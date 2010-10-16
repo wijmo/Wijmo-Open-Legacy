@@ -1,0 +1,36 @@
+﻿.ui-wijprogressbar
+{
+    moz-user-select: none;
+    text-align: left;
+    float: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.ui-wijprogressbar .C1pbProgress
+{
+    position: absolute;
+    overflow: hidden;
+	border-width:0;
+}
+.ui-wijprogressbar .ui-progressbar-backlabel
+{
+    position: absolute;
+    display: block;
+}
+.ui-wijprogressbar .ui-progressbar-frontlabel
+{
+    overflow: hidden;
+    background: transparent;
+    display: block;
+    position: absolute;
+}
+.ui-wijprogressbar-h
+{
+    width:200px; height:1.1em;
+}
+div.ui-wijprogressbar-v
+{
+    height:200px;
+    width:30px;
+}

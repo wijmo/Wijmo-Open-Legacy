@@ -1,0 +1,55 @@
+﻿  /* WijSlider  horizontal
+----------------------------------*/
+.ui-wijslider-horizontal
+{
+	position: relative;
+}     
+        
+.ui-wijslider-horizontal .ui-wijslider-track
+{
+    
+}
+        
+.ui-wijslider-horizontal .ui-wijslider-decbutton
+{
+    position: absolute;
+    left: 0px;
+    right: auto;
+    cursor:pointer;
+}
+
+.ui-wijslider-horizontal .ui-wijslider-incbutton
+{
+    position: absolute;
+    left: auto;
+    right: 0px;
+    cursor:pointer;
+}
+
+  /* WijSlider  vertical
+----------------------------------*/
+.ui-wijslider-vertical
+{
+	position: relative;
+}     
+        
+.ui-wijslider-vertical .ui-wijslider-track
+{
+    
+}
+        
+.ui-wijslider-vertical .ui-wijslider-decbutton
+{
+    position: absolute;
+    top: 0px;
+    bottom: auto;
+    cursor:pointer;
+}
+
+.ui-wijslider-vertical .ui-wijslider-incbutton
+{
+    position: absolute;
+    top: auto;
+    bottom: 0px;
+    cursor:pointer;
+}

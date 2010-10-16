@@ -1,0 +1,82 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <title>Slider - Overview</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="Provide a simple, familiar way for end-users to choose a value in a predefined range." />
+    <meta name="keywords" content="" />
+    <meta name="author" content="ComponentOne" />
+    <link href="../base-reset.css" rel="stylesheet" type="text/css" />
+    <link href="../../themes/Aristo/jquery-ui-1.8.4.custom.css" rel="stylesheet"
+        type="text/css" />
+    <link href="../demos-single.css" rel="stylesheet" type="text/css" />
+    <link href="../../Themes/Wijmo/jquery.ui.wijslider.css" rel="stylesheet" type="text/css" />
+    <script src="../../external/jquery-1.4.2.min.js" type="text/javascript"></script>
+    <script src="../../external/jquery-ui-1.8.5.custom.min.js" type="text/javascript"></script>
+    <script src="../../Wijmo/jquery.ui.wijutil.js" type="text/javascript"></script>
+    <script src="../../Wijmo/jquery.ui.wijslider.js" type="text/javascript"></script>
+    <script id="scriptInit" type="text/javascript">
+        $(document).ready(function () {
+            $("#hSlider").wijslider({ orientation: "horizontal", range: false, min: 0, max: 500, step: 10, value: 250, values: null });
+            $("#vSlider").wijslider({ orientation: "vertical", range: false, min: 0, max: 500, step: 10, value: 250, values: null });
+        });    
+    </script>
+    <style type="text/css">
+        .sliderContainer
+        {
+        }
+        
+        .layout
+        {
+            float: left;
+            margin: 0 10px;
+        }
+        .layout h6
+        {
+            margin-bottom: 10px;
+        }
+        #hSlider
+        {
+            width: 200px;
+        }
+        #vSlider
+        {
+            height: 200px;
+        }
+    </style>
+</head>
+<body class="demo-single">
+    <div class="container">
+        <div class="header">
+            <h2>
+                Overview</h2>
+        </div>
+        <div class="main demo">
+            <!-- Begin demo markup -->
+            <div class="sliderContainer ui-helper-clearfix">
+                <div class="layout">
+                    <h6>
+                        Horizontal Slider</h6>
+                    <div id="hSlider">
+                    </div>
+                </div>
+                <div class="layout">
+                    <h6>
+                        Vertical Slider</h6>
+                    <div id="vSlider">
+                    </div>
+                </div>
+            </div>
+            <!-- End demo markup -->
+            <div class="demo-options">
+                <!-- Begin options markup -->
+                <!-- End options markup -->
+            </div>
+        </div>
+        <div class="footer demo-description">
+
+        </div>
+    </div>
+</body>
+</html>

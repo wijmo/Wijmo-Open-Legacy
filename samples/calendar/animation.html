@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Calendar - Animation</title>
+	<meta charset="utf-8" />
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<meta name="author" content="ComponentOne" />
+	<link href="../base-reset.css" rel="stylesheet" type="text/css" />
+	<link href="../../themes/Aristo/jquery-ui-1.8.4.custom.css" rel="stylesheet"
+		type="text/css" />
+	<link href="../demos-single.css" rel="stylesheet" type="text/css" />
+	<script src="../../external/jquery-1.4.2.min.js" type="text/javascript"></script>
+	<script src="../../external/jquery-ui-1.8.5.custom.min.js" type="text/javascript"></script>
+	<link href="../../themes/Wijmo/jquery.ui.wijcalendar.css" rel="stylesheet" type="text/css" />
+	<script src="../../external/jquery.glob.min.js" type="text/javascript"></script>
+	<script src="../../Wijmo/jquery.ui.wijpopup.js" type="text/javascript"></script>
+	<script src="../../Wijmo/jquery.ui.wijcalendar.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(function () {
+			$("#calendar1").wijcalendar();
+
+			$('#direction').bind("change keyup", function () {
+				$("#calendar1").wijcalendar({ direction: $(this).val() });
+			});
+
+			$('#duration').bind("blur", function () {
+				try {
+					var duration = parseInt($(this).val());
+					if (duration < 0) alert("Invalid duration");
+					else {
+						$("#calendar1").wijcalendar({ duration: duration });
+					}
+				}
+				catch (e) {
+				}
+			});
+
+			$('#easing').bind("change keyup", function () {
+				$("#calendar1").wijcalendar({ easing: $(this).val() });
+			});
+
+
+		});
+	
+	</script>
+</head>
+<body class="demo-single">
+	<div class="container">
+		<div class="header">
+			<h2>
+				Animation</h2>
+		</div>
+		<div class="main demo">
+			<!-- Begin demo markup -->
+			<div id="calendar1">
+			</div>
+			<!-- End demo markup -->
+			<div class="demo-options">
+				<!-- Begin options markup -->
+				<div class="option-row">
+					<label for="direction">
+						Direction</label>
+					<select name="direction" id="direction">
+						<option value="horizontal" selected="selected">Horizontal</option>
+						<option value="vertical">Vertical</option>
+					</select>
+				</div>
+				<div class="option-row">
+					<label for="easing">
+						Easing</label>
+					<select name="easing" id="easing">
+						<option value="jswing">jswing</option>
+						<option value="def">def</option>
+						<option value="easeInQuad" selected="selected">easeInQuad</option>
+						<option value="easeOutQuad">easeOutQuad</option>
+						<option value="easeInOutQuad">easeInOutQuad</option>
+						<option value="easeInCubic">easeInCubic</option>
+						<option value="easeOutCubic">easeOutCubic</option>
+						<option value="easeInOutCubic">easeInOutCubic</option>
+						<option value="easeInQuart">easeInQuart</option>
+						<option value="easeOutQuart">easeOutQuart</option>
+						<option value="easeInOutQuart">easeInOutQuart</option>
+						<option value="easeInQuint">easeInQuint</option>
+						<option value="easeOutQuint">easeOutQuint</option>
+						<option value="easeInOutQuint">easeInOutQuint</option>
+						<option value="easeInSine">easeInSine</option>
+						<option value="easeOutSine">easeOutSine</option>
+						<option value="easeInOutSine">easeInOutSine</option>
+						<option value="easeInExpo">easeInExpo</option>
+						<option value="easeOutExpo">easeOutExpo</option>
+						<option value="easeInOutExpo">easeInOutExpo</option>
+						<option value="easeInCirc">easeInCirc</option>
+						<option value="easeOutCirc">easeOutCirc</option>
+						<option value="easeInOutCirc">easeInOutCirc</option>
+						<option value="easeInElastic">easeInElastic</option>
+						<option value="easeOutElastic">easeOutElastic</option>
+						<option value="easeInOutElastic">easeInOutElastic</option>
+						<option value="easeInBack">easeInBack</option>
+						<option value="easeOutBack">easeOutBack</option>
+						<option value="easeInOutBack">easeInOutBack</option>
+						<option value="easeInBounce">easeInBounce</option>
+						<option value="easeOutBounce">easeOutBounce</option>
+						<option value="easeInOutBounce">easeInOutBounce</option>
+					</select>
+				</div>
+				<div class="option-row">
+					<label for="duration">
+						Duration</label>
+					<input name="x" type="text" id="duration" style="width: 40px;" value="250" />
+				</div>
+				<!-- End options markup -->
+			</div>
+		</div>
+		<div class="footer demo-description">
+			<p>
+			</p>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>FormDecorator - Overview</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="%description%" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="ComponentOne" />
+    <link href="../base-reset.css" rel="stylesheet" type="text/css" />
+    <link href="../../themes/Aristo/jquery-ui-1.8.4.custom.css" rel="stylesheet" type="text/css" />
+    <link href="../demos-single.css" rel="stylesheet" type="text/css" />
+    <link type="text/css" href="../../themes/Wijmo/jquery.ui.wijsuperpanel.css" rel="stylesheet" />
+    <link type="text/css" href="../../themes/Wijmo/jquery.ui.wijlist.css" rel="stylesheet" />
+    <link type="text/css" href="../../themes/Wijmo/jquery.ui.wijtextboxdecorator.css" rel="stylesheet" />
+    <link type="text/css" href="../../themes/Wijmo/jquery.ui.wijdropdowndecorator.css" rel="stylesheet" />
+    <link type="text/css" href="../../themes/Wijmo/jquery.ui.wijradiobuttondecorator.css" rel="stylesheet" />
+    <link type="text/css" href="../../themes/Wijmo/jquery.ui.wijcheckboxdecorator.css" rel="stylesheet" />
+    <script src="../../external/jquery-1.4.2.min.js" type="text/javascript"></script>
+    <script src="../../external/jquery-ui-1.8.5.custom.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../external/jquery.mousewheel.min.js"></script>
+    <script type="text/javascript" src="../../Wijmo/jquery.ui.wijutil.js"></script>
+    <script type="text/javascript" src="../../Wijmo/jquery.ui.wijsuperpanel.js"></script>
+    <script type="text/javascript" src="../../Wijmo/jquery.ui.wijdatasource.js"></script>
+    <script type="text/javascript" src="../../Wijmo/jquery.ui.wijlist.js"></script>
+    <script type="text/javascript" src="../../Wijmo/jquery.ui.wijdropdowndecorator.js"></script>
+    <script type="text/javascript" src="../../Wijmo/jquery.ui.wijradiobuttondecorator.js"></script>
+    <script type="text/javascript" src="../../Wijmo/jquery.ui.wijcheckboxdecorator.js"></script>
+    <script type="text/javascript" src="../../Wijmo/jquery.ui.wijtextboxdecorator.js"></script>
+    <script id="scriptInit" type="text/javascript">
+        $(document).ready(function () {
+            $(":input[type='text'],:input[type='password'],:input[type='textarea']").wijtextboxdecorator();
+            $("#select1").wijdropdowndecorator({ height: 350 });
+            $("#select2").wijdropdowndecorator();
+            $("#select3").wijdropdowndecorator();
+            $(":input[type='radio']").wijradiobuttondecorator();
+            $(":input[type='checkbox']").wijcheckboxdecorator();
+        });
+    </script>
+</head>
+<body class="demo-single">
+    <div class="container">
+        <div class="header">
+            <h2>
+                Overview</h2>
+        </div>
+        <div class="main demo">
+            <!-- Begin demo markup -->
+            <div id="formdecorator">
+                <form>
+                <fieldset>
+                    <legend>TextBoxDecorator </legend>
+                    <div>
+                        <label for="textbox">
+                            Input
+                        </label>
+                        <input id="textbox" type="text" />
+                    </div>
+                    <div>
+                        <label for="pass">
+                            Password
+                        </label>
+                        <input id="pass" type="password" />
+                    </div>
+                    <div>
+                        <label for="area">
+                            TextArea</label>
+                        <textarea id="area" rows="20" cols="100"></textarea>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>DropDownDecorator </legend>
+                    <div>
+                        <label for="select1">
+                            Dropdown with Optgroups</label>
+                        <select id="select1">
+                            <optgroup label="A-G">
+                                <option>A</option>
+                                <option selected="selected">B</option>
+                                <option>C</option>
+                                <option>D</option>
+                                <option>E</option>
+                                <option>F</option>
+                                <option>G</option>
+                            </optgroup>
+                            <optgroup label="H-M">
+                                <option>H</option>
+                                <option>I</option>
+                                <option>J</option>
+                                <option>K</option>
+                                <option>L</option>
+                                <option>M</option>
+                            </optgroup>
+                        </select></div>
+                    Dropdown
+                    <select style="width: 120px;" id="select2">
+                        <option value="A">OptionA</option>
+                        <option value="B" selected="true">OptionB</option>
+                        <option value="C">OptionC</option>
+                        <option value="D">OptionD</option>
+                        <option value="E">OptionE</option>
+                        Dropdown with scrollbar
+                        <select style="width: 120px;" id="select3">
+                            <option value="A">OptionA</option>
+                            <option value="B" selected="true">OptionB</option>
+                            <option value="C">OptionC</option>
+                            <option value="D">OptionD</option>
+                            <option value="E">OptionE</option>
+                            <option value="F">OptionF</option>
+                            <option value="G">OptionG</option>
+                            <option value="H">OptionH</option>
+                            <option value="I">OptionI</option>
+                            <option value="J">OptionJ</option>
+                            <option value="K">OptionK</option>
+                            <option value="L">OptionL</option>
+                            <option value="M">OptionM</option>
+                            <option value="N">OptionN</option>
+                            <option value="O">OptionO</option>
+                            <option value="P">OptionP</option>
+                            <option value="Q">OptionQ</option>
+                            <option value="R">OptionR</option>
+                            <option value="S">OptionS</option>
+                            <option value="T">OptionT</option>
+                            <option value="U">OptionU</option>
+                            <option value="V">OptionV</option>
+                            <option value="W">OptionW</option>
+                            <option value="X">OptionX</option>
+                            <option value="Y">OptionY</option>
+                            <option value="Z">OptionZ</option>
+                        </select>
+                </fieldset>
+                <fieldset>
+                    <legend>CheckBoxDecorator</legend>
+                    <input id="checkbox1" type="checkbox" /><label for="checkbox1">checkbox1</label>
+                    <input id="checkbox2" type="checkbox" /><label for="checkbox2">checkbox2</label>
+                    <input id="checkbox3" type="checkbox" /><label for="checkbox3">checkbox3</label>
+                    <input id="checkbox4" type="checkbox" /><label for="checkbox4">checkbox4</label>
+                </fieldset>
+                <fieldset>
+                    <legend>RadioButtonDecorator</legend>
+                    <input type="radio" name="radiobutton1" id="radio1" /><label for="radio1">radio1</label>
+                    <input type="radio" name="radiobutton1" id="radio2" /><label for="radio2">radio2</label>
+                    <input type="radio" name="radiobutton1" id="radio3" /><label for="radio3">radio3</label>
+                    <input type="radio" name="radiobutton1" id="radio4" /><label for="radio4">radio4</label>
+                </fieldset>
+                </form>
+            </div>
+            <!-- End demo markup -->
+            <div class="demo-options">
+                <!-- Begin options markup -->
+                <!-- End options markup -->
+            </div>
+        </div>
+        <div class="footer demo-description">
+            <p>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

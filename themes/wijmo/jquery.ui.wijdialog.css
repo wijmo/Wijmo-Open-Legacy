@@ -1,0 +1,19 @@
+.ui-wijdialog-captionbutton { 
+	height:18px;
+	padding:1px;
+	width:19px;
+	float: right;
+	margin-right:.2em;
+	outline:none;
+}
+.ui-wijdialog-captionbutton:hover,
+.ui-wijdialog-captionbutton .ui-state-focus { 
+	padding: 0;
+}
+.ui-wijdialog-captionbutton .ui-icon{
+	margin:1px;
+}
+.ui-wijdialog .ui-wijdialog-hasframe{
+	padding: 0;
+}
+.ui-wijdialog-defaultdockingzone { position:fixed; bottom: 0px;left:0px; }

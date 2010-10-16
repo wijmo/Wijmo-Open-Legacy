@@ -1,0 +1,83 @@
+﻿.ui-wijtree
+{
+    width: 360px;
+    padding: 0.5em;
+}
+
+.ui-wijtree .ui-wijtree-parent span
+{
+    float: left;
+}
+
+.ui-wijtree .ui-wijtree-child
+{
+    margin-left: 32px;
+}
+
+.ui-wijtree .ui-wijtree-header
+{ }
+
+.ui-wijtree .ui-wijtree-list .ui-wijtree-node
+{
+    border: 0px;
+    background: none;
+    display: block;
+    float: left;
+    clear: both;
+    font-weight: normal;
+    margin: 0 20px 0 0;
+}
+
+.ui-wijtree-inner
+{
+	border: 1px solid transparent;
+	padding: 3px;
+	vertical-align:middle;
+}
+.ui-wijtree .ui-wijtree-list .ui-wijtree-node .ui-wijtree-inner a
+{
+	outline: none;
+    margin:0 0 0 0.5em;
+    float: left;
+}
+
+
+.ui-wijtree .ui-wijtree-list li.ui-wijtree-node
+{
+	margin-left:16px;
+}
+
+.ui-wijtree .ui-wijtree-list .ui-state-default a, .ui-wijtree .ui-wijtree-list .ui-state-default
+{
+    color: inherit;
+}
+
+.ui-wijtree .ui-wijtree-list .ui-state-hover, .ui-wijtree .ui-wijtree-list .ui-state-active
+{
+    font-weight: normal;
+}
+
+ui-wijtree a.ui-state-default:link, ui-wijtree a.ui-state-default:visited, ui-wijtree a.ui-state-default:hover, ui-wijtree a.ui-state-default:active, ui-wijtree a.ui-state-hover:link, ui-wijtree a.ui-state-hover:visited, ui-wijtree a.ui-state-hover:hover, ui-wijtree a.ui-state-hover:active, ui-wijtree a.ui-state-active:link, ui-wijtree a.ui-state-active:visited, ui-wijtree a.ui-state-active:hover, ui-wijtree a.ui-state-active:active
+{
+    border-style: solid;
+    font-weight: normal;
+}
+
+.ui-wijtree .ui-wijtree-list .ui-wijtree-item
+{
+    padding: 0;
+    width: 100%;
+    float: left;
+    clear:left;	
+    margin: 0 0 0 16px;
+    width:100%;
+}
+
+.ui-wijtree .ui-wijtree-list .ui-wijtree-parent
+{
+	margin: 0;
+    padding: 0;
+    width: 100%;
+    float: left;
+    clear:left;	
+}

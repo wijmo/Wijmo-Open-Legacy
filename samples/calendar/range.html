@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Calendar - Min/Max Date Range</title>
+	<meta charset="utf-8" />
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<meta name="author" content="ComponentOne" />
+	<link href="../base-reset.css" rel="stylesheet" type="text/css" />
+	<link href="../../themes/Aristo/jquery-ui-1.8.4.custom.css" rel="stylesheet"
+		type="text/css" />
+	<link href="../demos-single.css" rel="stylesheet" type="text/css" />
+	<script src="../../external/jquery-1.4.2.min.js" type="text/javascript"></script>
+	<script src="../../external/jquery-ui-1.8.5.custom.min.js" type="text/javascript"></script>
+	<link href="../../themes/Wijmo/jquery.ui.wijcalendar.css" rel="stylesheet" type="text/css" />
+	<script src="../../external/jquery.glob.min.js" type="text/javascript"></script>
+	<script src="../../Wijmo/jquery.ui.wijpopup.js" type="text/javascript"></script>
+	<script src="../../Wijmo/jquery.ui.wijcalendar.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(function () {
+			$("#calendar1").wijcalendar({
+				displayDate: new Date('2010/08/1'),
+				minDate: new Date('2010/08/16'),
+				maxDate: new Date('2010/08/25')
+			});
+		});
+	</script>
+</head>
+<body class="demo-single">
+	<div class="container">
+		<div class="header">
+			<h2>
+				Selection Range</h2>
+		</div>
+		<div class="main demo">
+			<!-- Begin demo markup -->
+			<div id="calendar1">
+			</div>
+			<!-- End demo markup -->
+			<div class="demo-options">
+				<!-- Begin options markup -->
+				<!-- End options markup -->
+			</div>
+		</div>
+		<div class="footer demo-description">
+			<p>
+			</p>
+		</div>
+	</div>
+</body>
+</html>

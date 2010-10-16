@@ -1,0 +1,121 @@
+/* wijcombobox
+ ----------------------------------*/
+.ui-wijcombobox
+{
+    position: relative;
+}
+.ui-wijcombobox-wrapper
+{
+    float: left;
+}
+/* wijcombobox textbox
+ ----------------------------------*/
+.ui-wijcombobox-input
+{
+    background: none repeat scroll 0 0 transparent;
+    border: 0 none;
+    color: inherit;
+    padding: 3px 5px 3px 5px;
+    outline: none;
+}
+
+.ui-wijcombobox .ui-wijcombobox-label
+{
+    background: transparent;
+    border: none;
+    font-weight: normal;
+    position: absolute;
+    white-space: nowrap;
+}
+.ui-wijcombobox-loading
+{
+    background: transparent url('images/ui-anim_basic_16x16.gif') right center no-repeat;
+}
+/* dropdown list trigger
+ ----------------------------------*/
+.ui-wijcombobox .ui-wijcombobox-trigger
+{
+    position: absolute;
+    top: 0px;
+    font-size: 0px;
+    width: 20px;
+    cursor: pointer;
+}
+/* dropdown list
+----------------------------------*/
+.ui-wijcombobox-list
+{
+    position: absolute;
+}
+.ui-wijcombobox-ul .ui-wijcombobox-item
+{
+    margin: 0;
+    padding: .2em .4em;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+.ui-wijcombobox-ul .ui-wijcombobox-item.ui-state-hover, .ui-wijcombobox-ul .ui-wijcombobox-item.ui-state-active
+{
+    font-weight: normal;
+    margin: -1px;
+}
+
+.ui-wijcombobox-ul .ui-wijlist-item-selected
+{
+    font-style: italic;
+}
+/* multiple columns
+----------------------------------*/
+.ui-wijcombobox-multicolumn .ui-wijcombobox-row, .ui-wijcombobox-multicolumn .ui-wijcombobox-rowheader
+{
+    list-style: none none outside;
+    padding: 0px;
+    margin: 0;
+    border: 0px;
+    overflow: hidden;
+    width: 10000px;
+}
+.ui-wijcombobox-multicolumn .ui-wijcombobox-cell
+{
+    float: left;
+    overflow: hidden;
+    border-width: 0;
+    text-align: center;
+    width: 100px;
+}
+.ui-wijcombobox-multicolumn .ui-wijcombobox-rowheader .ui-wijcombobox-cell
+{
+    border-right-width: 1px;
+}
+.ui-wijcombobox-multicolumn .ui-wijcombobox-row .ui-wijcombobox-cell
+{
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+}
+.ui-wijcombobox-multicolumn .ui-wijsuperpanel-header
+{
+    border-width: 0px;
+    border-bottom-width: 1px;
+}
+.ui-wijcombobox-multicolumn .ui-wijlist-item, .ui-wijcombobox-multicolumn .ui-wijlist-ul
+{
+    padding: 0px;
+    border: 0px;
+}
+.ui-wijcombobox-multicolumn .ui-wijcombobox-active-prev .ui-wijcombobox-cell
+{
+    border-bottom-width: 0px;
+}
+.ui-wijcombobox-multicolumn .ui-wijcombobox-row .ui-state-hover
+{
+    border-top-width: 1px;
+}
+.ui-wijcombobox-multicolumn .ui-wijlist-item-first .ui-state-hover
+{
+    border-top-width: 0px;
+}
+
+.ui-wijlist-ul .ui-wijlist-item
+{
+    cursor: pointer;
+}

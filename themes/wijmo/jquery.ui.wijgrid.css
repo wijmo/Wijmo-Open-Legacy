@@ -1,0 +1,253 @@
+.ui-wijgrid-loading
+{
+    background: transparent url('images/ui-anim_basic_16x16.gif') left top no-repeat;
+    min-height: 16px;
+    min-width: 16px;
+}
+
+.ui-wijgrid .ui-wijsuperpanel
+{
+    border: none;
+}
+.ui-wijgrid-filtericon
+{
+    background: url('images/filterop.png') no-repeat;
+    text-indent: -9999px;
+    overflow: hidden;
+    height: 16px;
+    width: 16px;
+}
+.filter-nofilter
+{
+    background-position: 0 0px;
+}
+
+.filter-contains
+{
+    background-position: 0 -16px;
+}
+
+.filter-notcontain
+{
+    background-position: 0 -32px;
+}
+
+.filter-beginswith
+{
+    background-position: 0 -48px;
+}
+
+.filter-endswith
+{
+    background-position: 0 -64px;
+}
+
+.filter-equals
+{
+    background-position: 0 -80px;
+}
+
+.filter-notequal
+{
+    background-position: 0 -96px;
+}
+
+.filter-greater
+{
+    background-position: 0 -112px;
+}
+
+.filter-less
+{
+    background-position: 0 -128px;
+}
+
+.filter-greaterorequal
+{
+    background-position: 0 -144px;
+}
+
+.filter-lessorequal
+{
+    background-position: 0 -160px;
+}
+
+.filter-isempty
+{
+    background-position: 0 -176px;
+}
+
+.filter-notisempty
+{
+    background-position: 0 -192px;
+}
+
+.filter-isnull
+{
+    background-position: 0 -208px;
+}
+
+.filter-notisnull
+{
+    background-position: 0 -224px;
+}
+
+.ui-wijpager .ui-icon
+{
+    cursor: pointer;
+}
+
+.ui-wijgrid .ui-wijgrid-grouptogglebtn
+{
+    float: left;
+    cursor: pointer;
+    margin-top: 3px;
+}
+
+.ui-wijgrid .ui-wijgrid-table
+{
+    border-collapse: collapse;
+    outline: none;
+}
+
+.ui-wijgrid-rowheader
+{
+    width: 21px;
+}
+
+.ui-wijgrid .ui-wijgrid-header, .ui-wijgrid .ui-wijgrid-footer
+{
+    border: none !important;
+    padding: 0.5em;
+}
+.ui-wijgrid tr.ui-wijgrid-row td
+{
+    border-right-color: inherit;
+    border-right-style: solid;
+    border-right-width: 1px;
+    text-align: left;
+    padding: 0 2px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.ui-wijgrid .wijgridtd
+{
+    font-weight: normal;
+}
+
+
+.ui-wijgrid .ui-wijgrid-headerrow .ui-c1basefield
+{
+    zoom:1;
+	overflow:hidden;
+}
+.ui-wijgrid .ui-wijgrid-headerrow .ui-wijgrid-headertext
+{
+    padding: 0.5em 1em;
+    display: block;
+    text-align:center;
+    position: relative;
+}
+.ui-wijgrid .ui-wijgrid-headerrow .ui-icon
+{
+    width:16px;
+    height:16px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -8px;
+    z-index:99;
+}
+
+.ui-wijgrid .ui-wijgrid-filterrow
+{
+}
+
+.ui-wijgrid .ui-wijpager
+{
+    display: block;
+    position: relative;
+}
+
+.ui-wijgrid-resizehandle
+{
+    position: absolute;
+    z-index: 99999;
+}
+
+/* 
+ *    Scrolling
+ */
+
+.ui-wijgrid-v-splitter, .ui-wijgrid-h-splitter
+{
+    background-color: white;
+    width: 4px;
+    height: 4px;
+    position: absolute;
+    z-index: 10;
+    display: none;
+}
+.ui-wijgrid-splits-enabled .ui-wijgrid-v-splitter
+{
+    border-right: 1px solid #000000;
+    display: block;
+    cursor: w-resize;
+}
+.ui-wijgrid-splits-enabled .ui-wijgrid-h-splitter
+{
+    border-bottom: 1px solid #000000;
+    display: block;
+    cursor: n-resize;
+}
+.ui-wijgrid-splits-enabled .ui-wijgrid-v-splitter.ui-draggable-dragging, .ui-wijgrid-splits-enabled .ui-wijgrid-h-splitter.ui-draggable-dragging
+{
+    background-color: #626262;
+}
+/*        
+        .ui-wijgrid-split-area
+        {
+            left: 0px;
+            top:0px;
+            position: absolute;
+            overflow: hidden;
+        }
+        .ui-wijgrid-split-area-se
+        {
+            overflow: auto;
+        }
+        .ui-wijgrid-splits-enabled .ui-wijgrid-split-area
+        {
+            overflow: auto;
+        }
+        .ui-wijgrid-splits-enabled .ui-wijgrid-split-area-nw, .ui-wijgrid-splits-enabled .ui-wijgrid-split-area-ne
+        {
+            overflow-x: hidden;
+        }
+        .ui-wijgrid-splits-enabled .ui-wijgrid-split-area-nw, .ui-wijgrid-splits-enabled .ui-wijgrid-split-area-sw
+        {
+            overflow-y: hidden;
+        }       
+*/
+
+.ui-wijgrid-filterlist
+{
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 100;
+}
+.ui-wijgrid-scroller
+{
+    overflow: hidden;
+}
+.ui-wijgrid-fixedview
+{
+    position: relative;
+}
+
+.ui-wijgrid-scroller
+{
+    border: 0px;
+}

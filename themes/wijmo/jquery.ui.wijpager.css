@@ -1,0 +1,35 @@
+﻿.ui-wijpager .ui-icon
+{
+    cursor: pointer;
+}
+.ui-wijpager .ui-list
+{
+    float: left;
+    padding: 1px;
+    margin: 0;
+}
+.ui-wijpager .ui-list .ui-page
+{
+    float: left;
+    height: auto;
+    line-height: 16px;
+    list-style: none outside none;
+    margin: 0 1px;
+    width: auto;
+}
+.ui-wijpager .ui-list .ui-page span
+{
+    margin: 2px;
+}
+
+.ui-wijpager .ui-list .ui-page a, .ui-wijpager .ui-list .ui-state-active span
+{
+    padding: 2px 5px;
+    display: block;
+    margin: 0;
+}
+.ui-wijpager .ui-list
+{
+    background: none;
+    border: none;
+}

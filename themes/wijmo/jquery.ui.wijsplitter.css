@@ -1,0 +1,108 @@
+﻿/* WijSplitter
+----------------------------------*/
+
+.ui-wijsplitter-vertical
+{
+    overflow: hidden;
+}
+.ui-wijsplitter-v-panel1
+{
+    float: left;
+    position: relative;
+}
+.ui-wijsplitter-v-panel1-content
+{
+    position: relative;
+}
+.ui-wijsplitter-v-bar
+{
+    float: left;
+    position: relative;
+    font-size: 1px;
+    width: 2px;
+}
+.ui-wijsplitter-v-expander
+{
+    position: absolute;
+    z-index: 99999;
+}
+
+.ui-wijsplitter-v-expanded .ui-wijsplitter-v-expander
+{
+        left: -18px;
+        z-index: 999999;
+}
+
+.ui-wijsplitter-v-collapsed .ui-wijsplitter-v-expander
+{
+        right: -18px;
+        z-index: 999999;
+}
+
+.ui-wijsplitter-v-panel2
+{
+    float: left;
+}
+.ui-wijsplitter-v-panel2-content
+{
+    position: relative;
+}
+.ui-wijsplitter-v-resize-hepler
+{
+    border-right: dotted 1px black;
+    overflow: hidden;
+    border-bottom: dotted 0 black;
+}
+
+.ui-wijsplitter-horizontal
+{
+    overflow: hidden;
+}
+.ui-wijsplitter-h-panel1
+{
+    position: relative;
+}
+.ui-wijsplitter-h-panel1-content
+{
+    overflow: auto;
+    position: relative;
+}
+.ui-wijsplitter-h-bar
+{
+    position: relative;
+    font-size: 1px;
+    height: 2px;
+}
+.ui-wijsplitter-h-expander
+{
+    position: absolute;
+    z-index: 99999;
+}
+
+
+.ui-wijsplitter-h-expanded .ui-wijsplitter-h-expander
+{
+        top: -18px;
+}
+
+.ui-wijsplitter-h-collapsed .ui-wijsplitter-h-expander
+{
+        bottom: -18px;
+}
+
+.ui-wijsplitter-h-panel2
+{
+}
+.ui-wijsplitter-h-panel2-content
+{
+    overflow: auto;
+    position: relative;
+}
+.ui-wijsplitter-h-resize-hepler
+{
+    border-bottom: dotted 1px black;
+    overflow: hidden;
+    border-right: dotted 0 black;
+}
+
+

@@ -1,0 +1,59 @@
+﻿
+.ui-wijwizard
+{
+	position: relative;
+}
+
+.ui-wijwizard-steps li
+{
+	float: left;
+	padding: 0.4em;
+	margin: 0 3px 0 0;
+}
+
+.ui-wijwizard-steps h1
+{
+	margin: 0;
+	padding: 0;
+	font-size: 24px;
+}
+
+.ui-wijwizard-content
+{
+	margin: 3px 0;
+}
+
+.ui-wijwizard .ui-wijwizard-panel 
+{ 
+	display: block; 
+	border-width: 0; 
+	padding: 1em 1.4em; 
+	background: none; 
+}
+
+.ui-wijwizard .ui-wijwizard-hide 
+{ 
+	display: none !important; 
+}
+
+.ui-wijwizard-buttons
+{
+	float: right;
+}
+.ui-wijwizard-next, .ui-wijwizard-prev
+{
+	display: block;
+	position: absolute;
+	padding: 3px 0;
+}
+.ui-wijwizard-next
+{
+	right: 0;
+	top: 49%;
+}
+
+.ui-wijwizard-prev
+{
+	left: 0;
+	top: 49%;
+}
