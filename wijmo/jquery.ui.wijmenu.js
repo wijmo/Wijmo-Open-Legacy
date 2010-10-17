@@ -9,7 +9,7 @@
  * licensing@wijmo.com
  * http://www.wijmo.com/license
  *
- */*
+ *
  * Wijmo Menu widget.
  *
  * Depends:
