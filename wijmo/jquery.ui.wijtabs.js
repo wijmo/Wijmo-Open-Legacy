@@ -70,15 +70,15 @@ $.widget("ui.wijtabs", {
 		///	</summary>
 		cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
 		///	<summary>
-		///		Determines whether a tab can be collapsed by a user. When this is set to ��true��, an already selected tab will be collapsed upon reselection. 
+		///		Determines whether a tab can be collapsed by a user. When this is set to true, an already selected tab will be collapsed upon reselection. 
 		///	</summary>
 		collapsible: false,
 		///	<summary>
-		///		This is an animation option for hiding the tab��s panel content. 
+		///		This is an animation option for hiding the tabs panel content. 
 		///	</summary>
 		hideOption: null, // e.g. { blind: true, fade: true, duration: 200}
 		///	<summary>
-		///		This is an animation option for showing the tab��s panel content. 
+		///		This is an animation option for showing the tabs panel content. 
 		///	</summary>
 		showOption: null, // e.g. { blind: true, fade: true, duration: 200}
 		///	<summary>
