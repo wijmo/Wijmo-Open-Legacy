@@ -158,7 +158,7 @@ $.widget("ui.wijcalendar", {
 		quickNavStep: 12,
 		///	<summary>
 		///		Determines the month slide direction.
-		///		Possible values are: ��horizontal�� or ��vertical��
+		///		Possible values are: horizontal or vertical
 		///	</summary>
 		direction: 'horizontal',
 		///	<summary>
@@ -166,7 +166,7 @@ $.widget("ui.wijcalendar", {
 		///	</summary>
 		duration: 250,
 		///	<summary>
-		///		Determines the animation��s easing effect.
+		///		Determines the animations easing effect.
 		///	</summary>
 		easing: 'easeInQuad',
 		///	<summary>
