@@ -170,7 +170,9 @@
             var self = this;
 
             if (self._getPanel1() != null) {
-                self._getPanel1().wijresizable('destroy');
+                if (self._getPanel1().is(":ui-wijresizable")) {
+                    self._getPanel1().wijresizable('destroy');
+                }
             }
 
             var expander = this._getExpander();
