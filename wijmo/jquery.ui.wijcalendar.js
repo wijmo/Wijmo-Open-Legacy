@@ -189,7 +189,7 @@ $.widget("ui.wijcalendar", {
 		if (this.options.popupMode){
 			var po = {autoHide: this.options.autoHide}
 			if (this.options.beforePopup) {po.showing = this.options.beforePopup;}
-			if (this.options.afterPopup) {po.show = this.options.afterPopup;}
+			if (this.options.afterPopup) {po.shown = this.options.afterPopup;}
 			if (this.options.beforeClose) {po.hidding = this.options.beforeClose;}
 			
 			var self = this;
