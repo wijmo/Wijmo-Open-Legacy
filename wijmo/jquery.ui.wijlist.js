@@ -21,11 +21,14 @@
 	var listCSS = 'ui-widget ui-widget-content ui-corner-all ui-wijlist',
 		listItemCSS = 'ui-wijlist-item',
 		listItemCSSAlternate = listItemCSS + '-alternate',
-		listItemCSSSelected = listItemCSS + '-selected ui-state-active',
+		listItemCSSSelected = listItemCSS + '-selected',
+		
 		listItemCSSFirst = listItemCSS + '-first',
 		listItemCSSLast = listItemCSS + '-last',
 		stateHover = 'ui-state-hover',
-		activeItem = 'ui-active-wijlistitem',
+		uiStateActive = "ui-state-active",
+		  activeItem = 'ui-active-wijlistitem',
+		  selectedActive = listItemCSSSelected + ' ' + uiStateActive,
 		itemKey = 'item.wijlist';
 	$.widget("ui.wijlist", {
 		options: {
@@ -362,11 +365,11 @@
 			var singleMode = self.options.selectionMode == 'single';
 			if (singleMode) {
 				var previous = self.selectedItem;
-				ele.addClass(listItemCSSSelected);
+				ele.addClass(selectedActive);
 				item.selected = true;
 				if (previous != undefined && item != previous) {
 					previous.selected = false;
-					previous.element.removeClass(listItemCSSSelected);
+					previous.element.removeClass(selectedActive);
 				}
 				self.selectedItem = item;
 				self._trigger("selected", event, {
@@ -378,10 +381,10 @@
 			else {
 				item.selected = !item.selected;
 				if (item.selected) {
-					ele.addClass(listItemCSSSelected);
+					ele.addClass(selectedActive);
 				}
 				else {
-					ele.removeClass(listItemCSSSelected);
+					ele.removeClass(selectedActive);
 				}
 				self.selectedItems = $.grep(self.items, function (a) {
 					return a.selected;
@@ -409,7 +412,7 @@
 				if (indices >= 0 && indices < len) {
 					item = self.items[indices];
 					item.selected = true;
-					item.element.addClass(listItemCSSSelected);
+					item.element.addClass(selectedActive);
 				}
 				else {
 					return;
@@ -417,7 +420,7 @@
 				var previous = self.selectedItem;
 				if (previous != undefined && previous != null) {
 					previous.selected = false;
-					previous.element.removeClass(listItemCSSSelected);
+					previous.element.removeClass(selectedActive);
 				}
 				self.selectedItem = item;
 				if (triggerSelected) {
@@ -434,7 +437,7 @@
 					if (value >= 0 && value < len) {
 						var i = self.items[value];
 						i.selected = true;
-						i.element.addClass(listItemCSSSelected);
+						i.element.addClass(selectedActive);
 					}
 				});
 				self.selectedItems = $.grep(self.items, function (a) {
@@ -463,7 +466,7 @@
 				var selectedItem = self.selectedItem;
 				if (selectedItem != undefined) {
 					selectedItem.selected = false;
-					selectedItem.element.removeClass(listItemCSSSelected);
+					selectedItem.element.removeClass(selectedActive);
 					self.selectedItem = undefined;
 				}
 			}
@@ -472,7 +475,7 @@
 					if (value >= 0 && value < len) {
 						var i = self.items[value];
 						i.selected = false;
-						i.element.removeClass(listItemCSSSelected);
+						i.element.removeClass(selectedActive);
 					}
 				});
 				self.selectedItems = $.grep(self.items, function (a) {
@@ -539,7 +542,7 @@
 			}
 			// add selected items
 			if (item.selected == true) {
-				li.addClass(listItemCSSSelected);
+			    li.addClass(selectedActive);
 				if (singleMode && self.selectedItem == undefined) {
 					self.selectedItem = item;
 				}
@@ -568,8 +571,7 @@
 			var singleItem = ul.children('.ui-wijlist-item:first');
 			var adjustHeight = null;
 			if (o.autoSize) {
-				var padding = parseFloat(ul.css('padding-top')) + parseFloat(ul.css('padding-bottom'));
-				adjustHeight = singleItem.outerHeight() * o.maxItemsCount + padding;
+				adjustHeight = singleItem.outerHeight(true) * o.maxItemsCount;
 			}
 
 			if (adjustHeight != null) {

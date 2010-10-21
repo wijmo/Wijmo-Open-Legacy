@@ -17,6 +17,7 @@
  *  jquery.ui.wijpopup.js
  *  
  */
+
 (function ($) {
 
 	$.fn.extend({
@@ -25,10 +26,10 @@
 		},
 	
 		setBounds: function (bounds) {
-			$(this).css('left', bounds.left);
-			$(this).css('top', bounds.top);
-			$(this).width(bounds.width);
-			$(this).height(bounds.height);
+			$(this).css({'left': bounds.left, 'top': bounds.top})
+				.width(bounds.width)
+				.height(bounds.height);
+			return this;
 		},
 		
 		getMaxZIndex: function () {
@@ -97,7 +98,7 @@
                 this.element.appendTo(root);
             }
 
-            this.element.data('visible', false);
+            this.element.data('visible.wijpopup', false);
             this.element.css('position', "absolute");
 			this.element.position({
 				of: $(document.body)
@@ -120,15 +121,26 @@
         destroy: function () {
             $.Widget.prototype.destroy.apply(this, arguments);
             if (this.isVisible()) this.hide();
+			
+			if ($.browser.msie && ($.browser.version < 7)) {
+			    jFrame = this.element.data('backframe.wijpopup');
+                if (!jFrame) jFrame.remove();
+			}
+			
+			var self = this;
+			this.element.unbind('.wijpopup');
+			$.each( [ "visible", "backframe", "animating", "width" ], function( i, prefix ) {
+				self.element.removeData( prefix + ".wijpopup" );
+			});
         },
 
         isVisible: function () {
 			/// <summary>Determines whether the element is visible.</summary>
-            return (!!this.element.data('visible') && this.element.is(':visible'));
+            return (!!this.element.data('visible.wijpopup') && this.element.is(':visible'));
         },
 		
 		isAnimating: function(){
-			return !!this.element.data("animating");
+		    return !!this.element.data("animating.wijpopup");
 		},
 
         show: function (position) {
@@ -141,14 +153,14 @@
             if (data.cancel) return;
 
             if (this.options.autoHide) {
-                $(document.body).bind('mouseup.wijpopup', $.proxy(this._docMouseUpHandler, this));
+                $(document.body).bind('mouseup.wijpopup', $.proxy(this._onDocMouseUp, this));
             }
 
             var effect = this.options.showEffect || "show";
             var duration = this.options.showDuration || 300;
             var ops = this.options.showOptions || {};
-			
-			this.element.data("animating", true);
+
+            this.element.data("animating.wijpopup", true);
 
             if ($.effects && $.effects[effect])
                 this.element.show(effect, ops, duration, $.proxy(this._showCompleted, this));
@@ -160,8 +172,8 @@
         },
 
         _showCompleted: function () {
-			this.element.removeData("animating");
-            this.element.data('visible', true);
+			this.element.removeData("animating.wijpopup");
+			this.element.data('visible.wijpopup', true);
 			this._trigger('shown');
         },
 
@@ -188,7 +200,7 @@
             var duration = this.options.hideDuration || 300;
             var ops = this.options.hideOptions || {};
 
-			this.element.data("animating", true);
+            this.element.data("animating.wijpopup", true);
             if ($.effects && $.effects[effect])
                 this.element.hide(effect, ops, duration, $.proxy(this._hideCompleted, this));
             else
@@ -199,23 +211,23 @@
         },
 
         _hideCompleted: function () {
-            if (this.element.data('originalWidth') !== undefined) {
-                this.element.width(this.element.data('originalWidth'));
-                this.element.removeData('originalWidth');
+            if (this.element.data('width.wijpopup') !== undefined) {
+                this.element.width(this.element.data('width.wijpopup'));
+                this.element.removeData('width.wijpopup');
             }
 
             this.element.unbind('move.wijpopup');
+            this.element.removeData("animating.wijpopup");
 			
 			if ($.browser.msie && ($.browser.version < 7)) {
-                jFrame = this.element.data('_hideWindowedElementsIFrame');
-                if (!jFrame) jFrame.hide();
+			    var jFrame = this.element.data('backframe.wijpopup');
+                if (jFrame) { jFrame.hide(); }
 			}
-			
-			this.element.removeData("animating");
+            
 			this._trigger('hidden');
         },
 
-        _docMouseUpHandler: function (e) {
+        _onDocMouseUp: function (e) {
             var srcElement = e.target ? e.target : e.srcElement;
             if (this.isVisible() && !!this.options.autoHide) {
                 if (srcElement != this.element.get(0) && $(srcElement).parents().index(this.element) < 0) this.hide();
@@ -223,42 +235,46 @@
         },
 
         _onMove: function (e) {
-            var jFrame = this.element.data('_hideWindowedElementsIFrame');
+            var jFrame = this.element.data('backframe.wijpopup');
             if (jFrame) {
                 this.element.before(jFrame);
-                jFrame.css('top', this.element.css('top'));
-                jFrame.css('left', this.element.css('left'));
+                jFrame.css({'top': this.element.css('top'),
+					'left': this.element.css('left')
+				});
             }
         },
 
         _addBackgroundIFrame: function () {
-            var jFrame = null;
             if ($.browser.msie && ($.browser.version < 7)) {
-                jFrame = this.element.data('_hideWindowedElementsIFrame');
+                var jFrame = this.element.data('backframe.wijpopup');
                 if (!jFrame) {
-                    jFrame = jQuery('<iframe/>');
-                    jFrame.attr('src', 'javascript:\'<html></html>\';');
-                    jFrame.css('position', 'absolute');
-                    jFrame.css('display', 'none');
-                    jFrame.attr('scrolling', 'no');
-                    jFrame.attr('frameborder', '0');
-                    jFrame.attr('tabIndex ', -1);
-                    jFrame.css('filter', 'progid:DXImageTransform.Microsoft.Alpha(style=0,opacity=0)');
+                    jFrame = jQuery('<iframe/>')
+						.css({'position': 'absolute', 
+							'display': 'none',
+							'filter': 'progid:DXImageTransform.Microsoft.Alpha(style=0,opacity=0)'
+						}).attr({'src': 'javascript:\'<html></html>\';',
+							'scrolling': 'no',
+							'frameborder': '0',
+							'tabIndex ': -1
+						});
+                    
                     this.element.before(jFrame);
-                    this.element.data('_hideWindowedElementsIFrame', jFrame);
+                    this.element.data('backframe.wijpopup', jFrame);
                     this.element.bind('move.wijpopup', $.proxy(this._onMove, this));
                 }
                 jFrame.setBounds(this.element.getBounds());
-                jFrame.css('display', this.element.css('display'));
-                jFrame.css('left', this.element.css('left'));
-                jFrame.css('top', this.element.css('top'));
-                jFrame.css('z-index', this.element.css('z-index') - 1);
+				document.title = this.element.css('display');
+                jFrame.css({'display': 'block',
+					'left': this.element.css('left'),
+					'top': this.element.css('top'),
+					'z-index': this.element.css('z-index') - 1
+				});
             }
         },
 
         _setZIndex: function (index) {
             this.element.css('z-index', index);
-            var jFrame = this.element.data('_hideWindowedElementsIFrame');
+            var jFrame = this.element.data('backframe.wijpopup');
             if (jFrame) {
                 jFrame.css('z-index', (this.element.css('z-index')) - 1);
             }
@@ -280,7 +296,5 @@
 			this._trigger('posChanged');
         }
     });
-
-
    
 })(jQuery);

@@ -24,15 +24,20 @@
             });
         }
     });
-	
-	$.fn.leftBorderWidth = function () {
+
+    var naNTest = function (num){
+        return isNaN(num) ? 0 : num;
+    };
+
+    $.fn.leftBorderWidth = function () {
         var blw = parseFloat($(this).css("borderLeftWidth"));
         var pl = parseFloat($(this).css("padding-left"));
         var ml = 0;
         if ($(this).css("margin-left") != "auto") {
             ml = parseFloat($(this).css("margin-left"));
         }
-        return blw + pl + ml;
+        
+        return naNTest(blw) + naNTest(pl) + naNTest(ml);
     };
 
     $.fn.rightBorderWidth = function () {
@@ -42,7 +47,7 @@
         if ($(this).css("margin-right") != "auto") {
             mr = parseFloat($(this).css("margin-right"));
         }
-        return brw + pr + mr;
+        return naNTest(brw) + naNTest(pr) + naNTest(mr);
     };
 
     $.fn.topBorderWidth = function () {
@@ -52,7 +57,7 @@
         if ($(this).css("margin-top") != "auto") {
             ml = parseFloat($(this).css("margin-top"));
         }
-        return blw + pl + ml;
+        return naNTest(blw) + naNTest(pl) + naNTest(ml);
     };
 
     $.fn.bottomBorderWidth = function () {
@@ -62,7 +67,7 @@
         if ($(this).css("margin-bottom") != "auto") {
             mr = parseFloat($(this).css("margin-bottom"));
         }
-        return brw + pr + mr;
+        return naNTest(brw) + naNTest(pr) + naNTest(mr);
     };
 
     $.fn.borderSize = function () {

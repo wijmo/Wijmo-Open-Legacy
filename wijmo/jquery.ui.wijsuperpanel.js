@@ -21,9 +21,7 @@
  *
  */
 (function($){
-	
-	var //templateWrapperClass = 'ui-wijsuperpanel-templateouterwrapper',
-		uiSuperPanelClasses = 'ui-wijsuperpanel ' + 'ui-widget ' + 'ui-widget-content', // the css on outmost div
+	var uiSuperPanelClasses = 'ui-wijsuperpanel ' + 'ui-widget ' + 'ui-widget-content',
 		rounderClass = 'ui-corner-all',
 		uiStateDisabled = 'ui-state-disabled',
 		uiStateHover = 'ui-state-hover',
@@ -867,7 +865,7 @@
 			//var hbarContainer = f.hbarContainer;
 			var originalElement = $(e.srcElement || e.originalTarget);
 			var dir = '';
-			var onHbar = originalElement.hasClass(hbarContainerCSS) || originalElement.parent().hasClass(hbarContainerCSS);
+			var onHbar = originalElement.closest("."+hbarContainerCSS, self.element).size()>0;
 			var hScroller = o.hScroller;
 			var vScroller = o.vScroller;
 			if (delta > 0) {
@@ -1272,11 +1270,12 @@
 			
 			var o = this.options;
 			var m = (dir == 'h' ? 'outerWidth' : 'outerHeight');
+			var m1 = (dir == 'h' ? 'contentWidth' : 'contentHeight');
 			var scroller = (dir == 'h' ? 'hScroller' : 'vScroller');
 			var f = this._fields();
 			var cWrapper = f.contentWrapper;
-			var tempWrapper = f.templateWrapper;
-			var size = tempWrapper[m]();
+			//var tempWrapper = f.templateWrapper;
+			var size = f[m1];
 			var contentHeight = cWrapper[m]();
 			
 			var vMin = o[scroller].scrollMin;
@@ -1330,9 +1329,10 @@
 				self._resetLargeChange(self,f,o);
 				self._bindElementEvents(self,f, ele, o);
 				var templateWrapper = f.templateWrapper;
-				templateWrapper.css({position:'absolute',left:'0px',top:'0px',width:'auto',height:'auto'});
-				templateWrapper.width(templateWrapper.width()).height(templateWrapper.height());
-				templateWrapper.css('position','');
+				templateWrapper.css({ 'float':'left',left:'0px',top:'0px',width:'auto',height:'auto'});
+				f.contentWidth = templateWrapper.width();
+				f.contentHeight = templateWrapper.height();
+				templateWrapper.css('float','');
 				self._setRounder(self, ele);
 				self._setInnerElementsSize(f, ele);
 				self._testScroll(self, f, o);
@@ -1340,7 +1340,7 @@
 				self._initScrollButtons(self, f, o);
 				self._trigger('painted');
 				
-				self._paintedMark = {date: new Date(), mainWidth:ele[0].offsetWidth, mainHeight:ele[0].offsetHeight, width: templateWrapper[0].offsetWidth,height: templateWrapper[0].offsetHeight};
+				self._paintedMark = {date: new Date(), mainWidth:ele[0].offsetWidth, mainHeight:ele[0].offsetHeight, width: f.contentWidth,height: f.contentWidth};
 				if (focused!=undefined){
 					$(focused).focus();
 				}
@@ -1456,7 +1456,7 @@
 			var v = dir == 'v';
 			var scroller = v ? o.vScroller: o.hScroller;
 			var clientKey = v? 'clientHeight':'clientWidth';
-			var offsetKey = v? 'offsetHeight':'offsetWidth';
+			var offsetKey = v? 'contentHeight':'contentWidth';
 			var autoKey = v? '_autoVLarge':'_autoHLarge';
 			
 			if (scroller.scrollLargeChange != null) {
@@ -1470,8 +1470,7 @@
 			
 			var content = f.contentWrapper;
 			var contentWidth = content[0][clientKey];
-			var wrapper = f.templateWrapper;
-			var wrapperWidth = wrapper[0][offsetKey];
+			var wrapperWidth = f[offsetKey];
 			
 			var percent = contentWidth / (wrapperWidth - contentWidth);
 			var large = ((hRange+1)*percent) / (1+ percent);
@@ -1509,13 +1508,9 @@
 			var vMin = vScroller.scrollMin;
 			var vRange = vMax - vMin;
 			
-			//var scrollerWrapper = f.stateContainer;
-			//var hbarContainer = f.hbarContainer;
 			var hbarDrag = f.hbarDrag;
-			//var vbarContainer = f.vbarContainer;
 			var vbarDrag = f.vbarDrag;
-			
-			if (self.hNeedScrollBar) {
+			if (self.hNeedScrollBar && hbarDrag.is(":visible")) {
 				var hLargeChange = self._getHScrollBarLargeChange();
 				var track = self._getTrackLen('h');
 				var dragLen = self._getDragLength(hRange, hLargeChange, track, o.hScroller.scrollMinDragLength);
@@ -1529,7 +1524,7 @@
 					hbarDrag.show();
 				}
 			}
-			if (self.vNeedScrollBar) {
+			if (self.vNeedScrollBar && vbarDrag.is(":visible")) {
 				var vLargeChange = self._getVScrollBarLargeChange();
 				var track1 = self._getTrackLen('v');
 				var dragLen1 = self._getDragLength(vRange, vLargeChange, track1, o.vScroller.scrollMinDragLength);
@@ -1613,8 +1608,9 @@
 			var o = self.options;
 			var v = dir == 'v';
 			var scroller = v? o.vScroller: o.hScroller;
-			var tempKey = v? 'outerHeight' : 'outerWidth'
-			var wrapKey = v? 'innerHeight' : 'innerWidth'
+			var tempKey = v? 'outerHeight' : 'outerWidth';
+			var wrapKey = v? 'innerHeight' : 'innerWidth';
+			var contentKey = v? "contentHeight" : "contentWidth";
 			var paddingKey = v?'top': 'left';
 			var hMin = scroller.scrollMin;
 			var hMax = scroller.scrollMax;
@@ -1629,7 +1625,7 @@
 			if (hValue > max) {
 				hValue = max;
 			}
-			var contentLeft = (tempWrapper[tempKey]() - cWrapper[wrapKey]()) * (hValue / max);
+			var contentLeft = (f[contentKey] - cWrapper[wrapKey]()) * (hValue / max);
 			if (Math.abs(contentLeft) < 0.001) {
 				contentLeft = 0;
 			}
@@ -1655,7 +1651,7 @@
 				var contentAnimationOptions = $.extend({}, o.animationOptions);
 				var userComplete = o.animationOptions.complete;
 				contentAnimationOptions.complete = function(){
-					self._scrollEnd(fireScrollEvent, self, 'h');
+					self._scrollEnd(fireScrollEvent, self, dir);
 					if ($.isFunction(userComplete)) {
 						userComplete(arguments);
 					}
@@ -1854,8 +1850,8 @@
 			var scrollerWrapper = f.stateContainer;
 			var contentWidth = content.innerWidth();
 			var contentHeight = content.innerHeight();
-			var wrapperWidth = wrapper[0].offsetWidth;
-			var wrapperHeight = wrapper[0].offsetHeight;
+			var wrapperWidth = f.contentWidth;
+			var wrapperHeight = f.contentHeight;
 			f.hScrolling = wrapperWidth > contentWidth;
 			f.vScrolling = wrapperHeight > contentHeight;
 			
@@ -1902,7 +1898,7 @@
 			// <param name="disable" type="Boolean">
 			// Whether to disable scroll bar.
 			// </param>
-			
+
 			if (bar === 'v') {
 				barContainer[disable ? "addClass" : "removeClass"]('ui-wijsuperpanel-vbarcontainer-disabled');
 				barContainer.find('.'+uiStateDefault)[disable ? "addClass" : "removeClass"](uiStateDisabled);
@@ -1985,6 +1981,9 @@
 		_setRounder: function(self, ele){
 			if (this.options.showRounder) {
 				ele.addClass(rounderClass);
+				if (self._rounderAdded){
+					return;
+				}
 				if ($.browser.msie) {
 					return;
 				}
@@ -2006,6 +2005,7 @@
 				var border = parseInt(value);
 				// adding 1 extra to out-most radius.
 				ele.css(key1,border +1);
+				self._rounderAdded = true;
 			}
 			else {
 				ele.removeClass(rounderClass);

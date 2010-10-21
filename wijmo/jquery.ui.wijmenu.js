@@ -1,27 +1,27 @@
 /*
- *
- * Wijmo Library 0.6.1
- * http://wijmo.com/
- *
- * Copyright(c) ComponentOne, LLC.  All rights reserved.
- * 
- * Dual licensed under the MIT or GPL Version 2 licenses.
- * licensing@wijmo.com
- * http://www.wijmo.com/license
- *
- *
- * Wijmo Menu widget.
- *
- * Depends:
- *	jquery.ui.core.js
- *	jquery.ui.widget.js
- *	jquery.ui.wijutil.js
- *	jquery.ui.position.js
- *	jquery.ui.effects.core.js
- *	jquery.ui.wijsuperpanel.js
- *
- */
- (function ($) {
+*
+* Wijmo Library 0.6.1
+* http://wijmo.com/
+*
+* Copyright(c) ComponentOne, LLC.  All rights reserved.
+* 
+* Dual licensed under the MIT or GPL Version 2 licenses.
+* licensing@wijmo.com
+* http://www.wijmo.com/license
+*
+*
+* Wijmo Menu widget.
+*
+* Depends:
+*	jquery.ui.core.js
+*	jquery.ui.widget.js
+*	jquery.ui.wijutil.js
+*	jquery.ui.position.js
+*	jquery.ui.effects.core.js
+*	jquery.ui.wijsuperpanel.js
+*
+*/
+(function ($) {
 	$.widget("ui.wijmenu", {
 		options: {
 			/// <summary>
@@ -124,10 +124,10 @@
 			backLink: true,
 			///<summary>
 			///Sets the text of the back link.
-			///Default:"back".
+			///Default:"Back".
 			///Type:String.
 			///</summary>
-			backLinkText: 'back',
+			backLinkText: 'Back',
 			///<summary>
 			///Sets the text of the top link.
 			///Default:"All".
@@ -439,6 +439,9 @@
 			var o = this.options;
 			var event = o.triggerEvent;
 			var self = this;
+			if (triggerEle.is("iframe")) {
+				triggerEle = $(triggerEle.get(0).contentWindow.document);
+			}
 			var menuContainer = self.element.data("domObject").menucontainer;
 			switch (event) {
 				case "click":
@@ -620,9 +623,9 @@
 			if (this.options.mode === "flyout") {
 				this._flyout();
 			}
-//			else if (this.options.mode === "popup") {
-//				this._popup();
-//			}
+			//			else if (this.options.mode === "popup") {
+			//				this._popup();
+			//			}
 			else {
 				this._drilldown();
 			}
@@ -808,7 +811,7 @@
 				var item = $(this);
 				item.removeClass("ui-widget ui-wijmenu-item ui-state-default ui-corner-all ui-wijmenu-parent ui-widget-header ui-wijmenu-separator");
 				var link = item.children(".ui-wijmenu-link");
-				link.removeClass("ui-wijmenu-link ui-corner-all").html(link.children(".ui-wijmenu-text").html()).unbind(".wijmenu");
+				link.removeClass("ui-wijmenu-link ui-corner-all ui-state-focus ui-state-hover ui-state-active").html(link.children(".ui-wijmenu-text").html()).unbind(".wijmenu");
 				item.children("ul").removeClass("ui-wijmenu-list ui-widget-content ui-corner-all ui-helper-clearfix ui-wijmenu-child ui-helper-reset")
 				.show().css({ left: "", top: "", position: "" });
 			});
@@ -876,7 +879,7 @@
 
 		_drilldown: function () {
 			var self = this;
-			var mycontainer = this.element.wrap("<div>").parent().css("position","relative");
+			var mycontainer = this.element.wrap("<div>").parent().css("position", "relative");
 			var container = this.element.data("domObject").menucontainer;
 			var scrollcontainer = this.element.data("domObject").scrollcontainer;
 			var o = this.options;
@@ -951,7 +954,7 @@
 					if (o.backLink) {
 						if (footer.find('a').size() == 0) {
 							footer.show();
-							$('<a href="#"><span class="ui-icon ui-icon-triangle-1-w"></span> <span>Back</span></a>')
+							$('<a href="#"><span class="ui-icon ui-icon-triangle-1-w"></span> <span>' + o.backLinkText + '</span></a>')
 								.appendTo(footer)
 								.click(function () { // ----- show the previous menu
 									var b = $(this);
@@ -1042,26 +1045,27 @@
 				obj.unbind("click");
 			})
 			$("ul", this.element).css({ left: "", width: "" });
+			this.element.css("left", "");
 		},
 
 		///popup menu
-//		_popup: function () {
-//			var self = this;
-//			var o = self.options;
-//			var triggerElement = o.trigger;
-//			if (triggerElement && triggerElement !== "" && $(triggerElement).length > 0) {
-//				triggerElement = $(triggerElement);
-//				self.element.data("domObject").menucontainer.css("position", "relative");
-//				triggerElement.bind("click.wijmenu", function (e) {
-//					self._displaySubmenu(triggerElement, self.element.data("domObject").menucontainer, e);
-//				});
-//				self.element.find("a.ui-wijmenu-link").bind("click.wijmenu", function () {
-//					var value = $(this).text();
-//					triggerElement.val(value);
-//					self._hideAllMenus();
-//				});
-//			}
-//		},
+		//		_popup: function () {
+		//			var self = this;
+		//			var o = self.options;
+		//			var triggerElement = o.trigger;
+		//			if (triggerElement && triggerElement !== "" && $(triggerElement).length > 0) {
+		//				triggerElement = $(triggerElement);
+		//				self.element.data("domObject").menucontainer.css("position", "relative");
+		//				triggerElement.bind("click.wijmenu", function (e) {
+		//					self._displaySubmenu(triggerElement, self.element.data("domObject").menucontainer, e);
+		//				});
+		//				self.element.find("a.ui-wijmenu-link").bind("click.wijmenu", function () {
+		//					var value = $(this).text();
+		//					triggerElement.val(value);
+		//					self._hideAllMenus();
+		//				});
+		//			}
+		//		},
 
 		_getItemByValue: function (val) {
 			var items = this.element.find("a.ui-wijmenu-link").filter(function () {
@@ -1305,4 +1309,5 @@
 		}
 	});
 
-})(jQuery)
+})(jQuery);
+
