@@ -398,7 +398,7 @@
 
 		selectItems: function (indices, triggerSelected) {
 			/// <summary>
-			/// Selects items by items’ indices.
+			/// Selects multiple items in the list.
 			/// </summary>
 			/// <param name="indices" type="Array/Number">
 			/// Indices of items to select.
