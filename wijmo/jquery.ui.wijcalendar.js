@@ -421,7 +421,7 @@ $.widget("ui.wijcalendar", {
 		this._trigger("beforeSelect", data);
 		if (data.cancel) { return; }
 		
-		if (!this.options.selectionMode.days || (!e.ctrlKey && !e.shiftKey)) { this.unSelectAll(); }
+		if (!this.options.selectionMode.days || (!e.metaKey && !e.shiftKey)) { this.unSelectAll(); }
 		
 		if (!!this.options.selectionMode.days && e.shiftKey) {
 			this._selectRange(this.options.lastSelDate, date);
