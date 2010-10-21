@@ -1373,10 +1373,10 @@
 			// ensure width and height
 			ele.addClass(uiSuperPanelClasses);
 			f.oldHeight = ele.css('height');
-			
 				var old = ele.css('overflow');
 				ele.css('overflow','');
-				ele.height(ele[0].offsetHeight);
+				// set height to element
+				ele.height(ele.height());
 				ele.css('overflow',old);
 			
 			self._createAdditionalDom(self,f,ele);
