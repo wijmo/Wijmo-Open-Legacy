@@ -309,11 +309,9 @@
             var distance = this.options.splitterDistance;
             var eleW = this.element.width();
             var eleH = this.element.height();
-            //var barSize = this.options.bar.width;
 
             if (this.options.orientation == "vertical") {
 
-                //var barW = barSize;
                 var barW = this._getBar().outerWidth();
 
                 if (distance > eleW - barW) {
@@ -334,10 +332,10 @@
 
                     var bw1 = this._getPanel1Content().borderSize().width;
                     var bh1 = this._getPanel1Content().borderSize().height;
-                    this._getPanel1Content().css("float", "none");
-                    this._getPanel1Content().css("height", eleH - bh1);
-                    this._getPanel1Content().css("width", distance - bw1);
-                    this._getPanel1Content().css("float", "left");
+                    this._getPanel1Content().css("float", "none").css("height", eleH - bh1).css("width", distance - bw1).css("float", "left");
+//                    this._getPanel1Content().css("height", eleH - bh1);
+//                    this._getPanel1Content().css("width", distance - bw1);
+//                    this._getPanel1Content().css("float", "left");
                 }
                 else {
 
@@ -355,15 +353,12 @@
                 }
                 if (window.navigator.userAgent.indexOf('Safari') > -1) {
 
-                    //var bw2 = this._getBar().borderSize().width;
                     var bh2 = this._getBar().borderSize().height;
-                    this._getBar().css("float", "none");
-                    //this._getBar().width(barW - bw2);
-                    this._getBar().height(eleH - bh2);
-                    this._getBar().css("float", "left");
+                    this._getBar().css("float", "none").height(eleH - bh2).css("float", "left");
+//                    this._getBar().height(eleH - bh2);
+//                    this._getBar().css("float", "left");
                 }
                 else {
-                    //this._getBar().setOutWidth(barW);
                     this._getBar().setOutHeight(eleH);
                 }
 
@@ -373,11 +368,10 @@
                 if (window.navigator.userAgent.indexOf('Safari') > -1) {
 
                     var bw3 = this._getPanel2Content().borderSize().width;
-                    //var bh3 = this._getPanel2Content().borderSize().height;
-                    this._getPanel2Content().css("float", "none");
-                    this._getPanel2Content().height(eleH - bw3);
-                    this._getPanel2Content().width(eleW - distance - barW - bw3);
-                    this._getPanel2Content().css("float", "left");
+                    this._getPanel2Content().css("float", "none").height(eleH - bw3).width(eleW - distance - barW - bw3).css("float", "left");
+//                    this._getPanel2Content().height(eleH - bw3);
+//                    this._getPanel2Content().width(eleW - distance - barW - bw3);
+//                    this._getPanel2Content().css("float", "left");
                 }
                 else {
 
@@ -390,7 +384,6 @@
 
             }
             else {
-                //var barH = barSize;
                 var barH = this._getBar().outerHeight();
 
                 if (distance > eleH - barH) {
@@ -403,8 +396,8 @@
 
                     distance = eleH - barH;
                 }
-                this._getPanel1().width(eleW);
-                this._getPanel1().height(distance);
+                this._getPanel1().width(eleW).height(distance);
+//                this._getPanel1().height(distance);
 
                 this._getPanel1Content().setOutWidth(eleW);
                 this._getPanel1Content().setOutHeight(distance);
@@ -420,9 +413,8 @@
                 }
 
                 this._getBar().setOutWidth(eleW);
-                //this._getBar().setOutHeight(barH);
-                this._getPanel2().width(eleW);
-                this._getPanel2().height(eleH - distance - barH);
+                this._getPanel2().width(eleW).height(eleH - distance - barH);
+//                this._getPanel2().height(eleH - distance - barH);
 
                 this._getPanel2Content().setOutWidth(eleW);
                 this._getPanel2Content().setOutHeight(eleH - distance - barH);
@@ -481,8 +473,7 @@
         },
 
         _expanderMouseOut: function (e) {
-            $(e.currentTarget).removeClass("ui-state-hover");
-            $(e.currentTarget).removeClass("ui-state-active");
+            $(e.currentTarget).removeClass("ui-state-hover ui-state-active");
         },
 
         _expanderMouseUp: function (e) {
@@ -515,14 +506,9 @@
             self._initElements();
 
             if (self.options.orientation == "vertical") {
-                self.element.removeClass("ui-wijsplitter-v-expanded");
-                self.element.removeClass("ui-wijsplitter-v-collapsed");
-                self._getExpander().removeClass("ui-corner-tl");
-                self._getExpander().removeClass("ui-corner-bl");
-                self._getExpander().removeClass("ui-corner-tr");
-                self._getExpander().removeClass("ui-corner-br");
-                self._getExpander().find("span").removeClass("ui-icon-arrowthickstop-1-w");
-                self._getExpander().find("span").removeClass("ui-icon-arrowthickstop-1-e");
+                self.element.removeClass("ui-wijsplitter-v-expanded ui-wijsplitter-v-collapsed");
+                self._getExpander().removeClass("ui-corner-tl ui-corner-bl ui-corner-tr ui-corner-br");
+                self._getExpander().find("span").removeClass("ui-icon-arrowthickstop-1-w ui-icon-arrowthickstop-1-e");
                 if (self.options.panel1.collapsed) {
                     self.element.addClass("ui-wijsplitter-v-collapsed");
                     self._getExpander().addClass("ui-corner-tr ui-corner-br");
@@ -535,14 +521,9 @@
                 }
             }
             else {
-                self.element.removeClass("ui-wijsplitter-h-expanded");
-                self.element.removeClass("ui-wijsplitter-h-collapsed");
-                self._getExpander().removeClass("ui-corner-tl");
-                self._getExpander().removeClass("ui-corner-tr");
-                self._getExpander().removeClass("ui-corner-bl");
-                self._getExpander().removeClass("ui-corner-br");
-                self._getExpander().find("span").removeClass("ui-icon-arrowthickstop-1-n");
-                self._getExpander().find("span").removeClass("ui-icon-arrowthickstop-1-s");
+                self.element.removeClass("ui-wijsplitter-h-expanded ui-wijsplitter-h-collapsed");
+                self._getExpander().removeClass("ui-corner-tl ui-corner-tr ui-corner-bl ui-corner-br");
+                self._getExpander().find("span").removeClass("ui-icon-arrowthickstop-1-n ui-icon-arrowthickstop-1-s");
                 if (self.options.panel1.collapsed) {
                     self.element.addClass("ui-wijsplitter-h-collapsed");
                     self._getExpander().addClass("ui-corner-bl ui-corner-br");
@@ -646,12 +627,12 @@
                 panel1content.css("overflow", "hidden");
             }
             else if (this.options.panel1.scrollBars == "horizontal") {
-                panel1content.css("overflow-x", "scroll");
-                panel1content.css("overflow-y", "hidden");
+                panel1content.css("overflow-x", "scroll").css("overflow-y", "hidden");
+//                panel1content.css("overflow-y", "hidden");
             }
             else if (this.options.panel1.scrollBars == "vertical") {
-                panel1content.css("overflow-x", "hidden");
-                panel1content.css("overflow-y", "scroll");
+                panel1content.css("overflow-x", "hidden").css("overflow-y", "scroll");
+//                panel1content.css("overflow-y", "scroll");
             }
 
             if (this.options.panel2.scrollBars == "auto") {
@@ -664,19 +645,19 @@
                 panel2content.css("overflow", "hidden");
             }
             else if (this.options.panel2.scrollBars == "horizontal") {
-                panel2content.css("overflow-x", "scroll");
-                panel2content.css("overflow-y", "hidden");
+                panel2content.css("overflow-x", "scroll").css("overflow-y", "hidden");
+//                panel2content.css("overflow-y", "hidden");
             }
             else if (this.options.panel2.scrollBars == "vertical") {
-                panel2content.css("overflow-x", "hidden");
-                panel2content.css("overflow-y", "scroll");
+                panel2content.css("overflow-x", "hidden").css("overflow-y", "scroll");
+//                panel2content.css("overflow-y", "scroll");
             }
 
         },
 
         _setFullSplitMode: function () {
-            this.element.css("width", "100%");
-            this.element.css("height", "100%");
+            this.element.css("width", "100%").css("height", "100%");
+//            this.element.css("height", "100%");
         },
 
         invalidate: function () {
