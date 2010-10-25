@@ -20,7 +20,7 @@
  */
 (function ($) {
 
-	var uiStateHover = 'ui-state-hover', zonCSS = 'ui-wijdialog-defaultdockingzone';
+	var uiStateHover = "ui-state-hover", zonCSS = "ui-wijdialog-defaultdockingzone";
 
 	$.widget("ui.wijdialog", $.ui.dialog, {
 		options: {
@@ -32,12 +32,12 @@
 			/// <remarks>
 			/// The default value for this option is: 
 			/// {
-			///	pin: {visible: true, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff:'ui-icon-pin-s'},
-			///	refresh: {visible: true, click: self.refresh, iconClassOn: 'ui-icon-refresh'},
-			///	toggle: {visible: true, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff:'ui-icon-carat-1-s'},
-			///	minimize: {visible: true, click: self.minimize, iconClassOn: 'ui-icon-minus'},
-			///	maximize: {visible: true, click: self.maximize, iconClassOn: 'ui-icon-extlink'},
-			///	close: {visible: true, click: self.close, iconClassOn: 'ui-icon-close'}
+			///	pin: {visible: true, click: self.pin, iconClassOn: "ui-icon-pin-w", iconClassOff:"ui-icon-pin-s"},
+			///	refresh: {visible: true, click: self.refresh, iconClassOn: "ui-icon-refresh"},
+			///	toggle: {visible: true, click: self.toggle, iconClassOn: "ui-icon-carat-1-n", iconClassOff:"ui-icon-carat-1-s"},
+			///	minimize: {visible: true, click: self.minimize, iconClassOn: "ui-icon-minus"},
+			///	maximize: {visible: true, click: self.maximize, iconClassOn: "ui-icon-extlink"},
+			///	close: {visible: true, click: self.close, iconClassOn: "ui-icon-close"}
 			/// };
 			/// Each button is represented by an object in this object. 
 			/// property name: The name of the button.
@@ -62,37 +62,21 @@
 			/// <summary>
 			/// A URL string specifies the URL for the iframe element inside wijdialog.
 			/// Type: String.
-			/// Default: ''.
+			/// Default: "".
 			/// </summary>
-			contentUrl: '',
+			contentUrl: "",
 			/// <summary>
 			/// A string specifies the ID of the DOM element to dock to when wijdialog is minimized.
 			/// Type: String.
-			/// Default: ''.
+			/// Default: "".
 			///	</summary>
-			minimizeZoneElementId: '',
-			/// <summary>
-			/// Buttoncreating event handler. A function gets called before caption buttons is created.
-			/// A user could use this event to change the array of the buttons to change, add or remove buttons from title bar.
-			/// Type: Function.
-			/// Default: null.
-			/// </summary>
-			/// <param name="e" type="EventObj">
-			/// EventObj relates to this event.
-			/// </param>
-			/// <param name="data" type="Array">
-			/// Buttons array will be created.
-			/// </param>
-			/// <remarks>
-			/// A user could use this event to change the array of the buttons to change, add or remove buttons from title bar.
-			/// </remarks>
-			buttoncreating: null
+			minimizeZoneElementId: ""
 		},
 
 		_create: function () {
 			var self = this;
 			$.ui.dialog.prototype._create.apply(self, arguments);
-			self.uiDialog.addClass('ui-wijdialog');
+			self.uiDialog.addClass("ui-wijdialog");
 			self._initWijWindow();
 			self._bindWindowResize();
 		},
@@ -101,27 +85,22 @@
 			var self = this;
 			self._createCaptionButtons();
 			self._checkUrl();
-			self.uiDialogButtonPane = $('.ui-dialog-buttonpane', self.uiDialog);
+			self.uiDialogButtonPane = $(".ui-dialog-buttonpane", self.uiDialog);
 		},
 
 		_checkUrl: function () {
 			var self = this;
 			var o = self.options;
 			var url = o.contentUrl;
-			if (typeof url === 'string' && url.length > 0) {
-				self.element.addClass('ui-wijdialog-hasframe');
-				//				self.contentWrapper = $('<div></div>').hide();
-				//				self.element.contents().each(function (index, ele) {
-				//					self.contentWrapper.append(ele);
-				//				});
+			if (typeof url === "string" && url.length > 0) {
+				self.element.addClass("ui-wijdialog-hasframe");
+
 				var innerFrame = $('<iframe style="width:100%;height:99%;" frameborder="0"></iframe>');
-				innerFrame.attr('src', url);
+				innerFrame.attr("src", url);
 				self.element.append(innerFrame);
 				self.innerFrame = innerFrame;
 			}
-			//			else {
 			self.contentWrapper = self.element;
-			//			}
 		},
 
 		_createCaptionButtons: function () {
@@ -129,23 +108,22 @@
 			var self = this;
 			var o = self.options;
 			var buttons = {
-				pin: { visible: true, click: self.pin, iconClassOn: 'ui-icon-pin-w', iconClassOff: 'ui-icon-pin-s' },
-				refresh: { visible: true, click: self.refresh, iconClassOn: 'ui-icon-refresh' },
-				toggle: { visible: true, click: self.toggle, iconClassOn: 'ui-icon-carat-1-n', iconClassOff: 'ui-icon-carat-1-s' },
-				minimize: { visible: true, click: self.minimize, iconClassOn: 'ui-icon-minus' },
-				maximize: { visible: true, click: self.maximize, iconClassOn: 'ui-icon-extlink' },
-				close: { visible: true, click: self.close, iconClassOn: 'ui-icon-close' }
+				pin: { visible: true, click: self.pin, iconClassOn: "ui-icon-pin-w", iconClassOff: "ui-icon-pin-s" },
+				refresh: { visible: true, click: self.refresh, iconClassOn: "ui-icon-refresh" },
+				toggle: { visible: true, click: self.toggle, iconClassOn: "ui-icon-carat-1-n", iconClassOff: "ui-icon-carat-1-s" },
+				minimize: { visible: true, click: self.minimize, iconClassOn: "ui-icon-minus" },
+				maximize: { visible: true, click: self.maximize, iconClassOn: "ui-icon-extlink" },
+				close: { visible: true, click: self.close, iconClassOn: "ui-icon-close" }
 			};
 			var oCaptionButtons = o.captionButtons;
 			var uiDialogTitlebar = self.uiDialogTitlebar;
 			$.extend(buttons, oCaptionButtons);
-			// remove close button and previously generated buttons
-			uiDialogTitlebar.children('.ui-dialog-titlebar-close, .ui-wijdialog-captionbutton').remove();
+			uiDialogTitlebar.children(".ui-dialog-titlebar-close, .ui-wijdialog-captionbutton").remove();
 			// recreate buttons
 			$.each(buttons, function (name, value) {
 				captionButtons.push({ button: name, info: value });
 			});
-			self._trigger('buttoncreating', null, captionButtons);
+			self._trigger("buttoncreating", null, captionButtons);
 			for (var i = captionButtons.length - 1; i >= 0; i--) {
 				self._createCaptionButton(captionButtons[i], uiDialogTitlebar);
 			};
@@ -154,21 +132,21 @@
 		_createCaptionButton: function (buttonHash, uiDialogTitlebar, notAppendToHeader) {
 			var self = this;
 
-			var buttonCSS = 'ui-wijdialog-titlebar-' + buttonHash.button;
-			var button = uiDialogTitlebar.children('.' + buttonCSS);
+			var buttonCSS = "ui-wijdialog-titlebar-" + buttonHash.button;
+			var button = uiDialogTitlebar.children("." + buttonCSS);
 			var info = buttonHash.info;
 			if (info.visible) {
 				if (button.size() === 0) {
-					var buttonIcon = $('<span></span>')
+					var buttonIcon = $("<span></span>")
 					.addClass(
-						'ui-icon ' +
+						"ui-icon " +
 						info.iconClassOn
 					)
 					.text(buttonHash.button);
 					var buttonObject = $('<a href="#"></a>')
 					.append(buttonIcon)
-					.addClass(buttonCSS + ' ui-corner-all ui-wijdialog-captionbutton')
-					.attr('role', 'button')
+					.addClass(buttonCSS + " ui-corner-all ui-wijdialog-captionbutton")
+					.attr("role", "button")
 					.hover(
 						function () {
 							buttonObject.addClass(uiStateHover);
@@ -197,7 +175,7 @@
 						buttonObject.appendTo(uiDialogTitlebar);
 					}
 				}
-				self[buttonHash.button + 'Button'] = buttonObject;
+				self[buttonHash.button + "Button"] = buttonObject;
 			}
 			else {
 				button.remove();
@@ -210,11 +188,11 @@
 			///	</summary>
 
 			var uiDialog = this.uiDialog;
-			var drag = uiDialog.draggable('option', 'disabled');
+			var drag = uiDialog.draggable("option", "disabled");
 			uiDialog.draggable({ disabled: !drag });
 			// remove ui-state-disabled because we are not disabling dialog.
 			if (!drag) {
-				uiDialog.removeClass('ui-state-disabled');
+				uiDialog.removeClass("ui-state-disabled");
 			}
 		},
 
@@ -225,7 +203,7 @@
 
 			var fr = this.innerFrame;
 			if (fr != undefined) {
-				fr.attr('src', fr.attr('src'));
+				fr.attr("src", fr.attr("src"));
 			}
 		},
 
@@ -250,7 +228,7 @@
 			var animationSetting = o.expandingAnimation;
 			if (fireEvent && animationSetting != null) {
 				self.contentWrapper.show(animationSetting.effect, animationSetting.options, animationSetting.speed, function (e) {
-					self.uiDialog.css('height', self._toggleHeight);
+					self.uiDialog.css("height", self._toggleHeight);
 					if ($.isFunction(animationSetting.callback)) {
 						animationSetting.callback(e);
 					}
@@ -260,7 +238,7 @@
 			else {
 				self.contentWrapper.show();
 				self._enableDisableResizer(false);
-				self.uiDialog.css('height', self.toggleHeight);
+				self.uiDialog.css("height", self.toggleHeight);
 			}
 		},
 
@@ -269,7 +247,7 @@
 			var o = self.options;
 			self._enableDisableResizer(true);
 			self._toggleHeight = self.uiDialog[0].style.height;
-			self.uiDialog.height('auto');
+			self.uiDialog.height("auto");
 			var animationSetting = o.collapsingAnimation;
 			if (fireEvent && animationSetting != null) {
 				self.contentWrapper.hide(animationSetting.effect, animationSetting.options, animationSetting.speed);
@@ -283,7 +261,7 @@
 			var dlg = this.uiDialog;
 			dlg.resizable({ disabled: disabled });
 			if (disabled) {
-				dlg.removeClass('ui-state-disabled');
+				dlg.removeClass("ui-state-disabled");
 			}
 		},
 
@@ -291,7 +269,7 @@
 			var dlg = this.uiDialog;
 			dlg.draggable({ disabled: disabled });
 			if (disabled) {
-				dlg.removeClass('ui-state-disabled');
+				dlg.removeClass("ui-state-disabled");
 			}
 		},
 
@@ -310,24 +288,23 @@
 				if (self.maximized) {
 					self.maximized = false;
 					self.restoreButton.remove(); //fixed bug can't minimize window when it's maximized
-					$(window).unbind('.onWinResize');
+					$(window).unbind(".onWinResize");
 				}
 				else { // minimize from normal state
 					self._saveNormalState();
 				}
 				// disable resizer
 				self._enableDisableResizer(true);
-				//self._enableDisableDragger(false);
 				//hide content
 
-				var $from = $('<div></div>')
+				var $from = $("<div></div>")
 				.appendTo(document.body)
 				.css({
 					top: self.uiDialog.offset().top,
 					left: self.uiDialog.offset().left,
 					height: self.uiDialog.innerHeight(),
 					width: self.uiDialog.innerWidth(),
-					position: 'absolute'
+					position: "absolute"
 				});
 
 				self.contentWrapper.hide();
@@ -335,43 +312,43 @@
 					self.uiDialogButtonPane.hide();
 				}
 				// remove size restriction
-				dlg.height('auto');
-				dlg.width('auto');
-				self._doButtonAction(self.minimizeButton, 'hide');
-				self._restoreButton(true, self.minimizeButton, 'After');
-				self._doButtonAction(self.pinButton, 'hide');
-				self._doButtonAction(self.refreshButton, 'hide');
-				self._doButtonAction(self.toggleButton, 'hide');
-				self._doButtonAction(self.maximizeButton, 'show');
+				dlg.height("auto");
+				dlg.width("auto");
+				self._doButtonAction(self.minimizeButton, "hide");
+				self._restoreButton(true, self.minimizeButton, "After");
+				self._doButtonAction(self.pinButton, "hide");
+				self._doButtonAction(self.refreshButton, "hide");
+				self._doButtonAction(self.toggleButton, "hide");
+				self._doButtonAction(self.maximizeButton, "show");
 				if (o.minimizeZoneElementId.length > 0) {
-					miniZone = $('#' + o.minimizeZoneElementId);
+					miniZone = $("#" + o.minimizeZoneElementId);
 				}
 				if (miniZone != null && miniZone.size() > 0) {
 					miniZone.append(self.uiDialog);
 				}
 				else {
-					var defaultZone = $('.' + zonCSS);
+					var defaultZone = $("." + zonCSS);
 					if (defaultZone.size() == 0) {
 						defaultZone = $('<div class="' + zonCSS + '"></div>');
 						$(document.body).append(defaultZone);
 					}
 					defaultZone.append(self.uiDialog).css("z-index", dlg.css("z-index"));
 				}
-				self.uiDialog.css('position', 'static');
-				self.uiDialog.css('float', 'left');
+				self.uiDialog.css("position", "static");
+				self.uiDialog.css("float", "left");
 
-				var $to = $('<div></div>')
+				var $to = $("<div></div>")
 				.appendTo(document.body)
 				.css({
 					top: self.uiDialog.offset().top,
 					left: self.uiDialog.offset().left,
 					height: self.uiDialog.innerHeight(),
 					width: self.uiDialog.innerWidth(),
-					position: 'absolute'
+					position: "absolute"
 				});
 				self.uiDialog.hide();
 
-				$from.effect('transfer', {
+				$from.effect("transfer", {
 					to: $to,
 					className: "ui-widget-content"
 				}, 100, function () {
@@ -379,7 +356,6 @@
 					$to.remove();
 					self.uiDialog.show();
 				});
-
 			}
 		},
 
@@ -399,14 +375,12 @@
 				if (self.minimized) {
 					self.restore(); //bug in IE when minimize -> maximize -> restore
 				}
-				else {
-					if (self.collapsed) {
-						self._expandDialogContent(false);
-					}
+				else if (self.collapsed) {
+					self._expandDialogContent(false);
 				}
 				if (self.maximizeButton != undefined) {
 					self.maximizeButton.hide();
-					self._restoreButton(true, self.maximizeButton, 'Before');
+					self._restoreButton(true, self.maximizeButton, "Before");
 				}
 				self._saveNormalState();
 				var w = $(window);
@@ -416,7 +390,7 @@
 				}
 				/// TODO : bind resize event.  
 				self.uiDialog.resizable({ disabled: true });
-				self.uiDialog.removeClass('ui-state-disabled');
+				self.uiDialog.removeClass("ui-state-disabled");
 			}
 		},
 
@@ -425,13 +399,7 @@
 			$(window).resize(function () {
 				if (self.maximized) {
 					var w = $(window);
-					//					if ($.browser.mozilla) {  //hide the scrollbar on ff
-					//						window.document.body.style.overflow = 'hidden';
-					//					}
 					self._onWinResize(self, w);
-					//					if ($.browser.mozilla) {
-					//						window.document.body.style.overflow = 'auto';
-					//					}
 				}
 			});
 		},
@@ -440,19 +408,20 @@
 			var self = this;
 			var dialog = self.uiDialog;
 			var ele = self.element;
-			self.normalWidth = dialog.css('width');
-			self.normalLeft = dialog.css('left');
-			self.normalTop = dialog.css('top');
-			self.normalHeight = dialog.css('height');
+			self.normalWidth = dialog.css("width");
+			self.normalLeft = dialog.css("left");
+			self.normalTop = dialog.css("top");
+			self.normalHeight = dialog.css("height");
 
-			self.normalInnerHeight = ele.css('height');
-			self.normalInnerWidth = ele.css('width');
-			self.normalInnerMinWidth = ele.css('miniwidth');
+			self.normalInnerHeight = ele.css("height");
+			self.normalInnerWidth = ele.css("width");
+			self.normalInnerMinWidth = ele.css("min-width");
+			self.normalInnerMinHeight = ele.css("min-height");
 		},
 
 		_onWinResize: function (self, w) {
-			self.uiDialog.css('top', w.scrollTop());
-			self.uiDialog.css('left', w.scrollLeft());
+			self.uiDialog.css("top", w.scrollTop());
+			self.uiDialog.css("left", w.scrollLeft());
 			self.uiDialog.setOutWidth(w.width());
 			self.uiDialog.setOutHeight(w.height());
 			self._resizeDialog(self);
@@ -460,15 +429,15 @@
 
 		_restoreButton: function (show, button, position) {
 			var self = this;
-			var buttonHash = { button: 'restore', info: {
+			var buttonHash = { button: "restore", info: {
 				visible: show,
 				click: self.restore,
-				iconClassOn: 'ui-icon-newwin'
+				iconClassOn: "ui-icon-newwin"
 			}
 			};
 			var restore = self._createCaptionButton(buttonHash, self.uiDialogTitlebar, true);
 			if (show) {
-				restore['insert' + position](button);
+				restore["insert" + position](button);
 				self.restoreButton = restore;
 			}
 		},
@@ -484,18 +453,18 @@
 			if (self.minimized) {
 				self.minimized = false;
 
-				var $from = $('<div></div>')
+				var $from = $("<div></div>")
 				.appendTo(document.body)
 				.css({
 					top: self.uiDialog.offset().top,
 					left: self.uiDialog.offset().left,
 					height: self.uiDialog.innerHeight(),
 					width: self.uiDialog.innerWidth(),
-					position: 'absolute'
+					position: "absolute"
 				});
 
-				dlg.css('position', 'absolute');
-				dlg.css('float', '');
+				dlg.css("position", "absolute");
+				dlg.css("float", "");
 				dlg.appendTo(document.body);
 				self._enableDisableResizer(false);
 				//self._enableDisableDragger(false);
@@ -504,17 +473,18 @@
 				if (self.uiDialogButtonPane.length) {
 					self.uiDialogButtonPane.show();
 				}
-				var $to = $('<div></div>')
+				var $to = $("<div></div>")
 				.appendTo(document.body)
 				.css({
 					top: self.uiDialog.offset().top,
 					left: self.uiDialog.offset().left,
 					height: self.uiDialog.innerHeight(),
 					width: self.uiDialog.innerWidth(),
-					position: 'absolute'
+					position: "absolute"
 				});
+
 				self.uiDialog.hide();
-				$from.effect('transfer', {
+				$from.effect("transfer", {
 					to: $to,
 					className: "ui-widget-content"
 				}, 150, function () {
@@ -523,19 +493,18 @@
 					$to.remove();
 				});
 
-
 				if (self.collapsed) {
 					self._collapseDialogContent();
 				}
-				self._doButtonAction(self.minimizeButton, 'show');
-				self._doButtonAction(self.restoreButton, 'remove');
-				self._doButtonAction(self.pinButton, 'show');
-				self._doButtonAction(self.refreshButton, 'show');
-				self._doButtonAction(self.toggleButton, 'show');
+				self._doButtonAction(self.minimizeButton, "show");
+				self._doButtonAction(self.restoreButton, "remove");
+				self._doButtonAction(self.pinButton, "show");
+				self._doButtonAction(self.refreshButton, "show");
+				self._doButtonAction(self.toggleButton, "show");
 			}
 			else if (self.maximized) {
 				self.maximized = false;
-				$(window).unbind('.onWinResize');
+				$(window).unbind(".onWinResize");
 				if (self.collapsed) {
 					self._expandDialogContent();
 				}
@@ -548,8 +517,18 @@
 				}
 				if (self.maximizeButton != undefined) {
 					self.maximizeButton.show();
-					self._restoreButton(false, self.maximizeButton, 'before');
+					self._restoreButton(false, self.maximizeButton, "before");
 				}
+			}
+		},
+
+		open: function () {
+			var self = this;
+			if (!self.minimized) {
+				$.ui.dialog.prototype.open.apply(self, arguments);
+			}
+			else {
+				self.uiDialog.show();
 			}
 		},
 
@@ -563,14 +542,18 @@
 			var self = this;
 			var dialog = self.uiDialog;
 			var ele = self.element;
-			dialog.css('width', self.normalWidth);
-			dialog.css('left', self.normalLeft);
-			dialog.css('top', self.normalTop);
-			dialog.css('height', self.normalHeight);
+			dialog.css("width", self.normalWidth);
+			dialog.css("left", self.normalLeft);
+			dialog.css("top", self.normalTop);
+			dialog.css("height", self.normalHeight);
 
-			ele.css('height', self.normalInnerHeight);
-			ele.css('width', self.normalInnerWidth);
-			ele.css('miniheight', self.normalInnerMinWidth);
+			ele.css("height", self.normalInnerHeight);
+			ele.css("width", self.normalInnerWidth);
+			ele.css("min-width", self.normalInnerMinWidth);
+			ele.css("min-height", self.normalInnerMinHeight);
+
+			self.options.width = self.normalWidth;
+			self.options.height = self.normalHeight;
 		}
 	});
 
