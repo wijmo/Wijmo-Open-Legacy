@@ -182,22 +182,20 @@ $.widget("ui.wijcalendar", {
 	_create: function () {
 		this.element.addClass("ui-wijcalendar ui-datepicker-inline ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all");
 		this._previewWrapper(this.options.allowPreview);
-		this.element.data('previewMode', false);
+		this.element.data('preview.wijcalendar', false);
 	},
 
 	_init: function () {
 		if (this.options.popupMode){
-			var po = {autoHide: this.options.autoHide}
-			if (this.options.beforePopup) {po.showing = this.options.beforePopup;}
-			if (this.options.afterPopup) {po.shown = this.options.afterPopup;}
-			if (this.options.beforeClose) {po.hidding = this.options.beforeClose;}
+			var po = {autoHide: !!this.options.autoHide}
+			if (this.options.beforePopup) { po.showing = this.options.beforePopup; }
+			if (this.options.afterPopup) { po.shown = this.options.afterPopup; }
+			if (this.options.beforeClose) { po.hidding = this.options.beforeClose; }
 			
 			var self = this;
 			po.hidden = function(data){
-				self.options.lastSelDate = undefined;
-				if (self.options.afterClose) {
-					self.options.afterClose.call(data);
-				}
+				self.element.removeData("lastdate.wijcalendar");
+				if (self.options.afterClose) { self.options.afterClose.call(data); }
 			};
 			
 			this.element.wijpopup(po);
@@ -207,7 +205,6 @@ $.widget("ui.wijcalendar", {
 		this._getDisabledDates();
 		this._resetWidth();
 		this.refresh();
-		
 		this.element.width(this.element.width()+2);
 	},
 	
@@ -216,6 +213,13 @@ $.widget("ui.wijcalendar", {
 		this.close();
 		this.element.html("");
 		this.element.removeClass("ui-wijcalendar ui-datepicker-inline ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-datepicker-multi");
+		
+		var self = this;
+		$.each( [ "preview", "disableddates", "selecteddates", "dragging", "lastdate", "animating" ], function( i, prefix ) {
+				self.element.removeData( prefix + ".wijcalendar" );
+			});
+		
+		this._previewWrapper(false);
 	},
 
 	_setOption: function (key, value) {
@@ -242,14 +246,7 @@ $.widget("ui.wijcalendar", {
 			break;
 
 			case "monthCols":
-				if (value > 1){
-					this.element.css('width', 17*value + 'em');
-					this.element.addClass('ui-datepicker-multi');
-				}
-				else{
-					this.element.css('width', '');
-					this.element.removeClass('ui-datepicker-multi');
-				}
+				this._resetWidth();
 				this.refresh();
 			break;
 			
@@ -281,26 +278,24 @@ $.widget("ui.wijcalendar", {
 		}
 	},
 	
-	getDisplayDate: function () {
-		/// <summary>Gets the valid display date.</summary>
-		var displayDate = this.options.displayDate;
-		if (displayDate === undefined) { displayDate = new Date(); }
-		if (wijDateOps.isSameDate(displayDate, new Date(1900, 0, 1))) { displayDate = new Date(); }
-		
-		return displayDate;
-	},
-	
 	refresh: function () {
 		/// <summary>Refresh the calendar.</summary>
 		this.element.html(this._getCalendarHtml());
 		this._bindEvents();
 	},
+	
+	getDisplayDate: function () {
+		/// <summary>Gets the valid display date.</summary>
+		var d = this.options.displayDate ? this.options.displayDate : new Date();
+		if (wijDateOps.isSameDate(d, new Date(1900, 0, 1))) { d = new Date(); }
+		
+		return d;
+	},
 
 	getSelectedDate: function(){
 		/// <summary>Gets the current selected date.</summary>
-		var selDates = this.options.selectedDates;
-		if (!selDates || selDates.length == 0) { return null; }
-		return selDates[0];
+		var dates = this.options.selectedDates;
+		return (!dates || dates.length == 0) ? null : dates[0];
 	},
 
 	selectDate: function (date) {
@@ -318,11 +313,11 @@ $.widget("ui.wijcalendar", {
 
 	unSelectAll: function () {
 		/// <summary>Unselect all by code.</summary>
-		var origSel = this.options.selectedDates;
-		if (origSel && origSel.length > 0) {
+		var dates = this.options.selectedDates;
+		if (dates && dates.length > 0) {
 			this._getSelectedDates().clear();
-			for (var i = 0; i < origSel.length; i++) {
-				this._refreshDate(origSel[i]);
+			for (var i = 0; i < dates.length; i++) {
+				this._refreshDate(dates[i]);
 			}
 		}
 	},
@@ -331,7 +326,7 @@ $.widget("ui.wijcalendar", {
 		if (wijDateOps.isSameMonth(this.getDisplayDate(), date)) { return; }
 	
 		var visible = this.element.is(":visible");
-		if (this.options.duration<=0 || !visible) {
+		if (this.options.duration <= 0 || !visible) {
 			this.refresh();
 		}
 		else {
@@ -378,81 +373,69 @@ $.widget("ui.wijcalendar", {
 		return $.findClosestCulture(name || this.options.culture);
 	},
 	
-	_getDateCollection: function(token){
-		var dates = this.element.data(token);
+	_getDates: function(token){
+		var name = token.toLowerCase() + ".wijcalendar";
+		var dates = this.element.data(name);
 		if (dates === undefined){
 			dates = new wijDateCollection(this, token);
-			this.element.data(token, dates);
+			this.element.data(name, dates);
 		}
 		return dates;
 	},
 	
 	_getDisabledDates: function(){
-		return this._getDateCollection('disabledDates');
+		return this._getDates('disabledDates');
 	},
 	
 	_getSelectedDates: function(){
-		return this._getDateCollection('selectedDates');
-	},
-	
-	_bindDocEvents: function(){
-		$(document.body).bind("mouseup." + this.widgetName, $.proxy(this.onDocMouseUp, this));
-	},
-	
-	_unBindDocEvents: function(){
-		$(document.body).unbind("." + this.widgetName);
-	},
-	
-	onDocMouseUp: function(e){
-		this._unBindDocEvents();
-		this.element.data('dragging', false);
+		return this._getDates('selectedDates');
 	},
 	
 	onDayMouseDown: function (e) {
 		e.preventDefault(); 
 		e.stopPropagation();
 		
+		var o = this.options, self = this;
 		if (e.which != 1) { return; }
 		var date = this._getCellDate(e.currentTarget);
 		if (date === undefined) { return; }
-		if (!this.options.selectionMode.day) { return; }
+		if (!o.selectionMode.day) { return; }
 		
 		var data = {date: date}
 		this._trigger("beforeSelect", data);
 		if (data.cancel) { return; }
 		
-		if (!this.options.selectionMode.days || (!e.metaKey && !e.shiftKey)) { this.unSelectAll(); }
+		if (!o.selectionMode.days || (!e.metaKey && !e.shiftKey)) { this.unSelectAll(); }
 		
-		if (!!this.options.selectionMode.days && e.shiftKey) {
-			this._selectRange(this.options.lastSelDate, date);
+		if (!!o.selectionMode.days && e.shiftKey && this.element.data("lastdate.wijcalendar")) {
+			this._selectRange(this.element.data("lastdate.wijcalendar"), date);
 		}
 		else {
-			this.options.lastSelDate = date;
+			this.element.data("lastdate.wijcalendar", date);
 			this.selectDate(date);
 		}
-		var selDates = [];
-		selDates[selDates.length] = date;
 		
 		this._trigger('afterSelect', data);
-		this._trigger('selectedDatesChanged');
+		this._trigger('selectedDatesChanged', {dates: [date]});
 	
-		if (!!this.options.selectionMode.days){
-			this.element.data('dragging', true);
-			this._bindDocEvents();
+		if (!!o.selectionMode.days){
+			this.element.data('dragging.wijcalendar', true);
+			$(document.body).bind("mouseup." + this.widgetName, function(){
+				$(document.body).unbind("mouseup." + self.widgetName);
+				self.element.data('dragging.wijcalendar', false);
+			});
 		}
 	},
 	
 	onDayClicked: function (e) {
-		var c = $(e.currentTarget);
-		var d = c.attr('date');
-		if (d === undefined) { return false; }
+		var date = this._getCellDate(e.currentTarget);
+		if (date === undefined) { return false; }
 		if (!this.options.selectionMode.day) { return false; }
 	
-		var date = new Date(d);
 		if (this.isPopupShowing()) {
 			this.close();
 		}else{
-			if (c.hasClass('ui-datepicker-other-month')){
+			if ($(e.currentTarget).hasClass('ui-datepicker-other-month')){
 				this._slideToDate(date);
 			}
 		}
@@ -464,12 +447,12 @@ $.widget("ui.wijcalendar", {
 		e.currentTarget.state = 'hover';
 		this._refreshDayCell(e.currentTarget);
 		
-		if (!!this.element.data('dragging')){
+		if (!!this.element.data('dragging.wijcalendar')){
 			var date = this._getCellDate(e.currentTarget);
 			if (date === undefined) { return; }
 			
 			this.unSelectAll();
-			this._selectRange(this.options.lastSelDate, date, true);
+			this._selectRange(this.element.data("lastdate.wijcalendar"), date, true);
 		}
 	},
 	
@@ -494,7 +477,7 @@ $.widget("ui.wijcalendar", {
 				minDate = wijDateOps.addDays(minDate, 1);
 			}
 			if (!bymouse) {
-				this.options.lastSelDate = undefined;
+				this.element.removeData("lastdate.wijcalendar");
 			}
 		}
 		else {
@@ -502,16 +485,14 @@ $.widget("ui.wijcalendar", {
 		}
 	},
 	
-	_getCellDate:function(cell){
-		var c = $(cell);
-		var d = c.attr('date');
+	_getCellDate:function(c){
+		var d = $(c).attr('date');
 		return (d === undefined) ? d : new Date(d);
 	},
 	
-	_getParentTable: function (cell) {
-		var parents = $(cell).parents('table');
-		if (parents.length == 0) { return undefined; }
-		return parents.get(0);
+	_getParentTable: function (c) {
+		var parents = $(c).parents('table');
+		return (parents.length == 0) ? undefined : parents.get(0);
 	},
 
 	_initMonthSelector: function (ms) {
@@ -536,8 +517,7 @@ $.widget("ui.wijcalendar", {
 						var dt = $(td).attr('daytype');
 						if (dt === undefined) { continue; }
 						if ($(td).find('a').hasClass('ui-priority-secondary')) { continue; }
-						var dayType = parseInt(dt);
-						if (this._isSelectable(dayType)) {
+						if (this._isSelectable(parseInt(dt))) {
 							cells[cells.length] = td;
 						}
 					}
@@ -552,19 +532,19 @@ $.widget("ui.wijcalendar", {
 		this._initMonthSelector(e.currentTarget);
 		var cells = $(e.currentTarget).data('cells');
 		
-		this.options.lastSelDate = undefined;
+		this.element.removeData("lastdate.wijcalendar");
 		this.unSelectAll();
 		var selDates = [];
 		for (var i = 0; i < cells.length; i++) {
-			var dayCell = cells[i];
-			var d = $(dayCell).attr('date');
+			var c = cells[i];
+			var d = $(c).attr('date');
 			if (d === undefined) { continue; }
 			var date = new Date(d);
 			this.selectDate(date);
 			selDates[selDates.length] = date;
 		}
 		
-		this._trigger('selectedDatesChanged');
+		this._trigger('selectedDatesChanged', {dates: selDates});
 		if (this.isPopupShowing()) {
 			this.close();
 		}
@@ -618,8 +598,7 @@ $.widget("ui.wijcalendar", {
 						var dt = $(td).attr('daytype');
 						if (dt === undefined) { continue; }
 						if ($(td).find('a').hasClass('ui-priority-secondary')) { continue; }
-						var dayType = parseInt(dt);
-						if (this._isSelectable(dayType)) {
+						if (this._isSelectable(parseInt(dt))) {
 							cells[cells.length] = td;
 						}
 					}
@@ -637,15 +616,15 @@ $.widget("ui.wijcalendar", {
 		this.unSelectAll();
 		var selDates = [];
 		for (var i = 0; i < cells.length; i++) {
-			var dayCell = $(cells[i]);
-			var d = dayCell.attr('date');
+			var c = $(cells[i]);
+			var d = c.attr('date');
 			if (d === undefined) { continue; }
 			var date = new Date(d);
 			this.selectDate(date);
 			selDates[selDates.length] = date;
 		}
 		
-		this._trigger('selectedDatesChanged');
+		this._trigger('selectedDatesChanged', {dates: selDates});
 		if (this.isPopupShowing()) {
 			this.close();
 		}
@@ -698,8 +677,7 @@ $.widget("ui.wijcalendar", {
 						var dt = $(td).attr('daytype');
 						if (dt === undefined) { continue; }
 						if ($(td).find('a').hasClass('ui-priority-secondary')) { continue; }
-						var dayType = parseInt(dt);
-						if (this._isSelectable(dayType)) {
+						if (this._isSelectable(parseInt(dt))) {
 							cells[cells.length] = td;
 						}
 					}
@@ -716,15 +694,15 @@ $.widget("ui.wijcalendar", {
 		this.unSelectAll();
 		var selDates = [];
 		for (var i = 0; i < cells.length; i++) {
-			var dayCell = $(cells[i]);
-			var d = dayCell.attr('date');
+			var c = $(cells[i]);
+			var d = c.attr('date');
 			if (d === undefined) { continue; }
 			var date = new Date(d);
 			this.selectDate(date);
 			selDates[selDates.length] = date;
 		}
 		
-		this._trigger('selectedDatesChanged');
+		this._trigger('selectedDatesChanged', {dates: selDates});
 		if (this.isPopupShowing()) {
 			this.close();
 		}
@@ -751,7 +729,7 @@ $.widget("ui.wijcalendar", {
 	},
 	
 	_isAnimating: function () {
-		return !!this.element.data('animating');
+		return !!this.element.data('animating.wijcalendar');
 	},
 	
 	onPreviewMouseEnter: function (e) {
@@ -767,7 +745,7 @@ $.widget("ui.wijcalendar", {
 		if (btnId === "prevPreview") { months = -months; }
 		
 		this.options.displayDate = wijDateOps.addMonths(mainDate, months);
-		this.element.data('previewMode', true);
+		this.element.data('preview.wijcalendar', true);
 		
 		var previewContainer = $('<div/>');
 		previewContainer.appendTo(document.body);
@@ -776,7 +754,7 @@ $.widget("ui.wijcalendar", {
 		previewContainer.html(this._getCalendarHtml());
 
 		this.options.displayDate = mainDate;
-		this.element.data('previewMode', false);
+		this.element.data('preview.wijcalendar', false);
 		this._createMonthViews();
 		
 		previewContainer.wijpopup({
@@ -812,7 +790,7 @@ $.widget("ui.wijcalendar", {
 	},
 	
 	_resetWidth: function(){
-		if (this._myGrid === undefined){
+		if (!this._myGrid){
 			this.element.css('height', '');
 			if (this.options.monthCols > 1){
 				this.element.css('width', 17*this.options.monthCols + 'em');
@@ -831,7 +809,7 @@ $.widget("ui.wijcalendar", {
 		this.element.height(h);
 		
 		var date = this.getDisplayDate();
-		this.element.wrapInner("<div class='ui-wijcalendar-wrapper' style='overflow:hidden;position:absolute;'></div>");
+		this.element.wrapInner("<div class='ui-wijcalendar-multi-aniwrapper'></div>");
 		var curContent = this.element.find('>:first-child').width(w).height(h);
 
 		var newContent = curContent.clone(false);
@@ -846,7 +824,7 @@ $.widget("ui.wijcalendar", {
 		var goNext = toDate > date;
 		
 		var calendar = this;
-		this.element.data('animating', true);
+		this.element.data('animating.wijcalendar', true);
 		curContent.effect('slide', 
 			{
 				mode: 'hide',
@@ -867,14 +845,14 @@ $.widget("ui.wijcalendar", {
 			}, 
 			
 			function(){
-				while(newContent.parent().is('.ui-wijcalendar-wrapper')){
+				while(newContent.parent().is('.ui-wijcalendar-multi-aniwrapper')){
 					newContent.parent().replaceWith(newContent);
 				}
 					
 				newContent.replaceWith(newContent.contents());
 				calendar.element.height('');
 				calendar._bindEvents();
-				calendar.element.data('animating', false);
+				calendar.element.data('animating.wijcalendar', false);
 				calendar._trigger('afterSlide');
 			});
 	},
@@ -883,23 +861,22 @@ $.widget("ui.wijcalendar", {
 		if (!this._isSingleMonth()) { return; }
 		
 		var date = this.getDisplayDate();
-		var curTable = this.element.find('.ui-datepicker-calendar'),
-		wrapper, slideContainer;
+		var curTable = this.element.find('.ui-datepicker-calendar'), wrapper, slideContainer;
 		
-		if (curTable.parent().is('.ui-wijcalendar-wrapper')){
+		if (curTable.parent().is('.ui-wijcalendar-aniwrapper')){
 			wrapper = curTable.parent();
 		}else{
 			wrapper = $.effects.createWrapper(curTable).css({overflow:'hidden'});
 			wrapper.removeClass('ui-effects-wrapper');
-			wrapper.addClass('ui-wijcalendar-wrapper');
+			wrapper.addClass('ui-wijcalendar-aniwrapper');
 		}
 		
-		if (wrapper.parent().is('.ui-wijcalendar-wrapper')){
+		if (wrapper.parent().is('.ui-wijcalendar-aniwrapper')){
 			slideContainer = wrapper.parent();
 		}else{
 			slideContainer = $.effects.createWrapper(wrapper).css({overflow:'hidden'});
 			slideContainer.removeClass('ui-effects-wrapper');
-			slideContainer.addClass('ui-wijcalendar-wrapper');
+			slideContainer.addClass('ui-wijcalendar-aniwrapper');
 		}
 		
 		var yearStep = 1;
@@ -958,7 +935,7 @@ $.widget("ui.wijcalendar", {
 		}
 		this._refreshTitle();
 		
-		this.element.data('animating', true);
+		this.element.data('animating.wijcalendar', true);
 		wrapper.effect('slide', 
 			{
 				mode: 'hide',
@@ -970,12 +947,12 @@ $.widget("ui.wijcalendar", {
 			
 			function(){
 				curTable = wrapper.children(':last');
-				while(curTable.parent().is('.ui-wijcalendar-wrapper')){
+				while(curTable.parent().is('.ui-wijcalendar-aniwrapper')){
 					curTable.parent().replaceWith(curTable);
 				}
 				curTable.css({float: '', width: ''});
 				calendar._bindEvents();
-				calendar.element.data('animating', false);
+				calendar.element.data('animating.wijcalendar', false);
 				calendar._trigger('afterSlide');
 			});
 	},
@@ -1009,20 +986,20 @@ $.widget("ui.wijcalendar", {
 		var curTable = this.element.find('.ui-datepicker-calendar'), wrapper, container;
 		var w = curTable.outerWidth(), h = curTable.outerHeight();
 		
-		if (curTable.parent().is('.ui-wijcalendar-wrapper')){
+		if (curTable.parent().is('.ui-wijcalendar-aniwrapper')){
 			wrapper = curTable.parent();
 		}else{
 			wrapper = $.effects.createWrapper(curTable).css({overflow:'hidden'})
 				.removeClass('ui-effects-wrapper')
-				.addClass('ui-wijcalendar-wrapper');
+				.addClass('ui-wijcalendar-aniwrapper');
 		}
 		
-		if (wrapper.parent().is('.ui-wijcalendar-wrapper')){
+		if (wrapper.parent().is('.ui-wijcalendar-aniwrapper')){
 			container = wrapper.parent();
 		}else{
 			container = $.effects.createWrapper(wrapper).css({overflow:'hidden'})
 				.removeClass('ui-effects-wrapper')
-				.addClass('ui-wijcalendar-wrapper')
+				.addClass('ui-wijcalendar-aniwrapper')
 				.width(w)
 				.height(h);
 		}
@@ -1049,7 +1026,7 @@ $.widget("ui.wijcalendar", {
 		curTable.width("100%").height("100%");
 		wrapper.css({border: 'solid 1px #cccccc'});
 		
-		this.element.data('animating', true);
+		this.element.data('animating.wijcalendar', true);
 		
 		var calendar = this;
 		wrapper.effect('size', 
@@ -1066,17 +1043,15 @@ $.widget("ui.wijcalendar", {
 			{
 				opacity: 1
 			},
-			
 			this.options.duration || 500,
-
 			function(){
-				nextTable.css({position:'', top:'', left:''});
-				while(nextTable.parent().is('.ui-wijcalendar-wrapper')){
+				nextTable.css({position:'', top:'', left:'', filter: ''});
+				while(nextTable.parent().is('.ui-wijcalendar-aniwrapper')){
 					nextTable.parent().replaceWith(nextTable);
 				}
 
 				calendar._bindEvents();
-				calendar.element.data('animating', false);
+				calendar.element.data('animating.wijcalendar', false);
 			}
 		);
 	},
@@ -1113,12 +1088,12 @@ $.widget("ui.wijcalendar", {
 		
 		var w = curTable.outerWidth(), h = curTable.outerHeight();
 		
-		if (curTable.parent().is('.ui-wijcalendar-wrapper')){
+		if (curTable.parent().is('.ui-wijcalendar-aniwrapper')){
 			container = curTable.parent();
 		}else{
 			container = $.effects.createWrapper(curTable).css({overflow:'hidden'})
 				.removeClass('ui-effects-wrapper')
-				.addClass('ui-wijcalendar-wrapper')
+				.addClass('ui-wijcalendar-aniwrapper')
 				.width(w)
 				.height(h);
 		}
@@ -1137,11 +1112,11 @@ $.widget("ui.wijcalendar", {
 		var nextTable = $(content).height(h).appendTo(container);
 		wrapper = $.effects.createWrapper(nextTable).css({overflow:'hidden'})
 			.removeClass('ui-effects-wrapper')
-			.addClass('ui-wijcalendar-wrapper')
+			.addClass('ui-wijcalendar-aniwrapper')
 			.css($.extend(bounds, {border: 'solid 1px #cccccc', position:'absolute'}));
 			
 		var calendar = this;
-		this.element.data('animating', true);
+		this.element.data('animating.wijcalendar', true);
 		wrapper.animate(
 			{
 				left: 0,
@@ -1162,7 +1137,7 @@ $.widget("ui.wijcalendar", {
 			function(){
 				curTable.remove();
 
-				while(nextTable.parent().is('.ui-wijcalendar-wrapper')){
+				while(nextTable.parent().is('.ui-wijcalendar-aniwrapper')){
 					nextTable.parent().replaceWith(nextTable);
 				}
 					
@@ -1171,7 +1146,7 @@ $.widget("ui.wijcalendar", {
 				}
 				
 				calendar._bindEvents();
-				calendar.element.data('animating', false);
+				calendar.element.data('animating.wijcalendar', false);
 			}
 		);
 		
@@ -1197,7 +1172,7 @@ $.widget("ui.wijcalendar", {
 	},
 
 	_bindEvents: function (){
-		if (!this.element.data('previewMode') && !this.options.disabled){
+		if (!this.element.data('preview.wijcalendar') && !this.options.disabled){
 			this.element.find('div .ui-wijcalendar-navbutton').unbind().bind('mouseout', function(){
 				var el = $(this);
 				el.removeClass('ui-state-hover');
@@ -1357,7 +1332,7 @@ $.widget("ui.wijcalendar", {
 		var date = this.getDisplayDate(), mv;
 		if (this._isSingleMonth()){
 			mv = this._getMonthView(date);
-			mv.showPreview = this.options.allowPreview && !this.element.data('previewMode') && !this.options.disabled;
+			mv.showPreview = this.options.allowPreview && !this.element.data('preview.wijcalendar') && !this.options.disabled;
 			return mv.getHtml();
 		}
 		
@@ -1586,7 +1561,7 @@ $.widget("ui.wijcalendar", {
 	},
 
 	_getHeaderHtml: function (monthDate, prevButtons, nextButtons) {
-		var previewMode = !!this.element.data('previewMode');
+		var previewMode = !!this.element.data('preview.wijcalendar');
 		var buttons = previewMode ? 'none' : (this._isSingleMonth() ? this.options.navButtons : 'default');
 		var hw = new htmlTextWriter();
 		if (buttons === 'quick'){
@@ -1819,7 +1794,7 @@ if (wijMonthView === undefined){
 		
 		getHtml: function (tableOnly) {
 			tableOnly = !!tableOnly;
-			var previewMode = !!this.calendar.element.data('previewMode');
+			var previewMode = !!this.calendar.element.data('preview.wijcalendar');
 			var hw = new htmlTextWriter();
 			if (!tableOnly && this.calendar.options.showTitle) {
 				hw.write(this.calendar._getHeaderHtml(this._startDateInMonth, this.isFirst, this.isLast));
