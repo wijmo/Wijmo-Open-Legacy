@@ -432,7 +432,7 @@ $.widget("ui.wijtabs", {
 		// initialization from scratch
 		if (init) {
 
-			this.element.addClass('ui-wijtabs' + ' ui-tabs-' + tabsAlign + ' ui-tabs ui-widget ui-widget-content ui-corner-all ui-helper-clearfix');
+		    this.element.addClass('ui-tabs ui-wijtabs' + ' ui-tabs-' + tabsAlign + ' ui-widget ui-widget-content ui-corner-all ui-helper-clearfix');
 			this.list.addClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
 			this.lis.addClass('ui-state-default' + ' ui-corner-' + tabsAlign);
 			this.panels.addClass('ui-tabs-panel ui-widget-content ui-corner-' + panelCorner);
