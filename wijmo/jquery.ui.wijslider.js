@@ -81,9 +81,9 @@
                 var ibtop = ctrlHeight / 2 - increBtnHeight / 2;
                 this._getIncreBtn().css("top", ibtop).css("right", 0);
                 //
-                this.element.css("left", decreBtnWidth + thumbWidth / 2 - 1);
-                this.element.css("top", ctrlHeight / 2 - this.element.outerHeight() / 2);
-                this.element.width(ctrlWidth - decreBtnWidth - increBtnWidth - thumbWidth - 2);
+                this.element.css("left", decreBtnWidth + thumbWidth / 2 - 1).css("top", ctrlHeight / 2 - this.element.outerHeight() / 2).width(ctrlWidth - decreBtnWidth - increBtnWidth - thumbWidth - 2);
+//                this.element.css("top", ctrlHeight / 2 - this.element.outerHeight() / 2);
+//                this.element.width(ctrlWidth - decreBtnWidth - increBtnWidth - thumbWidth - 2);
             }
             else {
                 var dbleft = ctrlWidth / 2 - decreBtnWidth / 2;
@@ -91,9 +91,9 @@
                 var ibleft = ctrlWidth / 2 - increBtnWidth / 2;
                 this._getIncreBtn().css("left", ibleft).css("bottom", 0);
                 //
-                this.element.css("left", ctrlWidth / 2 - this.element.outerWidth() / 2);
-                this.element.css("top", decreBtnHeight + thumbHeight / 2 + 1);
-                this.element.height(ctrlHeight - decreBtnHeight - increBtnHeight - thumbHeight - 2);
+                this.element.css("left", ctrlWidth / 2 - this.element.outerWidth() / 2).css("top", decreBtnHeight + thumbHeight / 2 + 1).height(ctrlHeight - decreBtnHeight - increBtnHeight - thumbHeight - 2);
+//                this.element.css("top", decreBtnHeight + thumbHeight / 2 + 1);
+//                this.element.height(ctrlHeight - decreBtnHeight - increBtnHeight - thumbHeight - 2);
             }
 
             this._bindEvents();
@@ -182,8 +182,7 @@
             self._trigger('buttonmouseout', e, data);
             //
             var decreBtn = self._getDecreBtn();
-            decreBtn.removeClass("ui-state-hover");
-            decreBtn.removeClass("ui-state-active");
+            decreBtn.removeClass("ui-state-hover ui-state-active");
         },
 
         _increBtnMouseOut: function (e) {
@@ -192,8 +191,7 @@
             self._trigger('buttonmouseout', e, data);
             //
             var increBtn = self._getIncreBtn();
-            increBtn.removeClass("ui-state-hover");
-            increBtn.removeClass("ui-state-active");
+            increBtn.removeClass("ui-state-hover ui-state-active");
         },
 
         _decreBtnMouseDown: function (e) {
