@@ -256,14 +256,15 @@ a
 ----------------------------------*/
 .ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight
 {
-    border: 1px solid #fcefa1;
-    background: #fbf9ee;
-    background: #fbf9ee linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
-    background: #fbf9ee -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
-    background: #fbf9ee -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)";
-    color: #363636;
+    border: 1px solid #666666;
+    background: #aaaaaa;
+    background: #aaaaaa linear-gradient(top, rgba(0,0,0,0.25), rgba(0,0,0,0));
+    background: #aaaaaa -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.25)), to(rgba(0,0,0,0)));
+    background: #aaaaaa -moz-linear-gradient(top, rgba(0,0,0,0.25), rgba(0,0,0,0));
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#33000000, endColorstr=#00000000);
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#33000000, endColorstr=#00000000)";
+    color: #ffffff;
+    text-shadow:1px 1px 1px #333333;
 }
 .ui-state-highlight a, .ui-widget-content .ui-state-highlight a, .ui-widget-header .ui-state-highlight a
 {
