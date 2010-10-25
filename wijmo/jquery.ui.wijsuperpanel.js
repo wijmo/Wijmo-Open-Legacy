@@ -70,6 +70,9 @@
 			/// The animation properties of wijsuperpanel scrolling.
 			/// Type: Object.
 			/// </summary>
+			/// <remarks>
+			/// Set this options to null to disable animation.
+			/// </remarks>
 			animationOptions: {
 				/// <summary>
 				/// A value determines whether to queue animation operations.
@@ -556,6 +559,9 @@
 			if (!f.initialized){
 				return;
 			}
+			if (self._radiusKey){
+				self.element.css(self._radiusKey,"");
+			}
 			if (f.intervalID != undefined) {
 				window.clearInterval(f.intervalID);
 				f.intervalID = undefined;
@@ -812,8 +818,9 @@
 			e.preventDefault();
 		},
 		
-		_draggingInternal: function (self,dir,scroller, originalElement){
-			var h = dir == 'h';
+		_draggingInternal: function (self, scroller, originalElement){
+			var dir = scroller.dir;
+			var h = dir === 'h';
 			var key = h?'left': 'top';
 			
 			var left = parseFloat(originalElement[0].style[key].replace('px', '')) - self._getScrollContainerPadding(key);
@@ -837,7 +844,7 @@
 				return;
 			}
 			scroller.scrollValue = v;
-			self._setDragAndContentPosition(true, false, dir);
+			self._setDragAndContentPosition(true, false, dir, "dragging");
 		},
 		
 		_dragging: function(e, self){
@@ -845,10 +852,10 @@
 			var originalElement = $(e.target);
 			var p = originalElement.parent();
 			if (p.hasClass(hbarContainerCSS)) {
-				self._draggingInternal(self,'h',o.hScroller, originalElement);
+				self._draggingInternal(self, o.hScroller, originalElement);
 			}
 			else{
-				self._draggingInternal(self,'v',o.vScroller, originalElement);
+				self._draggingInternal(self, o.vScroller, originalElement);
 			} 
 		},
 		
@@ -1250,7 +1257,7 @@
 			/// <param name="y" type="Number">
 			/// The position to scroll to.
 			/// </param>
-			
+
 			var o = this.options;
 			o.vScroller.scrollValue = this.scrollPxToValue(y, 'v');
 			this._setDragAndContentPosition(false, true, 'v', 'nonestop');
@@ -1515,8 +1522,10 @@
 				var track = self._getTrackLen('h');
 				var dragLen = self._getDragLength(hRange, hLargeChange, track, o.hScroller.scrollMinDragLength);
 				hbarDrag.width(dragLen);
+				var difference = hbarDrag.outerWidth() - hbarDrag.width();
+				hbarDrag.width( dragLen - difference );
 				var icon  = hbarDrag.children('span');
-				icon.css('margin-left',(dragLen - icon[0].offsetHeight) /2);
+				icon.css('margin-left',(hbarDrag.width() - icon[0].offsetWidth) /2);
 				if (track <= hbarDrag.outerWidth()) {
 					hbarDrag.hide();
 				}
@@ -1529,8 +1538,10 @@
 				var track1 = self._getTrackLen('v');
 				var dragLen1 = self._getDragLength(vRange, vLargeChange, track1, o.vScroller.scrollMinDragLength);
 				vbarDrag.height(dragLen1);
+				var difference1 = vbarDrag.outerHeight() - vbarDrag.height();
+				vbarDrag.height( dragLen1 - difference1 );
 				var icon1  = vbarDrag.children('span');
-				icon1.css('margin-top',(dragLen1 - icon1[0].offsetHeight) /2);
+				icon1.css('margin-top',(vbarDrag.height() - icon1[0].offsetHeight) /2);
 				if (track1 <= vbarDrag.outerHeight()){
 					vbarDrag.hide();
 				}
@@ -1603,7 +1614,7 @@
 			return padding;
 		},
 		
-		_contentDragAnimate: function (dir,animated,hbarContainer,hbarDrag, stop,fireScrollEvent){
+		_contentDragAnimate: function (dir,animated,hbarContainer,hbarDrag, stop,fireScrollEvent, dragging){
 			var self = this;
 			var o = self.options;
 			var v = dir == 'v';
@@ -1629,6 +1640,7 @@
 			if (Math.abs(contentLeft) < 0.001) {
 				contentLeft = 0;
 			}
+			contentLeft = Math.round(contentLeft);
 			var dragleft = -1;
 			if (hbarContainer!= undefined){
 				if (animated && hbarDrag.is(':animated') && stop != 'nonestop') {
@@ -1640,8 +1652,8 @@
 				var padding = self._getScrollContainerPadding(paddingKey);
 				dragleft = (hValue / max) * r + padding;
 			}
-			if (animated) {
-				if (dragleft>=0){
+			if (animated && o.animationOptions !=null) {
+				if (dragleft>=0 && dragging !== "dragging"){
 					var dragAnimationOptions = $.extend({}, o.animationOptions);
 					// not trigger scrolled when stop
 					dragAnimationOptions.complete = undefined;
@@ -1655,6 +1667,7 @@
 					if ($.isFunction(userComplete)) {
 						userComplete(arguments);
 					}
+                    
 				};
 				if (animated && tempWrapper.is(':animated') && stop != 'nonestop') {
 					tempWrapper.stop(true, false);
@@ -1664,7 +1677,7 @@
 			}
 			else {
 				var key = v ? 'top' : 'left';
-				if (dragleft >=0) {
+				if (dragleft >=0 && dragging !== "dragging") {
 					
 					hbarDrag[0].style[key] = dragleft + 'px';
 				}
@@ -1673,7 +1686,7 @@
 			}
 		},
 		
-		_setDragAndContentPosition: function(fireScrollEvent, animated, dir, stop){
+		_setDragAndContentPosition: function(fireScrollEvent, animated, dir, stop, dragging){
 			var self = this;
 			var f = self._fields();
 			var hbarContainer = f.hbarContainer;
@@ -1681,10 +1694,10 @@
 			var vbarContainer = f.vbarContainer;
 			var vbarDrag = f.vbarDrag;
 			if ((dir == 'both' || dir == 'h') && f.hScrolling) {
-				self._contentDragAnimate('h',animated,hbarContainer,hbarDrag,stop,fireScrollEvent);
+				self._contentDragAnimate('h',animated,hbarContainer,hbarDrag,stop,fireScrollEvent,dragging);
 			}
 			if ((dir == 'both' || dir == 'v') && f.vScrolling) {
-				self._contentDragAnimate('v',animated,vbarContainer,vbarDrag,stop,fireScrollEvent);
+				self._contentDragAnimate('v',animated,vbarContainer,vbarDrag,stop,fireScrollEvent,dragging);
 			}
 			if (f.intervalID>0){
 				window.clearInterval(f.intervalID);
@@ -1709,6 +1722,10 @@
 			if (fireEvent) {
 				// use settimeout to return to caller immediately.
 				window.setTimeout(function (){
+					var content = self.getContentElement();
+					if (!content.is(":visible")){
+						return;
+					}
 					var after = self.getContentElement().position();
 					var d = {
 						dir: dir,
@@ -1727,7 +1744,7 @@
 			if (dragLength < minidrag || (dragLength + 2) >= track) {
 				dragLength = minidrag;
 			}
-			return Math.floor(dragLength);
+			return Math.round(dragLength);
 		},
 		
 		_needScrollbar: function (scroller, needscroll){
@@ -2004,8 +2021,10 @@
 				var value = ele.css(key)
 				var border = parseInt(value);
 				// adding 1 extra to out-most radius.
+				
 				ele.css(key1,border +1);
 				self._rounderAdded = true;
+				self._radiusKey = key1;
 			}
 			else {
 				ele.removeClass(rounderClass);
