@@ -221,13 +221,12 @@
 			}
 			self._killmenuItems();
 			self._killtrigger();
-			this.element.unwrap().unwrap();
-			this.element.removeData("domObject").removeData("topmenu").removeData("activeItem").removeData("firstLeftValue");
+			self.element.unwrap().unwrap();
+			self.element.removeData("domObject").removeData("topmenu").removeData("activeItem").removeData("firstLeftValue");
 		},
 		destroy: function () {
 			/// <summary>Removes the wijmenu functionality completely. This returns the element back to its pre-init state.</summary>
 			this._destroy();
-			this.element.removeData("domObject").removeData("topmenu").removeData("activeItem").removeData("firstLeftValue");
 			$.Widget.prototype.destroy.apply(this);
 		},
 		activate: function (event, item) {
@@ -241,8 +240,8 @@
 			}
 			var active = item.eq(0)
 			.children(":first")
-				.addClass("ui-state-focus")
-				.attr("id", "ui-active-menuitem")
+			.addClass("ui-state-focus")
+			.attr("id", "ui-active-menuitem")
 			.end();
 			this.element.data("activeItem", active);
 			this._trigger("focus", event, { item: item });
@@ -299,11 +298,11 @@
 		nextPage: function (event) {
 			/// <summary>This event is similar to the next event,but it jumps a whole page.</summary>
 			/// <param name="event" type="Event">The javascript event.</param>
-			var self = this;
-			if (self._hasScroll()) {
+			var self = this, activeItem = self.element.data("activeItem"), parent = activeItem.parent();
+			if (self.mode=="sliding" && self._hasScroll()) {
 				// TODO merge with no-scroll-else
-				var activeItem = self.element.data("activeItem");
-				var parent = activeItem.parent();
+				//var activeItem = self.element.data("activeItem");
+				//var parent = activeItem.parent();
 				if (!activeItem || self.last()) {
 					self.activate(event, parent.children(":first"));
 					return;
@@ -330,16 +329,13 @@
 		previousPage: function (event) {
 			/// <summary>This event is silimlar to the previous event,but it jumps a whole page.</summary>
 			/// <param name="event" type="Event">The javascript event.</param>
-			var self = this;
-			if (this._hasScroll()) {
-				// TODO merge with no-scroll-else
-				var activeItem = self.element.data("activeItem");
-				var parent = activeItem.parent();
+			var self = this,activeItem = self.element.data("activeItem"),parent = activeItem.parent();
+			if (self.mode == "sliding" && this._hasScroll()) {
+				// TODO merge with no-scroll-else								
 				if (!activeItem || this.first()) {
 					this.activate(event, parent.children(":last"));
 					return;
 				}
-
 				var base = activeItem.offset().top,
 				height = this.options.maxHeight,
 				result = parent.children("li").filter(function () {
@@ -514,7 +510,7 @@
 				o.showAnimated = animated;
 			}
 			if (showDuration == null) {
-				o.showDuration == duration;
+				o.showDuration = duration;
 			}
 			if (hideAnimated == null) {
 				o.hideAnimated = animated;
@@ -578,8 +574,7 @@
 							link = $(n).children(":first").addClass("ui-wijmenu-link ui-corner-all");
 							link.wrapInner("<span>").children("span").addClass("ui-wijmenu-text");
 							if (hasSubmenu) {
-								icon = $("<span>");
-								icon.addClass("ui-icon ui-icon-triangle-1-e");
+								icon = $("<span>").addClass("ui-icon ui-icon-triangle-1-e");
 								link.append(icon);
 								//$(n).removeClass("ui-wijmenu-parent").addClass("ui-wijmenu-parent");
 							}
@@ -587,11 +582,12 @@
 								$(this).addClass("ui-state-hover");
 							}).bind("mouseleave.wijmenu", function () {
 								$(this).removeClass("ui-state-hover");
-							}).bind("mousedown.wijmenu", function () {
-								//$(this).addClass("ui-state-active");
-							}).bind("mouseup.wijmenu", function () {
-								//$(this).removeClass("ui-state-active");
 							});
+//							.bind("mousedown.wijmenu", function () {
+//								//$(this).addClass("ui-state-active");
+//							}).bind("mouseup.wijmenu", function () {
+//								//$(this).removeClass("ui-state-active");
+//							});
 						}
 					}
 					else if (li.children("h1,h2,h3,h4,h5").length > 0) {
@@ -606,8 +602,7 @@
 													$(this).removeClass("ui-state-hover");
 												});
 						if (hasSubmenu) {
-							icon = $("<span>");
-							icon.addClass("ui-icon ui-icon-triangle-1-e");
+							icon = $("<span>").addClass("ui-icon ui-icon-triangle-1-e");
 							link.append(icon);
 							//$(n).removeClass("ui-wijmenu-parent").addClass("ui-wijmenu-parent");
 						}
@@ -715,35 +710,35 @@
 					var showTimer, hideTimer;
 					li.removeClass("ui-wijmenu-parent").addClass("ui-wijmenu-parent");
 					$(this).find('.ui-wijmenu-link:eq(0)').bind("mouseenter.wijmenu",
-				function () {
-					clearTimeout(hideTimer);
-					var subList = $(this).next();
-					var link = $(this);
-					showTimer = setTimeout(function () {
-						self._displaySubmenu(link, subList);
-					}, 300);
-				}).bind("mouseleave.wijmenu",
-				function () {
-					clearTimeout(showTimer);
-					var subList = $(this).next();
-					hideTimer = setTimeout(function () {
-						self._hideSubmenu(subList);
-					}, 400);
-				});
+					function () {
+						clearTimeout(hideTimer);
+						var subList = $(this).next();
+						var link = $(this);
+						showTimer = setTimeout(function () {
+							self._displaySubmenu(link, subList);
+						}, 300);
+					}).bind("mouseleave.wijmenu",
+					function () {
+						clearTimeout(showTimer);
+						var subList = $(this).next();
+						hideTimer = setTimeout(function () {
+							self._hideSubmenu(subList);
+						}, 400);
+					});
 
 					$(this).find('ul .ui-wijmenu-link,ul >.ui-widget-header,ul >.ui-wijmenu-separator').bind("mouseenter.wijmenu",
-				function () {
-					clearTimeout(hideTimer);
-				}).bind("mouseleave.wijmenu",
-				function () {
-					//console.log(allSubLists);
-					hideTimer = setTimeout(function () {
-						allSubLists.each(function () {
-							self._hideSubmenu($(this));
-						});
-						//allSubLists.hide();
-					}, 500);
-				});
+					function () {
+						clearTimeout(hideTimer);
+					}).bind("mouseleave.wijmenu",
+					function () {
+						//console.log(allSubLists);
+						hideTimer = setTimeout(function () {
+							allSubLists.each(function () {
+								self._hideSubmenu($(this));
+							});
+							//allSubLists.hide();
+						}, 500);
+					});
 				}
 			});
 
@@ -839,8 +834,8 @@
 		_checkDrillMenuHeight: function (el, mycontainer, scrollcontainer) {
 			var o = this.options;
 			var self = this;
-			if (el.height() > o.maxHeight) { //el.addClass('fg-menu-scroll')
-			};
+//			if (el.height() > o.maxHeight) { //el.addClass('fg-menu-scroll')
+//			};
 			//el.css({ height: o.maxHeight });
 			mycontainer.height(el.height());
 			scrollcontainer.wijsuperpanel("option", "hScroller", { scrollValue: 0 });
@@ -879,10 +874,10 @@
 
 		_drilldown: function () {
 			var self = this;
-			var mycontainer = this.element.wrap("<div>").parent().css("position", "relative");
-			var container = this.element.data("domObject").menucontainer;
-			var scrollcontainer = this.element.data("domObject").scrollcontainer;
-			var o = this.options;
+			var mycontainer = self.element.wrap("<div>").parent().css("position", "relative");
+			var container = self.element.data("domObject").menucontainer;
+			var scrollcontainer = self.element.data("domObject").scrollcontainer;
+			var o = self.options;
 			var topList = container.find('.ui-wijmenu-list:first');
 			var breadcrumb = $('<ul class="wij-menu-breadcrumb ui-widget-default ui-corner-all ui-helper-clearfix"></ul>');
 			var crumbDefaultHeader = $('<li class="wij-menu-breadcrumb-text">' + o.crumbDefaultText + '</li>');
@@ -908,8 +903,8 @@
 			})
 			.addClass('ui-widget-content')
 			//.hide();
-			mycontainer.height(this.element.height());
-			this._sroll();
+			mycontainer.height(self.element.height());
+			self._sroll();
 			if (self._hasScroll()) {
 				var fixPadding = 5;
 				if (topList.children(":first").children(":first").length > 0) {
@@ -1036,9 +1031,9 @@
 			domObject.menucontainer.removeClass("wij-menu-ipod wij-menu-container");
 			$('.wij-menu-current', domObject.menucontainer).removeClass('wij-menu-current');
 			$(".wij-menu-breadcrumb", domObject.menucontainer).remove();
-			if (!this.element.parent().is(".scrollcontainer")) {
-				//this.element.unwrap();
-			}
+//			if (!this.element.parent().is(".scrollcontainer")) {
+//				//this.element.unwrap();
+//			}
 
 			this.element.find("li").each(function () {
 				var obj = $(this).children(":first");
