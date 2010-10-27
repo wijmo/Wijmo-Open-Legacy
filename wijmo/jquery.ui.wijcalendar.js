@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 0.6.1
+ * Wijmo Library 0.7.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -278,10 +278,24 @@ $.widget("ui.wijcalendar", {
 		}
 	},
 	
+	_isRTL: function(){
+		return !!this._getCulture().isRTL;
+	},
+	
 	refresh: function () {
 		/// <summary>Refresh the calendar.</summary>
 		this.element.html(this._getCalendarHtml());
+		this.element[(this._isRTL() ? 'add' : 'remove') + 'Class']('ui-datepicker-rtl');
 		this._bindEvents();
+	},
+	
+	refreshDate: function (date) {
+		/// <summary>Refresh a single date.</summary>
+		if (!this._monthViews) { return; }
+		if (date < this._groupStartDate || date > this._groupEndDate) { return; }
+		$.each(this._monthViews, function(){
+			this._refreshDate(date);
+		});
 	},
 	
 	getDisplayDate: function () {
@@ -308,7 +322,20 @@ $.widget("ui.wijcalendar", {
 		if (date < this.options.minDate || date > this.options.maxDate)	{ return; }
 		
 		this._getSelectedDates().add(date);
-		this._refreshDate(date);
+		this.refreshDate(date);
+	},
+	
+	unSelectDate: function (date) {
+		/// <summary>
+		///  Unselect a date by code.
+		/// </summary>
+		/// <param name="date" type="Date">The date to be removed from the selectedDates collection.</param>
+		date = new Date(date);
+		if (this._getDisabledDates().contains(date)) { return; }
+		if (date < this.options.minDate || date > this.options.maxDate)	{ return; }
+		
+		this._getSelectedDates().remove(date);
+		this.refreshDate(date);
 	},
 
 	unSelectAll: function () {
@@ -317,7 +344,7 @@ $.widget("ui.wijcalendar", {
 		if (dates && dates.length > 0) {
 			this._getSelectedDates().clear();
 			for (var i = 0; i < dates.length; i++) {
-				this._refreshDate(dates[i]);
+				this.refreshDate(dates[i]);
 			}
 		}
 	},
@@ -331,7 +358,7 @@ $.widget("ui.wijcalendar", {
 		}
 		else {
 			var data = {};
-			this._trigger('beforeSlide', data);
+			this._trigger('beforeSlide', null, data);
 			if (data.cancel) { return; }
 		
 			if (this._isSingleMonth()){
@@ -402,7 +429,7 @@ $.widget("ui.wijcalendar", {
 		if (!o.selectionMode.day) { return; }
 		
 		var data = {date: date}
-		this._trigger("beforeSelect", data);
+		this._trigger("beforeSelect", null, data);
 		if (data.cancel) { return; }
 		
 		if (!o.selectionMode.days || (!e.metaKey && !e.shiftKey)) { this.unSelectAll(); }
@@ -415,8 +442,8 @@ $.widget("ui.wijcalendar", {
 			this.selectDate(date);
 		}
 		
-		this._trigger('afterSelect', data);
-		this._trigger('selectedDatesChanged', {dates: [date]});
+		this._trigger('afterSelect', null, data);
+		this._trigger('selectedDatesChanged', null, {dates: [date]});
 	
 		if (!!o.selectionMode.days){
 			this.element.data('dragging.wijcalendar', true);
@@ -544,7 +571,7 @@ $.widget("ui.wijcalendar", {
 			selDates[selDates.length] = date;
 		}
 		
-		this._trigger('selectedDatesChanged', {dates: selDates});
+		this._trigger('selectedDatesChanged', null, {dates: selDates});
 		if (this.isPopupShowing()) {
 			this.close();
 		}
@@ -624,7 +651,7 @@ $.widget("ui.wijcalendar", {
 			selDates[selDates.length] = date;
 		}
 		
-		this._trigger('selectedDatesChanged', {dates: selDates});
+		this._trigger('selectedDatesChanged', null, {dates: selDates});
 		if (this.isPopupShowing()) {
 			this.close();
 		}
@@ -702,7 +729,7 @@ $.widget("ui.wijcalendar", {
 			selDates[selDates.length] = date;
 		}
 		
-		this._trigger('selectedDatesChanged', {dates: selDates});
+		this._trigger('selectedDatesChanged', null, {dates: selDates});
 		if (this.isPopupShowing()) {
 			this.close();
 		}
@@ -1428,14 +1455,6 @@ $.widget("ui.wijcalendar", {
 		var child = this.element.find('[id*=\'' + id + '\']');
 		return child.length === 0 ? undefined : child;
 	},
-	
-	_refreshDate: function (date) {
-		if (!this._monthViews) { return; }
-		if (date < this._groupStartDate || date > this._groupEndDate) { return; }
-		$.each(this._monthViews, function(){
-			this._refreshDate(date);
-		});
-	},
 
 	_refreshDayCell: function (dayCell) {
 		var d = $(dayCell);
@@ -1563,20 +1582,21 @@ $.widget("ui.wijcalendar", {
 	_getHeaderHtml: function (monthDate, prevButtons, nextButtons) {
 		var previewMode = !!this.element.data('preview.wijcalendar');
 		var buttons = previewMode ? 'none' : (this._isSingleMonth() ? this.options.navButtons : 'default');
+		var isRTL = this.element.is('.ui-datepicker-rtl');
 		var hw = new htmlTextWriter();
 		if (buttons === 'quick'){
 			hw.writeBeginTag('div');
 			hw.writeAttribute('class', 'ui-widget-header ui-wijcalendar-header ui-helper-clearfix ui-corner-all');
 			hw.writeTagRightChar();
-			if (!!prevButtons) { hw.write(this._getNavButtonHtml('quickprev', 'ui-wijcalendar-navbutton ui-datepicker-prev ui-corner-all', 'ui-icon ui-icon-seek-prev', this.options.quickPrevTooltip.replace('#', this.options.quickNavStep))); }
+			if (!!prevButtons) { hw.write(this._getNavButtonHtml('quickprev', 'ui-wijcalendar-navbutton ui-datepicker-prev ui-corner-all', 'ui-icon ui-icon-seek-' + (isRTL ? 'next' : 'prev'), this.options.quickPrevTooltip.replace('#', this.options.quickNavStep))); }
 			hw.writeBeginTag('div');
 			hw.writeAttribute('class', 'ui-datepicker-header ui-wijcalendar-header-inner');
 			hw.writeTagRightChar();
-			if (!!prevButtons) { hw.write(this._getNavButtonHtml('prev', 'ui-wijcalendar-navbutton ui-datepicker-prev ui-corner-all', 'ui-icon ui-icon-circle-triangle-w', this.options.prevTooltip)); }
+			if (!!prevButtons) { hw.write(this._getNavButtonHtml('prev', 'ui-wijcalendar-navbutton ui-datepicker-prev ui-corner-all', 'ui-icon ui-icon-circle-triangle-' + (isRTL ? 'e' : 'w'), this.options.prevTooltip)); }
 			this._fillTitle(hw, monthDate);
-			if (!!nextButtons) { hw.write(this._getNavButtonHtml('next', 'ui-wijcalendar-navbutton ui-datepicker-next ui-corner-all', 'ui-icon ui-icon-circle-triangle-e', this.options.nextTooltip)); }
+			if (!!nextButtons) { hw.write(this._getNavButtonHtml('next', 'ui-wijcalendar-navbutton ui-datepicker-next ui-corner-all', 'ui-icon ui-icon-circle-triangle-' + (isRTL ? 'w' : 'e'), this.options.nextTooltip)); }
 			hw.writeEndTag('div');
-			if (!!nextButtons) { hw.write(this._getNavButtonHtml('quicknext', 'ui-wijcalendar-navbutton ui-datepicker-next ui-corner-all', 'ui-icon ui-icon-seek-next', this.options.quickNextTooltip.replace('#', this.options.quickNavStep))); }
+			if (!!nextButtons) { hw.write(this._getNavButtonHtml('quicknext', 'ui-wijcalendar-navbutton ui-datepicker-next ui-corner-all', 'ui-icon ui-icon-seek-' + (isRTL ? 'prev' : 'next'), this.options.quickNextTooltip.replace('#', this.options.quickNavStep))); }
 			hw.writeEndTag('div');
 		}else{
 			hw.writeBeginTag('div');
@@ -1584,12 +1604,12 @@ $.widget("ui.wijcalendar", {
 			hw.writeTagRightChar();
 			
 			if (buttons != 'none' && !!prevButtons){
-				hw.write(this._getNavButtonHtml('prev', 'ui-wijcalendar-navbutton ui-datepicker-prev ui-corner-all', 'ui-icon ui-icon-circle-triangle-w', this.options.prevTooltip));
+				hw.write(this._getNavButtonHtml('prev', 'ui-wijcalendar-navbutton ui-datepicker-prev ui-corner-all', 'ui-icon ui-icon-circle-triangle-' + (isRTL ? 'e' : 'w'), this.options.prevTooltip));
 			}
 			this._fillTitle(hw, monthDate);
 			
 			if (buttons != 'none' && !!nextButtons){
-				hw.write(this._getNavButtonHtml('next', 'ui-wijcalendar-navbutton ui-datepicker-next ui-corner-all', 'ui-icon ui-icon-circle-triangle-e', this.options.prevTooltip));
+				hw.write(this._getNavButtonHtml('next', 'ui-wijcalendar-navbutton ui-datepicker-next ui-corner-all', 'ui-icon ui-icon-circle-triangle-' + (isRTL ? 'w' : 'e'), this.options.nextTooltip));
 			}
 			hw.writeEndTag('div');
 		}
@@ -1975,8 +1995,9 @@ if (wijDateCollection === undefined){
 			if (startIndex < 0 || endIndex < 0)	{ return; }
 			if (startIndex > endIndex) { return; }
 			var dates = this.getDates();
+			if (dates[end] > end){return;}
 			var startSlice = (!startIndex) ? [] : dates.slice(0, startIndex);
-			var endSlice = dates.slice(endIndex);
+			var endSlice = endIndex >= (dates.length - 1) ? [] : dates.slice(endIndex+1);
 			this.setDates(startSlice.concat(endSlice));
 		},
 		
@@ -2114,11 +2135,9 @@ if (wijMyGrid === undefined){
 			}
 		
 			var rows = 3, cols = 4;
-			//var width = 100 / cols + '%';
 			var height = 100 / rows + '%';
 			height = '30%';
 			hw.writeBeginTag('table');
-			//hw.writeAttribute('height', this.calendar.element.find('.ui-datepicker-calendar').height());
 			hw.writeAttribute('class', 'ui-datepicker-calendar ui-wijcalendar-mygrid');
 			hw.writeAttribute('onselectstart', 'return false;');
 			hw.writeTagRightChar();
