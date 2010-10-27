@@ -79,12 +79,10 @@
     color: inherit;
 }
 
-
 .ui-header-custom img, .ui-footer-custom img
 {
     width: 100%;
 }
-
 
 .ui-wijcalendar table.ui-wijcalendar-mygrid
 {
@@ -97,3 +95,17 @@
 {
     cursor: pointer;
 }
+
+.ui-wijcalendar-aniwrapper
+{
+	position: relative;
+	left: 0;
+	top: 0
+}
+
+.ui-wijcalendar-multi-aniwrapper
+{
+	position: absolute;
+	overflow: hidden;
+}
+

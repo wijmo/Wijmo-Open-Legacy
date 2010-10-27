@@ -21,38 +21,46 @@
 .ui-wijsuperpanel-hbarcontainer, .ui-wijsuperpanel-vbarcontainer
 {
     font-size: 0px;
+    border:0;
 }
 .ui-wijsuperpanel-templateouterwrapper
 {
     position: relative; 
 /*    overflow:auto; */
+    zoom: 1;
 }
 
 .ui-wijsuperpanel-vbarcontainer .ui-state-default, .ui-wijsuperpanel-hbarcontainer .ui-state-default
 {
-    width: 17px;
-    height: 17px;
+    width: 16px;
+    height: 16px;
     position: absolute;
 }
 .ui-wijsuperpanel .ui-wijsuperpanel-vbarcontainer
 {
     position: absolute;
-    width: 19px;
-    padding-top: 19px;
-    padding-bottom: 19px;
+    width: 18px;
+    padding-top: 18px;
+    padding-bottom: 18px;
     border: none;
 }
 .ui-wijsuperpanel .ui-wijsuperpanel-hbarcontainer
 {
     position: absolute;
-    height: 19px;
-    padding-left: 19px;
-    padding-right: 19px;
+    height: 18px;
+    padding-left: 18px;
+    padding-right: 18px;
     border: none;
 }
 .ui-wijsuperpanel-handle
 {
     position: absolute;
+    font-size:0px;
+    overflow:hidden;
+}
+.ui-wijsuperpanel-handle *
+{
+    font-size:0px;
 }
 .ui-wijsuperpanel-helper
 {

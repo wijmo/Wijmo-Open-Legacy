@@ -7,7 +7,7 @@
     overflow: hidden;
 }
 
-.ui-wijprogressbar .C1pbProgress
+.ui-wijprogressbar .ui-progressbar-value
 {
     position: absolute;
     overflow: hidden;
