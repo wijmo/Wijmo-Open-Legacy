@@ -1,6 +1,6 @@
 /*
 *
-* Wijmo Library 0.6.1
+* Wijmo Library 0.7.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -198,7 +198,7 @@
 						self.select();
 						if (activeItem.length > 0) {
 							if (o.mode === "flyout" && activeItem.has("ul").length > 0) {
-								self._displaySubmenu(activeItem.children(":first"), activeItem.find("ul:first"));
+								self._showFlyoutSubmenu(activeItem, activeItem.find("ul:first"));
 							}
 							else {
 								activeItem.children(":first").trigger("click");
@@ -299,7 +299,7 @@
 			/// <summary>This event is similar to the next event,but it jumps a whole page.</summary>
 			/// <param name="event" type="Event">The javascript event.</param>
 			var self = this, activeItem = self.element.data("activeItem"), parent = activeItem.parent();
-			if (self.mode=="sliding" && self._hasScroll()) {
+			if (self.mode == "sliding" && self._hasScroll()) {
 				// TODO merge with no-scroll-else
 				//var activeItem = self.element.data("activeItem");
 				//var parent = activeItem.parent();
@@ -329,7 +329,7 @@
 		previousPage: function (event) {
 			/// <summary>This event is silimlar to the previous event,but it jumps a whole page.</summary>
 			/// <param name="event" type="Event">The javascript event.</param>
-			var self = this,activeItem = self.element.data("activeItem"),parent = activeItem.parent();
+			var self = this, activeItem = self.element.data("activeItem"), parent = activeItem.parent();
 			if (self.mode == "sliding" && this._hasScroll()) {
 				// TODO merge with no-scroll-else								
 				if (!activeItem || this.first()) {
@@ -583,11 +583,11 @@
 							}).bind("mouseleave.wijmenu", function () {
 								$(this).removeClass("ui-state-hover");
 							});
-//							.bind("mousedown.wijmenu", function () {
-//								//$(this).addClass("ui-state-active");
-//							}).bind("mouseup.wijmenu", function () {
-//								//$(this).removeClass("ui-state-active");
-//							});
+							//							.bind("mousedown.wijmenu", function () {
+							//								//$(this).addClass("ui-state-active");
+							//							}).bind("mouseup.wijmenu", function () {
+							//								//$(this).removeClass("ui-state-active");
+							//							});
 						}
 					}
 					else if (li.children("h1,h2,h3,h4,h5").length > 0) {
@@ -636,6 +636,19 @@
 			}
 		},
 
+		_showFlyoutSubmenu: function (li, subList) {
+			var self = this;
+			var curList = self.element.data("currentMenuList");
+			if (curList != undefined) {
+				$.each(curList, function () {
+					if ($(this).get(0) != li.parent().get(0)) {
+						self._hideSubmenu($(this));
+					}
+				});
+			}
+			self._displaySubmenu(li.find('.ui-wijmenu-link:eq(0)'), subList);
+		},
+
 		_flyout: function () {
 			var container = this.element.data("domObject").menucontainer;
 			var self = this;
@@ -654,41 +667,17 @@
 					switch (self.options.triggerEvent) {
 						case "click":
 							link.bind("click.wijmenu", function () {
-								var curList = self.element.data("currentMenuList");
-								if (curList != undefined) {
-									$.each(curList, function () {
-										if ($(this).get(0) != li.parent().get(0)) {
-											self._hideSubmenu($(this));
-										}
-									});
-								}
-								self._displaySubmenu($(this), subList);
+								self._showFlyoutSubmenu(li, subList);
 							});
 							break;
 						case "dblclick":
-							link.bind("dblclick.wijmenu", function () {
-								var curList = self.element.data("currentMenuList");
-								if (curList != undefined) {
-									$.each(curList, function () {
-										if ($(this).get(0) != li.parent().get(0)) {
-											self._hideSubmenu($(this));
-										}
-									});
-								}
-								self._displaySubmenu($(this), subList);
+							link.bind("dblclick.wijmenu", function (e) {
+								self._showFlyoutSubmenu(li, subList);
 							});
 							break;
 						case "rtclick":
 							link.bind("contextmenu.wijmenu", function (e) {
-								var curList = self.element.data("currentMenuList");
-								if (curList != undefined) {
-									$.each(curList, function () {
-										if ($(this).get(0) != li.parent().get(0)) {
-											self._hideSubmenu($(this));
-										}
-									});
-								}
-								self._displaySubmenu($(this), subList);
+								self._showFlyoutSubmenu(li, subList);
 								e.preventDefault();
 							});
 							break;
@@ -755,8 +744,11 @@
 							var item = $(this).parent();
 							//var link = $(this);
 							if (item.has("ul").length == 0) {
-								$.each(curList, function () {
-									if ($(this).get(0) != item.parent().get(0)) {
+								$.each(curList, function (i, n) {
+									if (curList[curList.length - 1].get(0) == item.parent().get(0)) {
+										return true;
+									}
+									if ($(n).get(0) != item.parent().get(0)) {
 										self._hideSubmenu($(this));
 									}
 								});
@@ -834,8 +826,8 @@
 		_checkDrillMenuHeight: function (el, mycontainer, scrollcontainer) {
 			var o = this.options;
 			var self = this;
-//			if (el.height() > o.maxHeight) { //el.addClass('fg-menu-scroll')
-//			};
+			//			if (el.height() > o.maxHeight) { //el.addClass('fg-menu-scroll')
+			//			};
 			//el.css({ height: o.maxHeight });
 			mycontainer.height(el.height());
 			scrollcontainer.wijsuperpanel("option", "hScroller", { scrollValue: 0 });
@@ -1031,9 +1023,9 @@
 			domObject.menucontainer.removeClass("wij-menu-ipod wij-menu-container");
 			$('.wij-menu-current', domObject.menucontainer).removeClass('wij-menu-current');
 			$(".wij-menu-breadcrumb", domObject.menucontainer).remove();
-//			if (!this.element.parent().is(".scrollcontainer")) {
-//				//this.element.unwrap();
-//			}
+			//			if (!this.element.parent().is(".scrollcontainer")) {
+			//				//this.element.unwrap();
+			//			}
 
 			this.element.find("li").each(function () {
 				var obj = $(this).children(":first");
