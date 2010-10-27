@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 0.6.1
+ * Wijmo Library 0.7.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -18,130 +18,107 @@
  *
  */
 (function ($) {
-    var radiobuttonId = 0;
-    $.widget("ui.wijradiobuttondecorator", {
-        _create: function () {
-            var that = this;
-            var e = this.element;
-            if (e.is(":radio")) {
-                if (!this.element.attr("id")) {
-                    this.element.attr("id", "ui-radio-" + radiobuttonId);
-                    radiobuttonId += 1;
-                }
-                var radiobuttonElement;
-                if (this.element.parent().is("label")) {
-                    radiobuttonElement = this.element.parent().wrap("<div class='ui-wijradiobutton-inputwrapper'></div>").parent().wrap("<div></div>").parent().addClass("ui-wijradiobutton ui-widget");
-                    var label = this.element.parent();
-                    label.attr("for", this.element.attr("id"));
-                    radiobuttonElement.find(".ui-wijradiobutton-inputwrapper").append(this.element);
-                    radiobuttonElement.append(label);
+	var radiobuttonId = 0;
+	$.widget("ui.wijradiobuttondecorator", {
+		_radiobuttonPre: "ui-wijradiobutton",
+		_create: function () {
+			var that = this;
+			if (this.element.is(":radio")) {
+				if (!that.element.attr("id")) {
+					that.element.attr("id", "ui-radio-" + radiobuttonId);
+					radiobuttonId += 1;
+				}
+				var radiobuttonElement;
+				if (that.element.parent().is("label")) {
+					radiobuttonElement = that.element.parent().wrap("<div class='" + that._radiobuttonPre + "-inputwrapper'></div>").parent().wrap("<div></div>").parent().addClass(that._radiobuttonPre + " ui-widget");
+					var label = that.element.parent();
+					label.attr("for", that.element.attr("id"));
+					radiobuttonElement.find("." + that._radiobuttonPre + "-inputwrapper").append(that.element);
+					radiobuttonElement.append(label);
 
-                }
-                else {
-                    radiobuttonElement = this.element.wrap("<div class='ui-wijradiobutton-inputwrapper'></div>").parent().wrap("<div></div>").parent().addClass("ui-wijradiobutton ui-widget");
-                }
-                var targetLabel = $("label[for='" + this.element.attr("id") + "']");
-                if (targetLabel.length === 0) {
-                }
-                else {
-                    radiobuttonElement.append(targetLabel);
-                    targetLabel.attr("labelsign", "wij");
-                    //targetLabel.attr("tabindex", 0);
-                }
-                if (targetLabel.length > 0) {
-                    //this._addAttrs(e, targetLabel);
-                }
-                var boxElement = $("<div class='ui-wijradiobutton-box ui-widget ui-state-default ui-corner-all'><span class='ui-wijradiobutton-icon'></span></div>");
-                var iconElement = boxElement.children(".ui-wijradiobutton-icon");
-                radiobuttonElement.append(boxElement);
-                iconElement.addClass("ui-icon ui-icon-radio-off");
-                this.element.data("iconElement", iconElement);
-                this.element.data("boxElement", boxElement);
-                if (this.element.is(":disabled")) {
-                    this._setOption("disabled", true);
-                }
+				}
+				else {
+					radiobuttonElement = that.element.wrap("<div class='" + that._radiobuttonPre + "-inputwrapper'></div>").parent().wrap("<div></div>").parent().addClass(that._radiobuttonPre + " ui-widget");
+				}
+				var targetLabel = $("label[for='" + that.element.attr("id") + "']");
+				if (targetLabel.length > 0) {
+					radiobuttonElement.append(targetLabel);
+					targetLabel.attr("labelsign", "wij");
+					//targetLabel.attr("tabindex", 0);
+				}
+				var boxElement = $("<div class='" + that._radiobuttonPre + "-box ui-widget ui-state-default ui-corner-all'><span class='" + that._radiobuttonPre + "-icon'></span></div>");
+				var iconElement = boxElement.children("." + that._radiobuttonPre + "-icon");
+				radiobuttonElement.append(boxElement);
+				iconElement.addClass("ui-icon ui-icon-radio-off");
+				that.element.data("iconElement", iconElement);
+				that.element.data("boxElement", boxElement);
+				if (that.element.is(":disabled")) {
+					that._setOption("disabled", true);
+				}
 
-                boxElement.removeClass("ui-wijradiobutton-relative");
-                if (targetLabel.length == 0 || targetLabel.html() === "") {
-                    boxElement.addClass("ui-wijradiobutton-relative");
-                }
-                this._refresh();
-                //			boxElement.css("margin-top","9px");
+				boxElement.removeClass(that._radiobuttonPre + "-relative");
+				if (targetLabel.length == 0 || targetLabel.html() === "") {
+					boxElement.addClass(that._radiobuttonPre + "-relative");
+				}
+				that._refresh();
+				//			boxElement.css("margin-top","9px");
 
-                this.element.bind("click.checkbox", function () {
-                    that._refresh();
-                }).bind("focus.checkbox", function () {
-                    if (that.options.disabled) {
-                        return;
-                    }
-                    boxElement.removeClass("ui-state-default").addClass("ui-state-focus");
-                }).bind("blur.checkbox", function () {
-                    if (that.options.disabled) {
-                        return;
-                    }
-                    boxElement.removeClass("ui-state-focus").not(".ui-state-hover").addClass("ui-state-default");
-                });
+				that.element.bind("click.checkbox", function () {
+					that._refresh();
+				}).bind("focus.checkbox", function () {
+					if (that.options.disabled) {
+						return;
+					}
+					boxElement.removeClass("ui-state-default").addClass("ui-state-focus");
+				}).bind("blur.checkbox", function () {
+					if (that.options.disabled) {
+						return;
+					}
+					boxElement.removeClass("ui-state-focus").not(".ui-state-hover").addClass("ui-state-default");
+				});
 
-                radiobuttonElement.click(function () {
-                    if (targetLabel.length == 0 || targetLabel.html() === "") {
-                        that.element.attr("checked", true);
-                        that._refresh();
-                    }
+				radiobuttonElement.click(function () {
+					if (targetLabel.length == 0 || targetLabel.html() === "") {
+						that.element.attr("checked", true);
+						that._refresh();
+					}
 
-                })
+				})
 
-                radiobuttonElement.bind("mouseover.checkbox", function () {
-                    if (that.options.disabled) {
-                        return;
-                    }
-                    boxElement.removeClass("ui-state-default").addClass("ui-state-hover");
-                }).bind("mouseout.checkbox", function () {
-                    if (that.options.disabled) {
-                        return;
-                    }
-                    boxElement.removeClass("ui-state-hover").not(".ui-state-focus").addClass("ui-state-default");
-                });
+				radiobuttonElement.bind("mouseover.checkbox", function () {
+					if (that.options.disabled) {
+						return;
+					}
+					boxElement.removeClass("ui-state-default").addClass("ui-state-hover");
+				}).bind("mouseout.checkbox", function () {
+					if (that.options.disabled) {
+						return;
+					}
+					boxElement.removeClass("ui-state-hover").not(".ui-state-focus").addClass("ui-state-default");
+				});
 
-            }
-        },
+			}
+		},
 
-        _refresh: function () {
-            var name = this.element.attr("name");
-            var self = this;
-            $("[name=" + name + "]").each(function (i, n) {
-                $(n).parents(".ui-wijradiobutton").find(".ui-wijradiobutton-box").children().removeClass("ui-icon-radio-on ui-icon-radio-off").addClass("ui-icon-radio-on");
-                $(n).parents(".ui-wijradiobutton").find(".ui-wijradiobutton-box").removeClass("ui-state-active").addClass("ui-state-default");
-            })
-            if (self.element.is(":checked")) {
-                self.element.data("iconElement").removeClass("ui-icon-radio-on").addClass("ui-icon-radio-off");
-                self.element.data("boxElement").removeClass("ui-state-default").addClass("ui-state-active");
-            }
-            //this.iconElement.toggleClass("ui-icon ui-icon-radio-on", this.element.is(":checked"));
-        },
-
-
-        _addAttrs: function (oldele, newele) {
-            if (newele) {
-                var attrs = oldele.get(0).attributes;
-                $.each(attrs, function (i, n) {
-                    var name = n.name.toLowerCase();
-                    if (name == 'type' || name == 'id') {
-                        return true;
-                    }
-                    try {
-                        newele.attr(n.name, n.nodeValue);
-                    }
-                    catch (ex)
-                    { }
-                });
-            }
-        },
-        destroy: function () {
-            var boxelement = this.element.parent().parent();
-            boxelement.children("div.ui-wijradiobutton-box").remove();
-            this.element.unwrap();
-            this.element.unwrap();
-            $.Widget.prototype.destroy.apply(this);
-        }
-    });
+		_refresh: function () {
+			var name = this.element.attr("name");
+			var self = this;
+			$("[name=" + name + "]").each(function (i, n) {
+				$(n).parents(".ui-wijradiobutton").find("." + self._radiobuttonPre + "-box").children().removeClass("ui-icon-radio-on ui-icon-radio-off").addClass("ui-icon-radio-on");
+				$(n).parents(".ui-wijradiobutton").find("." + self._radiobuttonPre + "-box").removeClass("ui-state-active").addClass("ui-state-default");
+			})
+			if (self.element.is(":checked")) {
+				self.element.data("iconElement").removeClass("ui-icon-radio-on").addClass("ui-icon-radio-off");
+				self.element.data("boxElement").removeClass("ui-state-default").addClass("ui-state-active");
+			}
+		},
+		destroy: function () {
+			var self = this;
+			var boxelement = self.element.parent().parent();
+			boxelement.children("div." + self._radiobuttonPre + "-box").remove();
+			self.element.unwrap();
+			self.element.unwrap();
+			$.Widget.prototype.destroy.apply(self);
+		}
+	});
 })(jQuery);

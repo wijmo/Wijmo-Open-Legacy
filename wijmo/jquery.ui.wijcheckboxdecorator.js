@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 0.6.1
+ * Wijmo Library 0.7.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -19,122 +19,92 @@
  *
  */
 (function ($) {
-    var checkboxId = 0;
-    $.widget("ui.wijcheckboxdecorator", {
-        _init: function () {
-            var that = this;
-            var e = this.element;
-            if (e.is(":checkbox")) {
-                if (!this.element.attr("id")) {
-                    this.element.attr("id", "ui-checkbox-" + checkboxId);
-                    checkboxId += 1;
-                }
+	var checkboxId = 0;
+	$.widget("ui.wijcheckboxdecorator", {
+		_csspre: "ui-checkbox",
+		_init: function () {
+			var that = this;
+			if (that.element.is(":checkbox")) {
+				if (!that.element.attr("id")) {
+					that.element.attr("id", that._csspre + checkboxId);
+					checkboxId += 1;
+				}
+				var checkboxElement;
+				if (that.element.parent().is("label")) {
+					checkboxElement = that.element.parent().wrap("<div class='" + that._csspre + "-inputwrapper'></div>").parent().wrap("<div></div>").parent().addClass(that._csspre + " ui-widget");
+					var label = that.element.parent();
+					label.attr("for", that.element.attr("id"));
+					checkboxElement.find("." + that._csspre + "-inputwrapper").append(that.element);
+					checkboxElement.append(label);
+				}
+				else {
+					checkboxElement = that.element.wrap("<div class='" + that._csspre + "-inputwrapper'></div>").parent().wrap("<div></div>").parent().addClass(that._csspre + " ui-widget");
+				}
+				var targetLabel = $("label[for='" + that.element.attr("id") + "']");
+				if (targetLabel.length > 0) {
+					checkboxElement.append(targetLabel);
+					targetLabel.attr("labelsign", "C1");
+				}
+				var boxElement = $("<div class='" + that._csspre + "-box ui-widget ui-state-default ui-corner-all'><span class='" + that._csspre + "-icon'></span></div>");
+				var iconElement = boxElement.children("." + that._csspre + "-icon");
+				checkboxElement.append(boxElement);
+				that.element.data("iconElement", iconElement);
+				that.element.data("boxElement", boxElement);
+				if (that.element.is(":disabled")) {
+					that._setOption("disabled", true);
+				}
+				boxElement.removeClass(that._csspre + "-relative");
+				if (targetLabel.length == 0 || targetLabel.html() === "") {
+					boxElement.addClass(that._csspre + "-relative");
+				}
+				that.element.bind("click.checkbox", function () {
+					that.refresh();
+				}).bind("focus.checkbox", function () {
+					if (that.options.disabled) {
+						return;
+					}
+					boxElement.removeClass("ui-state-default").addClass("ui-state-focus");
+				}).bind("blur.checkbox", function () {
+					if (that.options.disabled) {
+						return;
+					}
+					boxElement.removeClass("ui-state-focus").not(".ui-state-hover").addClass("ui-state-default");
+				})
+				checkboxElement.click(function () {
+					if (targetLabel.length == 0 || targetLabel.html() === "") {
+						that.element.attr("checked", !that.element.attr("checked"));
+						that.refresh();
+					}
 
-                var checkboxElement;
-                if (this.element.parent().is("label")) {
-                    checkboxElement = this.element.parent().wrap("<div class='ui-checkbox-inputwrapper'></div>").parent().wrap("<div></div>").parent().addClass("ui-checkbox ui-widget");
-                    var label = this.element.parent();
-                    label.attr("for", this.element.attr("id"));
-                    checkboxElement.find(".ui-checkbox-inputwrapper").append(this.element);
-                    checkboxElement.append(label);
+				})
+				that.refresh();
+				checkboxElement.bind("mouseover.checkbox", function () {
+					if (that.options.disabled) {
+						return;
+					}
+					boxElement.removeClass("ui-state-default").addClass("ui-state-hover");
+				}).bind("mouseout.checkbox", function () {
+					if (that.options.disabled) {
+						return;
+					}
+					boxElement.removeClass("ui-state-hover").not(".ui-state-focus").addClass("ui-state-default");
+				});
+			}
+		},
 
-                }
-                else {
-                    checkboxElement = this.element.wrap("<div class='ui-checkbox-inputwrapper'></div>").parent().wrap("<div></div>").parent().addClass("ui-checkbox ui-widget");
-                }
+		refresh: function () {
+			var self = this;
+			self.element.data("iconElement").toggleClass("ui-icon ui-icon-check", self.element.is(":checked"));
+			self.element.data("boxElement").toggleClass("ui-state-active", self.element.is(":checked"));
+		},
 
-                //var checkboxElement=this.element.wrap("<div class='ui-checkbox-inputwrapper'></div>").parent().wrap("<div></div>").parent().addClass("ui-checkbox ui-widget");
-                //inputwraper.wrap(checkbox);
-                var targetLabel = $("label[for='" + this.element.attr("id") + "']");
-                if (targetLabel.length === 0) {
-                }
-                else {
-                    checkboxElement.append(targetLabel);
-                    targetLabel.attr("labelsign", "C1");
-                    //targetLabel.attr("tabindex", 0);
-                }
-                if (targetLabel.length > 0) {
-                    //this._addAttrs(e, targetLabel);
-                }
-                var boxElement = $("<div class='ui-checkbox-box ui-widget ui-state-default ui-corner-all'><span class='ui-checkbox-icon'></span></div>");
-                var iconElement = boxElement.children(".ui-checkbox-icon");
-                checkboxElement.append(boxElement);
-                this.element.data("iconElement", iconElement);
-                this.element.data("boxElement", boxElement);
-                if (this.element.is(":disabled")) {
-                    this._setOption("disabled", true);
-                }
-                boxElement.removeClass("ui-checkbox-relative");
-                if (targetLabel.length == 0 || targetLabel.html() === "") {
-                    boxElement.addClass("ui-checkbox-relative");
-                }
-
-                this.element.bind("click.checkbox", function () {
-                    that.refresh();
-                }).bind("focus.checkbox", function () {
-                    if (that.options.disabled) {
-                        return;
-                    }
-                    boxElement.removeClass("ui-state-default").addClass("ui-state-focus");
-                }).bind("blur.checkbox", function () {
-                    if (that.options.disabled) {
-                        return;
-                    }
-                    boxElement.removeClass("ui-state-focus").not(".ui-state-hover").addClass("ui-state-default");
-                })
-
-                checkboxElement.click(function () {
-                    if (targetLabel.length == 0 || targetLabel.html() === "") {
-                        that.element.attr("checked", !that.element.attr("checked"));
-                        that.refresh();
-                    }
-
-                })
-                this.refresh();
-                checkboxElement.bind("mouseover.checkbox", function () {
-                    if (that.options.disabled) {
-                        return;
-                    }
-                    boxElement.removeClass("ui-state-default").addClass("ui-state-hover");
-                }).bind("mouseout.checkbox", function () {
-                    if (that.options.disabled) {
-                        return;
-                    }
-                    boxElement.removeClass("ui-state-hover").not(".ui-state-focus").addClass("ui-state-default");
-                });
-            }
-        },
-
-        refresh: function () {
-            this.element.data("iconElement").toggleClass("ui-icon ui-icon-check", this.element.is(":checked"));
-            this.element.data("boxElement").toggleClass("ui-state-active", this.element.is(":checked"));
-        },
-
-
-        _addAttrs: function (oldele, newele) {
-            if (newele) {
-                var attrs = oldele.get(0).attributes;
-                $.each(attrs, function (i, n) {
-                    var name = n.name.toLowerCase();
-                    if (name == 'type' || name == 'id') {
-                        return true;
-                    }
-                    try {
-                        newele.attr(n.name, n.nodeValue);
-                    }
-                    catch (ex)
-                    { }
-                });
-            }
-
-        },
-        destroy: function () {
-            var boxelement = this.element.parent().parent();
-            boxelement.children("div.ui-checkbox-box").remove();
-            //this.element.parent().unwrap();
-            this.element.unwrap();
-            this.element.unwrap();
-            $.Widget.prototype.destroy.apply(this);
-        }
-    });
+		destroy: function () {
+			var self = this;
+			var boxelement = self.element.parent().parent();
+			boxelement.children("div." + that._csspre + "-box").remove();
+			self.element.unwrap();
+			self.element.unwrap();
+			$.Widget.prototype.destroy.apply(self);
+		}
+	});
 })(jQuery);
