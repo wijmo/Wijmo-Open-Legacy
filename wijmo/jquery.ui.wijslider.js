@@ -195,6 +195,8 @@
         },
 
         _decreBtnMouseDown: function (e) {
+            e.preventDefault();
+            
             var self = e.data;
             var data = { buttonType: "decreButton" };
             self._trigger('buttonmousedown', e, data);
@@ -204,6 +206,8 @@
         },
 
         _increBtnMouseDown: function (e) {
+            e.preventDefault();
+          
             var self = e.data;
             var data = { buttonType: "increButton" };
             self._trigger('buttonmousedown', e, data);
