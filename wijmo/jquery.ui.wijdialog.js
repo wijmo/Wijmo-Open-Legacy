@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 0.7.0
+ * Wijmo Library 0.8.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -126,12 +126,12 @@
 			self._trigger("buttoncreating", null, captionButtons);
 			for (var i = captionButtons.length - 1; i >= 0; i--) {
 				self._createCaptionButton(captionButtons[i], uiDialogTitlebar);
-			};
+			}
 		},
 
 		_createCaptionButton: function (buttonHash, uiDialogTitlebar, notAppendToHeader) {
 			var self = this;
-
+			var buttonObject;
 			var buttonCSS = "ui-wijdialog-titlebar-" + buttonHash.button;
 			var button = uiDialogTitlebar.children("." + buttonCSS);
 			var info = buttonHash.info;
@@ -143,7 +143,7 @@
 						info.iconClassOn
 					)
 					.text(buttonHash.button);
-					var buttonObject = $('<a href="#"></a>')
+					buttonObject = $('<a href="#"></a>')
 					.append(buttonIcon)
 					.addClass(buttonCSS + " ui-corner-all ui-wijdialog-captionbutton")
 					.attr("role", "button")
@@ -202,7 +202,7 @@
 			///	</summary>
 
 			var fr = this.innerFrame;
-			if (fr != undefined) {
+			if (fr !== undefined) {
 				fr.attr("src", fr.attr("src"));
 			}
 		},
@@ -211,7 +211,7 @@
 			var self = this;
 
 			// TODO : toggle animation and event invoking.
-			if (self.collapsed == undefined || !self.collapsed) {
+			if (self.collapsed === undefined || !self.collapsed) {
 				self.collapsed = true;
 				self._collapseDialogContent(true);
 			}
@@ -224,9 +224,9 @@
 		_expandDialogContent: function (fireEvent) {
 			var self = this;
 			var o = self.options;
-
+			self.uiDialog.height("auto");
 			var animationSetting = o.expandingAnimation;
-			if (fireEvent && animationSetting != null) {
+			if (fireEvent && animationSetting !== null) {
 				self.contentWrapper.show(animationSetting.effect, animationSetting.options, animationSetting.speed, function (e) {
 					self.uiDialog.css("height", self._toggleHeight);
 					if ($.isFunction(animationSetting.callback)) {
@@ -249,7 +249,7 @@
 			self._toggleHeight = self.uiDialog[0].style.height;
 			self.uiDialog.height("auto");
 			var animationSetting = o.collapsingAnimation;
-			if (fireEvent && animationSetting != null) {
+			if (fireEvent && animationSetting !== null) {
 				self.contentWrapper.hide(animationSetting.effect, animationSetting.options, animationSetting.speed);
 			}
 			else {
@@ -323,12 +323,12 @@
 				if (o.minimizeZoneElementId.length > 0) {
 					miniZone = $("#" + o.minimizeZoneElementId);
 				}
-				if (miniZone != null && miniZone.size() > 0) {
+				if (miniZone !== null && miniZone.size() > 0) {
 					miniZone.append(self.uiDialog);
 				}
 				else {
 					var defaultZone = $("." + zonCSS);
-					if (defaultZone.size() == 0) {
+					if (defaultZone.size() === 0) {
 						defaultZone = $('<div class="' + zonCSS + '"></div>');
 						$(document.body).append(defaultZone);
 					}
@@ -360,7 +360,7 @@
 		},
 
 		_doButtonAction: function (button, action) {
-			if (button != undefined) {
+			if (button !== undefined) {
 				button.removeClass(uiStateHover);
 				button[action]();
 			}
@@ -378,7 +378,7 @@
 				else if (self.collapsed) {
 					self._expandDialogContent(false);
 				}
-				if (self.maximizeButton != undefined) {
+				if (self.maximizeButton !== undefined) {
 					self.maximizeButton.hide();
 					self._restoreButton(true, self.maximizeButton, "Before");
 				}
@@ -515,7 +515,7 @@
 				if (self.collapsed) {
 					self._collapseDialogContent();
 				}
-				if (self.maximizeButton != undefined) {
+				if (self.maximizeButton !== undefined) {
 					self.maximizeButton.show();
 					self._restoreButton(false, self.maximizeButton, "before");
 				}
