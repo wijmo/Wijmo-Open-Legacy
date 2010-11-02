@@ -1,6 +1,7 @@
+/*globals jQuery*/
 /*
  *
- * Wijmo Library 0.7.0
+ * Wijmo Library 0.8.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -17,19 +18,19 @@
  *  jquery.ui.wijsuperpanel.js
  *  
  */
+"use strict";
 (function ($) {
-	var listCSS = 'ui-widget ui-widget-content ui-corner-all ui-wijlist',
-		listItemCSS = 'ui-wijlist-item',
-		listItemCSSAlternate = listItemCSS + '-alternate',
-		listItemCSSSelected = listItemCSS + '-selected',
-		
-		listItemCSSFirst = listItemCSS + '-first',
-		listItemCSSLast = listItemCSS + '-last',
-		stateHover = 'ui-state-hover',
+	var listCSS = "ui-widget ui-widget-content ui-corner-all ui-wijlist",
+		listItemCSS = "ui-wijlist-item",
+		listItemCSSAlternate = listItemCSS + "-alternate",
+		listItemCSSSelected = listItemCSS + "-selected",
+		listItemCSSFirst = listItemCSS + "-first",
+		listItemCSSLast = listItemCSS + "-last",
+		stateHover = "ui-state-hover",
 		uiStateActive = "ui-state-active",
-		  activeItem = 'ui-active-wijlistitem',
-		  selectedActive = listItemCSSSelected + ' ' + uiStateActive,
-		itemKey = 'item.wijlist';
+		activeItem = "ui-active-wijlistitem",
+		selectedActive = listItemCSSSelected + " " + uiStateActive,
+		itemKey = "item.wijlist";
 	$.widget("ui.wijlist", {
 		options: {
 			/// <summary>
@@ -47,13 +48,13 @@
 			selected: null,
 			/// <summary>
 			/// A value indicates the selection mode of wijlist.
-			/// Default: 'single'.
+			/// Default: "single".
 			/// Type: String.
 			/// </summary>
 			/// <remarks>
-			/// Options are 'single' and 'multiple'. This option should not be set again after initialization.
+			/// Options are "single" and "multiple". This option should not be set again after initialization.
 			/// </remarks>
-			selectionMode: 'single',
+			selectionMode: "single",
 			/// <summary>
 			/// A value determines whether to auto-size wijlist.
 			/// Default: false.
@@ -173,13 +174,12 @@
 		},
 
 		_create: function () {
-			var self = this;
-			var ele = self.element;
+			var self = this, ele = this.element;
 			ele.addClass(listCSS).attr({
 				role: "listbox",
 				"aria-activedescendant": activeItem
-			}).bind('click.' + self.widgetName, self, self._onListClick);
-			self.ul = $('<ul class="ui-wijlist-ul"></ul>').appendTo(ele);
+			}).bind("click." + self.widgetName, self, self._onListClick);
+			self.ul = $("<ul class='ui-wijlist-ul'></ul>").appendTo(ele);
 			if (self.options.disabled) {
 				self.disable();
 			}
@@ -190,7 +190,7 @@
 			/// Sets Items to be rendered by the wijlist.
 			/// </summary>
 			/// <param name="items" type="Array">
-			/// Items array to be rendered.  The array contains object like {label: 'label', value: 'value'}.
+			/// Items array to be rendered.  The array contains object like {label: "label", value: "value"}.
 			///	</param>
 			this.items = items;
 		},
@@ -219,16 +219,13 @@
 			/// Destroys wijlist.
 			/// </summary>
 
-			var self = this;
-			var ele = self.element;
+			var self = this, ele = this.element;
 			if (self.superPanel !== undefined) {
 				self.superPanel.destroy();
 			}
 
-			ele.removeClass(listCSS).removeAttr('role').removeAttr('aria-activedescendant');
-			ele.unbind('.' + self.widgetName);
+			ele.removeClass(listCSS).removeAttr("role").removeAttr("aria-activedescendant").unbind("." + self.widgetName);
 			self.ul.remove();
-
 			$.Widget.prototype.destroy.apply(self, arguments);
 		},
 
@@ -246,20 +243,20 @@
 			/// Whether to scroll activated item to view.
 			///	</param>
 
-			var self = this;
+			var self = this, active;
 			self.deactivate();
-			if (item == null || item == undefined) {
+			if (item === null || item === undefined) {
 				return;
 			}
-			if (self._trigger('focusing', event, item) == false) {
+			if (self._trigger("focusing", event, item) === false) {
 				return;
 			}
-			var active = self.active = item.element;
+			active = self.active = item.element;
 			if (self.options.addHoverItemClass) {
 				active.addClass(stateHover);
 			}
 			self.active.attr("id", activeItem);
-			if (scrollTo && self.superPanel != undefined) {
+			if (scrollTo && self.superPanel !== undefined) {
 				self.superPanel.scrollChildIntoView(active);
 			}
 			self._trigger("focus", event, item);
@@ -270,8 +267,7 @@
 			/// Deactivates activated items.
 			/// </summary>
 
-			var self = this;
-			var a = self.active;
+			var self = this, a = this.active;
 			if (!a) {
 				return;
 			}
@@ -293,7 +289,7 @@
 			/// Turns to the next page of the list.
 			/// </summary>
 
-			this.superPanel.doScrolling('bottom', true);
+			this.superPanel.doScrolling("bottom", true);
 		},
 
 		previous: function (event) {
@@ -309,7 +305,7 @@
 			/// Turns to the previous page of the wijlist.
 			/// </summary>
 
-			this.superPanel.doScrolling('top', true);
+			this.superPanel.doScrolling("top", true);
 		},
 
 		first: function () {
@@ -333,13 +329,13 @@
 			/// Move focus between items.
 			/// </summary>
 
-			var self = this;
+			var self = this, item, next;
 			if (!self.active) {
-				var item = self.ul.children(edge).data(itemKey);
+				item = self.ul.children(edge).data(itemKey);
 				self.activate(event, item, true);
 				return;
 			}
-			var next = self.active[direction + "All"]("." + listItemCSS).eq(0);
+			next = self.active[direction + "All"]("." + listItemCSS).eq(0);
 			if (next.length) {
 				self.activate(event, next.data(itemKey), true);
 			}
@@ -354,20 +350,16 @@
 			/// </summary>
 			///
 
-			var self = this;
-			if (self.active == undefined) {
+			var self = this, ele = this.active, item = ele.data(itemKey), singleMode, previous;
+			if (ele === undefined) {
 				return;
 			}
-
-			var ele = self.active;
-			var item = ele.data(itemKey);
-
-			var singleMode = self.options.selectionMode == 'single';
+			singleMode = self.options.selectionMode === "single";
 			if (singleMode) {
-				var previous = self.selectedItem;
+				previous = self.selectedItem;
 				ele.addClass(selectedActive);
 				item.selected = true;
-				if (previous != undefined && item != previous) {
+				if (previous !== undefined && item !== previous) {
 					previous.selected = false;
 					previous.element.removeClass(selectedActive);
 				}
@@ -404,11 +396,8 @@
 			/// Indices of items to select.
 			/// </param>
 
-			var self = this;
-			var singleMode = self.options.selectionMode == 'single';
-			var len = self.items.length;
+			var self = this, singleMode = this.options.selectionMode === "single", item, previous, len = this.items.length;
 			if (singleMode) {
-				var item;
 				if (indices >= 0 && indices < len) {
 					item = self.items[indices];
 					item.selected = true;
@@ -417,14 +406,14 @@
 				else {
 					return;
 				}
-				var previous = self.selectedItem;
-				if (previous != undefined && previous != null) {
+				previous = self.selectedItem;
+				if (previous !== undefined && previous !== null) {
 					previous.selected = false;
 					previous.element.removeClass(selectedActive);
 				}
 				self.selectedItem = item;
 				if (triggerSelected) {
-					self._trigger("selected", event, {
+					self._trigger("selected", null, {
 						item: item,
 						previousItem: previous
 						//,
@@ -444,7 +433,7 @@
 					return a.selected;
 				});
 				if (triggerSelected) {
-					self._trigger("selected", event, {
+					self._trigger("selected", null, {
 						selectedItems: self.selectedItems
 					});
 				}
@@ -459,12 +448,10 @@
 			/// Indices of items to unselect.
 			/// </param>
 
-			var self = this;
-			var mode = self.options.selectionMode;
-			var len = self.items.length;
-			if (mode == 'single') {
-				var selectedItem = self.selectedItem;
-				if (selectedItem != undefined) {
+			var self = this, mode = this.options.selectionMode, len = this.items.length, selectedItem;
+			if (mode === "single") {
+				selectedItem = self.selectedItem;
+				if (selectedItem !== undefined) {
 					selectedItem.selected = false;
 					selectedItem.element.removeClass(selectedActive);
 					self.selectedItem = undefined;
@@ -488,43 +475,40 @@
 			/// <summary>
 			/// Render items of wijlist.
 			/// </summary>
-			var self = this;
-			var ul = self.ul;
-			var o = self.options;
+			var self = this, ul = this.ul, o = this.options, items, count, singleMode, i, item;
 			ul.empty();
 			self.selectedItem = undefined;
 			self.selectedItems = [];
 			// returns if no items to render.
-			var items = self.items;
-			if (items == undefined) {
+			items = self.items;
+			if (items === undefined) {
 				return;
 			}
-			var count = items.length;
-			if (items == undefined || items == null && count == 0) {
+			count = items.length;
+			if (items === undefined || items === null && count === 0) {
 				return;
 			}
-			var singleMode = o.selectionMode == 'single';
-			for (var i = 0; i < count; i++) {
-				var item = items[i];
+			singleMode = o.selectionMode === "single";
+			for (i = 0; i < count; i++) {
+				item = items[i];
 				self._renderItem(ul, item, i, singleMode);
 			}
 			items[0].element.addClass(listItemCSSFirst);
 			items[count - 1].element.addClass(listItemCSSLast);
-			self._trigger('listrendered', null, self);
+			self._trigger("listrendered", null, self);
 		},
 
 
 		_renderItem: function (ul, item, index, singleMode) {
-			var self = this;
-			var li = $('<li class="ui-wijlist-item ui-corner-all"></li>');
+			var self = this, li = $("<li class='ui-wijlist-item ui-corner-all'></li>"), label, url;
 			item.element = li;
 			item.list = self;
-			if (self._trigger('itemrendering', null, item) == false) {
+			if (self._trigger("itemrendering", null, item) === false) {
 				return;
 			}
-			var label = item.label;
+			label = item.label;
 			// if text is set, text will override label value.
-			if (item.text != undefined) {
+			if (item.text !== undefined) {
 				label = item.text;
 			}
 			// binds list item event
@@ -536,24 +520,24 @@
 				}
 			}).data(itemKey, item).append(label).appendTo(ul);
 			// render image
-			var url = item.imageUrl;
-			if (url != undefined && url.length > 0) {
-				li.prepend('<img src="' + item.imageUrl + '">');
+			url = item.imageUrl;
+			if (url !== undefined && url.length > 0) {
+				li.prepend("<img src='" + item.imageUrl + "'>");
 			}
 			// add selected items
-			if (item.selected == true) {
-			    li.addClass(selectedActive);
-				if (singleMode && self.selectedItem == undefined) {
+			if (item.selected === true) {
+				li.addClass(selectedActive);
+				if (singleMode && self.selectedItem === undefined) {
 					self.selectedItem = item;
 				}
 				else {
 					self.selectedItems.push(item);
 				}
 			}
-			if (index % 2 == 1) {
+			if (index % 2 === 1) {
 				li.addClass(listItemCSSAlternate);
 			}
-			self._trigger('itemrendered', null, item);
+			self._trigger("itemrendered", null, item);
 		},
 
 		refreshSuperPanel: function () {
@@ -561,34 +545,29 @@
 			/// Reset the layout of superpanel to reflect the change in content.
 			/// </summary>
 
-			var self = this;
-			var ele = self.element;
-			if (!ele.is(':visible')) {
+			var self = this, ele = this.element, o = this.options, ul = this.ul, singleItem = ul.children(".ui-wijlist-item:first"),
+			adjustHeight = null, h, percent, small, vScroller, large, spOptions, pt;
+			if (!ele.is(":visible")) {
 				return false;
 			}
-			var o = self.options;
-			var ul = self.ul;
-			var singleItem = ul.children('.ui-wijlist-item:first');
-			var adjustHeight = null;
 			if (o.autoSize) {
 				adjustHeight = singleItem.outerHeight(true) * o.maxItemsCount;
 			}
 
-			if (adjustHeight != null) {
+			if (adjustHeight !== null) {
 				ele.height(Math.min(adjustHeight, ul.outerHeight()));
 			}
-			var h = ele.innerHeight();
-			var percent = h / (ul.outerHeight() - h);
-			var large = (101 * percent) / (1 + percent);
-			var small = (singleItem.outerHeight() / (ul.outerHeight() - h)) * (101 - large);
-			var vScroller;
-			if (self.superPanel == undefined) {
-				var spOptions = {
+			h = ele.innerHeight();
+			percent = h / (ul.outerHeight() - h);
+			large = (101 * percent) / (1 + percent);
+			small = (singleItem.outerHeight() / (ul.outerHeight() - h)) * (101 - large);
+			if (self.superPanel === undefined) {
+				spOptions = {
 					allowResize: false,
 					keyboardSupport: false,
 					bubbleScrollingEvent: true,
 					hScroller: {
-						scrollBarVisibility: 'hidden'
+						scrollBarVisibility: "hidden"
 					},
 					vScroller: {
 						scrollSmallChange: small,
@@ -597,7 +576,7 @@
 				};
 
 				$.extend(spOptions, o.superPanelOptions);
-				self.superPanel = ele.wijsuperpanel(spOptions).data('wijsuperpanel');
+				self.superPanel = ele.wijsuperpanel(spOptions).data("wijsuperpanel");
 			}
 			else {
 				vScroller = self.superPanel.options.vScroller;
@@ -605,10 +584,10 @@
 				vScroller.scrollSmallChange = small;
 				self.superPanel.paintPanel();
 			}
-			var pt = ul.css('padding-top');
+			pt = ul.css("padding-top");
 			if (pt.length > 0) {
 				vScroller = self.superPanel.options.vScroller;
-				vScroller.firstStepChangeFix = self.superPanel.scrollPxToValue(parseFloat(pt), 'v');
+				vScroller.firstStepChangeFix = self.superPanel.scrollPxToValue(parseFloat(pt), "v");
 			}
 			else {
 				vScroller.firstStepChangeFix = 0;
