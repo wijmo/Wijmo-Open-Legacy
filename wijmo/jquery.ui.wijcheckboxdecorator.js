@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 0.7.0
+ * Wijmo Library 0.8.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -54,7 +54,7 @@
 					that._setOption("disabled", true);
 				}
 				boxElement.removeClass(that._csspre + "-relative");
-				if (targetLabel.length == 0 || targetLabel.html() === "") {
+				if (targetLabel.length === 0 || targetLabel.html() === "") {
 					boxElement.addClass(that._csspre + "-relative");
 				}
 				that.element.bind("click.checkbox", function () {
@@ -69,14 +69,14 @@
 						return;
 					}
 					boxElement.removeClass("ui-state-focus").not(".ui-state-hover").addClass("ui-state-default");
-				})
+				});
 				checkboxElement.click(function () {
-					if (targetLabel.length == 0 || targetLabel.html() === "") {
+					if (targetLabel.length === 0 || targetLabel.html() === "") {
 						that.element.attr("checked", !that.element.attr("checked"));
 						that.refresh();
 					}
 
-				})
+				});
 				that.refresh();
 				checkboxElement.bind("mouseover.checkbox", function () {
 					if (that.options.disabled) {
@@ -101,7 +101,7 @@
 		destroy: function () {
 			var self = this;
 			var boxelement = self.element.parent().parent();
-			boxelement.children("div." + that._csspre + "-box").remove();
+			boxelement.children("div." + self._csspre + "-box").remove();
 			self.element.unwrap();
 			self.element.unwrap();
 			$.Widget.prototype.destroy.apply(self);
