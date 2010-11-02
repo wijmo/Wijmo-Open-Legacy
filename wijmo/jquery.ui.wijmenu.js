@@ -1,6 +1,6 @@
 /*
 *
-* Wijmo Library 0.7.0
+* Wijmo Library 0.8.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -299,7 +299,7 @@
 			/// <summary>This event is similar to the next event,but it jumps a whole page.</summary>
 			/// <param name="event" type="Event">The javascript event.</param>
 			var self = this, activeItem = self.element.data("activeItem"), parent = activeItem.parent();
-			if (self.mode == "sliding" && self._hasScroll()) {
+			if (self.mode === "sliding" && self._hasScroll()) {
 				// TODO merge with no-scroll-else
 				//var activeItem = self.element.data("activeItem");
 				//var parent = activeItem.parent();
@@ -330,7 +330,7 @@
 			/// <summary>This event is silimlar to the previous event,but it jumps a whole page.</summary>
 			/// <param name="event" type="Event">The javascript event.</param>
 			var self = this, activeItem = self.element.data("activeItem"), parent = activeItem.parent();
-			if (self.mode == "sliding" && this._hasScroll()) {
+			if (self.mode === "sliding" && this._hasScroll()) {
 				// TODO merge with no-scroll-else								
 				if (!activeItem || this.first()) {
 					this.activate(event, parent.children(":last"));
@@ -379,13 +379,13 @@
 
 		_set_mode: function (value) {
 			this._destroy();
-			this.options["mode"] = value;
+			this.options.mode = value;
 			this.refresh();
 		},
 
 		_set_orientation: function (value) {
+			var menuContainer = this.element.data("domObject").menucontainer;
 			if (this.options.mode === "flyout") {
-				var menuContainer = this.element.data("domObject").menucontainer;
 				menuContainer.removeClass("ui-wijmenu-vertical ui-wijmenu-horizontal").addClass("ui-wijmenu-" + value);
 				this.element.children("li:has(ul)").each(function () {
 					if (value === "horizontal") {
@@ -403,10 +403,10 @@
 
 		_set_triggerEvent: function (value) {
 			this._killtrigger();
-			this.options["triggerEvent"] = value;
+			this.options.triggerEvent = value;
 			var triggerEle = $(this.options.trigger).filter(function () {
 				return $(this).closest(".ui-wijmenu").length === 0;
-			})
+			});
 			if (triggerEle.length > 0) {
 				this._initTrigger(triggerEle);
 			}
@@ -418,10 +418,10 @@
 
 		_set_trigger: function (value) {
 			this._killtrigger();
-			this.options["triggerEvent"] = value;
+			this.options.triggerEvent = value;
 			var triggerEle = $(this.options.trigger).filter(function () {
 				return $(this).closest(".ui-wijmenu").length === 0;
-			})
+			});
 			if (triggerEle.length > 0) {
 				this._initTrigger(triggerEle);
 			}
@@ -445,12 +445,12 @@
 						if (o.mode !== "popup") {
 							self._displaySubmenu(triggerEle, menuContainer);
 						}
-					})
+					});
 					break;
 				case "mouseenter":
 					triggerEle.bind("mouseenter.wijmenu", function () {
 						self._displaySubmenu(triggerEle, menuContainer);
-					})
+					});
 					//.mouseleave(function (e) {						
 					//self._hideSubmenu(menuContainer);
 					//});
@@ -458,13 +458,13 @@
 				case "dblclick":
 					triggerEle.bind("dblclick.wijmenu", function () {
 						self._displaySubmenu(triggerEle, menuContainer);
-					})
+					});
 					break;
 				case "rtclick":
 					triggerEle.bind("contextmenu.wijmenu", function (e) {
 						self._displaySubmenu(triggerEle, menuContainer);
 						e.preventDefault();
-					})
+					});
 					break;
 			}
 			$(document).bind("click.wijmenudoc", function (e) {
@@ -489,7 +489,7 @@
 
 		_killtrigger: function () {
 			var o = this.options;
-			if (o.trigger != '') {
+			if (o.trigger !== "") {
 				var triggerEle = $(o.trigger);
 				if (triggerEle && triggerEle.length > 0) {
 					triggerEle.unbind(".wijmenu");
@@ -628,7 +628,7 @@
 			if (o.trigger !== "") {
 				var triggerEle = $(o.trigger).filter(function () {
 					return $(this).closest(".ui-wijmenu").length === 0;
-				})
+				});
 				if (triggerEle.length > 0) {
 					menucontainer.hide();
 					self._initTrigger(triggerEle);
@@ -639,14 +639,47 @@
 		_showFlyoutSubmenu: function (li, subList) {
 			var self = this;
 			var curList = self.element.data("currentMenuList");
-			if (curList != undefined) {
+			if (curList !== undefined) {
 				$.each(curList, function () {
-					if ($(this).get(0) != li.parent().get(0)) {
+					if ($(this).get(0) !== li.parent().get(0)) {
 						self._hideSubmenu($(this));
 					}
 				});
 			}
 			self._displaySubmenu(li.find('.ui-wijmenu-link:eq(0)'), subList);
+		},
+
+		_getItemTriggerEvent: function (item) {
+			var self = this;
+			var o = self.options;
+			var triggerEvent = "default";
+			if (o.trigger !== "") {
+
+				if (item.is(o.trigger)) {
+					triggerEvent = o.triggerEvent;
+				}
+				else if (self.element.is(o.trigger)) {
+					triggerEvent = o.triggerEvent;
+				}
+				else {
+					item.parents(".ui-wijmenu-parent").each(function (i, n) {
+						if ($(n).is(o.trigger)) {
+							triggerEvent = o.triggerEvent;
+							return false;
+						}
+					});
+					if (triggerEvent === "default") {
+						var triggerEle = $(o.trigger).filter(function () {
+							return $(this).closest(".ui-wijmenu").length === 0;
+						});
+						if (triggerEle.length > 0) {
+							triggerEvent = o.triggerEvent;
+						}
+					}
+				}
+			}
+			item.data("triggerEvent", triggerEvent);
+			return triggerEvent;
 		},
 
 		_flyout: function () {
@@ -660,7 +693,9 @@
 			container.find('li:has(ul)').each(function () {
 				var allSubLists = $(this).find('ul');
 				var li = $(this);
-				if (self.options.trigger !== "" && li.is(self.options.trigger) && self.options.triggerEvent != "mouseenter") {
+				var triggerEvent = self._getItemTriggerEvent(li);
+
+				if (triggerEvent !== "default" && self.options.triggerEvent !== "mouseenter") {
 					li.removeClass("ui-wijmenu-parent").addClass("ui-wijmenu-parent");
 					var link = $(this).find('.ui-wijmenu-link:eq(0)');
 					var subList = link.next();
@@ -684,7 +719,7 @@
 					}
 					$(document).bind("click.wijmenu", function (e) {
 						if (container.is(":animated")) {
-							//return;
+							return;
 						}
 						var obj = $(e.target).closest(".ui-wijmenu");
 						if (obj.length === 0) {
@@ -735,20 +770,20 @@
 			///when click the menu item hide the submenus.
 			container.find(".ui-wijmenu-link").bind("click.wijmenu", function (e) {
 				if ($(this).is("a")) {
-					if (!(self.options.trigger !== "" && $(this).parent().is(self.options.trigger) && self.options.triggerEvent != "mouseenter")) {
+					if (!(self.options.trigger !== "" && $(this).parent().data("triggerEvent") !== "default" && self.options.triggerEvent !== "mouseenter")) {
 						self._hideAllMenus();
 					}
 					else {
 						var curList = self.element.data("currentMenuList");
-						if (curList != undefined) {
+						if (curList !== undefined) {
 							var item = $(this).parent();
 							//var link = $(this);
-							if (item.has("ul").length == 0) {
+							if (item.has("ul").length === 0) {
 								$.each(curList, function (i, n) {
-									if (curList[curList.length - 1].get(0) == item.parent().get(0)) {
+									if (curList[curList.length - 1].get(0) === item.parent().get(0)) {
 										return true;
 									}
-									if ($(n).get(0) != item.parent().get(0)) {
+									if ($(n).get(0) !== item.parent().get(0)) {
 										self._hideSubmenu($(this));
 									}
 								});
@@ -775,7 +810,7 @@
 				}
 				var outerTrigger = $(self.options.trigger).filter(function () {
 					return $(this).closest(".ui-wijmenu").length === 0;
-				})
+				});
 				if (outerTrigger.length === 0) {
 					return;
 				}
@@ -824,7 +859,7 @@
 		},
 
 		_checkDrillMenuHeight: function (el, mycontainer, scrollcontainer) {
-			var o = this.options;
+			//var o = this.options;
 			var self = this;
 			//			if (el.height() > o.maxHeight) { //el.addClass('fg-menu-scroll')
 			//			};
@@ -881,7 +916,7 @@
 			var firstCrumb = $('<li class="' + firstCrumbClass + '"><a href="#" class="' + firstCrumbLinkClass + '">' + firstCrumbIcon + firstCrumbText + '</a></li>');
 			container.addClass('wij-menu-ipod wij-menu-container');
 			if (o.backLink) { breadcrumb.addClass('wij-menu-footer').appendTo(container).hide(); }
-			else { breadcrumb.addClass('wij-menu-header').prependTo(container); };
+			else { breadcrumb.addClass('wij-menu-header').prependTo(container); }
 			if (!o.backLink) {
 				breadcrumb.append(crumbDefaultHeader);
 			}
@@ -893,7 +928,7 @@
 				width: container.width(),
 				left: container.width()
 			})
-			.addClass('ui-widget-content')
+			.addClass('ui-widget-content');
 			//.hide();
 			mycontainer.height(self.element.height());
 			self._sroll();
@@ -916,7 +951,6 @@
 					var parentLeft = (parentUl.data("topmenu")) ? 0 : parseFloat(topList.css('left'));
 					var nextLeftVal = Math.round(parentLeft - parseFloat(container.width()));
 					var footer = $('.wij-menu-footer', container);
-
 					// show next menu   		
 					self._resetDrillChildMenu(parentUl);
 					self._checkDrillMenuHeight(nextList, mycontainer, scrollcontainer);
@@ -934,12 +968,12 @@
 						self._resetDrillChildMenu(c);
 						self._checkDrillMenuHeight(prevList, mycontainer, scrollcontainer);
 						prevList.addClass('wij-menu-current').attr('aria-expanded', 'true');
-						if (prevList.hasClass('wij-menu-content')) { b.remove(); footer.hide(); };
+						if (prevList.hasClass('wij-menu-content')) { b.remove(); footer.hide(); }
 					};
 
 					// initialize "back" link
 					if (o.backLink) {
-						if (footer.find('a').size() == 0) {
+						if (footer.find('a').size() === 0) {
 							footer.show();
 							$('<a href="#"><span class="ui-icon ui-icon-triangle-1-w"></span> <span>' + o.backLinkText + '</span></a>')
 								.appendTo(footer)
@@ -960,7 +994,7 @@
 					}
 					// or initialize top breadcrumb
 					else {
-						if (breadcrumb.find('li').size() == 1) {
+						if (breadcrumb.find('li').size() === 1) {
 							breadcrumb.empty().append(firstCrumb);
 							firstCrumb.find('a').click(function () {
 								self._resetDrilldownMenu(breadcrumb);
@@ -973,10 +1007,7 @@
 						newCrumb
 							.appendTo(breadcrumb)
 							.find('a').click(function () {
-								if ($(this).parent().is('.wij-menu-current-crumb')) {
-									//menu.chooseItem(this);
-								}
-								else {
+								if (!$(this).parent().is('.wij-menu-current-crumb')) {
 									var newLeftVal = -($('.wij-menu-current').parents('ul').size() - 1) * 180;
 									topList.animate({ left: newLeftVal }, o.showDuration, function () {
 										setPrevMenu();
@@ -985,11 +1016,11 @@
 									// make this the current crumb, delete all breadcrumbs after this one, and navigate to the relevant menu
 									$(this).parent().addClass('wij-menu-current-crumb').find('span').remove();
 									$(this).parent().nextAll().remove();
-								};
+								}
 								//return false;
 							});
 						newCrumb.prev().append(' <span class="ui-icon ui-icon-carat-1-e"></span>');
-					};
+					}
 					//return false;
 				});
 				}
@@ -1000,15 +1031,15 @@
 						self.select(e);
 						if (self.options.trigger) {
 							var triggers = $(self.options.trigger).filter(function () {
-								return $(this).closest(".ui-wijmenu").length == 0;
-							})
+								return $(this).closest(".ui-wijmenu").length === 0;
+							});
 							if (triggers.length) {
 								self._hideSubmenu(container);
 								self._resetDrilldownMenu(breadcrumb);
 							}
 						}
 					});
-				};
+				}
 			});
 		},
 
@@ -1030,7 +1061,7 @@
 			this.element.find("li").each(function () {
 				var obj = $(this).children(":first");
 				obj.unbind("click");
-			})
+			});
 			$("ul", this.element).css({ left: "", width: "" });
 			this.element.css("left", "");
 		},
@@ -1142,7 +1173,7 @@
 				var animationOptions = {
 					context: sublist,
 					show: true
-				}
+				};
 				$.ui.wijmenu.animations[animated](option, animationOptions);
 			}
 			else {
@@ -1178,19 +1209,17 @@
 					}
 				}
 
-			})
+			});
 			return zindex + 1;
 		},
 
 		_hideCurrentSubmenu: function (aItem) {
 			var self = this;
 			aItem.find("ul").each(function () {
-				if ($(this).data("notClose")) {
+				if (!$(this).data("notClose")) {
 					//if (this != item.parent().get(0)&&aItem.get(0)!=item.get(0)) {
 					//	self._hideSubmenu($(this));
-					//}
-				}
-				else {
+					//}				
 					self._hideSubmenu($(this));
 				}
 			});
@@ -1213,7 +1242,7 @@
 				var animationOptions = {
 					context: sublist,
 					show: false
-				}
+				};
 				$.ui.wijmenu.animations[animated](option, animationOptions);
 			}
 			else {
@@ -1223,7 +1252,7 @@
 			var list = this.element.data("currentMenuList");
 			if (list) {
 				list = $.map(list, function (n) {
-					return n && (n.get(0) == sublist.get(0)) ? null : n;
+					return n && (n.get(0) === sublist.get(0)) ? null : n;
 				});
 				this.element.data("currentMenuList", $.makeArray(list));
 			}
@@ -1251,21 +1280,22 @@
 			var o = this.options;
 			var pOption = { my: 'left top',
 				at: 'right top'
-			}
+			};
 			if (o.orientation === "horizontal") {
 				if (item.parent().parent().parent().parent().is(".ui-wijmenu")) {
 					pOption = { my: 'left top',
 						at: 'left bottom'
-					}
+					};
 				}
 			}
 
 			if (!item.is(".ui-wijmenu-link")) {
 				pOption = { my: 'left top',
 					at: 'left bottom'
-				}
-				pOption = $.extend(pOption, o.position);
+				};
+
 			}
+			pOption = $.extend(pOption, o.position);
 			return pOption;
 		}
 
