@@ -1,22 +1,22 @@
 /*
- *
- * Wijmo Library 0.7.0
- * http://wijmo.com/
- *
- * Copyright(c) ComponentOne, LLC.  All rights reserved.
- * 
- * Dual licensed under the MIT or GPL Version 2 licenses.
- * licensing@wijmo.com
- * http://www.wijmo.com/license
- *
- * * Wijmo Dropdown widget.
- * 
- * Depends:
- *  jquery-1.4.2.js
- *	jquery.ui.core.js
- *	jquery.ui.widget.js
- *
- */
+*
+* Wijmo Library 0.8.0
+* http://wijmo.com/
+*
+* Copyright(c) ComponentOne, LLC.  All rights reserved.
+* 
+* Dual licensed under the MIT or GPL Version 2 licenses.
+* licensing@wijmo.com
+* http://www.wijmo.com/license
+*
+* * Wijmo Dropdown widget.
+* 
+* Depends:
+*  jquery-1.4.2.js
+*	jquery.ui.core.js
+*	jquery.ui.widget.js
+*
+*/
 (function ($) {
 	$.widget("ui.wijdropdowndecorator", {
 		options: {
@@ -69,8 +69,8 @@
 			var maxIndex = self._getMaxZIndex();
 
 			self.$dropdownList = $("<ul></ul>")
-            .addClass("ui-dropdown-list ui-widget-content ui-widget ui-corner-all ui-helper-reset")
-            .appendTo(self.div);
+			.addClass("ui-dropdown-list ui-widget-content ui-widget ui-corner-all ui-helper-reset")
+			.appendTo(self.div);
 
 			self.element.children().each(function () {//this.element
 				var $chilren = $(this);
@@ -98,13 +98,13 @@
 					//                    .mouseenter(function (event) {
 					//                        self._activate($(this));
 					//                    })
-                    .mousemove(function (event) {//mousemove replace mouseenter to resolve the hovered <li> changed issue when scrolling the ddl
-                    	var current = $(event.target).closest(".ui-dropdown-item");
-                    	if (current != this.last) {
-                    		self._activate($(this));
-                    	}
-                    	this.last = $(event.target).closest(".ui-dropdown-item");
-                    });
+					.mousemove(function (event) {//mousemove replace mouseenter to resolve the hovered <li> changed issue when scrolling the ddl
+						var current = $(event.target).closest(".ui-dropdown-item");
+						if (current !== this.last) {
+							self._activate($(this));
+						}
+						this.last = $(event.target).closest(".ui-dropdown-item");
+					});
 					$li.data("value", val);
 					return $li;
 				}
@@ -158,7 +158,7 @@
 			$(document.body).bind("click." + self.widgetName, function (e) {
 				var offset = self.div.offset();
 				//console.log($.contains(self.div, $(e.target)));
-				if (e.target === label.get(0) || e.target == inputWrap.get(0) || e.target == inputWrap.children().get(0)) {
+				if (e.target === label.get(0) || e.target === inputWrap.get(0) || e.target === inputWrap.children().get(0)) {
 					return;
 				}
 				if (e.pageX < offset.left || e.pageX > offset.left + self.div.width()) {
@@ -245,7 +245,7 @@
 				if (self.superpanel.vNeedScrollBar) {
 					var div = self.div;
 					var top = self._activeItem.offset().top,
-				    height = self._activeItem.outerHeight();
+					height = self._activeItem.outerHeight();
 					if (div.offset().top > top) {
 						div.wijsuperpanel("scrollTo", 0, top - self.$dropdownList.offset().top);
 					}
@@ -261,7 +261,7 @@
 			var self = this;
 			if (self._value) {
 				self.$dropdownList.find("li.ui-dropdown-item").each(function () {
-					if ($(this).data("value") == self._value) {
+					if ($(this).data("value") === self._value) {
 						self._activate($(this));
 					}
 				});
@@ -363,10 +363,10 @@
 				}
 				var base = self._activeItem.offset().top,
 				height = self.options.height,
-                result = self.$dropdownList.find(".ui-dropdown-item").filter(function () {
-                	var close = $(self).offset().top - base + height - $(self).height();
-                	return close < 10 && close > -10;
-                });
+				result = self.$dropdownList.find(".ui-dropdown-item").filter(function () {
+				var close = $(self).offset().top - base + height - $(self).height();
+					return close < 10 && close > -10;
+				});
 
 				if (!result.length) {
 					result = self.$dropdownList.find(".ui-dropdown-item:first");
@@ -387,15 +387,15 @@
 				if (parseInt($(n).css("z-index")) > index) {
 					index = parseInt($(n).css("z-index"));
 				}
-			})
+			});
 			self.element.data("maxZIndex", index);
 			return index;
 		},
-		
+
 		destroy: function () {
 			this.element.closest(".ui-wijdropdowndecorator").find(">div.ui-dropdown-trigger,>div.ui-dropdown,>label.ui-dropdown-label").remove();
 			this.element.unwrap().unwrap().removeData("maxZIndex");
 			$.Widget.prototype.destroy.apply(this);
 		}
-	})
+	});
 })(jQuery);
