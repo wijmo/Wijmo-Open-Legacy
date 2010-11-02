@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 0.7.0
+ * Wijmo Library 0.8.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -43,7 +43,7 @@ var wijDayType = {
 $.widget("ui.wijcalendar", {
 	options: {
 		///	<summary>
-		///		The culture id
+		///		Gets or sets culture ID.
 		///	</summary>
 		culture: '',
 		///	<summary>
@@ -57,9 +57,9 @@ $.widget("ui.wijcalendar", {
 		///	<summary>
 		///		Gets or sets the format for the title text. 
 		///	</summary>
-		titleFormat: "{0:MMMM yyyy}",
+		titleFormat: "MMMM yyyy",
 		///	<summary>
-		///		Determines the display date for the first month view.
+		///		A Boolean property that determines whether to display calendar title.
 		///	</summary>
 		showTitle: true,
 		///	<summary>
@@ -76,6 +76,7 @@ $.widget("ui.wijcalendar", {
 		dayCols: 7,
 		///	<summary>
 		///		Gets or sets the format for the week day. 
+		///		Possible values are: "short", "full", "firstLetter" or "abbreviated".
 		///	</summary>
 		weekDayFormat: "short",
 		///	<summary>
@@ -187,7 +188,7 @@ $.widget("ui.wijcalendar", {
 
 	_init: function () {
 		if (this.options.popupMode){
-			var po = {autoHide: !!this.options.autoHide}
+			var po = {autoHide: !!this.options.autoHide};
 			if (this.options.beforePopup) { po.showing = this.options.beforePopup; }
 			if (this.options.afterPopup) { po.shown = this.options.afterPopup; }
 			if (this.options.beforeClose) { po.hidding = this.options.beforeClose; }
@@ -238,7 +239,7 @@ $.widget("ui.wijcalendar", {
 			
 			case "culture":
 				this.refresh();
-			break
+			break;
 			
 			case "allowPreview":
 				this._previewWrapper(value);
@@ -309,7 +310,7 @@ $.widget("ui.wijcalendar", {
 	getSelectedDate: function(){
 		/// <summary>Gets the current selected date.</summary>
 		var dates = this.options.selectedDates;
-		return (!dates || dates.length == 0) ? null : dates[0];
+		return (!dates || dates.length === 0) ? null : dates[0];
 	},
 
 	selectDate: function (date) {
@@ -428,7 +429,7 @@ $.widget("ui.wijcalendar", {
 		if (date === undefined) { return; }
 		if (!o.selectionMode.day) { return; }
 		
-		var data = {date: date}
+		var data = {date: date};
 		this._trigger("beforeSelect", null, data);
 		if (data.cancel) { return; }
 		
@@ -519,7 +520,7 @@ $.widget("ui.wijcalendar", {
 	
 	_getParentTable: function (c) {
 		var parents = $(c).parents('table');
-		return (parents.length == 0) ? undefined : parents.get(0);
+		return (parents.length === 0) ? undefined : parents.get(0);
 	},
 
 	_initMonthSelector: function (ms) {
@@ -544,7 +545,7 @@ $.widget("ui.wijcalendar", {
 						var dt = $(td).attr('daytype');
 						if (dt === undefined) { continue; }
 						if ($(td).find('a').hasClass('ui-priority-secondary')) { continue; }
-						if (this._isSelectable(parseInt(dt))) {
+						if (this._isSelectable(parseInt(dt, 10))) {
 							cells[cells.length] = td;
 						}
 					}
@@ -584,7 +585,7 @@ $.widget("ui.wijcalendar", {
 		var cells = $(e.currentTarget).data('cells');
 
 		for (var i = 0; i < cells.length; i++) {
-			e.currentTarget = cells[i]
+			e.currentTarget = cells[i];
 			this.onDayMouseEnter(e);
 		}
 	},
@@ -594,7 +595,7 @@ $.widget("ui.wijcalendar", {
 		var cells = $(e.currentTarget).data('cells');
 		
 		for (var i = 0; i < cells.length; i++) {
-			e.currentTarget = cells[i]
+			e.currentTarget = cells[i];
 			this.onDayMouseLeave(e);
 		}
 	},
@@ -606,7 +607,7 @@ $.widget("ui.wijcalendar", {
 		if (tokens[tokens.length - 2] !== 'cs') {
 			throw Error.create('not a column');
 		}
-		var colIndex = parseInt(tokens[tokens.length - 1]);
+		var colIndex = parseInt(tokens[tokens.length - 1], 10);
 		var monthID = (tokens.slice(0, tokens.length - 2)).join('_');
 		var monthTable = this._getParentTable(wd);
 		var cells = [];
@@ -625,7 +626,7 @@ $.widget("ui.wijcalendar", {
 						var dt = $(td).attr('daytype');
 						if (dt === undefined) { continue; }
 						if ($(td).find('a').hasClass('ui-priority-secondary')) { continue; }
-						if (this._isSelectable(parseInt(dt))) {
+						if (this._isSelectable(parseInt(dt, 10))) {
 							cells[cells.length] = td;
 						}
 					}
@@ -664,7 +665,7 @@ $.widget("ui.wijcalendar", {
 		var cells = $(e.currentTarget).data('cells');
 
 		for (var i = 0; i < cells.length; i++) {
-			e.currentTarget = cells[i]
+			e.currentTarget = cells[i];
 			this.onDayMouseEnter(e);
 		}
 	},
@@ -674,7 +675,7 @@ $.widget("ui.wijcalendar", {
 		var cells = $(e.currentTarget).data('cells');
 
 		for (var i = 0; i < cells.length; i++) {
-			e.currentTarget = cells[i]
+			e.currentTarget = cells[i];
 			this.onDayMouseLeave(e);
 		}
 	},
@@ -686,7 +687,7 @@ $.widget("ui.wijcalendar", {
 		if (tokens[tokens.length - 2] !== 'rs') {
 			throw Error.create('not a row');
 		}
-		var rowIndex = parseInt(tokens[tokens.length - 1]);
+		var rowIndex = parseInt(tokens[tokens.length - 1], 10);
 		var monthID = (tokens.slice(0, tokens.length - 2)).join('_');
 		var monthTable = this._getParentTable(wn);
 		var cells = [];
@@ -704,7 +705,7 @@ $.widget("ui.wijcalendar", {
 						var dt = $(td).attr('daytype');
 						if (dt === undefined) { continue; }
 						if ($(td).find('a').hasClass('ui-priority-secondary')) { continue; }
-						if (this._isSelectable(parseInt(dt))) {
+						if (this._isSelectable(parseInt(dt, 10))) {
 							cells[cells.length] = td;
 						}
 					}
@@ -808,7 +809,7 @@ $.widget("ui.wijcalendar", {
 		if (previewContainer){
 			if (previewContainer.wijpopup('isAnimating')) {
 				var self = this;
-				window.setTimeout(function () {self.onPreviewMouseLeave(e)}, 200);
+				window.setTimeout(function () {self.onPreviewMouseLeave(e);}, 200);
 			}else{
 				previewContainer.wijpopup('hide');
 				this.element.removeData('previewContainer');
@@ -923,7 +924,7 @@ $.widget("ui.wijcalendar", {
 		
 		var direction = this.options.direction || 'horizontal';
 		var goNext = toDate > date;
-		var months = new Array();
+		var months = [];
 		months[months.length] = toDate;
 		var w = curTable.outerWidth(),
 		h = curTable.outerHeight();
@@ -1003,7 +1004,6 @@ $.widget("ui.wijcalendar", {
 					
 				case "decade":
 					return;
-					break;
 			}
 		}
 		
@@ -1088,7 +1088,7 @@ $.widget("ui.wijcalendar", {
 		if (this._isAnimating()) { return false; }
 		
 		var cell = $(e.currentTarget);
-		var index = parseInt(cell.attr('index'));
+		var index = parseInt(cell.attr('index'), 10);
 		if (this._myGrid.gridType !== "month") {
 			if (!index || index === 11)	{ return false; }
 		}
@@ -1133,7 +1133,7 @@ $.widget("ui.wijcalendar", {
 			var mv = this._getMonthView(date);
 			content = mv.getHtml(true);
 		}else{
-			content = this._myGrid.getHtml(true)
+			content = this._myGrid.getHtml(true);
 		}
 		
 		var nextTable = $(content).height(h).appendTo(container);
@@ -1184,7 +1184,7 @@ $.widget("ui.wijcalendar", {
 		if (this._myGrid === undefined) { return; }
 		
 		var cell = $(e.currentTarget);
-		var index = parseInt(cell.attr('index'));
+		var index = parseInt(cell.attr('index'), 10);
 		if (this._myGrid.gridType !== "month" && (index < 0 || index > 11))	{ return; }
 		cell.addClass("ui-state-hover");
 	},
@@ -1193,7 +1193,7 @@ $.widget("ui.wijcalendar", {
 		if (this._myGrid === undefined) { return; }
 		
 		var cell = $(e.currentTarget);
-		var index = parseInt(cell.attr('index'));
+		var index = parseInt(cell.attr('index'), 10);
 		if (this._myGrid.gridType !== "month" && (index < 0 || index > 11))	{ return; }
 		cell.removeClass("ui-state-hover");
 	},
@@ -1273,7 +1273,7 @@ $.widget("ui.wijcalendar", {
 	
 	_getCellClassName: function (dayType, date, previewMode) {
 		var cssCell = '';
-		var cssText = 'ui-state-default'
+		var cssText = 'ui-state-default';
 		
 		var allowSelDay = (!!this.options.selectionMode.day || !!this.options.selectionMode.days);
 		previewMode = previewMode || false;
@@ -1300,7 +1300,7 @@ $.widget("ui.wijcalendar", {
 				cssText += ' ui-state-disabled';
 			}
 			if ((dayType & wijDayType.today)) {
-				cssCell += ' ui-datepicker-days-cell-over ui-datepicker-today'
+				cssCell += ' ui-datepicker-days-cell-over ui-datepicker-today';
 				cssText += ' ui-state-highlight';
 			}
 			if ((dayType & wijDayType.selected) && 
@@ -1352,7 +1352,7 @@ $.widget("ui.wijcalendar", {
 		}
 		
 		this._slideToDate(nextDate);
-		return false
+		return false;
 	},
 	
 	_getMonthGroupHtml: function () {
@@ -1368,7 +1368,7 @@ $.widget("ui.wijcalendar", {
 		for (var r = 0; r < this.options.monthRows; r++) {
 			for (var c = 0; c < this.options.monthCols; c++) {
 				hw.writeBeginTag('div');
-				hw.writeAttribute('class', 'ui-datepicker-group' + (c==0 ? ' ui-datepicker-group-first' : '') + (c==this.options.monthCols-1 ? ' ui-datepicker-group-last' : ''));
+				hw.writeAttribute('class', 'ui-datepicker-group' + (c===0 ? ' ui-datepicker-group-first' : '') + (c==this.options.monthCols-1 ? ' ui-datepicker-group-last' : ''));
 				hw.writeAttribute('style', 'width:' + width);
 				hw.writeTagRightChar();
 				mv = this._getMonthView(date);
@@ -1408,8 +1408,8 @@ $.widget("ui.wijcalendar", {
 				monthID = this._getMonthID(date);
 				this._monthViews[monthID] = new wijMonthView(this, date);
 				
-				if (row == 0){
-					if (col == 0){					
+				if (row === 0){
+					if (col === 0){					
 						this._monthViews[monthID].isFirst = true;
 					}
 						
@@ -1462,13 +1462,13 @@ $.widget("ui.wijcalendar", {
 		if (d.attr("daytype") === undefined) { return; }
 		if (d.attr("date") === undefined) { return; }
 		
-		var dayType = parseInt(d.attr("daytype"));
+		var dayType = parseInt(d.attr("daytype"), 10);
 		var date = new Date(d.attr("date"));
 		d.attr('className', this._getCellClassName(dayType, date).cssCell);
 		var txt = d.find('a');
 		if (txt.length > 0){
 			txt.toggleClass("ui-state-hover", d.attr("state") === 'hover');
-			txt.toggleClass("ui-state-active", ((dayType & wijDayType.selected) != 0));
+			txt.toggleClass("ui-state-active", ((dayType & wijDayType.selected) !== 0));
 		}
 	},
 	
@@ -1492,51 +1492,6 @@ $.widget("ui.wijcalendar", {
 		}
 		return ret;
 	},
-
-	_formatTitle: function (format, monthDate, startMonth, endMonth, count) {
-		var result = '';
-		for (var pos = 0; true; ) {
-			var start = format.indexOf('{', pos);
-			var end = format.indexOf('}', pos);
-			if (start < 0 && end < 0) {
-				result += format.slice(pos);
-				break;
-			}
-			if (end > 0 && (end < start || start < 0)) {
-				result += format.slice(pos, end + 1);
-				pos = end + 2;
-				continue;
-			}
-			result += format.slice(pos, start);
-			pos = start + 1;
-			if (format.charAt(pos) === '{') {
-				result += '{';
-				pos++;
-				continue;
-			}
-			if (end < 0) {
-				break;
-			}
-			var f = this._splitString(format.slice(pos, end), ':', 2);
-			var i = parseInt(f[0]);
-			switch (i) {
-				case 0:
-					result += this._formatDate(f[1], monthDate);
-					break;
-				case 1:
-					result += this._formatDate(f[1], startMonth);
-					break;
-				case 2:
-					result += this._formatDate(f[1], endMonth);
-					break;
-				case 3:
-					result += count.toString();
-					break;
-			}
-			pos = end + 1;
-		}
-		return result;
-	},
 	
 	_getNavButtonHtml: function (id, cls, imgClass, tooltip) {
 		var hw = new htmlTextWriter();
@@ -1559,11 +1514,11 @@ $.widget("ui.wijcalendar", {
 		if (this._myGrid !== undefined) {
 			return this._myGrid.getTitle();
 		}else{
-			var count = this.options.monthRows * this.options.monthCols;
-			var startMonth = this.getDisplayDate();
-			monthDate = monthDate || startMonth;
-			var endMonth = wijDateOps.addMonths(startMonth, count - 1);
-			return this._formatTitle(this.options.titleFormat, monthDate, startMonth, endMonth, count);
+			var d = monthDate || this.getDisplayDate(),
+			f = this.options.titleFormat || 'MMMM yyyy',
+			data = {date: d, format: f, title: this._formatDate(f,  d)};
+			this._trigger('title', null, data);
+			return data.title;
 		}
 	},
 	
@@ -1703,18 +1658,21 @@ if (wijMonthView === undefined){
 		},
 		
 		_getRowCount: function () {
-			return this.calendar.options.showWeekDays ? this.calendar.options.dayRows + 1 : this.calendar.options.dayRows;
+			var o = this.calendar.options;
+			return o.showWeekDays ? o.dayRows + 1 : o.dayRows;
 		},
 	
 		_getColCount: function () {
-			return this.calendar.options.showWeekNumbers ? this.calendar.options.dayCols + 1 : this.calendar.options.dayCols;
+			var o = this.calendar.options;
+			return o.showWeekNumbers ? o.dayCols + 1 : o.dayCols;
 		},
 		
 		_getDayType: function (date) {
+			var o = this.calendar.options;
 			var dayType = wijDayType.general;
 			var dow = date.getDay();
 			var weekEnd = dow === 6 || dow === 0; // Saturday or Sunday
-			var outOfRange = date < this.calendar.options.minDate || date > this.calendar.options.maxDate;
+			var outOfRange = date < o.minDate || date > o.maxDate;
 			var otherMonth = date < this._startDateInMonth || date > this._endDateInMonth;
 			var isDisabled = outOfRange || this.calendar._getDisabledDates().contains(date);
 			var isSelected = this.calendar._getSelectedDates().contains(date);
@@ -1742,7 +1700,7 @@ if (wijMonthView === undefined){
 			if (isCustom) {
 				dayType |= wijDayType.custom;
 			}
-			if (otherMonth && !this.calendar.options.showOtherMonthDays) {
+			if (otherMonth && !o.showOtherMonthDays) {
 				dayType |= wijDayType.gap;
 			}
 			return dayType;
@@ -1750,12 +1708,12 @@ if (wijMonthView === undefined){
 		
 		_refreshDate: function (date) {
 			if (date < this._startDate || date > this._endDate)	{ return; }
-			
+			var o = this.calendar.options;
 			var offset = (Math.round(Math.abs(date - this._startDate) / (24 * 60 * 60 * 1000)));
-			var row = Math.floor(offset / this.calendar.options.dayCols);
-			var col = Math.floor(offset % this.calendar.options.dayCols);
-			if (this.calendar.options.showWeekNumbers)	{ col++; }
-			if (this.calendar.options.showWeekDays)	{ row++; }
+			var row = Math.floor(offset / this.calendar.options.dayCols),
+			col = Math.floor(offset % this.calendar.options.dayCols);
+			if (o.showWeekNumbers)	{ col++; }
+			if (o.showWeekDays)	{ row++; }
 
 			var tbl = $("#" + this.id, this.calendar.element).get(0);
 			if (tbl) {
@@ -1772,13 +1730,14 @@ if (wijMonthView === undefined){
 		},
 	
 		_fillDayCell: function (hw, date, previewMode) {
+			var o = this.calendar.options;
 			var text = date.getDate().toString();
-			if (this.calendar.options.showDayPadding) {
+			if (o.showDayPadding) {
 				if (text.length === 1) {
 					text = '0' + text;
 				}
 			}
-			var tooltip = this.calendar._formatDate(this.calendar.options.toolTipFormat, date);
+			var tooltip = this.calendar._formatDate(o.toolTipFormat || "dddd, MMMM dd, yyyy", date);
 			var dayType = this._getDayType(date);
 			if ((dayType & wijDayType.custom)) {
 				var customDay = this._getCustomDay(date);
@@ -1814,9 +1773,10 @@ if (wijMonthView === undefined){
 		
 		getHtml: function (tableOnly) {
 			tableOnly = !!tableOnly;
+			var o = this.calendar.options;
 			var previewMode = !!this.calendar.element.data('preview.wijcalendar');
-			var hw = new htmlTextWriter();
-			if (!tableOnly && this.calendar.options.showTitle) {
+			var hw = new htmlTextWriter(), i;
+			if (!tableOnly && o.showTitle) {
 				hw.write(this.calendar._getHeaderHtml(this._startDateInMonth, this.isFirst, this.isLast));
 			}
 			
@@ -1828,7 +1788,7 @@ if (wijMonthView === undefined){
 				hw.writeBeginTag('a');
 				hw.writeAttribute('class', 'ui-icon ui-icon-grip-dotted-vertical');
 				hw.writeAttribute('href', '#');
-				hw.writeAttribute('title', this.calendar.options.prevPreviewTooltip);
+				hw.writeAttribute('title', o.prevPreviewTooltip);
 				hw.writeAttribute('onclick', 'return false;');
 				hw.writeTagRightChar();
 				hw.write('&#160;');
@@ -1842,17 +1802,17 @@ if (wijMonthView === undefined){
 			hw.writeAttribute('summary', this.calendar._getTitleText(this._startDateInMonth));
 			hw.writeAttribute('onselectstart', 'return false;');
 			hw.writeTagRightChar();
-			if (this.calendar.options.showWeekDays) {
+			if (o.showWeekDays) {
 				hw.writeFullBeginTag('thead');
 				hw.writeBeginTag('tr');
 				hw.writeTagRightChar();
-				if (this.calendar.options.showWeekNumbers) {
+				if (o.showWeekNumbers) {
 					hw.writeBeginTag('th');
 					hw.writeAttribute('id', this.id + '_ms');
-					hw.writeAttribute('class', 'ui-datepicker-week-col ui-wijcalendar-monthselector'  + (!!this.calendar.options.selectionMode.month ? ' ui-wijcalendar-selectable' : ''));
+					hw.writeAttribute('class', 'ui-datepicker-week-col ui-wijcalendar-monthselector'  + (!!o.selectionMode.month ? ' ui-wijcalendar-selectable' : ''));
 					hw.writeTagRightChar();
 					
-					if (!!this.calendar.options.selectionMode.month && !previewMode && !this.calendar.options.disabled){
+					if (!!o.selectionMode.month && !previewMode && !o.disabled){
 						hw.writeBeginTag('a');
 						hw.writeAttribute('class', 'ui-icon ui-icon-triangle-1-se');
 						hw.writeSelfClosingTagEnd();
@@ -1863,16 +1823,15 @@ if (wijMonthView === undefined){
 					hw.writeEndTag('th');
 				}
 				
-				var dayOfWeek = this._startDate.getDay();
-				var weekStartDate = this._startDate;
-				for (var i = 0; i < this.calendar.options.dayCols; i++) {
+				var dayOfWeek = this._startDate.getDay(), weekStartDate = this._startDate;
+				for (i = 0; i < o.dayCols; i++) {
 					var weekEnd = dayOfWeek === 6 || dayOfWeek === 0;
-					var colIndex = i + ((this.calendar.options.showWeekNumbers) ? 1 : 0);
-					var txt = this._getWeekDayText(dayOfWeek, this.calendar.options.weekDayFormat);
+					var colIndex = i + ((o.showWeekNumbers) ? 1 : 0);
+					var txt = this._getWeekDayText(dayOfWeek, o.weekDayFormat);
 					var fullTxt = this._getWeekDayText(dayOfWeek, "full");
 					hw.writeBeginTag('th');
 					hw.writeAttribute('id', this.id + '_cs_' + colIndex);
-					hw.writeAttribute('class', (weekEnd ? 'ui-datepicker-week-end' : 'ui-datepicker-week-day') + (!!this.calendar.options.selectionMode.weekDay ? ' ui-wijcalendar-selectable' : ''));
+					hw.writeAttribute('class', (weekEnd ? 'ui-datepicker-week-end' : 'ui-datepicker-week-day') + (!!o.selectionMode.weekDay ? ' ui-wijcalendar-selectable' : ''));
 					hw.writeTagRightChar();
 					
 					hw.writeBeginTag('span');
@@ -1890,26 +1849,25 @@ if (wijMonthView === undefined){
 			}
 
 			hw.writeFullBeginTag('tbody');
-			var date = this._startDate;
-			var wnDate = this._startDateInMonth;
-			for (var i = 0; i < this.calendar.options.dayRows; i++) {
+			var date = this._startDate, wnDate = this._startDateInMonth;
+			for (i = 0; i < o.dayRows; i++) {
 				hw.writeBeginTag('tr');
 				hw.writeTagRightChar();
-				if (this.calendar.options.showWeekNumbers) {
-					var rowIndex = i + ((this.calendar.options.showWeekDays) ? 1 : 0);
+				if (o.showWeekNumbers) {
+					var rowIndex = i + ((o.showWeekDays) ? 1 : 0);
 					if (!this.calendar._isSingleMonth()) {
 						rowIndex++;
 					}
 					hw.writeBeginTag('td');
 					hw.writeAttribute('id', this.id + '_rs_' + rowIndex);
-					hw.writeAttribute('class', 'ui-datepicker-week-col ui-wijcalendar-week-num' + (!!this.calendar.options.selectionMode.weekNumber ? ' ui-wijcalendar-selectable' : ''));
+					hw.writeAttribute('class', 'ui-datepicker-week-col ui-wijcalendar-week-num' + (!!o.selectionMode.weekNumber ? ' ui-wijcalendar-selectable' : ''));
 					hw.writeTagRightChar();
-					var weekNumber = wijDateOps.getWeekOfYear(wnDate, this.calendar.options.calendarWeekRule, this.culture.calendar.firstDay);
+					var weekNumber = wijDateOps.getWeekOfYear(wnDate, o.calendarWeekRule, this.culture.calendar.firstDay);
 					hw.write(weekNumber);
 					hw.writeEndTag('td');
-					wnDate = wijDateOps.addDays(wnDate, this.calendar.options.dayCols);
+					wnDate = wijDateOps.addDays(wnDate, o.dayCols);
 				}
-				for (var j = 0; j < this.calendar.options.dayCols; j++) {
+				for (var j = 0; j < o.dayCols; j++) {
 					this._fillDayCell(hw, date, previewMode);
 					date = wijDateOps.addDays(date, 1);
 				}
@@ -1926,7 +1884,7 @@ if (wijMonthView === undefined){
 				hw.writeBeginTag('a');
 				hw.writeAttribute('class', 'ui-icon ui-icon-grip-dotted-vertical');
 				hw.writeAttribute('href', '#');
-				hw.writeAttribute('title', this.calendar.options.nextPreviewTooltip);
+				hw.writeAttribute('title', o.nextPreviewTooltip);
 				hw.writeAttribute('onclick', 'return false;');
 				hw.writeTagRightChar();
 				hw.write('&#160;');
@@ -1936,15 +1894,15 @@ if (wijMonthView === undefined){
 			
 			return hw.toString();
 		}
-	}
-};
+	};
+}
 
 if (wijDateCollection === undefined){
 	var wijDateCollection = function (calendar, optionName) {
 		this._calendar = calendar;
 		this._optionName = optionName;
 		this._normalize();		
-	}
+	};
 
 	wijDateCollection.prototype = {
 		_calendar: null,
@@ -1995,7 +1953,7 @@ if (wijDateCollection === undefined){
 			if (startIndex < 0 || endIndex < 0)	{ return; }
 			if (startIndex > endIndex) { return; }
 			var dates = this.getDates();
-			if (dates[end] > end){return;}
+			if (dates[endIndex] > end){return;}
 			var startSlice = (!startIndex) ? [] : dates.slice(0, startIndex);
 			var endSlice = endIndex >= (dates.length - 1) ? [] : dates.slice(endIndex+1);
 			this.setDates(startSlice.concat(endSlice));
@@ -2050,8 +2008,8 @@ if (wijDateCollection === undefined){
 				this._calendar.options[this._optionName] = newDates.sort(function(a, b){ return a.getTime() - b.getTime();});
 			}
 		}
-	}
-};
+	};
+}
 
 if (wijMyGrid === undefined){
 	var wijMyGrid = function (calendar) {
@@ -2128,9 +2086,9 @@ if (wijMyGrid === undefined){
 			}
 				
 			tableOnly = !!tableOnly;
-		
+			var o = this.calendar.options;
 			var hw = new htmlTextWriter();
-			if (this.calendar.options.showTitle && !tableOnly) {
+			if (o.showTitle && !tableOnly) {
 				hw.write(this.calendar._getHeaderHtml(null, true, true));
 			}
 		
@@ -2162,13 +2120,13 @@ if (wijMyGrid === undefined){
 								selected = true;
 							}
 							cellText = ms.namesAbbr[index];
-							outofRange = date < this.calendar.options.minDate || date > this.calendar.options.maxDate;
+							outofRange = date < o.minDate || date > o.maxDate;
 							
 							break;
 						case "year":
 							if (index === 0 || index === 11) { outofRange = true; }
 							v = startYear + index;
-							if (v < this.calendar.options.minDate.getFullYear() || v > this.calendar.options.maxDate.getFullYear()){
+							if (v < o.minDate.getFullYear() || v > o.maxDate.getFullYear()){
 								outofRange = true;
 							}else{
 								selected = (year === v);
@@ -2178,7 +2136,7 @@ if (wijMyGrid === undefined){
 						case "decade":
 							if (index === 0 || index === 11) { outofRange = true; }
 							v = startDecade + index * 10;
-							if (v < this.calendar.options.minDate.getFullYear() || v > this.calendar.options.maxDate.getFullYear()){
+							if (v < o.minDate.getFullYear() || v > o.maxDate.getFullYear()){
 								outofRange = true;
 							}else{
 								selected = (year >= v && year < (v + 10));
@@ -2193,7 +2151,7 @@ if (wijMyGrid === undefined){
 					if (outofRange) {
 						cls = cls + ' ui-datepicker-other-month  ui-priority-secondary ui-datepicker-unselectable';
 					}else{
-						if (!this.calendar.options.disabled) {
+						if (!o.disabled) {
 							cls += " ui-wijcalendar-day-selectable";
 						}
 					}
@@ -2220,8 +2178,7 @@ if (wijMyGrid === undefined){
 			return hw.toString();
 		}
 	};
-};
-	
+}	
 
  
 if (wijDateOps === undefined) {
@@ -2318,7 +2275,7 @@ if (wijDateOps === undefined) {
 	wijDateOps.getDateToken = function (date) {
 		return date.getFullYear() + '_' + date.getMonth() + '_' + date.getDate();
 	};
-};
+}
 
 	
 if (htmlTextWriter === undefined){
@@ -2336,7 +2293,7 @@ if (htmlTextWriter === undefined){
 		writeFullBeginTag: function (tagName) {	this._html[this._html.length] = '<' + tagName + '>'; },
 		writeSelfClosingTagEnd: function () { this._html[this._html.length] = '/>'; },
 		writeAttribute: function (name, value) { 
-			if (value == undefined || value === null) { return; }
+			if (value === undefined || value === null) { return; }
 			this._html[this._html.length] = ' ' + name + '=\"';
 			this._html[this._html.length] = value;
 			this._html[this._html.length] = '\"';
@@ -2345,7 +2302,7 @@ if (htmlTextWriter === undefined){
 		clean: function () { this._html = []; },
 		toString: function () { return this._html.join(''); }
 	};
-};
+}
 
 
 })(jQuery);
