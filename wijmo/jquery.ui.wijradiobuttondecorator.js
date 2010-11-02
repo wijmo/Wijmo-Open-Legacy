@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 0.7.0
+ * Wijmo Library 0.8.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -57,7 +57,7 @@
 				}
 
 				boxElement.removeClass(that._radiobuttonPre + "-relative");
-				if (targetLabel.length == 0 || targetLabel.html() === "") {
+				if (targetLabel.length === 0 || targetLabel.html() === "") {
 					boxElement.addClass(that._radiobuttonPre + "-relative");
 				}
 				that._refresh();
@@ -78,12 +78,12 @@
 				});
 
 				radiobuttonElement.click(function () {
-					if (targetLabel.length == 0 || targetLabel.html() === "") {
+					if (targetLabel.length === 0 || targetLabel.html() === "") {
 						that.element.attr("checked", true);
 						that._refresh();
 					}
 
-				})
+				});
 
 				radiobuttonElement.bind("mouseover.checkbox", function () {
 					if (that.options.disabled) {
@@ -106,7 +106,7 @@
 			$("[name=" + name + "]").each(function (i, n) {
 				$(n).parents(".ui-wijradiobutton").find("." + self._radiobuttonPre + "-box").children().removeClass("ui-icon-radio-on ui-icon-radio-off").addClass("ui-icon-radio-on");
 				$(n).parents(".ui-wijradiobutton").find("." + self._radiobuttonPre + "-box").removeClass("ui-state-active").addClass("ui-state-default");
-			})
+			});
 			if (self.element.is(":checked")) {
 				self.element.data("iconElement").removeClass("ui-icon-radio-on").addClass("ui-icon-radio-off");
 				self.element.data("boxElement").removeClass("ui-state-default").addClass("ui-state-active");
