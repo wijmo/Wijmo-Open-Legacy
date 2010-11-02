@@ -1,6 +1,6 @@
 /*
 *
-* Wijmo Library 0.7.0
+* Wijmo Library 0.8.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -336,20 +336,20 @@
 			var my = o.position.my;
 			var arr = my.split(" ");
 			var cssname = '';
-			if (arr.length == 2) {
+			if (arr.length === 2) {
 				cssname += arr[0].substr(0, 1);
 				cssname += arr[1].substr(0, 1);
 			}
 			var arrat = o.position.at.split(" ");
-			if (arr[0] == arrat[0]) {
-				if ((arr[1] == 'top' && arrat[1] == 'bottom') || (arr[1] == 'bottom' && arrat[1] == 'top')) {
+			if (arr[0] === arrat[0]) {
+				if ((arr[1] === 'top' && arrat[1] === 'bottom') || (arr[1] === 'bottom' && arrat[1] === 'top')) {
 					cssname = cssname.substr(1, 1) + cssname.substr(0, 1);
 				}
 			}
-			else if (arrat[0] == 'center') {
+			else if (arrat[0] === 'center') {
 				cssname = cssname.substr(1, 1) + cssname.substr(0, 1);
 			}
-			if (cssname.substr(0, 1) == 'c') {
+			if (cssname.substr(0, 1) === 'c') {
 				cssname = cssname.substr(1, 1) + cssname.substr(0, 1);
 			}
 			if (this.element.data('arrowClass')) {
@@ -429,7 +429,7 @@
 				Y: obj.offset().top,
 				Width: obj.outerWidth(true),
 				Height: obj.outerHeight(true)
-			}
+			};
 			if (point.X <= bnd.X || point.X >= (bnd.X + bnd.Width)) {
 				return false;
 			}
@@ -468,13 +468,14 @@
 		//end tooltip mouse events
 		_setposition: function () {
 			var tooltip = this.element.data("tooltip");
-			var isHidden = tooltip.is(":hidden")
+			var isHidden = tooltip.is(":hidden");
 			if (isHidden) {
 				tooltip.show();
 			}
 			var option = $.extend(this.options.position, {});
 			tooltip.css({ left: 0, top: 0 });
 			//if (!this.element.data("fixed")) {
+			var offsetstr = "";
 			if (this.options.showCallOut) {
 				var arrowClass = this.element.data("arrowClass");
 				var str = arrowClass.substr(arrowClass.length - 2, 1);
@@ -483,8 +484,7 @@
 				//offset[0] = parseInt(offset[0]);
 				//offset[1] = parseInt(offset[1]);
 				offset[0] = offset[1] = 0;
-				//console.log(arrowClass);
-				var offsetstr = "";
+				//console.log(arrowClass);				
 				switch (str) {
 					case "l":
 						offset[0] += 14;
@@ -528,7 +528,7 @@
 			var innerCallout = domObject.callout.children();
 			innerCallout.css({
 				"border-left-color": "",
-				"border-left-color": "",
+				"border-top-color": "",
 				"border-bottom-color": "",
 				"border-right-color": ""
 			});
@@ -563,7 +563,7 @@
 			var changeset = { left: false, top: false };
 			var win = $(window);
 			var over;
-			if (this.options.position.at[0] != 'center') {
+			if (this.options.position.at[0] !== 'center') {
 				if (position.left < 0) {
 					changeset.left = true;
 				}
@@ -572,7 +572,7 @@
 					changeset.left = true;
 				}
 			}
-			if (this.options.position[1] != 'center') {
+			if (this.options.position[1] !== 'center') {
 				over = position.top + tooltip.height() - win.height() - win.scrollTop();
 				if (position.top < 0) {
 					changeset.top = true;
@@ -628,7 +628,7 @@
 						this._trigger("shown");
 
 					}, this)
-				}
+				};
 				var animations = $.ui.wijtooltip.animations, duration = o.showAnimation.duration, easing = o.showAnimation.animated;
 				if (easing && !animations[easing] && !$.easing[easing]) {
 					easing = 'fade';
@@ -670,7 +670,7 @@
 					complete: $.proxy(function () {
 						this._trigger("hidden");
 					}, this)
-				}
+				};
 				var animations = $.ui.wijtooltip.animations, duration = o.hideAnimation.duration, easing = o.hideAnimation.animated;
 				if (easing && !animations[easing] && !$.easing[easing]) {
 					easing = 'fade';
@@ -700,13 +700,13 @@
 					if (data) {
 						domElement.container.html(data);
 					}
-				})
+				});
 				if (strret) {
 					domElement.container.html(strret);
 				}
 			}
 			else {
-				if (content != "") {
+				if (content !== "") {
 					domElement.container.html(content);
 				}
 				else {
@@ -753,7 +753,7 @@
 					}
 				}
 
-			})
+			});
 			return zindex + 1;
 		},
 
@@ -862,14 +862,14 @@
 			var borderLeft = domelement.callout.css("border-left-width").replace(/px/g, '') * 1;
 			var borderRight = domelement.callout.css("border-right-width").replace(/px/g, '') * 1;
 			var borderBottom = domelement.callout.css("border-bottom-width").replace(/px/g, '') * 1;
-			var borderh = borderLeft == 0 ? borderRight : borderLeft;
-			var borderv = borderTop == 0 ? borderBottom : borderTop;
+			var borderh = borderLeft === 0 ? borderRight : borderLeft;
+			var borderv = borderTop === 0 ? borderBottom : borderTop;
 
 			var offset = {};
 			var width = tooltip.width();
 			var height = tooltip.height();
 			var collision = (this.options.position.collision || "flip").split(" ");
-			if (collision.length == 1) {
+			if (collision.length === 1) {
 				collision[1] = collision[0];
 			}
 			switch (calloutcss) {
@@ -954,7 +954,7 @@
 
 		_showAtflip: function (calloutcss, offset) {
 			var collision = (this.options.position.collision || "flip").split(" ");
-			if (collision[0] != "flip" && collision[1] != "flip") {
+			if (collision[0] !== "flip" && collision[1] !== "flip") {
 				return;
 			}
 			var cssname = calloutcss.substr(calloutcss.length - 2, 2);
@@ -967,7 +967,7 @@
 			var borderRight = domelement.callout.css("border-right-width").replace(/px/g, '') * 1;
 			var borderBottom = domelement.callout.css("border-bottom-width").replace(/px/g, '') * 1;
 			var win = $(window);
-			if (collision[1] == "flip") {
+			if (collision[1] === "flip") {
 				if (cssname.indexOf('t') > -1) {
 					if (offset.top + height > win.height()) {
 						offset.top -= (height + borderBottom * 2);
@@ -981,7 +981,7 @@
 					}
 				}
 			}
-			if (collision[0] == "flip") {
+			if (collision[0] === "flip") {
 				if (cssname.indexOf('l') > -1) {
 					if (offset.left + width > win.width()) {
 						offset.left -= (width + borderRight * 2);
@@ -1018,7 +1018,7 @@
 				options = $.extend({
 					duration: 300,
 					easing: "swing"
-				}, options, additions)
+				}, options, additions);
 				options.context.stop(true, true).animate(options.show ? { opacity: 'show'} : { opacity: 'hide' }, options);
 			}
 		}
