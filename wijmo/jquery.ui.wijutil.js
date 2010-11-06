@@ -1,4 +1,4 @@
-﻿/*
+/*
  *
  * Wijmo Library 0.7.0
  * http://wijmo.com/
