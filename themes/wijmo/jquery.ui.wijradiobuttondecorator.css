@@ -1,7 +1,10 @@
 .ui-wijradiobutton
 {
-    position: relative;
-    float: left;
+    position: relative; /*float: left;*/
+    margin: 3px 0;
+    height: 16px;
+    width: 16px;
+    line-height: 16px;
 }
 .ui-wijradiobutton .ui-wijradiobutton-inputwrapper
 {

@@ -1,7 +1,11 @@
 .ui-wijdropdowndecorator
 {
-    width: 300px;
+    display: inline-block;
     position: relative;
+    width: auto;
+    zoom: 1;
+    *display: inline;
+    z-index: 101;
 }
 
 
@@ -16,7 +20,7 @@
     position: absolute;
     right: 0;
     top: 0;
-    padding: 0 5px;
+    padding: 0 3px;
 }
 
 .ui-wijdropdowndecorator .ui-dropdown-trigger .ui-icon
@@ -42,6 +46,20 @@
     padding: 0.4em;
     border: 0 none;
 }
+
+.ui-wijdropdowndecorator .ui-dropdown .ui-dropdown-item
+{
+border:1px solid transparent;
+cursor:pointer;
+font-weight:normal;
+margin:1px 0;
+padding:3px 5px;
+text-align:left;
+*border-color: white;
+*filter: chroma(color=white);
+
+}
+
 /*
 .ui-wijdropdowndecorator .ui-dropdown .ui-dropdown-optgroup .ui-dropdown-items
 {

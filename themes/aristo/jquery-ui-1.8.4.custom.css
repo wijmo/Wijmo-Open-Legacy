@@ -1,9 +1,4 @@
 /*
-* Aristo for jQuery UI
-* Licensed under Creative Commons Attribution-Share Alike 3.0 with permission from 280 North and Pinvoke.
-*/
-
-/*
  * jQuery UI CSS Framework @VERSION
  *
  * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
@@ -156,12 +151,10 @@ a
 .ui-widget-header
 {
     border: 1px solid #a8a8a8;
-    background: #c4c4c4;
+    background: #c4c4c4 url(images/ui-bg_highlight-soft_100_c4c4c4_1x100.png) 50% 50% repeat-x;
     background: #c4c4c4 linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
     background: #c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
-    background: #c4c4c4 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)";
+    background: #c4c4c4 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0)); /*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)"; */
     color: #333;
     font-weight: bold;
     text-shadow: 0px 1px 0px rgba(255,255,255,0.7);
@@ -176,12 +169,10 @@ a
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default
 {
     border: 1px solid #a8a8a8;
-    background: #c4c4c4;
+    background: #c4c4c4 url(images/ui-bg_highlight-hard_80_c4c4c4_1x100.png) 50% 50% repeat-x;
     background: #c4c4c4 linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
     background: #c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
-    background: #c4c4c4 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)";
+    background: #c4c4c4 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0)); /*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)"; */
     font-weight: bold;
     color: #4f4f4f;
     text-shadow: 0px 1px 0px rgba(255,255,255,0.7);
@@ -201,12 +192,10 @@ a
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus
 {
     border: 1px solid #7096ab;
-    background: #85b2cb;
+    background: #85b2cb url(images/ui-bg_highlight-hard_80_85b2cb_1x100.png) 50% 50% repeat-x;
     background: #85b2cb linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0));
     background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.6)), to(rgba(255,255,255,0)));
-    background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0));
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#CCFFFFFF, endColorstr=#00FFFFFF);
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#CCFFFFFF, endColorstr=#00FFFFFF)";
+    background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0)); /*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#CCFFFFFF, endColorstr=#00FFFFFF);     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#CCFFFFFF, endColorstr=#00FFFFFF)"; */
     font-weight: bold;
     color: #313131;
     -moz-box-shadow: 0 0 5px #85b2cb;
@@ -227,12 +216,10 @@ a
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active
 {
     border: 1px solid #7096ab;
-    background: #85b2cb;
+    background: #85b2cb url(images/ui-bg_inset-hard_65_85b2cb_1x100.png) 50% 50% repeat-x;
     background: #85b2cb linear-gradient(top, rgba(255,255,255,0), rgba(255,255,255,0.4));
     background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0)), to(rgba(255,255,255,0.4)));
-    background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0), rgba(255,255,255,0.4));
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF, endColorstr=#CCFFFFFF);
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF, endColorstr=#CCFFFFFF)";
+    background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0), rgba(255,255,255,0.4)); /*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF, endColorstr=#CCFFFFFF);     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF, endColorstr=#CCFFFFFF)"; */
     font-weight: bold;
     color: #1C4257;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
@@ -260,12 +247,11 @@ a
     background: #aaaaaa;
     background: #aaaaaa linear-gradient(top, rgba(0,0,0,0.25), rgba(0,0,0,0));
     background: #aaaaaa -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.25)), to(rgba(0,0,0,0)));
-    background: #aaaaaa -moz-linear-gradient(top, rgba(0,0,0,0.25), rgba(0,0,0,0));
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#33000000, endColorstr=#00000000);
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#33000000, endColorstr=#00000000)";
+    background: #aaaaaa -moz-linear-gradient(top, rgba(0,0,0,0.25), rgba(0,0,0,0)); /*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#33000000, endColorstr=#00000000);     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#33000000, endColorstr=#00000000)"; */
     color: #ffffff;
-    text-shadow:1px 1px 1px #333333;
+    text-shadow: 1px 1px 1px #333333;
 }
+
 .ui-state-highlight a, .ui-widget-content .ui-state-highlight a, .ui-widget-header .ui-state-highlight a
 {
     color: #363636;
@@ -273,12 +259,10 @@ a
 .ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error
 {
     border: 1px solid #cd0a0a;
-    background: #fef1ec;
+    background: #fef1ec url(images/ui-bg_inset-soft_95_fef1ec_1x100.png) 50% bottom repeat-x;
     background: #fef1ec linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
     background: #fef1ec -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
-    background: #fef1ec -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)";
+    background: #fef1ec -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0)); /*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)";*/
     color: #cd0a0a;
 }
 .ui-state-error a, .ui-widget-content .ui-state-error a, .ui-widget-header .ui-state-error a
@@ -1766,9 +1750,7 @@ button.ui-button::-moz-focus-inner
     background: #85b2cb;
     background: #85b2cb linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
     background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
-    background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)";
+    background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0)); /*   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)"; */
 }
 
 
@@ -1850,9 +1832,7 @@ button.ui-button::-moz-focus-inner
     background: #e3e3e3;
     background: #e3e3e3 linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
     background: #e3e3e3 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
-    background: #e3e3e3 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)";
+    background: #e3e3e3 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0)); /*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)"; */
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
     border-radius: 0;
@@ -2036,9 +2016,7 @@ button.ui-button::-moz-focus-inner
     background: #e3e3e3;
     background: #e3e3e3 linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
     background: #e3e3e3 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
-    background: #e3e3e3 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)";
+    background: #e3e3e3 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0)); /*   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)"; */
     border-right: none;
     border-left: none;
     border-top: none;
@@ -2233,12 +2211,10 @@ button.ui-button::-moz-focus-inner
 }
 .ui-wijmenu
 {
-    background: #c4c4c4;
+    background: #c4c4c4 url(images/ui-bg_highlight-hard_80_c4c4c4_1x100.png) top repeat-x;
     background: #c4c4c4 linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
     background: #c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
     background: #c4c4c4 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)";
 }
 .ui-wijmenu .ui-state-default
 {
@@ -2260,6 +2236,24 @@ button.ui-button::-moz-focus-inner
     box-shadow: none;
 }
 
+*html .ui-wijmenu-vertical, *html .ui-wijmenu .ui-wijsuperpanel, *html .ui-wijmenu .ui-wijmenu-list
+{
+    background: none;
+}
+
+*html .ui-wijmenu-horizontal .ui-wijmenu-child
+{
+    background: #ffffff;
+}
+
+
+*html .ui-wijmenu .ui-wijmenu-link
+{
+    border-color: #c4c4c4;
+    filter: chroma(color=#c4c4c4);
+}
+
+
 .ui-wijtooltip
 {
     background: #000;
@@ -2270,6 +2264,28 @@ button.ui-button::-moz-focus-inner
     -webkit-box-shadow: 0px 0px 8px #85b2cb, inset 0px 1px 0px #999;
     box-shadow: 0px 0px 8px #85b2cb, inset 0px 1px 0px #999;
 }
+
+.ui-wijtooltip-arrow-lb .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-lc .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-lt .ui-wijtooltip-pointer-inner
+{
+    border-right-color: #000 !important;
+}
+
+.ui-wijtooltip-arrow-rb .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-rc .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-rt .ui-wijtooltip-pointer-inner
+{
+    border-left-color: #000 !important;
+}
+
+.ui-wijtooltip-arrow-br .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-bc .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-bl .ui-wijtooltip-pointer-inner
+{
+    border-top-color: #000 !important;
+}
+
+.ui-wijtooltip-arrow-tb .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-tc .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-tt .ui-wijtooltip-pointer-inner
+{
+    border-bottom-color: #000 !important;
+}
+
+
 .ui-wijtooltip .ui-wijtooltip-pointer
 {
     opacity: 0.8;

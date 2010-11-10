@@ -98,14 +98,18 @@
 
 .ui-wijcalendar-aniwrapper
 {
-	position: relative;
-	left: 0;
-	top: 0
+    position: relative;
+    left: 0;
+    top: 0;
 }
 
 .ui-wijcalendar-multi-aniwrapper
 {
-	position: absolute;
-	overflow: hidden;
+    position: absolute;
+    overflow: hidden;
 }
 
+.ui-datepicker-rtl .ui-datepicker-prev .ui-icon, .ui-datepicker-rtl .ui-datepicker-next .ui-icon
+{
+    direction: rtl;
+}

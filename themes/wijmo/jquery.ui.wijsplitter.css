@@ -20,6 +20,7 @@
     position: relative;
     font-size: 1px;
     width: 2px;
+    z-index:99999;
 }
 .ui-wijsplitter-v-expander
 {
@@ -72,6 +73,7 @@
     position: relative;
     font-size: 1px;
     height: 2px;
+    z-index:99999;
 }
 .ui-wijsplitter-h-expander
 {

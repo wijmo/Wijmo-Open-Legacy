@@ -1,11 +1,16 @@
 .ui-checkbox
 {
-    position: relative;
-    float: left;
+    position: relative; /*float: left;*/
+    margin: 3px 0;
+    height: 16px;
+    line-height: 16px;
+    width: 16px;
 }
 .ui-checkbox .ui-checkbox-inputwrapper
 {
-    width: 0; height: 0; overflow: hidden;
+    width: 0;
+    height: 0;
+    overflow: hidden;
 }
 .ui-checkbox label
 {
@@ -20,7 +25,7 @@
 }
 .ui-checkbox .ui-checkbox-box
 {
-    position: absolute;    
+    position: absolute;
     bottom: 0;
     left: 0;
     width: 16px;
@@ -32,5 +37,5 @@
 
 .ui-checkbox .ui-checkbox-relative
 {
-    position:relative;
-    }
+    position: relative;
+}
