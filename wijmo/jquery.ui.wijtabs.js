@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 0.7.0
+ * Wijmo Library 0.8.2
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -18,8 +18,7 @@
  *	jquery.ui.position.js
  *	jquery.effects.core.js	
  *	jquery.cookie.js
- *	jquery.glob.js
- *
+  *
  */
  (function($) {
 
@@ -37,7 +36,7 @@ function getNextListId() {
 $.widget("ui.wijtabs", {
 	options: {
 		///	<summary>
-		///		Determines the tabs' alignment to the content
+		///		Determines the tabs' alignment in respect to the content
 		///	</summary>
 		alignment: 'top',
 		///	<summary>
@@ -45,7 +44,7 @@ $.widget("ui.wijtabs", {
 		///	</summary>
 		sortable: false,
 		///	<summary>
-		///		Determines whether to wrap to the next line or scrolling is enabled when the tabs exceed the width
+		///		Determines whether to wrap to the next line or scrolling is enabled when the tabs exceed the specified width
 		///	</summary>
 		scrollable: false,
 		///	<summary>
@@ -165,7 +164,7 @@ $.widget("ui.wijtabs", {
 	
 	_initScroller: function(){
 		var horz = $.inArray(this._getAlignment(), ['top', 'bottom']) != -1;
-		if (!horz) return;
+		if (!horz) { return; }
 
 		var width = 0;
 		this.lis.each(function() {
@@ -173,7 +172,7 @@ $.widget("ui.wijtabs", {
 		});
 		
 		if (!!this.options.scrollable && this.element.innerWidth() < width){
-			if (this.scrollWrap == undefined){
+			if (this.scrollWrap === undefined){
 				this.list.wrap("<div class='scrollWrap'></div>");
 				this.scrollWrap = this.list.parent();
 				$.effects.save(this.list, ['width', 'height', 'overflow']);
@@ -238,7 +237,7 @@ $.widget("ui.wijtabs", {
 	_getAlignment : function(tabs){
 		tabs = tabs === undefined ? true : tabs;
 		var align = this.options.alignment || 'top';
-		if (tabs) return align;
+		if (tabs) { return align; }
 		
 		switch(align){
 			case 'top':
@@ -300,7 +299,7 @@ $.widget("ui.wijtabs", {
 	_blindPanel: function(panel, mode){
 		var o = this.options;
 		var content = panel.parent('.ui-wijtabs-content');
-		if (!content.length) return;
+		if (!content.length) { return; }
 
 		this.list.width(this.list.width());		
 		var props = ['position','top','left', 'width'];
@@ -342,7 +341,7 @@ $.widget("ui.wijtabs", {
 				//$.effects.restore(panel, props); 
 				$.effects.removeWrapper(panel); // Restore
 				
-				if (mode == 'show') self._restoreLayout();
+				if (mode == 'show') { self._restoreLayout(); }
 				
 				self._resetStyle(panel);
 				panel.dequeue();
@@ -361,12 +360,12 @@ $.widget("ui.wijtabs", {
 	},
 	
 	_normalizeBlindOption: function(o){
-		if (o.blind === undefined) o.blind = false;
-		if (o.fade === undefined) o.fade = false;
-		if (o.duration === undefined) o.duration = 200;
+		if (o.blind === undefined) { o.blind = false; }
+		if (o.fade === undefined) { o.fade = false; }
+		if (o.duration === undefined) { o.duration = 200; }
 		if (typeof o.duration == 'string'){
 			try{
-				o.duration = parseInt(o.duration);
+				o.duration = parseInt(o.duration, 10);
 			}
 			catch(e){
 				o.duration = 200;
@@ -432,7 +431,7 @@ $.widget("ui.wijtabs", {
 		// initialization from scratch
 		if (init) {
 
-		    this.element.addClass('ui-tabs ui-wijtabs' + ' ui-tabs-' + tabsAlign + ' ui-widget ui-widget-content ui-corner-all ui-helper-clearfix');
+			this.element.addClass('ui-tabs ui-wijtabs' + ' ui-tabs-' + tabsAlign + ' ui-widget ui-widget-content ui-corner-all ui-helper-clearfix');
 			this.list.addClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
 			this.lis.addClass('ui-state-default' + ' ui-corner-' + tabsAlign);
 			this.panels.addClass('ui-tabs-panel ui-widget-content ui-corner-' + panelCorner);
@@ -517,14 +516,12 @@ $.widget("ui.wijtabs", {
 
 			// clean up to avoid memory leaks in certain versions of IE 6
 			$(window).bind('unload', function() {
-				if (self.lis)
+				if (self.lis){
 					self.lis.add(self.anchors).unbind('.tabs');
+				}
 				self.lis = self.anchors = self.panels = null;
 			});
-
-		}
-		// update selected after add/remove
-		else {
+		}else { // update selected after add/remove
 			o.selected = this.lis.index(this.lis.filter('.ui-tabs-selected'));
 		}
 
@@ -573,10 +570,10 @@ $.widget("ui.wijtabs", {
 			});
 		}
 		
-		if (o.showOption === undefined || o.showOption === null) o.showOption = {};
+		if (o.showOption === undefined || o.showOption === null) { o.showOption = {}; }
 		this._normalizeBlindOption(o.showOption);
 		
-		if (o.hideOption === undefined || o.hideOption === null) o.hideOption = {};
+		if (o.hideOption === undefined || o.hideOption === null) { o.hideOption = {}; }
 		this._normalizeBlindOption(o.hideOption);
 
 		// Show a tab...
@@ -588,8 +585,8 @@ $.widget("ui.wijtabs", {
 				
 				if (tabsAlign == 'top' || tabsAlign == 'bottom'){
 					var props = { duration: o.showOption.duration };
-					if (o.showOption.blind) props.height = 'toggle';		
-					if (o.showOption.fade) props.opacity = 'toggle';
+					if (o.showOption.blind) { props.height = 'toggle'; }
+					if (o.showOption.fade) { props.opacity = 'toggle'; }
 					$show.hide().removeClass('ui-tabs-hide') // avoid flicker that way
 					.animate(props, o.showOption.duration || 'normal', function() {
 						self._resetStyle($show);
@@ -612,8 +609,8 @@ $.widget("ui.wijtabs", {
 			function(clicked, $hide) {
 				if (tabsAlign == 'top' || tabsAlign == 'bottom'){
 					var props = { duration: o.hideOption.duration };
-					if (o.hideOption.blind) props.height = 'toggle';		
-					if (o.hideOption.fade) props.opacity = 'toggle';
+					if (o.hideOption.blind) { props.height = 'toggle'; }
+					if (o.hideOption.fade) { props.opacity = 'toggle'; }
 					$hide.animate(props, o.hideOption.duration || 'normal', function() {
 						self.lis.removeClass('ui-tabs-selected ui-state-active');
 						$hide.addClass('ui-tabs-hide');
@@ -781,8 +778,9 @@ $.widget("ui.wijtabs", {
 		});
 		
 		var content = $('.ui-wijtabs-content');
-		if (content.length)
+		if (content.length){
 			content.replaceWith(content.contents());
+		}
 
 		if (o.cookie) {
 			this._cookie(null, o.cookie);
@@ -792,10 +790,10 @@ $.widget("ui.wijtabs", {
 	},
 
 	add: function(url, label, index) {
-	    /// <summary>Add a new tab.</summary>
-	    /// <param name="url" type="String">A URL consisting of a fragment identifier only to create an in-page tab or a full url (relative or absolute, no cross-domain support) to turn the new tab into an Ajax (remote) tab.</param>
-	    /// <param name="label" type="String">The tab label.</param>
-	    /// <param name="index" type="Number">Zero-based position where to insert the new tab.</param>
+		/// <summary>Add a new tab.</summary>
+		/// <param name="url" type="String">A URL consisting of a fragment identifier only to create an in-page tab or a full url (relative or absolute, no cross-domain support) to turn the new tab into an Ajax (remote) tab.</param>
+		/// <param name="label" type="String">The tab label.</param>
+		/// <param name="index" type="Number">Zero-based position where to insert the new tab.</param>
 		if (index === undefined) {
 			index = this.anchors.length; // append by default
 		}
@@ -817,10 +815,11 @@ $.widget("ui.wijtabs", {
 
 		if (index >= this.lis.length) {
 			$li.appendTo(this.list);
-			if (this.panels.length > 0)
+			if (this.panels.length > 0){
 				$panel.insertAfter(this.panels[this.panels.length - 1]);
-			else
+			}else{
 				$panel.appendTo(this.list[0].parentNode);
+			}
 		}
 		else {
 			$li.insertBefore(this.lis[index]);
@@ -849,8 +848,8 @@ $.widget("ui.wijtabs", {
 	},
 
 	remove: function(index) {
-	    /// <summary>Remove a tab.</summary>
-	    /// <param name="index" type="Number">The zero-based index of the tab to be removed.</param>
+		/// <summary>Remove a tab.</summary>
+		/// <param name="index" type="Number">The zero-based index of the tab to be removed.</param>
 		var o = this.options, $li = this.lis.eq(index).remove(),
 			$panel = this.panels.eq(index).remove();
 
@@ -871,9 +870,9 @@ $.widget("ui.wijtabs", {
 	},
 
 	enable: function(index) {
-	    /// <summary>Enable a disabled tab.</summary>
-	    /// <param name="index" type="Number">The zero-based index of the tab to be enabled.</param>
-        var o = this.options;
+		/// <summary>Enable a disabled tab.</summary>
+		/// <param name="index" type="Number">The zero-based index of the tab to be enabled.</param>
+		var o = this.options;
 		if ($.inArray(index, o.disabled) == -1) {
 			return;
 		}
@@ -887,9 +886,9 @@ $.widget("ui.wijtabs", {
 	},
 
 	disable: function(index) {
-	    /// <summary>Disabled a tab.</summary>
-	    /// <param name="index" type="Number">The zero-based index of the tab to be disabled.</param>
-        var self = this, o = this.options;
+		/// <summary>Disabled a tab.</summary>
+		/// <param name="index" type="Number">The zero-based index of the tab to be disabled.</param>
+		var self = this, o = this.options;
 		if (index != o.selected) { // cannot disable already selected tab
 			this.lis.eq(index).addClass('ui-state-disabled');
 
@@ -904,9 +903,9 @@ $.widget("ui.wijtabs", {
 	},
 
 	select: function(index) {
-	    /// <summary>Select a tab, as if it were clicked.</summary>
-	    /// <param name="index" type="Number">The zero-based index of the tab to be selected or the id selector of the panel the tab is associated with.</param>
-        if (typeof index == 'string') {
+		/// <summary>Select a tab, as if it were clicked.</summary>
+		/// <param name="index" type="Number">The zero-based index of the tab to be selected or the id selector of the panel the tab is associated with.</param>
+		if (typeof index == 'string') {
 			index = this.anchors.index(this.anchors.filter('[href$=' + index + ']'));
 		}
 		else if (index === null) { // usage of null is deprecated, TODO remove in next release
@@ -921,9 +920,9 @@ $.widget("ui.wijtabs", {
 	},
 
 	load: function(index) {
-	    /// <summary>Reload the content of an Ajax tab programmatically.</summary>
-	    /// <param name="index" type="Number">The zero-based index of the tab to be loaded</param>
-        var self = this, o = this.options, a = this.anchors.eq(index)[0], url = $.data(a, 'load.tabs');
+		/// <summary>Reload the content of an Ajax tab programmatically.</summary>
+		/// <param name="index" type="Number">The zero-based index of the tab to be loaded</param>
+		var self = this, o = this.options, a = this.anchors.eq(index)[0], url = $.data(a, 'load.tabs');
 
 		this.abort();
 
@@ -958,7 +957,7 @@ $.widget("ui.wijtabs", {
 				try {
 					o.ajaxOptions.success(r, s);
 				}
-				catch (e) {}
+				catch (e1) {}
 			},
 			error: function(xhr, s, e) {
 				// take care of tab labels
@@ -973,7 +972,7 @@ $.widget("ui.wijtabs", {
 					// loadError to manipulate the tab content panel via $(a.hash)
 					o.ajaxOptions.error(xhr, s, index, a);
 				}
-				catch (e) {}
+				catch (e2) {}
 			}
 		}));
 
@@ -984,7 +983,7 @@ $.widget("ui.wijtabs", {
 	},
 
 	abort: function() {
-	    /// <summary>Terminate all running tab ajax requests and animations.</summary>	    
+		/// <summary>Terminate all running tab ajax requests and animations.</summary>	    
 		this.element.queue([]);
 		this.panels.stop(false, true);
 
@@ -1004,16 +1003,16 @@ $.widget("ui.wijtabs", {
 	},
 
 	url: function(index, url) {
-	    /// <summary>Change the url from which an Ajax (remote) tab will be loaded.</summary>
-	    /// <param name="index" type="Number">The zero-based index of the tab of which its URL is to be updated.</param>
-	    /// <param name="url" type="String">A URL the content of the tab is loaded from.</param>
-        this.anchors.eq(index).removeData('cache.tabs').data('load.tabs', url);
+		/// <summary>Change the url from which an Ajax (remote) tab will be loaded.</summary>
+		/// <param name="index" type="Number">The zero-based index of the tab of which its URL is to be updated.</param>
+		/// <param name="url" type="String">A URL the content of the tab is loaded from.</param>
+		this.anchors.eq(index).removeData('cache.tabs').data('load.tabs', url);
 		return this;
 	},
 
 	length: function() {
-	    /// <summary>Retrieve the number of tabs of the first matched tab pane.</summary>
-        return this.anchors.length;
+		/// <summary>Retrieve the number of tabs of the first matched tab pane.</summary>
+		return this.anchors.length;
 	}
 
 });
