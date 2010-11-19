@@ -1,6 +1,6 @@
 /*
 *
-* Wijmo Library 0.8.0
+* Wijmo Library 0.8.2
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -143,8 +143,9 @@
 		},
 		_create: function () {
 			//before crete menu items,hide the menu. to avoid show wild uls in the page before init the menu.
-			this.element.hide();
 			var self = this;
+			self.element.hide();
+			
 			var o = self.options;
 			self._setAnimationOptions();
 
