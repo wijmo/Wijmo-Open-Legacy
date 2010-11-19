@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 0.7.0
+ * Wijmo Library 0.8.2
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -180,7 +180,7 @@ $.widget("ui.wijaccordion", {
 	},
 	_initHeaders: function (selector) {
 		var o = this.options;
-		selector = selector == null ? o.header : selector;
+		selector = selector ? selector : o.header;
 		this.headers = this.element.find(selector);
 		this.headers.each(jQuery.proxy(this._initHeader, this));
 	},
@@ -194,10 +194,10 @@ $.widget("ui.wijaccordion", {
 			content.appendBefore(header);
 		}
 		header.addClass("ui-accordion-header ui-helper-reset");
-		if (header.find("> a").length == 0) {
+		if (header.find("> a").length === 0) {
 			header.wrapInner('<a href="#"></a>');
 		}
-		if (header.find("> .ui-icon").length == 0) {
+		if (header.find("> .ui-icon").length === 0) {
 			$('<span class="ui-icon"></span>').insertBefore($("> a", header)[0]);
 		}
 		if (index == o.selectedIndex) {
@@ -252,7 +252,7 @@ $.widget("ui.wijaccordion", {
 		if (typeof index == "number") {
 			nextHeader = $(headers[index]);
 		} else if (typeof index == "string") {
-			index = parseInt(index);
+			index = parseInt(index, 0);
 			nextHeader = $(headers[index]);
 		} else {
 			nextHeader = $(index);
@@ -281,7 +281,7 @@ $.widget("ui.wijaccordion", {
 
 		var nextContent = rightToLeft ? nextHeader.prev(".ui-accordion-content") : nextHeader.next(".ui-accordion-content");
 		var prevContent = rightToLeft ? prevHeader.prev(".ui-accordion-content") : prevHeader.next(".ui-accordion-content");
-		if (prevHeader.length == 0 && nextHeader.length == 0) {
+		if (prevHeader.length === 0 && nextHeader.length === 0) {
 			return false;
 		}
 		var ev = jQuery.Event("beforeselectedindexchanged");
@@ -384,7 +384,7 @@ $.widget("ui.wijaccordion", {
 			openedTriangles.removeClass(this._triangleIconOpened);
 			closedTriangles.removeClass(this._triangleIconClosed);
 		}
-		if (prevDirection != null) {
+		if (prevDirection !== null) {
 			this.element.removeClass("ui-accordion-" + prevDirection);
 		}
 		switch (newDirection) {
@@ -444,7 +444,7 @@ $.widget("ui.wijaccordion", {
 					header.remove();
 					header.insertAfter(content);
 				} else {
-					content = header.prev(".ui-accordion-content")
+					content = header.prev(".ui-accordion-content");
 					header.remove();
 					header.insertBefore(content);
 				}
@@ -461,7 +461,7 @@ $.extend($.ui.wijaccordion, {
 			options = $.extend({
 				easing: "swing",
 				duration: 300
-			}, options, additions);            
+			}, options, additions);
 			if (!options.toHide.size()) {
 				options.toShow.stop(true, true).animate(options.horizontal ? { width: "show"} : { height: "show" }, options);
 				return;
@@ -491,8 +491,8 @@ $.extend($.ui.wijaccordion, {
 
 				var parts = ('' + $.css(options.toShow[0], prop)).match(/^([\d+-.]+)(.*)$/);
 				showProps[prop] = {
-					value: parts[1],
-					unit: parts[2] || 'px'
+					value: parts ? parts[1] : 0,
+					unit: parts ? (parts[2] || 'px') : 'px'
 				};
 			});
 			options.toShow.css(options.horizontal ? { width: 0, overflow: 'hidden'} : { height: 0, overflow: 'hidden' }).stop(true, true).show();
