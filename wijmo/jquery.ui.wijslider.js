@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 0.8.0
+ * Wijmo Library 0.8.2
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -197,8 +197,11 @@
 			//
 			var decreBtn = self._getDecreBtn();
 			decreBtn.addClass("ui-state-active");
+
+			self._intervalID = window.setInterval(function () { self._decreBtnHandle(self); }, 200);
 		},
 
+		_intervalID: null,
 		_increBtnMouseDown: function (e) {
 			var self = e.data;
 			var data = { buttonType: "increButton" };
@@ -206,6 +209,8 @@
 			//
 			var increBtn = self._getIncreBtn();
 			increBtn.addClass("ui-state-active");
+
+			self._intervalID = window.setInterval(function () { self._increBtnHandle(self); }, 200);
 		},
 
 		_decreBtnMouseUp: function (e) {
@@ -215,6 +220,8 @@
 			//
 			var decreBtn = self._getDecreBtn();
 			decreBtn.removeClass("ui-state-active");
+
+			window.clearInterval(self._intervalID);
 		},
 
 		_increBtnMouseUp: function (e) {
@@ -224,34 +231,41 @@
 			//
 			var increBtn = self._getIncreBtn();
 			increBtn.removeClass("ui-state-active");
+
+			window.clearInterval(self._intervalID);
 		},
 
+		_decreBtnHandle: function (sender) {
+			if (sender.options.orientation === "horizontal") {
+				sender._decre();
+			}
+			else {
+				sender._incre();
+			}
+		},
 
 		_decreBtnClick: function (e) {
 			var self = e.data;
 			var data = { buttonType: "decreButton" };
 			//
-			if (self.options.orientation === "horizontal") {
-				self._decre();
+			self._decreBtnHandle(self);
+			self._trigger('buttonclick', e, data);
+		},
+
+		_increBtnHandle: function (sender) {
+			if (sender.options.orientation === "horizontal") {
+				sender._incre();
 			}
 			else {
-				self._incre();
+				sender._decre();
 			}
-			//
-			self._trigger('buttonclick', e, data);
 		},
 
 		_increBtnClick: function (e) {
 			var self = e.data;
-			var data = { buttonType: "increButton" };            
+			var data = { buttonType: "increButton" };
 			//
-			if (self.options.orientation === "horizontal") {
-				self._incre();
-			}
-			else {
-				self._decre();
-			}
-			//
+			self._increBtnHandle(self);
 			self._trigger('buttonclick', e, data);
 		},
 
@@ -354,7 +368,7 @@
 						this._oldValue2 = this.values(1);
 						this._oldX = event.pageX;
 						this._oldY = event.pageY;
-						
+
 						return true;
 					}
 				}
@@ -419,8 +433,8 @@
 			if (this.options.dragFill) {
 				$(document.documentElement).css("cursor", "default");
 				window.setTimeout(function () {
-					this._dragFillTarget = false; 
-					this._dragFillStart = 0; 
+					this._dragFillTarget = false;
+					this._dragFillStart = 0;
 				}, 500);
 			}
 			return returnVal;
