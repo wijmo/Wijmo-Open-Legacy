@@ -1,6 +1,6 @@
 /*
 *
-* Wijmo Library 0.8.0
+* Wijmo Library 0.8.2
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -20,8 +20,10 @@
 (function ($) {
 	$.widget("ui.wijdropdowndecorator", {
 		options: {
-			width: 300,
-			height: 250
+			width: 200,
+			height: 250,
+			showingAnimation: { effect: "blind" },
+			hidingAnimation: { effect: "blind" }
 		},
 		hoverClass: "ui-state-hover",
 		activeClass: "ui-state-active",
@@ -34,6 +36,7 @@
 			this._activeItem = null;
 			this._applySelect(this.element);
 		},
+
 		_applySelect: function (n) {
 			var self = this;
 			//var divWidth = $(n).width();
@@ -63,8 +66,10 @@
 			container.append(self.$anthorWarp);
 			container.append(inputWrap);
 			container.append(self.div);
+			container.css({
+				width: self.options.width
+			});
 			self.div.addClass("ui-dropdown");
-			self.div.width(container.width());
 			label.data("dropdown", self.div);
 			var maxIndex = self._getMaxZIndex();
 
@@ -95,9 +100,6 @@
 					var val = $item.val();
 					var text = $item.text();
 					var $li = $("<li class=\"ui-dropdown-item ui-corner-all\"><span>" + text + "</span></li>")
-					//                    .mouseenter(function (event) {
-					//                        self._activate($(this));
-					//                    })
 					.mousemove(function (event) {//mousemove replace mouseenter to resolve the hovered <li> changed issue when scrolling the ddl
 						var current = $(event.target).closest(".ui-dropdown-item");
 						if (current !== this.last) {
@@ -112,11 +114,10 @@
 
 			label.bind("click." + self.widgetName, function () {
 				if (!self.div.is(":visible")) {
-					self.div.show();
-					self._initActiveItem();
+					self._show();
 				}
 				else {
-					self.div.hide();
+					self._hide();
 				}
 			}).bind("mouseover." + self.widgetName, function () {
 				label.addClass(self.hoverClass);
@@ -134,11 +135,10 @@
 
 			inputWrap.bind("click." + self.widgetName, function () {
 				if (!self.div.is(":visible")) {
-					self.div.show();
-					self._initActiveItem();
+					self._show();
 				}
 				else {
-					self.div.hide();
+					self._hide();
 				}
 				self.$anthorWarp.focus();
 			}).bind("mouseover." + self.widgetName, function () {
@@ -180,7 +180,7 @@
 			});
 
 			height = Math.min(self.options.height, self.$dropdownList.outerHeight());
-			self.div.css("z-index", maxIndex).css({
+			self.div.css("z-index", maxIndex + 1).css({
 				height: height,
 				width: self.options.width
 			});
@@ -233,6 +233,28 @@
 			self._initActiveItem();
 			if (self._activeItem) {
 				self.$anthorWarp.children("label").text(self._activeItem.text());
+			}
+		},
+
+		_show: function () {
+			var self = this, showingAnimation = self.options.showingAnimation;
+			if (showingAnimation != null) {
+				self.div.show(showingAnimation.effect, showingAnimation.options, showingAnimation.speed, function () {
+					self._initActiveItem();
+				});
+			}
+			else {
+				self.div.show();
+			}
+		},
+
+		_hide: function () {
+			var self = this, hidingAnimation = self.options.hidingAnimation;
+			if (hidingAnimation != null) {
+				self.div.hide(hidingAnimation.effect, hidingAnimation.options, hidingAnimation.speed, hidingAnimation.callback);
+			}
+			else {
+				self.div.hide();
 			}
 		},
 
@@ -364,7 +386,7 @@
 				var base = self._activeItem.offset().top,
 				height = self.options.height,
 				result = self.$dropdownList.find(".ui-dropdown-item").filter(function () {
-				var close = $(self).offset().top - base + height - $(self).height();
+					var close = $(self).offset().top - base + height - $(self).height();
 					return close < 10 && close > -10;
 				});
 
