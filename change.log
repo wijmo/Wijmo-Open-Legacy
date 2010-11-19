@@ -1,0 +1,23 @@
+
+Changes mode to version 0.8.1
+-----------------------------
+
+Accordion
+---------
+Fixed javascript exception during animation under IE 9. Javascript exception 
+was thrown when trying to expand/collapse accordion panes.
+
+CheckBoxDecorator
+-----------------
+Modified checkboxElement.click.  The checkbox was not being checked/unchecked 
+when placed inside a dialog widget.
+
+Menu, ToolTip
+-------------
+Upgrade bgiframe from 2.1.1 to 2.1.3-pre.  This version fixed the issue that iframe is 
+still created on the win7 and ie7/8/9.
+
+progressbar
+-----------
+Fixed not shown corectly when the fillDirection set to 'north' or 'south' 
+and labelAlign set to 'north' or south.
