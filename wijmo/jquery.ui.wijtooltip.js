@@ -1,6 +1,6 @@
 /*
 *
-* Wijmo Library 0.8.0
+* Wijmo Library 0.8.2
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -78,9 +78,9 @@
 			///Determines whether to show the callout element.
 			///Type:Boolean.
 			///Default:true.
-			///Code example:$(".selector").wijtooltip("option","showCallOut",true).
+			///Code example:$(".selector").wijtooltip("option","showCallout",true).
 			///</summary>
-			showCallOut: true,
+			showCallout: true,
 			/// <summary>
 			///Determines the animation effect that will be shown.
 			///Remarks:This should be an object value.Possible values include:'animated','duration',and 'easing'.This property works with jQuery animation.
@@ -190,7 +190,7 @@
 			}
 		},
 		_set_calloutSide: function () {
-			if (this.options.showCallOut) {
+			if (this.options.showCallout) {
 				this._addCallOut();
 			}
 		},
@@ -202,7 +202,7 @@
 		},
 
 		_set_position: function (value) {
-			if (this.options.showCallOut) {
+			if (this.options.showCallout) {
 				var oldpos = this.element.data("oldPos");
 				if (oldpos.my !== value.my || oldpos.at !== value.at) {
 					this._setCalloutCss();
@@ -265,18 +265,16 @@
 			var tooltip = this.element.data("tooltip");
 			tooltip.hide();
 			this._setCalloutCss();
-			if (this.options.showCallOut) {
+			if (this.options.showCallout) {
 				domElement.callout.show();
 			}
 			else {
 				domElement.callout.hide();
 			}
 
-			if ($.fn.bgiframe && $.browser.msie && $.browser.version === "6.0") {
-				tooltip.bgiframe();
-			}
 			this.element.data("offset", this.options.position.offset);
 		},
+
 		_setStructure: function () {
 			var tooltip = $("<div>");
 			tooltip.addClass("ui-wijtooltip");
@@ -316,6 +314,7 @@
 				$(">:first", domelement.callout).addClass("ui-wijtooltip-pointer-inner-fill");
 			}
 		},
+
 		_setCloseBtnCss: function () {
 			var domElement = this.element.data("domElements");
 
@@ -328,7 +327,7 @@
 		},
 
 		_setCalloutCss: function () {
-			if (!this.options.showCallOut) {
+			if (!this.options.showCallout) {
 				this.options.position.offset = this.element.data("offset");
 				return;
 			}
@@ -365,12 +364,14 @@
 			this.element.data("arrowClass", cssname);
 
 		},
+
 		_initializeDomElements: function () {
 			var tooltip = this.element.data("tooltip");
 			tooltip.bind("mouseout", $.proxy(this._onMouseOutTooltipElement, this));
 			tooltip.bind("mouseover", $.proxy(this._onMouseOverTooltipElement, this));
 			this.element.data("domElements").closebtn.bind("click", $.proxy(this._onClickCloseBtn, this));
 		},
+
 		_attachEventToElement: function () {
 			if (this.element.data("title") == null) {
 				this.element.data("title", this.element.attr("title"));
@@ -421,6 +422,7 @@
 					break;
 			}
 		},
+
 		///judgy if the point is in element
 		_isPointInsideRectWithOutBorder: function (point, _element) {
 			var obj = $(_element);
@@ -438,6 +440,7 @@
 			}
 			return true;
 		},
+
 		// end tooltip mouse events
 		_onMouseOutTooltipElement: function (e) {
 			if (this.options.closeBehavior === "sticky" || this.options.closeBehavior === "none") {
@@ -450,6 +453,7 @@
 				this.hide();
 			}
 		},
+
 		_onMouseOverTooltipElement: function (e) {
 			if (this.options.closeBehavior === "auto" && !this.options.mouseTrailing) {
 				if (!this.element.data("currentElement") || this._isPointInsideRectWithOutBorder({
@@ -460,6 +464,7 @@
 				}
 			}
 		},
+
 		_onClickCloseBtn: function () {
 			this.hide();
 		},
@@ -476,27 +481,52 @@
 			tooltip.css({ left: 0, top: 0 });
 			//if (!this.element.data("fixed")) {
 			var offsetstr = "";
-			if (this.options.showCallOut) {
+			if (this.options.showCallout) {
 				var arrowClass = this.element.data("arrowClass");
-				var str = arrowClass.substr(arrowClass.length - 2, 1);
+				var str = arrowClass.substr(arrowClass.length - 2, 2);
+				var strArr = str.split("");
 				var offset = [];
 				//----change the position offset to set the callout.
 				//offset[0] = parseInt(offset[0]);
 				//offset[1] = parseInt(offset[1]);
 				offset[0] = offset[1] = 0;
-				//console.log(arrowClass);				
-				switch (str) {
+				//console.log(arrowClass);
+				var domelement = this.element.data("domElements");
+				var borderTop = domelement.callout.css("border-top-width").replace(/px/g, '') * 1;
+				var borderLeft = domelement.callout.css("border-left-width").replace(/px/g, '') * 1;
+				var borderRight = domelement.callout.css("border-right-width").replace(/px/g, '') * 1;
+				var borderBottom = domelement.callout.css("border-bottom-width").replace(/px/g, '') * 1;
+				var top = domelement.callout.css("top").replace(/px/g, '') * 1;
+				var left = domelement.callout.css("left").replace(/px/g, '') * 1;
+				var right = domelement.callout.css("right").replace(/px/g, '') * 1;
+				var bottom = domelement.callout.css("bottom").replace(/px/g, '') * 1;
+
+				switch (str[0]) {
 					case "l":
-						offset[0] += 14;
+						offset[0] = borderRight;
 						break;
 					case "r":
-						offset[0] -= 14;
-						break;
-					case "t":
-						offset[1] += 14;
+						offset[0] = -borderLeft;
 						break;
 					case "b":
-						offset[1] -= 14;
+						offset[1] = bottom;
+						break;
+					case "t":
+						offset[1] = -top;
+						break;
+				}
+				switch (str[1]) {
+					case "t":
+						offset[1] = -top;
+						break;
+					case "b":
+						offset[1] = bottom;
+						break;
+					case "r":
+						offset[0] = right;
+						break;
+					case "l":
+						offset[0] = -left;
 						break;
 				}
 				offsetstr = offset.join(" ");
@@ -507,7 +537,7 @@
 			tooltip.css({ left: 0, top: 0 });
 			this.element.data("fixedArrowClass", false);
 			tooltip.position({ my: option.my, at: option.at, of: option.of, offset: offsetstr, collision: option.collision });
-			if (this.options.showCallOut) {
+			if (this.options.showCallout) {
 				this._calloutflip(position);
 				this._set_unfilledCallout();
 			}
@@ -788,20 +818,22 @@
 			// handle IE 6
 			if ($.browser.msie && $.browser.version < 7) {
 				scrollWidth = Math.max(
-				document.documentElement.scrollWidth,
-				document.body.scrollWidth
-			);
+					document.documentElement.scrollWidth,
+					document.body.scrollWidth
+				);
 				offsetWidth = Math.max(
-				document.documentElement.offsetWidth,
-				document.body.offsetWidth
-			);
+					document.documentElement.offsetWidth,
+					document.body.offsetWidth
+				);
 
 				if (scrollWidth < offsetWidth) {
 					return $(window).width() + 'px';
-				} else {
+				} 
+				else {
 					return scrollWidth + 'px';
 				}
-			} else {
+			} 
+			else {
 				return $(document).width() + 'px';
 			}
 		},
