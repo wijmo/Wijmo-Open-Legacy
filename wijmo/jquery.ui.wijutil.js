@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 0.7.0
+ * Wijmo Library 0.8.2
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -17,77 +17,77 @@
  */
 /*Replace inner content by iframe and load content using given url*/
 (function ($) {
-    $.fn.extend({
-        wijContent: function (url) {
-            return this.each(function () {
-                this.innerHTML = '<iframe frameborder="0" style="width: 100%; height: 100%;" src="' + url + '">"';
-            });
-        }
-    });
+	$.fn.extend({
+		wijContent: function (url) {
+			return this.each(function () {
+				this.innerHTML = '<iframe frameborder="0" style="width: 100%; height: 100%;" src="' + url + '">"';
+			});
+		}
+	});
 
-    var naNTest = function (num){
-        return isNaN(num) ? 0 : num;
-    };
+	var naNTest = function (num){
+		return isNaN(num) ? 0 : num;
+	};
 
-    $.fn.leftBorderWidth = function () {
-        var blw = parseFloat($(this).css("borderLeftWidth"));
-        var pl = parseFloat($(this).css("padding-left"));
-        var ml = 0;
-        if ($(this).css("margin-left") != "auto") {
-            ml = parseFloat($(this).css("margin-left"));
-        }
-        
-        return naNTest(blw) + naNTest(pl) + naNTest(ml);
-    };
+	$.fn.leftBorderWidth = function () {
+		var blw = parseFloat($(this).css("borderLeftWidth"));
+		var pl = parseFloat($(this).css("padding-left"));
+		var ml = 0;
+		if ($(this).css("margin-left") != "auto") {
+			ml = parseFloat($(this).css("margin-left"));
+		}
+		
+		return naNTest(blw) + naNTest(pl) + naNTest(ml);
+	};
 
-    $.fn.rightBorderWidth = function () {
-        var brw = parseFloat($(this).css("borderRightWidth"));
-        var pr = parseFloat($(this).css("padding-right"));
-        var mr = 0;
-        if ($(this).css("margin-right") != "auto") {
-            mr = parseFloat($(this).css("margin-right"));
-        }
-        return naNTest(brw) + naNTest(pr) + naNTest(mr);
-    };
+	$.fn.rightBorderWidth = function () {
+		var brw = parseFloat($(this).css("borderRightWidth"));
+		var pr = parseFloat($(this).css("padding-right"));
+		var mr = 0;
+		if ($(this).css("margin-right") != "auto") {
+			mr = parseFloat($(this).css("margin-right"));
+		}
+		return naNTest(brw) + naNTest(pr) + naNTest(mr);
+	};
 
-    $.fn.topBorderWidth = function () {
-        var blw = parseFloat($(this).css("borderTopWidth"));
-        var pl = parseFloat($(this).css("padding-top"));
-        var ml = 0;
-        if ($(this).css("margin-top") != "auto") {
-            ml = parseFloat($(this).css("margin-top"));
-        }
-        return naNTest(blw) + naNTest(pl) + naNTest(ml);
-    };
+	$.fn.topBorderWidth = function () {
+		var blw = parseFloat($(this).css("borderTopWidth"));
+		var pl = parseFloat($(this).css("padding-top"));
+		var ml = 0;
+		if ($(this).css("margin-top") != "auto") {
+			ml = parseFloat($(this).css("margin-top"));
+		}
+		return naNTest(blw) + naNTest(pl) + naNTest(ml);
+	};
 
-    $.fn.bottomBorderWidth = function () {
-        var brw = parseFloat($(this).css("borderBottomWidth"));
-        var pr = parseFloat($(this).css("padding-bottom"));
-        var mr = 0;
-        if ($(this).css("margin-bottom") != "auto") {
-            mr = parseFloat($(this).css("margin-bottom"));
-        }
-        return naNTest(brw) + naNTest(pr) + naNTest(mr);
-    };
+	$.fn.bottomBorderWidth = function () {
+		var brw = parseFloat($(this).css("borderBottomWidth"));
+		var pr = parseFloat($(this).css("padding-bottom"));
+		var mr = 0;
+		if ($(this).css("margin-bottom") != "auto") {
+			mr = parseFloat($(this).css("margin-bottom"));
+		}
+		return naNTest(brw) + naNTest(pr) + naNTest(mr);
+	};
 
-    $.fn.borderSize = function () {
-        var bw = $(this).leftBorderWidth() + $(this).rightBorderWidth();
-        var bh = $(this).topBorderWidth() + $(this).bottomBorderWidth();
-        var b = { width: bw, height: bh };
-        return b;
-    };
+	$.fn.borderSize = function () {
+		var bw = $(this).leftBorderWidth() + $(this).rightBorderWidth();
+		var bh = $(this).topBorderWidth() + $(this).bottomBorderWidth();
+		var b = { width: bw, height: bh };
+		return b;
+	};
 
-    $.fn.setOutWidth = function (width) {
-        var bw = $(this).leftBorderWidth() + $(this).rightBorderWidth();
-        $(this).width(width - bw);
-        return this;
-    };
+	$.fn.setOutWidth = function (width) {
+		var bw = $(this).leftBorderWidth() + $(this).rightBorderWidth();
+		$(this).width(width - bw);
+		return this;
+	};
 
-    $.fn.setOutHeight = function (height) {
-        var bh = $(this).topBorderWidth() + $(this).bottomBorderWidth();
-        $(this).height(height - bh);
-        return this;
-    };
+	$.fn.setOutHeight = function (height) {
+		var bh = $(this).topBorderWidth() + $(this).bottomBorderWidth();
+		$(this).height(height - bh);
+		return this;
+	};
 	
 	$.fn.getWidget = function () {
 		var widgetName = this.data("widgetName");
@@ -178,22 +178,22 @@
 })(jQuery);
 
 __wijReadOptionEvents = function (eventsArr, widgetInstance) {
-    // handle option events
-    for (var k = 0; k < eventsArr.length; k++) {
-        if (widgetInstance.options[eventsArr[k]] != null)
-            widgetInstance.element.bind(eventsArr[k], widgetInstance.options[eventsArr[k]]);
-    }
-    //handle option event names separated by space, like: "afterexpand aftercollapse"
-    for (k in widgetInstance.options) {
-        if (k.indexOf(" ") != -1) {
-            // possible multiple events separated by space:
-            var arr = k.split(" ");
-            for (var j = 0; j < arr.length; j++) {
-                if (arr[j].length > 0)
-                    widgetInstance.element.bind(arr[j], widgetInstance.options[k]);
-            }
-        }
-    }
+	// handle option events
+	for (var k = 0; k < eventsArr.length; k++) {
+		if (widgetInstance.options[eventsArr[k]] != null)
+			widgetInstance.element.bind(eventsArr[k], widgetInstance.options[eventsArr[k]]);
+	}
+	//handle option event names separated by space, like: "afterexpand aftercollapse"
+	for (k in widgetInstance.options) {
+		if (k.indexOf(" ") != -1) {
+			// possible multiple events separated by space:
+			var arr = k.split(" ");
+			for (var j = 0; j < arr.length; j++) {
+				if (arr[j].length > 0)
+					widgetInstance.element.bind(arr[j], widgetInstance.options[k]);
+			}
+		}
+	}
 };
 
 
