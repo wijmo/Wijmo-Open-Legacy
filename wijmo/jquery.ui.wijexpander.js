@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 0.7.0
+ * Wijmo Library 0.8.2
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -77,7 +77,7 @@ $.widget("ui.wijexpander", {
     _setOption: function (key, value) {
         switch (key) {
             case "contentUrl":
-                if (value != "") {
+                if (value) {
                     this.element.find("> .ui-widget-content").wijContent(value);
                 } else {
                     this.element.find("> .ui-widget-content").html("");
@@ -119,10 +119,10 @@ $.widget("ui.wijexpander", {
             header.insertAfter(content);
         }
         header.addClass("ui-expander-header ui-helper-reset");
-        if (header.find("> a").length == 0) {
+        if (header.find("> a").length === 0) {
             header.wrapInner('<a href="#"></a>');
         }
-        if (header.find("> .ui-icon").length == 0) {
+        if (header.find("> .ui-icon").length === 0) {
             $('<span class="ui-icon"></span>').insertBefore($("> a", header)[0]);
         }
         content.addClass("ui-expander-content ui-helper-reset ui-widget-content");
@@ -131,7 +131,7 @@ $.widget("ui.wijexpander", {
     _init: function () {
         var o = this.options;
         this._handleExpandDirectionChange(o.expandDirection, false);
-        if (o.contentUrl != "") {
+        if (o.contentUrl) {
             $(".ui-widget-content", this.element).wijContent(this.options.contentUrl);
         }
         if (!o.expanded) {
@@ -177,7 +177,7 @@ $.widget("ui.wijexpander", {
         var openedContents;
         var openedTriangles;
         var closedTriangles;
-        if (prevDirection != null && prevDirection != newDirection) {
+        if (prevDirection && prevDirection != newDirection) {
             this.element.removeClass("ui-expander-" + prevDirection);
         }
         if (allowDOMChange) {
@@ -247,7 +247,7 @@ $.widget("ui.wijexpander", {
                     header.remove();
                     header.insertAfter(content);
                 } else {
-                    content = header.prev(".ui-expander-content")
+                    content = header.prev(".ui-expander-content");
                     header.remove();
                     header.insertBefore(content);
                 }
@@ -255,10 +255,6 @@ $.widget("ui.wijexpander", {
         }
 
     },
-
-    /*****************************
-    Widget specific implementation
-    ******************************/
 
     /** public methods */
 
@@ -284,8 +280,10 @@ $.widget("ui.wijexpander", {
                 expand: false,
                 content: this.element.find("> .ui-widget-content"),
                 complete: jQuery.proxy(function () {
+                    this.element.find("> .ui-widget-content").removeClass("ui-expander-content-active"); //.removeClass(this._contentCornerOpened);
                     this.element.trigger("aftercollapse");
                     this.element.find("> .ui-widget-content").css('display', '');
+
                 }, this),
                 horizontal: this.element.hasClass("ui-helper-horizontal")
             };
@@ -310,7 +308,6 @@ $.widget("ui.wijexpander", {
             $(this.parentNode).trigger("aftercollapse");
         }
         this.element.find("> .ui-expander-header").removeClass("ui-state-active").removeClass(this._headerCornerOpened).addClass("ui-state-default ui-corner-all").find("> .ui-icon").removeClass(this._triangleIconOpened).addClass(this._triangleIconClosed);
-        this.element.find("> .ui-widget-content").removeClass("ui-expander-content-active"); //.removeClass(this._contentCornerOpened);
         this.options.expanded = false;
         return true;
     },
@@ -338,6 +335,7 @@ $.widget("ui.wijexpander", {
                 expand: true,
                 content: this.element.find("> .ui-widget-content"),
                 complete: jQuery.proxy(function () {
+                    this.element.find("> .ui-widget-content").addClass("ui-expander-content-active").addClass(this._contentCornerOpened);
                     this.element.trigger("afterexpand");
                     this.element.find("> .ui-widget-content").css('display', '');
                 }, this),
@@ -364,7 +362,7 @@ $.widget("ui.wijexpander", {
             $(this.parentNode).trigger("afterexpand");
         }
         this.element.find("> .ui-expander-header").removeClass("ui-state-default ui-corner-all").addClass("ui-state-active").addClass(this._headerCornerOpened).find("> .ui-icon").removeClass(this._triangleIconClosed).addClass(this._triangleIconOpened);
-        this.element.find("> .ui-widget-content").addClass("ui-expander-content-active").addClass(this._contentCornerOpened)
+
 
         this.options.expanded = true;
         return true;
@@ -392,7 +390,6 @@ $.extend($.ui.wijexpander, {
             } else {
                 options.content.stop(true, true).animate(options.horizontal ? { width: 'hide', opacity: 'hide'} : { height: 'hide', opacity: 'hide' }, options);
             }
-
         }
     }
 }); 
