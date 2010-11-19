@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>ProgressBar - Direction</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="Slider lets you input two values, an upper and a lower bound, on the track." />
+    <meta name="keywords" content="" />
+    <meta name="author" content="ComponentOne" />
+    <link href="../base-reset.css" rel="stylesheet" type="text/css" />
+    <link href="../../themes/Aristo/jquery-ui-1.8.4.custom.css" rel="stylesheet"
+        type="text/css" />
+    <link href="../demos-single.css" rel="stylesheet" type="text/css" />
+    <link href="../../themes/Wijmo/jquery.ui.wijprogressbar.css" rel="stylesheet" type="text/css" />
+    <script src="../../external/jquery-1.4.3.min.js" type="text/javascript"></script>
+    <script src="../../external/jquery-ui-1.8.6.custom.min.js" type="text/javascript"></script>
+    <script src="../../Wijmo/jquery.ui.wijutil.js" type="text/javascript"></script>
+    <script src="../../Wijmo/jquery.ui.wijtooltip.js" type="text/javascript"></script>
+    <script src="../../Wijmo/jquery.ui.wijprogressbar.js" type="text/javascript"></script>
+    <style type="text/css">
+        .option-row li
+        {
+            margin: 3px 0;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#progressbar1").wijprogressbar({
+                value: 50,
+                animationOptions: {
+                    duration: 1000
+                }
+            });
+            $("#value").blur(function () {
+                if ($(this).val() == "") return;
+                var value = parseInt($(this).val());
+                $("#progressbar1").wijprogressbar("option", "value", value);
+            });
+            $("#labelAlign").change(function () {
+                $("#progressbar1").wijprogressbar("option", "labelAlign", $(this).val());
+            });
+            $("#fillDirection").change(function () {
+                $("#progressbar1").wijprogressbar("option", "fillDirection", $(this).val());
+            });
+            $("#orientation").change(function () {
+                $("#progressbar1").wijprogressbar("option", "orientation", $(this).val());
+            });
+        });
+                
+    </script>
+</head>
+<body class="demo-single">
+    <div class="container">
+        <div class="header">
+            <h2>
+                Direction</h2>
+        </div>
+        <div class="main demo">
+            <!-- Begin demo markup -->
+            <div id="progressbar1">
+            </div>
+            <!-- End demo markup -->
+            <div class="demo-options">
+                <!-- Begin options markup -->
+                <div class="option-row">
+                    <ul>
+                        <li>
+                            <label>
+                                Value</label>
+                            <input type="text" id="value" value="50" />
+                        </li>
+                        <li>
+                            <label>
+                                Label Align</label>
+                            <select id="labelAlign">
+                                <option value="east">east</option>
+                                <option value="west">west</option>
+                                <option value="center">center</option>
+                                <option value="north">north</option>
+                                <option value="south">south</option>
+                                <option value="running">running</option>
+                            </select>(if select running,please change the value) </li>
+                        <li>
+                            <label>
+                                Fill Direction</label>
+                            <select id="fillDirection">
+                                <option value="east">east</option>
+                                <option value="west">west</option>
+                                <option value="south">south</option>
+                                <option value="north">north</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+                <!-- End options markup -->
+            </div>
+        </div>
+        <div class="footer demo-description">
+            <p>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
