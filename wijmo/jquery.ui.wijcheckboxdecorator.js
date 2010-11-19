@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 0.8.0
+ * Wijmo Library 0.8.2
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -71,10 +71,10 @@
 					boxElement.removeClass("ui-state-focus").not(".ui-state-hover").addClass("ui-state-default");
 				});
 				checkboxElement.click(function () {
-					if (targetLabel.length === 0 || targetLabel.html() === "") {
+					//if (targetLabel.length === 0 || targetLabel.html() === "") {
 						that.element.attr("checked", !that.element.attr("checked"));
 						that.refresh();
-					}
+					//}
 
 				});
 				that.refresh();
