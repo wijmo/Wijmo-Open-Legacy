@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 0.8.0
+ * Wijmo Library 0.8.2
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -869,7 +869,7 @@
 			//var f = self._fields();
 			//var scrollerWrapper = f.stateContainer;
 			//var hbarContainer = f.hbarContainer;
-			var originalElement = $(e.srcElement || e.originalTarget);
+			var originalElement = $(e.srcElement || e.originalEvent.target);
 			var dir = "";
 			var onHbar = originalElement.closest("." + hbarContainerCSS, self.element).size() > 0;
 			var hScroller = o.hScroller;
@@ -916,7 +916,7 @@
 			if (self.options.disabled) {
 				return;
 			}
-			var originalElement = $(e.srcElement || e.originalTarget);
+			var originalElement = $(e.srcElement || e.originalEvent.target);
 			var ele = null;
 			var addhover = false;
 
@@ -1336,6 +1336,9 @@
 				self._bindElementEvents(self, f, ele, o);
 				var templateWrapper = f.templateWrapper;
 				templateWrapper.css({ "float": "left", left: "0px", top: "0px", width: "auto", height: "auto" });
+				// hide and show wrapper div to force the width to change for some browser.
+				templateWrapper.hide();
+				templateWrapper.show();
 				f.contentWidth = templateWrapper.width();
 				f.contentHeight = templateWrapper.height();
 				templateWrapper.css("float", "");
