@@ -1,6 +1,6 @@
-﻿/*
+/*
  *
- * Wijmo Library 0.8.2
+ * Wijmo Library 0.9.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.

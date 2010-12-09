@@ -1,10 +1,10 @@
-.ui-wijtooltip {
+.wijmo-wijtooltip {
     position: absolute;
     z-index: 9999;
 }
 
 
-.ui-wijtooltip .ui-wijtooltip-close
+.wijmo-wijtooltip .wijmo-wijtooltip-close
 {
     background:none repeat scroll 0 0 transparent;
 border:medium none;
@@ -16,57 +16,57 @@ top:3px;
 width:16px;
     }
 
-.ui-wijtooltip .ui-wijtooltip-title
+.wijmo-wijtooltip .wijmo-wijtooltip-title
 {
     background:none repeat scroll 0 0 transparent;
 border:medium none;
 color:inherit;
 padding:0.4em;
 }
-.ui-wijtooltip .ui-wijtooltip-container
+.wijmo-wijtooltip .wijmo-wijtooltip-container
 {
     padding: 1em;
     overflow: hidden;
 }
 
-.ui-wijtooltip {
+.wijmo-wijtooltip {
     border-width: 2px;
 }
 
-.ui-wijtooltip .ui-wijtooltip-pointer, .ui-wijtooltip .ui-wijtooltip-pointer-inner {
+.wijmo-wijtooltip .wijmo-wijtooltip-pointer, .wijmo-wijtooltip .wijmo-wijtooltip-pointer-inner {
     background: none;
     height: 0;
     position: absolute;
     width: 0;
 }
 
-.ui-wijtooltip-arrow-tr .ui-wijtooltip-pointer, .ui-wijtooltip-arrow-tc .ui-wijtooltip-pointer, .ui-wijtooltip-arrow-tl .ui-wijtooltip-pointer {
+.wijmo-wijtooltip-arrow-tr .wijmo-wijtooltip-pointer, .wijmo-wijtooltip-arrow-tc .wijmo-wijtooltip-pointer, .wijmo-wijtooltip-arrow-tl .wijmo-wijtooltip-pointer {
     border-bottom-width: 14px;
     border-top: 0 none;
     top: -14px;
 	
 }
 
-.ui-wijtooltip-arrow-tr .ui-wijtooltip-pointer {
-    border-left: 18px dotted transparent;
+.wijmo-wijtooltip-arrow-tr .wijmo-wijtooltip-pointer {
+    border-left: 18px solid transparent;
     border-right: 0 none;
     right: 10px;
 }
 
-.ui-wijtooltip-arrow-tc .ui-wijtooltip-pointer {
-    border-left: 10px dotted transparent;
-    border-right: 10px dotted transparent;
+.wijmo-wijtooltip-arrow-tc .wijmo-wijtooltip-pointer {
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
     left: 50%;
     margin-left: -10px;
 }
 
-.ui-wijtooltip-arrow-tl .ui-wijtooltip-pointer {
+.wijmo-wijtooltip-arrow-tl .wijmo-wijtooltip-pointer {
     border-left: 0 none;
-    border-right: 18px dotted transparent;
+    border-right: 18px solid transparent;
     left: 10px;
 }
 
-.ui-wijtooltip-arrow-tr .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-tc .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-tl .ui-wijtooltip-pointer-inner {
+.wijmo-wijtooltip-arrow-tr .wijmo-wijtooltip-pointer-inner, .wijmo-wijtooltip-arrow-tc .wijmo-wijtooltip-pointer-inner, .wijmo-wijtooltip-arrow-tl .wijmo-wijtooltip-pointer-inner {
     border-bottom-color: inherit;
     border-bottom-style: solid;
     border-bottom-width: 10px;
@@ -74,52 +74,52 @@ padding:0.4em;
 	*font-size:0;line-height:0;
 }
 
-.ui-wijtooltip-arrow-tr .ui-wijtooltip-pointer-inner {
-    border-left: 12px dotted transparent;
+.wijmo-wijtooltip-arrow-tr .wijmo-wijtooltip-pointer-inner {
+    border-left: 12px solid transparent;
     border-right: 0 none;
     right: 2px;
 }
 
-.ui-wijtooltip-arrow-tc .ui-wijtooltip-pointer-inner {
-    border-left: 8px dotted transparent;
-    border-right: 8px dotted transparent;
+.wijmo-wijtooltip-arrow-tc .wijmo-wijtooltip-pointer-inner {
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
     left: -8px;
 }
 
-.ui-wijtooltip-arrow-tl .ui-wijtooltip-pointer-inner {
+.wijmo-wijtooltip-arrow-tl .wijmo-wijtooltip-pointer-inner {
     border-left: 0 none;
-    border-right-style: dotted;
+    border-right-style: solid;
     border-right-color: inherit;
     border-right-width: 12px;
     left: 2px;
 }
 
-.ui-wijtooltip-arrow-rb .ui-wijtooltip-pointer, .ui-wijtooltip-arrow-rc .ui-wijtooltip-pointer, .ui-wijtooltip-arrow-rt .ui-wijtooltip-pointer {
+.wijmo-wijtooltip-arrow-rb .wijmo-wijtooltip-pointer, .wijmo-wijtooltip-arrow-rc .wijmo-wijtooltip-pointer, .wijmo-wijtooltip-arrow-rt .wijmo-wijtooltip-pointer {
     border-left-width: 14px;
     border-right: 0 none;
     right: -14px;
 }
 
-.ui-wijtooltip-arrow-rb .ui-wijtooltip-pointer {
+.wijmo-wijtooltip-arrow-rb .wijmo-wijtooltip-pointer {
     border-bottom: 0 none;
-    border-top: 18px dotted transparent;
+    border-top: 18px solid transparent;
     bottom: 10px;
 }
 
-.ui-wijtooltip-arrow-rc .ui-wijtooltip-pointer {
-    border-bottom: 10px dotted transparent;
-    border-top: 10px dotted transparent;
+.wijmo-wijtooltip-arrow-rc .wijmo-wijtooltip-pointer {
+    border-bottom: 10px solid transparent;
+    border-top: 10px solid transparent;
     bottom: 50%;
     margin-bottom: -10px;
 }
 
-.ui-wijtooltip-arrow-rt .ui-wijtooltip-pointer {
-    border-bottom: 18px dotted transparent;
+.wijmo-wijtooltip-arrow-rt .wijmo-wijtooltip-pointer {
+    border-bottom: 18px solid transparent;
     border-top: 0 none;
     top: 10px;
 }
 
-.ui-wijtooltip-arrow-rb .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-rc .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-rt .ui-wijtooltip-pointer-inner {
+.wijmo-wijtooltip-arrow-rb .wijmo-wijtooltip-pointer-inner, .wijmo-wijtooltip-arrow-rc .wijmo-wijtooltip-pointer-inner, .wijmo-wijtooltip-arrow-rt .wijmo-wijtooltip-pointer-inner {
     border-left-color: inherit;
     border-left-style: solid;
     border-left-width: 10px;
@@ -128,55 +128,55 @@ padding:0.4em;
 }
 
 
-.ui-wijtooltip-arrow-rb .ui-wijtooltip-pointer-inner {
+.wijmo-wijtooltip-arrow-rb .wijmo-wijtooltip-pointer-inner {
     border-bottom: 0 none;
-    border-top-style: dotted;
+    border-top-style: solid;
     border-top-color: inherit;
     border-top-width: 12px;
     bottom: 2px;
 }
 
-.ui-wijtooltip-arrow-rc .ui-wijtooltip-pointer-inner {
-    border-bottom: 8px dotted transparent;
-    border-top: 8px dotted transparent;
+.wijmo-wijtooltip-arrow-rc .wijmo-wijtooltip-pointer-inner {
+    border-bottom: 8px solid transparent;
+    border-top: 8px solid transparent;
     bottom: -8px;
 }
 
-.ui-wijtooltip-arrow-rt .ui-wijtooltip-pointer-inner {
-        border-bottom-style: dotted;
+.wijmo-wijtooltip-arrow-rt .wijmo-wijtooltip-pointer-inner {
+        border-bottom-style: solid;
     border-bottom-color: inherit;
     border-bottom-width: 12px;
     border-top: 0 none;
     top: 2px;
 }
 
-.ui-wijtooltip-arrow-br .ui-wijtooltip-pointer, .ui-wijtooltip-arrow-bc .ui-wijtooltip-pointer, .ui-wijtooltip-arrow-bl .ui-wijtooltip-pointer {
+.wijmo-wijtooltip-arrow-br .wijmo-wijtooltip-pointer, .wijmo-wijtooltip-arrow-bc .wijmo-wijtooltip-pointer, .wijmo-wijtooltip-arrow-bl .wijmo-wijtooltip-pointer {
     border-bottom: 0 none;
     border-top-width: 14px;
     bottom: -14px;
 	
 }
 
-.ui-wijtooltip-arrow-br .ui-wijtooltip-pointer {
-    border-left: 18px dotted transparent;
+.wijmo-wijtooltip-arrow-br .wijmo-wijtooltip-pointer {
+    border-left: 18px solid transparent;
     border-right: 0 none;
     right: 10px;
 }
 
-.ui-wijtooltip-arrow-bc .ui-wijtooltip-pointer {
-    border-left: 10px dotted transparent;
-    border-right: 10px dotted transparent;
+.wijmo-wijtooltip-arrow-bc .wijmo-wijtooltip-pointer {
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
     left: 50%;
     margin-left: -10px;
 }
 
-.ui-wijtooltip-arrow-bl .ui-wijtooltip-pointer {
+.wijmo-wijtooltip-arrow-bl .wijmo-wijtooltip-pointer {
     border-left: 0 none;
-    border-right: 18px dotted transparent;
+    border-right: 18px solid transparent;
     left: 10px;
 }
 
-.ui-wijtooltip-arrow-br .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-bc .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-bl .ui-wijtooltip-pointer-inner {
+.wijmo-wijtooltip-arrow-br .wijmo-wijtooltip-pointer-inner, .wijmo-wijtooltip-arrow-bc .wijmo-wijtooltip-pointer-inner, .wijmo-wijtooltip-arrow-bl .wijmo-wijtooltip-pointer-inner {
     border-top-color: inherit;
     border-top-style: solid;
     border-top-width: 10px;
@@ -184,50 +184,50 @@ padding:0.4em;
 	*font-size:0;line-height:0;
 }
 
-.ui-wijtooltip-arrow-br .ui-wijtooltip-pointer-inner {
-    border-left: 12px dotted transparent;
+.wijmo-wijtooltip-arrow-br .wijmo-wijtooltip-pointer-inner {
+    border-left: 12px solid transparent;
     border-right: 0 none;
     right: 2px;
 }
 
-.ui-wijtooltip-arrow-bc .ui-wijtooltip-pointer-inner {
-    border-left: 8px dotted transparent;
-    border-right: 8px dotted transparent;
+.wijmo-wijtooltip-arrow-bc .wijmo-wijtooltip-pointer-inner {
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
     left: -8px;
 }
 
-.ui-wijtooltip-arrow-bl .ui-wijtooltip-pointer-inner {
+.wijmo-wijtooltip-arrow-bl .wijmo-wijtooltip-pointer-inner {
     border-left: 0 none;
-    border-right: 12px dotted transparent;
+    border-right: 12px solid transparent;
     left: 2px;
 }
 
-.ui-wijtooltip-arrow-lb .ui-wijtooltip-pointer, .ui-wijtooltip-arrow-lc .ui-wijtooltip-pointer, .ui-wijtooltip-arrow-lt .ui-wijtooltip-pointer {
+.wijmo-wijtooltip-arrow-lb .wijmo-wijtooltip-pointer, .wijmo-wijtooltip-arrow-lc .wijmo-wijtooltip-pointer, .wijmo-wijtooltip-arrow-lt .wijmo-wijtooltip-pointer {
     border-left: 0 none;
     border-right-width: 14px;
     left: -14px;
 }
 
-.ui-wijtooltip-arrow-lb .ui-wijtooltip-pointer {
+.wijmo-wijtooltip-arrow-lb .wijmo-wijtooltip-pointer {
     border-bottom: 0 none;
-    border-top: 18px dotted transparent;
+    border-top: 18px solid transparent;
     bottom: 10px;
 }
 
-.ui-wijtooltip-arrow-lc .ui-wijtooltip-pointer {
-    border-bottom: 10px dotted transparent;
-    border-top: 10px dotted transparent;
+.wijmo-wijtooltip-arrow-lc .wijmo-wijtooltip-pointer {
+    border-bottom: 10px solid transparent;
+    border-top: 10px solid transparent;
     bottom: 50%;
     margin-bottom: -10px;
 }
 
-.ui-wijtooltip-arrow-lt .ui-wijtooltip-pointer {
-    border-bottom: 18px dotted transparent;
+.wijmo-wijtooltip-arrow-lt .wijmo-wijtooltip-pointer {
+    border-bottom: 18px solid transparent;
     border-top: 0 none;
     top: 10px;
 }
 
-.ui-wijtooltip-arrow-lb .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-lc .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-lt .ui-wijtooltip-pointer-inner {
+.wijmo-wijtooltip-arrow-lb .wijmo-wijtooltip-pointer-inner, .wijmo-wijtooltip-arrow-lc .wijmo-wijtooltip-pointer-inner, .wijmo-wijtooltip-arrow-lt .wijmo-wijtooltip-pointer-inner {
     border-right-color: inherit;
     border-right-style: solid;
     border-right-width: 10px;
@@ -235,20 +235,20 @@ padding:0.4em;
 	*font-size:0;line-height:0;
 }
 
-.ui-wijtooltip-arrow-lb .ui-wijtooltip-pointer-inner {
+.wijmo-wijtooltip-arrow-lb .wijmo-wijtooltip-pointer-inner {
     border-bottom: 0 none;
-    border-top: 12px dotted transparent;
+    border-top: 12px solid transparent;
     bottom: 2px;
 }
 
-.ui-wijtooltip-arrow-lc .ui-wijtooltip-pointer-inner {
-    border-bottom: 8px dotted transparent;
-    border-top: 8px dotted transparent;
+.wijmo-wijtooltip-arrow-lc .wijmo-wijtooltip-pointer-inner {
+    border-bottom: 8px solid transparent;
+    border-top: 8px solid transparent;
     bottom: -8px;
 }
 
-.ui-wijtooltip-arrow-lt .ui-wijtooltip-pointer-inner {
-    border-bottom-style: dotted;
+.wijmo-wijtooltip-arrow-lt .wijmo-wijtooltip-pointer-inner {
+    border-bottom-style: solid;
     border-bottom-color: inherit;
     border-bottom-width: 12px;
     border-top: 0 none;

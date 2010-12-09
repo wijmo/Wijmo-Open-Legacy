@@ -1,4 +1,4 @@
-﻿/*.ui-wijaccordion.ui-helper-horizontal > .ui-widget-content
+﻿/*.wijmo-wijaccordion.ui-helper-horizontal > .ui-widget-content
 {
     width: 200px;
     height: 200px;  
@@ -8,7 +8,7 @@
     margin-bottom:0;    
 }
 
-.ui-wijaccordion.ui-helper-horizontal > .ui-accordion-header
+.wijmo-wijaccordion.ui-helper-horizontal > .ui-accordion-header
 {
     height: 200px;	
     padding-top:0;

@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 0.8.2
+ * Wijmo Library 0.9.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -18,7 +18,8 @@
  *	jquery.ui.position.js
  *	jquery.effects.core.js	
  *	jquery.cookie.js
-  *
+ *  jquery.wijmo.wijsuperpanel.js
+ *	jquery.wijmo.wijutil.js
  */
  (function($) {
 
@@ -33,14 +34,15 @@ function getNextListId() {
 	return ++listId;
 }
 
-$.widget("ui.wijtabs", {
+$.widget("wijmo.wijtabs", {
 	options: {
 		///	<summary>
-		///		Determines the tabs' alignment in respect to the content
+		///		Determines the tabs' alignment in respect to the content.
+		///     Possible values are: 'top', 'bottom', 'left' and 'right'.
 		///	</summary>
 		alignment: 'top',
 		///	<summary>
-		///		Determines whether the tab can be dragged to a new position
+		///		Determines whether the tab can be dragged to a new position.
 		///	</summary>
 		sortable: false,
 		///	<summary>
@@ -264,7 +266,7 @@ $.widget("ui.wijtabs", {
 		var props = ['width', 'height', 'overflow'];
 		$.effects.save(this.element, props);
 		$.effects.save(this.list, props);
-		$.effects.save(this.element.find('.ui-wijtabs-content'), props);
+		$.effects.save(this.element.find('.wijmo-wijtabs-content'), props);
 		this.list.width(this.list.width());
 		
 		$hide = this.panels.filter(':not(.ui-tabs-hide)');
@@ -276,29 +278,29 @@ $.widget("ui.wijtabs", {
 		var props = ['width', 'height', 'overflow'];
 		$.effects.restore(this.element, props);
 		$.effects.restore(this.list, props);
-		$.effects.restore(this.element.find('.ui-wijtabs-content'), props);
+		$.effects.restore(this.element.find('.wijmo-wijtabs-content'), props);
 	},
 	
 	_hideContent: function(){
-		var content=this.element.find('.ui-wijtabs-content');
+		var content=this.element.find('.wijmo-wijtabs-content');
 		if (content.length){
 			this._saveLayout();
-			content.addClass('ui-tabs-hide');
+			content.addClass('ui-tabs-hide').attr('aria-hidden', true);
 			this.element.width(this.list.outerWidth(true));
 		}
 	},
 	
 	_showContent: function(){
-		var content=this.element.find('.ui-wijtabs-content');
+		var content=this.element.find('.wijmo-wijtabs-content');
 		if (content.length){
 			this._restoreLayout();
-			content.removeClass('ui-tabs-hide');
+			content.removeClass('ui-tabs-hide').attr('aria-hidden', false);
 		}
 	},
 	
 	_blindPanel: function(panel, mode){
 		var o = this.options;
-		var content = panel.parent('.ui-wijtabs-content');
+		var content = panel.parent('.wijmo-wijtabs-content');
 		if (!content.length) { return; }
 
 		this.list.width(this.list.width());		
@@ -306,7 +308,7 @@ $.widget("ui.wijtabs", {
 		$.effects.save(panel, props); panel.show(); // Save & Show
 		
 		if (mode == 'show')	{
-			panel.removeClass('ui-tabs-hide'); // Show
+			panel.removeClass('ui-tabs-hide').attr('aria-hidden', false); // Show
 			panel.width(this.element.data('panel.width'));
 		}else{
 			panel.width(panel.width());
@@ -333,8 +335,8 @@ $.widget("ui.wijtabs", {
 			},
 			complete: function() {
 				if(mode == 'hide') {
-					self.lis.removeClass('ui-tabs-selected ui-state-active');
-					panel.addClass('ui-tabs-hide'); // Hide
+					self.lis.removeClass('ui-tabs-selected ui-state-active').attr('aria-selected', false);
+					panel.addClass('ui-tabs-hide').attr('aria-hidden', true); // Hide
 				}else{
 					panel.css('width', '');
 				}
@@ -430,8 +432,12 @@ $.widget("ui.wijtabs", {
 		
 		// initialization from scratch
 		if (init) {
-
-			this.element.addClass('ui-tabs ui-wijtabs' + ' ui-tabs-' + tabsAlign + ' ui-widget ui-widget-content ui-corner-all ui-helper-clearfix');
+			// ARIA
+			this.list.attr( "role", "tablist" );
+			this.lis.attr( "role", "tab" );
+			this.panels.attr( "role", "tabpanel" );
+		
+			this.element.addClass('ui-tabs wijmo-wijtabs' + ' ui-tabs-' + tabsAlign + ' ui-widget ui-widget-content ui-corner-all ui-helper-clearfix');
 			this.list.addClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
 			this.lis.addClass('ui-state-default' + ' ui-corner-' + tabsAlign);
 			this.panels.addClass('ui-tabs-panel ui-widget-content ui-corner-' + panelCorner);
@@ -444,12 +450,12 @@ $.widget("ui.wijtabs", {
 				break;
 				
 				case 'left':
-					content = $('<div/>').addClass('ui-wijtabs-content').appendTo(this.element);
+					content = $('<div/>').addClass('wijmo-wijtabs-content').appendTo(this.element);
 					this.panels.appendTo(content);
 				break;
 				
 				case 'right':
-					content = $('<div/>').addClass('ui-wijtabs-content').insertBefore(this.list);
+					content = $('<div/>').addClass('wijmo-wijtabs-content').insertBefore(this.list);
 					this.panels.appendTo(content);
 				break;
 				
@@ -500,11 +506,11 @@ $.widget("ui.wijtabs", {
 			}
 
 			// highlight selected tab
-			this.panels.addClass('ui-tabs-hide');
-			this.lis.removeClass('ui-tabs-selected ui-state-active');
+			this.panels.addClass('ui-tabs-hide').attr('aria-hidden', true);
+			this.lis.removeClass('ui-tabs-selected ui-state-active').attr('aria-selected', false);
 			if (o.selected >= 0 && this.anchors.length) { // check for length avoids error when initializing empty list
-				this.panels.eq(o.selected).removeClass('ui-tabs-hide');
-				this.lis.eq(o.selected).addClass('ui-tabs-selected ui-state-active');
+				this.panels.eq(o.selected).removeClass('ui-tabs-hide').attr('aria-hidden', false);
+				this.lis.eq(o.selected).addClass('ui-tabs-selected ui-state-active').attr('aria-selected', true);
 
 				// seems to be expected behavior that the show callback is fired
 				self.element.queue("tabs", function() {
@@ -537,6 +543,9 @@ $.widget("ui.wijtabs", {
 		for (var i = 0, li; (li = this.lis[i]); i++) {
 			$(li)[$.inArray(i, o.disabled) != -1 &&
 				!$(li).hasClass('ui-tabs-selected') ? 'addClass' : 'removeClass']('ui-state-disabled');
+			if ($(li).hasClass('ui-state-disabled')){
+				$(li).attr('aria-disabled', true);
+			}
 		}
 
 		// reset cache if switching from cached to not cached
@@ -579,15 +588,15 @@ $.widget("ui.wijtabs", {
 		// Show a tab...
 		var showTab = ((o.showOption.blind || o.showOption.fade) && o.showOption.duration > 0) ?
 			function(clicked, $show) {
-				$(clicked).closest('li').addClass('ui-tabs-selected ui-state-active');
+				$(clicked).closest('li').addClass('ui-tabs-selected ui-state-active').attr('aria-selected', true);
 				self._showContent();
-				$show.removeClass('ui-tabs-hide');
+				$show.removeClass('ui-tabs-hide').attr('aria-hidden', false);
 				
 				if (tabsAlign == 'top' || tabsAlign == 'bottom'){
 					var props = { duration: o.showOption.duration };
 					if (o.showOption.blind) { props.height = 'toggle'; }
 					if (o.showOption.fade) { props.opacity = 'toggle'; }
-					$show.hide().removeClass('ui-tabs-hide') // avoid flicker that way
+					$show.hide().removeClass('ui-tabs-hide').attr('aria-hidden', false) // avoid flicker that way
 					.animate(props, o.showOption.duration || 'normal', function() {
 						self._resetStyle($show);
 						self._trigger('show', null, self._ui(clicked, $show[0]));
@@ -598,9 +607,9 @@ $.widget("ui.wijtabs", {
 				}
 			} :
 			function(clicked, $show) {
-				$(clicked).closest('li').addClass('ui-tabs-selected ui-state-active');
+				$(clicked).closest('li').addClass('ui-tabs-selected ui-state-active').attr('aria-selected', true);
 				self._showContent();
-				$show.removeClass('ui-tabs-hide');
+				$show.removeClass('ui-tabs-hide').attr('aria-hidden', false);
 				self._trigger('show', null, self._ui(clicked, $show[0]));
 			};
 		
@@ -612,8 +621,8 @@ $.widget("ui.wijtabs", {
 					if (o.hideOption.blind) { props.height = 'toggle'; }
 					if (o.hideOption.fade) { props.opacity = 'toggle'; }
 					$hide.animate(props, o.hideOption.duration || 'normal', function() {
-						self.lis.removeClass('ui-tabs-selected ui-state-active');
-						$hide.addClass('ui-tabs-hide');
+						self.lis.removeClass('ui-tabs-selected ui-state-active').attr('aria-selected', false);
+						$hide.addClass('ui-tabs-hide').attr('aria-hidden', true);
 						self._resetStyle($hide);
 						self.element.dequeue("tabs");
 					});	
@@ -623,9 +632,9 @@ $.widget("ui.wijtabs", {
 				}
 			} :
 			function(clicked, $hide, $show) {
-				self.lis.removeClass('ui-tabs-selected ui-state-active');
+				self.lis.removeClass('ui-tabs-selected ui-state-active').attr('aria-selected', false);
 				self._hideContent();
-				$hide.addClass('ui-tabs-hide');
+				$hide.addClass('ui-tabs-hide').attr('aria-hidden', true);
 				self.element.dequeue("tabs");
 			};
 		
@@ -727,7 +736,7 @@ $.widget("ui.wijtabs", {
 		this._removeScroller();
 		this.element.unbind('.tabs')
 			.removeClass([
-				'ui-wijtabs', 
+				'wijmo-wijtabs', 
 				'ui-tabs-top', 
 				'ui-tabs-bottom', 
 				'ui-tabs-left', 
@@ -739,9 +748,11 @@ $.widget("ui.wijtabs", {
 				'ui-tabs-collapsible',
 				'ui-helper-clearfix'
 				].join(' '))
-			.removeData('tabs');
+			.removeData('tabs')
+			.removeAttr('role');
 
-		this.list.removeClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
+		this.list.removeClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all')
+			.removeAttr('role');
 
 		this.anchors.each(function() {
 			var href = $.data(this, 'href.tabs');
@@ -757,8 +768,7 @@ $.widget("ui.wijtabs", {
 		this.lis.unbind('.tabs').add(this.panels).each(function() {
 			if ($.data(this, 'destroy.tabs')) {
 				$(this).remove();
-			}
-			else {
+			}else {
 				$(this).removeClass([
 					'ui-state-default',
 					'ui-corner-top',
@@ -773,11 +783,15 @@ $.widget("ui.wijtabs", {
 					'ui-tabs-panel',
 					'ui-widget-content',
 					'ui-tabs-hide'
-				].join(' ')).css({position:'', left: '', top: ''});
+				].join(' ')).css({position:'', left: '', top: ''})
+				.removeAttr('role')
+				.removeAttr('aria-hidden')
+				.removeAttr('aria-selected')
+				.removeAttr('aria-disabled');
 			}
 		});
 		
-		var content = $('.ui-wijtabs-content');
+		var content = $('.wijmo-wijtabs-content');
 		if (content.length){
 			content.replaceWith(content.contents());
 		}
@@ -804,14 +818,19 @@ $.widget("ui.wijtabs", {
 
 		var tabsAlign = this._getAlignment(),
 		panelCorner = this._getAlignment(false);
-		$li.addClass('ui-state-default' + ' ui-corner-' + tabsAlign).data('destroy.tabs', true);
+		$li.addClass('ui-state-default' + ' ui-corner-' + tabsAlign)
+			.data('destroy.tabs', true)
+			.attr('role', 'tab')
+			.attr('aria-selected', false);
 
 		// try to find an existing element before creating a new one
 		var $panel = $('#' + id);
 		if (!$panel.length) {
-			$panel = $(o.panelTemplate).attr('id', id).data('destroy.tabs', true);
+			$panel = $(o.panelTemplate).attr('id', id)
+					.data('destroy.tabs', true)
+					.attr('role', 'tabpanel');
 		}
-		$panel.addClass('ui-tabs-panel ui-widget-content ui-corner-' + panelCorner + ' ui-tabs-hide');
+		$panel.addClass('ui-tabs-panel ui-widget-content ui-corner-' + panelCorner + ' ui-tabs-hide').attr('aria-hidden', true);
 
 		if (index >= this.lis.length) {
 			$li.appendTo(this.list);
@@ -833,8 +852,8 @@ $.widget("ui.wijtabs", {
 
 		if (this.anchors.length == 1) { // after tabify
 			o.selected = 0;
-			$li.addClass('ui-tabs-selected ui-state-active');
-			$panel.removeClass('ui-tabs-hide');
+			$li.addClass('ui-tabs-selected ui-state-active').attr('aria-selected', true);
+			$panel.removeClass('ui-tabs-hide').attr('aria-hidden', false);
 			this.element.queue("tabs", function() {
 				self._trigger('show', null, self._ui(self.anchors[0], self.panels[0]));
 			});
@@ -877,7 +896,7 @@ $.widget("ui.wijtabs", {
 			return;
 		}
 
-		this.lis.eq(index).removeClass('ui-state-disabled');
+		this.lis.eq(index).removeClass('ui-state-disabled').removeAttr('aria-disabled');
 		o.disabled = $.grep(o.disabled, function(n, i) { return n != index; });
 
 		// callback
@@ -890,7 +909,7 @@ $.widget("ui.wijtabs", {
 		/// <param name="index" type="Number">The zero-based index of the tab to be disabled.</param>
 		var self = this, o = this.options;
 		if (index != o.selected) { // cannot disable already selected tab
-			this.lis.eq(index).addClass('ui-state-disabled');
+			this.lis.eq(index).addClass('ui-state-disabled').attr('aria-disabled', true);
 
 			o.disabled.push(index);
 			o.disabled.sort();

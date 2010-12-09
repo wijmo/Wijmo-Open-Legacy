@@ -1,42 +1,42 @@
 /* SuperPanel
 ----------------------------------*/
-.ui-wijsuperpanel
+.wijmo-wijsuperpanel
 {
     overflow: hidden;
     outline: none;
     background-image: none;
 }
-.ui-wijsuperpanel-statecontainer
+.wijmo-wijsuperpanel-statecontainer
 {
     overflow: hidden;
     position: relative;
     zoom:1;
 }
-.ui-wijsuperpanel-contentwrapper
+.wijmo-wijsuperpanel-contentwrapper
 {
     position: absolute;
     overflow: hidden;
 
 }
-.ui-wijsuperpanel-hbarcontainer, .ui-wijsuperpanel-vbarcontainer
+.wijmo-wijsuperpanel-hbarcontainer, .wijmo-wijsuperpanel-vbarcontainer
 {
     font-size: 0px;
     border:0;
 }
-.ui-wijsuperpanel-templateouterwrapper
+.wijmo-wijsuperpanel-templateouterwrapper
 {
     position: relative; 
 /*    overflow:auto; */
     zoom: 1;
 }
 
-.ui-wijsuperpanel-vbarcontainer .ui-state-default, .ui-wijsuperpanel-hbarcontainer .ui-state-default
+.wijmo-wijsuperpanel-vbarcontainer .ui-state-default, .wijmo-wijsuperpanel-hbarcontainer .ui-state-default
 {
     width: 16px;
     height: 16px;
     position: absolute;
 }
-.ui-wijsuperpanel .ui-wijsuperpanel-vbarcontainer
+.wijmo-wijsuperpanel .wijmo-wijsuperpanel-vbarcontainer
 {
     position: absolute;
     width: 18px;
@@ -44,7 +44,7 @@
     padding-bottom: 18px;
     border: none;
 }
-.ui-wijsuperpanel .ui-wijsuperpanel-hbarcontainer
+.wijmo-wijsuperpanel .wijmo-wijsuperpanel-hbarcontainer
 {
     position: absolute;
     height: 18px;
@@ -52,46 +52,46 @@
     padding-right: 18px;
     border: none;
 }
-.ui-wijsuperpanel-handle
+.wijmo-wijsuperpanel-handle
 {
     position: absolute;
     font-size:0px;
     overflow:hidden;
 }
-.ui-wijsuperpanel-handle *
+.wijmo-wijsuperpanel-handle *
 {
     font-size:0px;
 }
-.ui-wijsuperpanel-helper
+.wijmo-wijsuperpanel-helper
 {
     border-style: dotted;
     background: transparent;
 }
 
-.ui-wijsuperpanel-button
+.wijmo-wijsuperpanel-button
 {
     position: absolute;
     padding: 4px;
 }
-.ui-wijsuperpanel .ui-icon-gripsmall-diagonal-se
+.wijmo-wijsuperpanel .ui-icon-gripsmall-diagonal-se
 {
     background: none;
     width: 7px;
     height: 7px;
 }
-.ui-wijsuperpanel-hbar-buttonleft
+.wijmo-wijsuperpanel-hbar-buttonleft
 {
     left: 0;
 }
-.ui-wijsuperpanel-hbar-buttonright
+.wijmo-wijsuperpanel-hbar-buttonright
 {
     right: 0;
 }
-.ui-wijsuperpanel-vbar-buttontop
+.wijmo-wijsuperpanel-vbar-buttontop
 {
     top: 0;
 }
-.ui-wijsuperpanel-vbar-buttonbottom
+.wijmo-wijsuperpanel-vbar-buttonbottom
 {
     bottom: 0;
 }

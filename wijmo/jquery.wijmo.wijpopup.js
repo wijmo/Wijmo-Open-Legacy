@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 0.8.2
+ * Wijmo Library 0.9.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -42,7 +42,7 @@
 	});
 
 
-	$.widget("ui.wijpopup", {
+	$.widget("wijmo.wijpopup", {
 		options: {
 			///	<summary>
 			///     Determines if the element's parent element is the outermost element. 

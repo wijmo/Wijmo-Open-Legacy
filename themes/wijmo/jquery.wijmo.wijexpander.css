@@ -1,37 +1,37 @@
-﻿.ui-wijexpander
+﻿.wijmo-wijexpander
 {
     margin: 1px;
     padding: 0;
     display: block;
 }
 
-.ui-wijexpander a
+.wijmo-wijexpander a
 {
     outline: none;
 }
 
-.ui-wijexpander .ui-expander-header
+.wijmo-wijexpander .ui-expander-header
 {
     cursor: pointer;
     margin-top: 1px;
     position: relative;
 }
-/*.ui-wijexpander.ui-helper-horizontal > .ui-expander-header
+/*.wijmo-wijexpander.ui-helper-horizontal > .ui-expander-header
 {
     cursor: pointer;
     width: 20px;
     height: 200px;
 }
-.ui-wijexpander.ui-state-disabled > .ui-expander-header
+.wijmo-wijexpander.ui-state-disabled > .ui-expander-header
 {
     cursor: default;
 }
-.ui-wijexpander > .ui-widget-content
+.wijmo-wijexpander > .ui-widget-content
 {
     height: 100px;
     overflow: auto;
 }
-.ui-wijexpander.ui-state-disabled > .ui-widget-content
+.wijmo-wijexpander.ui-state-disabled > .ui-widget-content
 {
 }*/
 
@@ -49,14 +49,14 @@
 }
 
 
-.ui-wijexpander .ui-expander-header a
+.wijmo-wijexpander .ui-expander-header a
 {
     display: block;
     font-size: 1em;
     padding: 0.5em 0.5em 0.5em 0.7em;
 }
 
-.ui-wijexpander .ui-expander-header .ui-icon
+.wijmo-wijexpander .ui-expander-header .ui-icon
 {
     left: 0.5em;
     margin-top: -8px;
@@ -64,7 +64,7 @@
     top: 50%;
 }
 
-.ui-wijexpander .ui-expander-content-active
+.wijmo-wijexpander .ui-expander-content-active
 {
     display: block;
     border-top: 0 none;
@@ -72,12 +72,12 @@
 }
 
 
-.ui-wijexpander .ui-expander-header > a
+.wijmo-wijexpander .ui-expander-header > a
 {
     padding-left: 2.2em;
 }
 
-.ui-helper-horizontal.ui-wijexpander .ui-expander-header .ui-icon
+.ui-helper-horizontal.wijmo-wijexpander .ui-expander-header .ui-icon
 {
     left: inherit;
     margin-top: inherit;
@@ -87,7 +87,7 @@
     left: 50%;
 }
 
-.ui-helper-horizontal.ui-wijexpander .ui-expander-header > a
+.ui-helper-horizontal.wijmo-wijexpander .ui-expander-header > a
 {
     padding-left: inherit;
     padding-top: 2.2em;

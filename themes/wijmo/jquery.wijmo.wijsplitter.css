@@ -1,20 +1,22 @@
 ﻿/* WijSplitter
 ----------------------------------*/
 
-.ui-wijsplitter-vertical
+.wijmo-wijsplitter-vertical
 {
-    overflow: hidden;
+    overflow: hidden; 
+    /* fixed bug for IE6.7 */
+    position: relative;
 }
-.ui-wijsplitter-v-panel1
+.wijmo-wijsplitter-v-panel1
 {
     float: left;
     position: relative;
 }
-.ui-wijsplitter-v-panel1-content
+.wijmo-wijsplitter-v-panel1-content
 {
     position: relative;
 }
-.ui-wijsplitter-v-bar
+.wijmo-wijsplitter-v-bar
 {
     float: left;
     position: relative;
@@ -22,85 +24,133 @@
     width: 2px;
     z-index:99999;
 }
-.ui-wijsplitter-v-expander
+
+.wijmo-wijsplitter-vertical .ui-resizable-e
+{
+	right:-7px;
+	width:10px;
+	z-index:999999;
+	display:block;
+	background-color:white;
+	filter:alpha(opacity=0);
+	-moz-opacity:0;
+	opacity: 0;
+}
+
+*html .wijmo-wijsplitter-vertical .ui-resizable-e
+{
+	right:-4px;
+}
+
+*+html .wijmo-wijsplitter-vertical .ui-resizable-e
+{
+	right:-4px;
+}
+
+.wijmo-wijsplitter-v-expander
 {
     position: absolute;
     z-index: 99999;
 }
 
-.ui-wijsplitter-v-expanded .ui-wijsplitter-v-expander
+.wijmo-wijsplitter-v-expanded .wijmo-wijsplitter-v-expander
 {
         left: -18px;
         z-index: 999999;
 }
 
-.ui-wijsplitter-v-collapsed .ui-wijsplitter-v-expander
+.wijmo-wijsplitter-v-collapsed .wijmo-wijsplitter-v-expander
 {
         right: -18px;
         z-index: 999999;
 }
 
-.ui-wijsplitter-v-panel2
+.wijmo-wijsplitter-v-panel2
 {
     float: left;
 }
-.ui-wijsplitter-v-panel2-content
+.wijmo-wijsplitter-v-panel2-content
 {
     position: relative;
 }
-.ui-wijsplitter-v-resize-hepler
+.wijmo-wijsplitter-v-resize-hepler
 {
     border-right: dotted 1px black;
     overflow: hidden;
     border-bottom: dotted 0 black;
 }
 
-.ui-wijsplitter-horizontal
+.wijmo-wijsplitter-horizontal
 {
     overflow: hidden;
+    /* fixed bug for IE6.7 */
+    position: relative;
 }
-.ui-wijsplitter-h-panel1
+.wijmo-wijsplitter-h-panel1
 {
     position: relative;
 }
-.ui-wijsplitter-h-panel1-content
+.wijmo-wijsplitter-h-panel1-content
 {
     overflow: auto;
     position: relative;
 }
-.ui-wijsplitter-h-bar
+.wijmo-wijsplitter-h-bar
 {
     position: relative;
     font-size: 1px;
     height: 2px;
     z-index:99999;
 }
-.ui-wijsplitter-h-expander
+
+.wijmo-wijsplitter-horizontal .ui-resizable-s
+{
+	bottom:-7px;
+	height:10px;
+	z-index:999999;
+	display:block;
+	background-color:white;
+	filter:alpha(opacity=0);
+	-moz-opacity:0;
+	opacity: 0;
+}
+
+*html .wijmo-wijsplitter-horizontal .ui-resizable-s
+{
+	bottom:-4px;
+}
+
+*+html .wijmo-wijsplitter-horizontal .ui-resizable-s
+{
+	bottom:-4px;
+}
+
+.wijmo-wijsplitter-h-expander
 {
     position: absolute;
     z-index: 99999;
 }
 
 
-.ui-wijsplitter-h-expanded .ui-wijsplitter-h-expander
+.wijmo-wijsplitter-h-expanded .wijmo-wijsplitter-h-expander
 {
         top: -18px;
 }
 
-.ui-wijsplitter-h-collapsed .ui-wijsplitter-h-expander
+.wijmo-wijsplitter-h-collapsed .wijmo-wijsplitter-h-expander
 {
         bottom: -18px;
 }
 
-.ui-wijsplitter-h-panel2
+.wijmo-wijsplitter-h-panel2
 {
 }
-.ui-wijsplitter-h-panel2-content
+.wijmo-wijsplitter-h-panel2-content
 {
     overflow: auto;
     position: relative;
 }
-.ui-wijsplitter-h-resize-hepler
+.wijmo-wijsplitter-h-resize-hepler
 {
     border-bottom: dotted 1px black;
     overflow: hidden;

@@ -1,16 +1,16 @@
 ﻿  /* WijSlider  horizontal
 ----------------------------------*/
-.ui-wijslider-horizontal
+.wijmo-wijslider-horizontal
 {
 	position: relative;
 }     
         
-.ui-wijslider-horizontal .ui-wijslider-track
+.wijmo-wijslider-horizontal .wijmo-wijslider-track
 {
     
 }
         
-.ui-wijslider-horizontal .ui-wijslider-decbutton
+.wijmo-wijslider-horizontal .wijmo-wijslider-decbutton
 {
     position: absolute;
     left: 0px;
@@ -18,7 +18,7 @@
     cursor:pointer;
 }
 
-.ui-wijslider-horizontal .ui-wijslider-incbutton
+.wijmo-wijslider-horizontal .wijmo-wijslider-incbutton
 {
     position: absolute;
     left: auto;
@@ -28,17 +28,17 @@
 
   /* WijSlider  vertical
 ----------------------------------*/
-.ui-wijslider-vertical
+.wijmo-wijslider-vertical
 {
 	position: relative;
 }     
         
-.ui-wijslider-vertical .ui-wijslider-track
+.wijmo-wijslider-vertical .wijmo-wijslider-track
 {
     
 }
         
-.ui-wijslider-vertical .ui-wijslider-decbutton
+.wijmo-wijslider-vertical .wijmo-wijslider-decbutton
 {
     position: absolute;
     top: 0px;
@@ -46,7 +46,7 @@
     cursor:pointer;
 }
 
-.ui-wijslider-vertical .ui-wijslider-incbutton
+.wijmo-wijslider-vertical .wijmo-wijslider-incbutton
 {
     position: absolute;
     top: auto;

@@ -1,6 +1,7 @@
+/*globals window document jQuery */
 /*
  *
- * Wijmo Library 0.8.2
+ * Wijmo Library 0.9.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -20,47 +21,61 @@
  *	jquery.mousewheel.js
  *
  */
+"use strict";
 (function ($) {
-	var uiSuperPanelClasses = "ui-wijsuperpanel " + "ui-widget " + "ui-widget-content",
+	var uiSuperPanelClasses = "wijmo-wijsuperpanel " + "ui-widget " + "ui-widget-content",
 		rounderClass = "ui-corner-all",
 		uiStateDisabled = "ui-state-disabled",
 		uiStateHover = "ui-state-hover",
 		uiStateActive = "ui-state-active",
 		uiStateDefault = "ui-state-default",
-		scrollerHandle = "ui-wijsuperpanel-handle",
-		hbarContainerCSS = "ui-wijsuperpanel-hbarcontainer",
-		vbarContainerCSS = "ui-wijsuperpanel-vbarcontainer",
+		scrollerHandle = "wijmo-wijsuperpanel-handle",
+		hbarContainerCSS = "wijmo-wijsuperpanel-hbarcontainer",
+		vbarContainerCSS = "wijmo-wijsuperpanel-vbarcontainer",
 		innerElementHtml =
-				"<div class='ui-wijsuperpanel-statecontainer'>" +
-				"<div class='ui-wijsuperpanel-contentwrapper'>" +
-				"<div class='ui-wijsuperpanel-templateouterwrapper'></div>" +
+				"<div class='wijmo-wijsuperpanel-statecontainer'>" +
+				"<div class='wijmo-wijsuperpanel-contentwrapper'>" +
+				"<div class='wijmo-wijsuperpanel-templateouterwrapper'></div>" +
 				"</div>" +
 				"</div>",
-		hbarHtml = "<div class='ui-wijsuperpanel-hbarcontainer ui-widget-header'>" +
-				"<div class='ui-wijsuperpanel-handle ui-state-default ui-corner-all'><span class='ui-icon ui-icon-grip-solid-vertical'></span></div>" +
-				"<div class='ui-wijsuperpanel-hbar-buttonleft ui-state-default ui-corner-bl'><span class='ui-icon ui-icon-triangle-1-w'></span></div>" +
-				"<div class='ui-wijsuperpanel-hbar-buttonright ui-state-default ui-corner-br'><span class='ui-icon ui-icon-triangle-1-e'></span></div>" +
+		hbarHtml = "<div class='wijmo-wijsuperpanel-hbarcontainer ui-widget-header'>" +
+				"<div class='wijmo-wijsuperpanel-handle ui-state-default ui-corner-" +
+				"all'><span class='ui-icon ui-icon-grip-solid-vertical'></span></div>" +
+				"<div class='wijmo-wijsuperpanel-hbar-buttonleft ui-state-default " +
+				"ui-corner-bl'><span class='ui-icon ui-icon-triangle-1-w'></span></div>" +
+				"<div class='wijmo-wijsuperpanel-hbar-buttonright ui-state-default " +
+				"ui-corner-br'><span class='ui-icon ui-icon-triangle-1-e'></span></div>" +
 				"</div>",
-		vbarHtml = "<div class='ui-wijsuperpanel-vbarcontainer ui-widget-header'>" +
-				"<div class='ui-wijsuperpanel-handle ui-state-default ui-corner-all'><span class='ui-icon ui-icon-grip-solid-horizontal'></span></div>" +
-				"<div class='ui-wijsuperpanel-vbar-buttontop ui-state-default ui-corner-tr'><span class='ui-icon ui-icon-triangle-1-n'></span></div>" +
-				"<div class='ui-wijsuperpanel-vbar-buttonbottom ui-state-default ui-corner-br'><span class='ui-icon ui-icon-triangle-1-s'></span></div>" +
+		vbarHtml = "<div class='wijmo-wijsuperpanel-vbarcontainer ui-widget-header'>" +
+				"<div class='wijmo-wijsuperpanel-handle ui-state-default ui-corner-all'" +
+				"><span class='ui-icon ui-icon-grip-solid-horizontal'></span></div>" +
+				"<div class='wijmo-wijsuperpanel-vbar-buttontop ui-state-default " +
+				"ui-corner-tr'><span class='ui-icon ui-icon-triangle-1-n'></span></div>" +
+				"<div class='wijmo-wijsuperpanel-vbar-buttonbottom ui-state-default " +
+				"ui-corner-br'><span class='ui-icon ui-icon-triangle-1-s'></span></div>" +
 				"</div>",
-		hButtons = "<div class='ui-state-default ui-wijsuperpanel-button ui-wijsuperpanel-buttonleft'><span class='ui-icon ui-icon-carat-1-w'></span></div>" +
-				"<div class='ui-state-default ui-wijsuperpanel-button ui-wijsuperpanel-buttonright'><span class='ui-icon ui-icon-carat-1-e'></span></div>",
-		vButtons = "<div class='ui-state-default ui-wijsuperpanel-button ui-wijsuperpanel-buttontop'><span class='ui-icon ui-icon-carat-1-n'></span></div>" +
-				"<div class='ui-state-default ui-wijsuperpanel-button ui-wijsuperpanel-buttonbottom'><span class='ui-icon ui-icon-carat-1-s'></span></div>";
+		hButtons = "<div class='ui-state-default wijmo-wijsuperpanel-button " +
+				"wijmo-wijsuperpanel-buttonleft'><span class='ui-icon " +
+				"ui-icon-carat-1-w'></span></div><div class='ui-state-default" +
+				" wijmo-wijsuperpanel-button wijmo-wijsuperpanel-buttonright'>" +
+				"<span class='ui-icon ui-icon-carat-1-e'></span></div>",
+		vButtons = "<div class='ui-state-default wijmo-wijsuperpanel-button" +
+		" wijmo-wijsuperpanel-buttontop'><span class='ui-icon ui-icon-carat-1-n'>" +
+				"</span></div><div class='ui-state-default wijmo-wijsuperpanel-button" +
+				" wijmo-wijsuperpanel-buttonbottom'><span class='ui-icon" +
+				" ui-icon-carat-1-s'></span></div>";
 
-	$.widget("ui.wijsuperpanel", {
+	$.widget("wijmo.wijsuperpanel", {
 		options: {
 			/// <summary>
-			/// A value determines whether wijsuperpanel can be resized.
+			/// This value determines whether the wijsuperpanel can be resized. 
 			/// Default: false.
 			/// Type: Boolean.
 			/// </summary>
 			allowResize: false,
 			/// <summary>
-			/// A value determines whether wijsuperpanel to automatically refresh when content size or wijsuperpanel size are changed.
+			/// This value determines whether wijsuperpanel to automatically refresh 
+			/// when content size or wijsuperpanel size are changed.
 			/// Default: false.
 			/// Type: Boolean.
 			/// </summary>
@@ -74,19 +89,19 @@
 			/// </remarks>
 			animationOptions: {
 				/// <summary>
-				/// A value determines whether to queue animation operations.
+				/// This value determines whether to queue animation operations.
 				/// Default: false.
 				/// Type: Boolean.
 				/// </summary>
 				queue: false,
 				/// <summary>
-				/// A value sets the animation duration of the scrolling animation.
+				/// This value sets the animation duration of the scrolling animation.
 				/// Default: 250.
 				/// Type: Number.
 				/// </summary>
 				duration: 250,
 				/// <summary>
-				/// A value sets the animation easing of the scrolling animation.
+				/// This value sets the animation easing of the scrolling animation.
 				/// Default: undefined.
 				/// Type: string.
 				/// </summary>
@@ -94,13 +109,13 @@
 			},
 
 			/// <summary>
-			/// A function gets called when thumb buttons of scrollbars dragging stops.
+			/// This function gets called when thumb buttons of scrollbars dragging stops.
 			/// Default: null.
 			/// Type: Function.
 			/// </summary>
 			dragstop: null,
 			/// <summary>
-			/// A function gets called after panel is painted.
+			/// This function gets called after panel is painted.
 			/// Default: null.
 			/// Type: Function.
 			/// </summary>
@@ -110,89 +125,106 @@
 			/// </summary>
 			hScroller: {
 				/// <summary>
-				/// A value determines the position of the horizontal scroll bar. 
+				/// This value determines the position of the horizontal scroll bar. 
 				/// Default: "bottom".
 				/// Type: String.
 				/// </summary>
 				/// <remarks>
 				/// Possible options are "bottom" and "top".
-				/// "bottom" - The horizontal scroll bar is placed at the bottom of the content area.
-				/// "top" - The horizontal scroll bar is placed at the top of the content area.
+				/// "bottom" - The horizontal scroll bar is placed at the bottom of 
+				/// the content area.
+				/// "top" - The horizontal scroll bar is placed at the top of the 
+				///content area.
 				/// </remarks>
 				scrollBarPosition: "bottom",
 				/// <summary>
-				/// A value determines the visibility of the horizontal scroll bar.
+				/// This value determines the visibility of the horizontal scroll bar.
 				/// Default: "auto".
 				/// Type: String
 				/// </summary>
 				/// <remarks>
 				/// Possible options are "auto", "visible" and "hidden".
 				/// "auto" - Shows the scroll when needed.
-				/// "visible" - Scroll bar will always be visible. It"s disabled when not needed.
+				/// "visible" - Scroll bar will always be visible. It"s disabled 
+				/// when not needed.
 				/// "hidden" - Scroll bar will be hidden.
 				/// </remarks>
 				scrollBarVisibility: "auto",
 				/// <summary>
-				/// A value determines the scroll mode of horizontal scrolling. 
+				/// This value determines the scroll mode of horizontal scrolling. 
 				/// Default: "scrollbar".
 				/// Type: String.
 				/// </summary>
 				/// <remarks>
-				/// Possible options are "scrollbar", "buttons", "buttonshover" and "edge".
+				/// Possible options are "scrollbar", "buttons", "buttonshover" 
+				/// and "edge".
 				/// "scrollbar" - Scroll bars are used for scrolling.
-				/// "buttons" - Scroll buttons are used for scrolling. Scrolling occurs only when scroll buttons are clicked.
-				/// "buttonshover" - Scroll buttons are used for scrolling. Scrolling occurs only when scroll buttons are hovered.
-				/// "edge" - Scrolling occurs when the mouse is moving to the edge of the content area.
+				/// "buttons" - Scroll buttons are used for scrolling. 
+				/// Scrolling occurs only when scroll buttons are clicked.
+				/// "buttonshover" - Scroll buttons are used for scrolling. 
+				/// Scrolling occurs only when scroll buttons are hovered.
+				/// "edge" - Scrolling occurs when the mouse is moving to the edge
+				/// of the content area.
 				/// Scroll modes can be combined with each other. 
-				/// For example, scrollMode: "scrollbar,scrollbuttons" will enable both a scrollbar and scroll buttons.
+				/// For example, scrollMode: "scrollbar,scrollbuttons" will enable 
+				/// both a scrollbar and scroll buttons.
 				/// </remarks>
 				scrollMode: "scrollbar",
 				/// <summary>
-				/// A value determines the horizontal scrolling position of wijsuperpanel.
+				/// This value determines the horizontal scrolling position of
+				/// wijsuperpanel.
 				/// Default: null.
 				/// Type: Number.
 				/// </summary>
 				scrollValue: null,
 				/// <summary>
-				/// A value sets the maximum value of horizontal scroller.
+				/// This value sets the maximum value of horizontal scroller.
 				/// Default: 100.
 				/// Type: Number.
 				/// </summary>
 				scrollMax: 100,
 				/// <summary>
-				/// A value sets the minimum value of horizontal scroller.
+				/// This value sets the minimum value of horizontal scroller.
 				/// Default: 0.
 				/// Type: Number.
 				/// </summary>
 				scrollMin: 0,
 				/// <summary>
-				/// A value sets the large change value of horizontal scroller.
+				/// This value sets the large change value of horizontal scroller.
 				/// Default: null.
 				/// Type: Number.
 				/// </summary>
 				/// <remarks>
-				/// wijsuperpanel will scroll a large change when a user clicks on the tracks of scroll bars or presses left or right arrow keys on the keyboard with the shift key down.
-				/// When scrollLargeChange is null, wijsuperpanel will scroll the width of content.
+				/// wijsuperpanel will scroll a large change when a user clicks on the 
+				/// tracks of scroll bars or presses left or right arrow keys on the 
+				/// keyboard with the shift key down.
+				/// When scrollLargeChange is null, wijsuperpanel will scroll 
+				/// the width of content.
 				/// </remarks>
 				scrollLargeChange: null,
 				/// <summary>
-				/// A value sets the small change value of horizontal scroller.
+				/// This value sets the small change value of horizontal scroller.
 				/// Default: null. 
 				/// Type: Number.
 				/// </summary>
 				/// <remarks>
-				/// wijsuperpanel will scroll a small change when a user clicks on the arrows of scroll bars, clicks or hovers scroll buttons, presses left or right arrow keys on keyboard, and hovers on the edge of wijsuperpanel.
-				/// When scrollSmallChange is null, wijsuperpanel will scroll half of the width of content.
+				/// wijsuperpanel will scroll a small change when a user clicks on 
+				/// the arrows of scroll bars, clicks or hovers scroll buttons, 
+				/// presses left or right arrow keys on keyboard, 
+				/// and hovers on the edge of wijsuperpanel.
+				/// When scrollSmallChange is null, wijsuperpanel will scroll half of 
+				/// the width of content.
 				/// </remarks>
 				scrollSmallChange: null,
 				/// <summary>
-				/// A value sets the minimum length, in pixel, of the horizontal scroll bar thumb button.
+				/// This value sets the minimum length, in pixel, of the horizontal 
+				/// scroll bar thumb button.
 				/// Default: 6.
 				/// Type: Number.
 				/// </summary>
 				scrollMinDragLength: 6,
 				/// <summary>
-				/// An object determines the increase button position. 
+				/// This object determines the increase button position. 
 				/// Default: null.
 				/// Type: Object.
 				/// </summary>
@@ -201,19 +233,21 @@
 				/// </remarks>
 				increaseButtonPosition: null,
 				/// <summary>
-				/// An object determines the decrease button position.
+				/// This object determines the decrease button position.
 				/// Default: 0.
 				/// Type: Object.
 				/// </summary>
 				decreaseButtonPosition: null,
 				/// <summary>
-				/// A value sets the width of horizontal hovering edge which will trigger the horizontal scrolling.
+				/// This value sets the width of horizontal hovering edge 
+				/// which will trigger the horizontal scrolling.
 				/// Default: 20.
 				/// Type: Number.
 				/// </summary>
 				hoverEdgeSpan: 20,
 				/// <summary>
-				/// The number specifies the value to add to smallchange or largechange when scrolling the first step(scrolling from scrollMin).
+				/// The number specifies the value to add to smallchange or largechange
+				/// when scrolling the first step(scrolling from scrollMin).
 				/// Default: 0.
 				/// Type: Number.
 				/// </summary>
@@ -221,19 +255,21 @@
 
 			},
 			/// <summary>
-			/// A value determins whether wijsuperpanel provides keyboard scrolling support.
+			/// A value determins whether wijsuperpanel provides 
+			/// keyboard scrolling support.
 			/// Default: false.
 			/// Type: Boolean.
 			/// </summary>
 			keyboardSupport: false,
 			/// <summary>
-			/// A value determines the time interval to call the scrolling function when doing continuous scrolling.
+			/// This value determines the time interval to call the scrolling
+			/// function when doing continuous scrolling.
 			/// Default: 100.
 			/// Type: Number.
 			/// </summary>
 			keyDownInterval: 100,
 			/// <summary>
-			/// A value determines whether wijsuperpanel has mouse wheel support.
+			/// This value determines whether wijsuperpanel has mouse wheel support.
 			/// Default: true.
 			/// Type: Boolean.
 			/// </summary>
@@ -242,7 +278,8 @@
 			/// </remarks>
 			mouseWheelSupport: true,
 			/// <summary>
-			/// A value determines whether to fire the mouse wheel event when wijsuperpanel is scrolled to the end.
+			/// This value determines whether to fire the mouse wheel event 
+			/// when wijsuperpanel is scrolled to the end.
 			/// Default: true.
 			/// Type: Boolean.
 			/// </summary>
@@ -254,12 +291,13 @@
 			/// </summary>
 			resized: null,
 			/// <summary>
-			/// An option determines the behavior of resizable widget. See JQuery UI resizable options document.
+			/// This option determines the behavior of resizable widget. 
+			/// See JQuery UI resizable options document.
 			/// Type: Object.
 			/// </summary>
 			resizableOptions: {
 				handles: "all",
-				helper: "ui-widget-content ui-wijsuperpanel-helper"
+				helper: "ui-widget-content wijmo-wijsuperpanel-helper"
 			},
 			/// <summary>
 			/// Scrolling event handler. A function called before scrolling occurs.
@@ -273,7 +311,8 @@
 			/// The data with this event.
 			/// data.oldValue: The scrollValue before scrolling occurs.
 			/// data.newValue: The scrollValue after scrolling occurs.
-			/// data.dir: The direction of the scrolling action. Possible values: "v"(vertical) and "h"(horizontal).
+			/// data.dir: The direction of the scrolling action. 
+			/// Possible values: "v"(vertical) and "h"(horizontal).
 			/// data.beforePosition: The position of content before scrolling occurs.
 			/// </param>
 			scrolling: null,
@@ -287,13 +326,14 @@
 			/// </param>
 			/// <param name="data" type="Object">
 			/// The data with this event.
-			/// data.dir: The direction of the scrolling action. Possible values: "v"(vertical) and "h"(horizontal).
+			/// data.dir: The direction of the scrolling action. 
+			/// Possible values: "v"(vertical) and "h"(horizontal).
 			/// data.beforePosition: The position of content before scrolling occurs.
 			/// data.afterPosition: The position of content after scrolling occurs.
 			/// </param>
 			scrolled: null,
 			/// <summary>
-			/// A value determines whether to show the rounded corner of wijsuperpanel.
+			/// This value determines whether to show the rounded corner of wijsuperpanel.
 			/// Default: true.
 			/// Type: Boolean.
 			/// </summary>
@@ -303,89 +343,106 @@
 			/// </summary>
 			vScroller: {
 				/// <summary>
-				/// A value determines the position of vertical scroll bar. 
+				/// This value determines the position of vertical scroll bar. 
 				/// Default: "right".
 				/// Type: String.
 				/// </summary>
 				/// <remarks>
 				/// Possible options are: "left", "right".
-				/// "left" - The vertical scroll bar is placed at the left side of the content area.
-				/// "right" - The vertical scroll bar is placed at the right side of the content area.
+				/// "left" - The vertical scroll bar is placed at the 
+				/// left side of the content area.
+				/// "right" - The vertical scroll bar is placed at the 
+				/// right side of the content area.
 				/// </remarks>
 				scrollBarPosition: "right",
 				/// <summary>
-				/// A value determines the visibility of the vertical scroll bar.
+				/// This value determines the visibility of the vertical scroll bar.
 				/// Default.: "auto". 
 				/// Type: String.
 				/// </summary>
 				/// <remarks>
 				/// Possible options are "auto", "visible" and "hidden".
 				/// "auto" - Shows the scroll bar when needed.
-				/// "visible" - Scroll bar will always be visible. It"s disabled when not needed.
+				/// "visible" - Scroll bar will always be visible. 
+				/// It"s disabled when not needed.
 				/// "hidden" - Scroll bar will be shown.
 				/// </remarks>
 				scrollBarVisibility: "auto",
 				/// <summary>
-				/// A value determines the scroll mode of vertical scrolling. 
+				/// This value determines the scroll mode of vertical scrolling. 
 				/// Default: "scrollbar".
 				/// Type: String.
 				/// </summary>
 				/// <remarks>
-				/// Possible options are: "scrollbar", "buttons", "buttonshover" and "edge".
+				/// Possible options are: "scrollbar", "buttons", 
+				/// "buttonshover" and "edge".
 				/// "scrollbar" - Scroll bars are used for scrolling.
-				/// "buttons" - Scroll buttons are used for scrolling. Scrolling occurs only when scroll buttons are clicked.
-				/// "buttonshover" - Scroll buttons are used for scrolling. Scrolling occurs only when scroll buttons are hovered.
-				/// "edge" - Scrolling occurs when the mouse is moving to the edge of the content area.
+				/// "buttons" - Scroll buttons are used for scrolling. 
+				/// Scrolling occurs only when scroll buttons are clicked.
+				/// "buttonshover" - Scroll buttons are used for scrolling. 
+				/// Scrolling occurs only when scroll buttons are hovered.
+				/// "edge" - Scrolling occurs when the mouse is moving to 
+				/// the edge of the content area.
 				/// Scroll modes can be combined with each other. 
-				/// For example, vScrollMode: "scrollbar,scrollbuttons" will enable both a scrollbar and scroll buttons.
+				/// For example, vScrollMode: "scrollbar,scrollbuttons" will enable 
+				/// both a scrollbar and scroll buttons.
 				/// </remarks>
 				scrollMode: "scrollbar",
 				/// <summary>
-				/// A value determines the vertical scrolling position of wijsuperpanel.
+				/// This value determines the vertical scrolling position of
+				/// wijsuperpanel.
 				/// Default: null.
 				/// Type: Number.
 				/// </summary>
 				scrollValue: null,
 				/// <summary>
-				/// A value sets the maximum value of vertical scroller.
+				/// This value sets the maximum value of vertical scroller.
 				/// Default: 100.
 				/// Type: Number.
 				/// </summary>
 				scrollMax: 100,
 				/// <summary>
-				/// A value sets the minimum value of vertical scroller.
+				/// This value sets the minimum value of vertical scroller.
 				/// Default: 0.
 				/// Type: Number.
 				/// </summary>
 				scrollMin: 0,
 				/// <summary>
-				/// A value sets the large change value of vertical scroller. 
+				/// This value sets the large change value of vertical scroller. 
 				/// Default: null.
 				/// Type: Number.
 				/// </summary>
 				/// <remarks>
-				/// wijsuperpanel will scroll a large change when a user clicks on the tracks of scroll bars or presses left or right arrow keys on the keyboard with the shift key down.
-				/// When scrollLargeChange is null, wijsuperpanel will scroll the height of content.
+				/// wijsuperpanel will scroll a large change when a user clicks 
+				/// on the tracks of scroll bars or presses left or right arrow keys 
+				/// on the keyboard with the shift key down.
+				/// When scrollLargeChange is null, wijsuperpanel 
+				/// will scroll the height of content.
 				/// </remarks>
 				scrollLargeChange: null,
 				/// <summary>
-				/// A value sets the small change value of vertical scroller. 
+				/// This value sets the small change value of vertical scroller. 
 				/// Default: null.
 				/// Type: Number.
 				/// </summary>
 				/// <remarks>
-				/// wijsuperpanel will scroll a small change when a user clicks on the arrows of scroll bars, clicks or hovers scroll buttons, presses left or right arrow keys on keyboard, and hovers on the edge of wijsuperpanel.
-				/// When scrollSmallChange is null, wijsuperpanel will scroll half of the height of content.	
+				/// wijsuperpanel will scroll a small change when a user clicks on the 
+				/// arrows of scroll bars, clicks or hovers scroll buttons, presses left
+				/// or right arrow keys on keyboard, and hovers on the edge of 
+				/// wijsuperpanel.
+				/// When scrollSmallChange is null, wijsuperpanel will scroll half of 
+				/// the height of content.
 				/// </remarks>
 				scrollSmallChange: null,
 				/// <summary>
-				/// A value sets the minimum length, in pixel, of the vertical scroll bar thumb button.
+				/// This value sets the minimum length, in pixel, of the vertical 
+				/// scroll bar thumb button.
 				/// Default: 6.
 				/// Type: Number
 				/// </summary>
 				scrollMinDragLength: 6,
 				/// <summary>
-				/// An object determines the increase button position. 
+				/// This object determines the increase button position. 
 				/// Default: null.
 				/// Type: Object.
 				/// </summary>
@@ -394,7 +451,7 @@
 				/// </remarks>
 				increaseButtonPosition: null,
 				/// <summary>
-				/// An object determines the decrease button position.
+				/// This object determines the decrease button position.
 				/// Default: 0.
 				/// Type: Object.
 				/// </summary>
@@ -403,13 +460,15 @@
 				/// </remarks>
 				decreaseButtonPosition: null,
 				/// <summary>
-				/// A value sets the width of horizontal hovering edge which will trigger the vertical scrolling.
+				/// This value sets the width of horizontal hovering edge 
+				/// which will trigger the vertical scrolling.
 				/// Default: 20.
 				/// Type: Number.
 				/// </summary>
 				hoverEdgeSpan: 20,
 				/// <summary>
-				/// The value to add to small change or largechange when scrolling the first step(scrolling from value 0).
+				/// The value to add to small change or largechange when scrolling 
+				/// the first step(scrolling from value 0).
 				/// Default: 0.
 				/// Type: Number.
 				/// </summary>
@@ -419,25 +478,27 @@
 
 		_setOption: function (key, value) {
 
-			var self = this;
-			var o = self.options;
-			var f = self._fields();
-			var hd = f.hbarDrag;
-			var vd = f.vbarDrag;
-			var r = f.resizer;
+			var self = this,
+			o = self.options,
+			f = self._fields(),
+			hd = f.hbarDrag,
+			vd = f.vbarDrag,
+			r = f.resizer;
 
 			// override existing 
 			if (key === "animationOptions") {
 				value = $.extend(o.animationOptions, value);
 			}
 			else if (key === "hScroller") {
-				if (value.scrollLargeChange !== undefined && value.scrollLargeChange !== null) {
+				if (value.scrollLargeChange !== undefined && 
+				value.scrollLargeChange !== null) {
 					self._autoHLarge = false;
 				}
 				value = $.extend(o.hScroller, value);
 			}
 			else if (key === "vScroller") {
-				if (value.scrollLargeChange !== undefined && value.scrollLargeChange !== null) {
+				if (value.scrollLargeChange !== undefined && 
+				value.scrollLargeChange !== null) {
 					self._autoVLarge = false;
 				}
 				value = $.extend(o.vScroller, value);
@@ -447,44 +508,43 @@
 			}
 			$.Widget.prototype._setOption.apply(self, arguments);
 			switch (key) {
-				case "allowResize":
-					self._initResizer();
-					break;
-				case "disabled":
-					if (value) {
-						if (hd !== undefined) {
-							hd.draggable("disable");
-						}
-						if (vd !== undefined) {
-							vd.draggable("disable");
-						}
-						if (r !== undefined) {
-							r.resizable("disable");
-						}
+			case "allowResize":
+				self._initResizer();
+				break;
+			case "disabled":
+				if (value) {
+					if (hd !== undefined) {
+						hd.draggable("disable");
 					}
-					else {
-						if (hd !== undefined) {
-							hd.draggable("enable");
-						}
-						if (vd !== undefined) {
-							vd.draggable("enable");
-						}
-						if (r !== undefined) {
-							r.resizable("enable");
-						}
+					if (vd !== undefined) {
+						vd.draggable("disable");
 					}
-					break;
-				case "mouseWheelSupport":
-				case "keyboardSupport":
-					self._bindElementEvents(self, f, self.element, o);
-					break;
+					if (r !== undefined) {
+						r.resizable("disable");
+					}
+				}
+				else {
+					if (hd !== undefined) {
+						hd.draggable("enable");
+					}
+					if (vd !== undefined) {
+						vd.draggable("enable");
+					}
+					if (r !== undefined) {
+						r.resizable("enable");
+					}
+				}
+				break;
+			case "mouseWheelSupport":
+			case "keyboardSupport":
+				self._bindElementEvents(self, f, self.element, o);
+				break;
 			}
 			return self;
 		},
 
 		_create: function () {
-			var self = this;
-			var o = self.options;
+			var self = this, o = self.options;
 			o.vScroller.dir = "v";
 			o.hScroller.dir = "h";
 			self.paintPanel();
@@ -497,48 +557,49 @@
 
 		_detectAutoRefresh: function () {
 			// register with auto fresh.
-			var self = this;
-
-			var panels = $.ui.wijsuperpanel.panels;
+			var self = this, panels = $.wijmo.wijsuperpanel.panels;
 			if (panels === undefined) {
 				panels = [];
-				$.ui.wijsuperpanel.panels = panels;
+				$.wijmo.wijsuperpanel.panels = panels;
 			}
 			panels.push(self);
 			// start timer to monitor content.
 			if (self.options.autoRefresh) {
-				if (!$.ui.wijsuperpanel.setAutoRefreshInterval) {
-					$.ui.wijsuperpanel.setAutoRefreshInterval = self._setAutoRefreshInterval;
-					$.ui.wijsuperpanel.setAutoRefreshInterval();
+				if (!$.wijmo.wijsuperpanel.setAutoRefreshInterval) {
+					$.wijmo.wijsuperpanel.setAutoRefreshInterval = 
+					self._setAutoRefreshInterval;
+					$.wijmo.wijsuperpanel.setAutoRefreshInterval();
 				}
 			}
 		},
 
 		_setAutoRefreshInterval: function () {
-			var interval = $.ui.wijsuperpanel.autoRereshInterval;
-			var panels = $.ui.wijsuperpanel.panels;
-			var intervalID = window.setInterval(function () {
+			var interval = $.wijmo.wijsuperpanel.autoRereshInterval,
+			panels = $.wijmo.wijsuperpanel.panels,
+			intervalID = window.setInterval(function () {
 				window.clearInterval(intervalID);
-				var count = panels.length;
-				var toContinue = false;
-				for (var i = 0; i < count; i++) {
-					var panel = panels[i];
-					var mainElement = panel.element[0];
-					var autoRefresh = panel.options.autoRefresh;
+				var count = panels.length, toContinue = false, i, panel,
+				mainElement, autoRefresh, ele, mark;
+				for (i = 0; i < count; i++) {
+					panel = panels[i];
+					mainElement = panel.element[0];
+					autoRefresh = panel.options.autoRefresh;
 					if (autoRefresh) {
 						toContinue = true;
 					}
-					var ele = panel.getContentElement();
-					var mark = panel._paintedMark;
+					ele = panel.getContentElement();
+					mark = panel._paintedMark;
 					if (panel.options.autoRefresh && ele.is(":visible") &&
 					(mark === undefined ||
-					mark.width !== ele[0].offsetWidth || mark.height !== ele[0].offsetHeight ||
-					mark.mainWidth !== mainElement.offsetWidth || mark.mainHeight !== mainElement.offsetHeight)) {
+					mark.width !== ele[0].offsetWidth || 
+					mark.height !== ele[0].offsetHeight ||
+					mark.mainWidth !== mainElement.offsetWidth || 
+					mark.mainHeight !== mainElement.offsetHeight)) {
 						panel.paintPanel();
 					}
 				}
 				if (toContinue) {
-					window.setTimeout($.ui.wijsuperpanel.setAutoRefreshInterval, 0);
+					window.setTimeout($.wijmo.wijsuperpanel.setAutoRefreshInterval, 0);
 				}
 			}, interval === undefined ? 500 : interval);
 		},
@@ -548,11 +609,11 @@
 			/// Destroys wijsuperpanel widget and reset the DOM element.
 			/// </summary>
 
-			var self = this;
-			var f = self._fields();
-			var ele = self.element;
+			var self = this, f = self._fields(), ele = self.element, 
+			buttons, templateWrapper;
 			// remove this widget from panels array.
-			$.ui.wijsuperpanel.panels = $.grep($.ui.wijsuperpanel.panels, function (value) {
+			$.wijmo.wijsuperpanel.panels = 
+			$.grep($.wijmo.wijsuperpanel.panels, function (value) {
 				return value !== self;
 			});
 			if (!f.initialized) {
@@ -566,7 +627,7 @@
 				f.intervalID = undefined;
 			}
 			// destory widgets
-			if (f.resizer != null) {
+			if (f.resizer !== undefined) {
 				f.resizer.resizable("destroy");
 			}
 			if (f.hbarContainer !== undefined) {
@@ -579,9 +640,9 @@
 			}
 			ele.unbind("." + self.widgetName);
 			f.contentWrapper.unbind("." + self.widgetName);
-			var buttons = f.stateContainer.find(">.ui-wijsuperpanel-button");
+			buttons = f.stateContainer.find(">.wijmo-wijsuperpanel-button");
 			buttons.unbind("." + self.widgetName);
-			var templateWrapper = f.templateWrapper;
+			templateWrapper = f.templateWrapper;
 			templateWrapper.contents().each(function (index, e) {
 				ele.append(e);
 			});
@@ -594,10 +655,8 @@
 		},
 
 		_fields: function () {
-			var self = this;
-			var ele = self.element;
-			var key = self.widgetName + "-fields";
-			var d = self._fieldsStore;
+			var self = this, ele = self.element, key = self.widgetName + "-fields",
+			d = self._fieldsStore;
 			if (d === undefined) {
 				d = {};
 				ele.data(key, d);
@@ -613,14 +672,17 @@
 
 		_bindElementEvents: function (self, f, ele, o) {
 			// mouse move only edge mode is used.
-			var hEdge = self._hasMode(o.hScroller, "edge");
-			var vEdge = self._hasMode(o.vScroller, "edge");
-			var wn = self.widgetName;
+			var hEdge = self._hasMode(o.hScroller, "edge"),
+			vEdge = self._hasMode(o.vScroller, "edge"),
+			wn = self.widgetName;
 
 			if (hEdge || vEdge) {
 				if (self._mousemoveBind === undefined) {
 					self._mousemoveBind = true;
 					ele.bind("mousemove." + wn, self, self._contentMouseMove);
+					ele.bind("mouseleave." + wn, null, function () {
+						self._clearInterval();
+					});
 				}
 			}
 			else {
@@ -662,32 +724,33 @@
 			// Handles mouse move event of content area.
 			// Edge hover scrolling is handled in this method.
 
-			var self = e.data;
-			var o = self.options;
+			var self = e.data, o = self.options, hScroller, vScroller, 
+			contentWrapper, f, hMode, vMode, mousePagePosition, off, left, top,
+			hEdge, vEdge, innerHeight, innerWidth, dir;
 			if (o.disabled) {
 				return;
 			}
-			var hScroller = o.hScroller;
-			var vScroller = o.vScroller;
-			var contentWrapper = $(e.currentTarget);
-			var f = self._fields();
-			var hMode = self._hasMode(hScroller, "edge");
-			var vMode = self._hasMode(vScroller, "edge");
+			hScroller = o.hScroller;
+			vScroller = o.vScroller;
+			contentWrapper = $(e.currentTarget);
+			f = self._fields();
+			hMode = self._hasMode(hScroller, "edge");
+			vMode = self._hasMode(vScroller, "edge");
 			self._clearInterval();
-			var mousePagePosition = {
+			mousePagePosition = {
 				X: e.pageX,
 				Y: e.pageY
 			};
-			var off = contentWrapper.offset();
-			var left = off.left;
-			var top = off.top;
+			off = contentWrapper.offset();
+			left = off.left;
+			top = off.top;
 			left = mousePagePosition.X - left;
 			top = mousePagePosition.Y - top;
-			var hEdge = hScroller.hoverEdgeSpan;
-			var vEdge = vScroller.hoverEdgeSpan;
-			var innerHeight = contentWrapper.innerHeight();
-			var innerWidth = contentWrapper.innerWidth();
-			var dir = "";
+			hEdge = hScroller.hoverEdgeSpan;
+			vEdge = vScroller.hoverEdgeSpan;
+			innerHeight = contentWrapper.innerHeight();
+			innerWidth = contentWrapper.innerWidth();
+			dir = "";
 			if (hMode) {
 				if (left < hEdge) {
 					dir = "left";
@@ -719,11 +782,11 @@
 		_scrollButtonMouseOver: function (e) {
 			// Scroll buttons mouse over event handler.
 
-			var self = e.data;
+			var self = e.data, button;
 			if (self.options.disabled) {
 				return;
 			}
-			var button = $(e.currentTarget);
+			button = $(e.currentTarget);
 			if (!button.hasClass(uiStateDisabled)) {
 				button.bind("mouseout." + self.widgetName, self, self._buttonMouseOut)
 				.bind("mousedown." + self.widgetName, self, self._buttonMouseDown)
@@ -736,22 +799,21 @@
 		_buttonScroll: function (button, self, mode) {
 			// Do button scroll.
 
-			var dir = "";
-			var o = self.options;
-			var f = self._fields();
-			var hMode = self._hasMode(o.hScroller, mode);
-			var vMode = self._hasMode(o.vScroller, mode);
+			var dir = "", o = self.options,
+			f = self._fields(),
+			hMode = self._hasMode(o.hScroller, mode),
+			vMode = self._hasMode(o.vScroller, mode);
 
-			if (button.hasClass("ui-wijsuperpanel-buttonleft") && hMode) {
+			if (button.hasClass("wijmo-wijsuperpanel-buttonleft") && hMode) {
 				dir = "left";
 			}
-			else if (button.hasClass("ui-wijsuperpanel-buttonright") && hMode) {
+			else if (button.hasClass("wijmo-wijsuperpanel-buttonright") && hMode) {
 				dir = "right";
 			}
-			else if (button.hasClass("ui-wijsuperpanel-buttontop") && vMode) {
+			else if (button.hasClass("wijmo-wijsuperpanel-buttontop") && vMode) {
 				dir = "top";
 			}
-			else if (button.hasClass("ui-wijsuperpanel-buttonbottom") && vMode) {
+			else if (button.hasClass("wijmo-wijsuperpanel-buttonbottom") && vMode) {
 				dir = "bottom";
 			}
 			if (dir.length > 0) {
@@ -762,11 +824,11 @@
 		},
 
 		_buttonMouseDown: function (e) {
-			var self = e.data;
+			var self = e.data, button;
 			if (self.options.disabled) {
 				return;
 			}
-			var button = $(e.currentTarget);
+			button = $(e.currentTarget);
 			if (!button.hasClass(uiStateDisabled)) {
 				button.addClass(uiStateActive);
 				self._buttonScroll(button, self, "buttons");
@@ -774,15 +836,13 @@
 		},
 
 		_buttonMouseUp: function (e) {
-			var self = e.data;
-			var button = $(e.currentTarget);
+			var self = e.data, button = $(e.currentTarget);
 			button.removeClass("ui-state-active");
 			self._clearInterval();
 		},
 
 		_buttonMouseOut: function (e) {
-			var self = e.data;
-			var button = $(e.currentTarget);
+			var self = e.data, button = $(e.currentTarget);
 			button.unbind("mouseout", self._buttonMouseOut)
 			.unbind("mousedown", self._buttonMouseDown)
 			.unbind("mouseup", self._buttonMouseUp)
@@ -794,13 +854,12 @@
 		_panelKeyDown: function (e) {
 			// Key down handler.
 
-			var self = e.data;
-			var o = self.options;
+			var self = e.data, o = self.options, shift, keycode;
 			if (!o.keyboardSupport || o.disabled) {
 				return;
 			}
-			var shift = e.shiftKey;
-			var keycode = e.keyCode;
+			shift = e.shiftKey;
+			keycode = e.keyCode;
 			if (keycode === $.ui.keyCode.LEFT) {
 				self._doScrolling("left", self, shift);
 			}
@@ -818,22 +877,22 @@
 		},
 
 		_draggingInternal: function (self, scroller, originalElement) {
-			var dir = scroller.dir;
-			var h = dir === "h";
-			var key = h ? "left" : "top";
-
-			var left = parseFloat(originalElement[0].style[key].replace("px", "")) - self._getScrollContainerPadding(key);
-			var track = self._getTrackLen(dir) - originalElement[h ? "outerWidth" : "outerHeight"]();
-			var proportion = left / track;
-			var topValue = (scroller.scrollMax - scroller.scrollLargeChange + 1);
-			var v = proportion * topValue;
+			var dir = scroller.dir, h = dir === "h",
+			key = h ? "left" : "top",
+			left = parseFloat(originalElement[0].style[key].replace("px", "")) - 
+			self._getScrollContainerPadding(key),
+			track = self._getTrackLen(dir) - 
+			originalElement[h ? "outerWidth" : "outerHeight"](),
+			proportion = left / track,
+			topValue = (scroller.scrollMax - scroller.scrollLargeChange + 1),
+			v = proportion * topValue, data;
 			if (v < scroller.scrollMin) {
 				v = scroller.scrollMin;
 			}
 			if (v > topValue) {
 				v = topValue;
 			}
-			var data = {
+			data = {
 				oldValue: scroller.scrollValue,
 				newValue: v,
 				dir: dir
@@ -847,9 +906,8 @@
 		},
 
 		_dragging: function (e, self) {
-			var o = self.options;
-			var originalElement = $(e.target);
-			var p = originalElement.parent();
+			var o = self.options, originalElement = $(e.target),
+			p = originalElement.parent();
 			if (p.hasClass(hbarContainerCSS)) {
 				self._draggingInternal(self, o.hScroller, originalElement);
 			}
@@ -859,21 +917,20 @@
 		},
 
 		_panelMouseWheel: function (e, delta) {
-
-
-			var self = e.data;
-			var o = self.options;
+			var self = e.data, o = self.options, originalElement, dir, onHbar,
+			hScroller, vScroller, scrollEnd;
 			if (!o.mouseWheelSupport || o.disabled) {
 				return;
 			}
 			//var f = self._fields();
 			//var scrollerWrapper = f.stateContainer;
 			//var hbarContainer = f.hbarContainer;
-			var originalElement = $(e.srcElement || e.originalEvent.target);
-			var dir = "";
-			var onHbar = originalElement.closest("." + hbarContainerCSS, self.element).size() > 0;
-			var hScroller = o.hScroller;
-			var vScroller = o.vScroller;
+			originalElement = $(e.srcElement || e.originalEvent.target);
+			dir = "";
+			onHbar = originalElement.closest("." + hbarContainerCSS, self.element)
+			.size() > 0;
+			hScroller = o.hScroller;
+			vScroller = o.vScroller;
 			if (delta > 0) {
 				dir = onHbar ? "left" : "top";
 			}
@@ -884,41 +941,45 @@
 			if (dir.length > 0) {
 				self._doScrolling(dir, self);
 			}
-			var scrollEnd = false;
+			scrollEnd = false;
 			if (dir === "left") {
-				scrollEnd = !self.hNeedScrollBar || Math.abs(hScroller.scrollValue - hScroller.scrollMin) < 0.001;
+				scrollEnd = !self.hNeedScrollBar || 
+				Math.abs(hScroller.scrollValue - hScroller.scrollMin) < 0.001;
 			}
 			if (dir === "right") {
-				scrollEnd = !self.hNeedScrollBar || Math.abs(hScroller.scrollValue - (hScroller.scrollMax - self._getHScrollBarLargeChange() + 1)) < 0.001;
+				scrollEnd = !self.hNeedScrollBar || Math.abs(hScroller.scrollValue - 
+				(hScroller.scrollMax - self._getHScrollBarLargeChange() + 1)) < 0.001;
 			}
 			if (dir === "top") {
-				scrollEnd = !self.vNeedScrollBar || Math.abs(vScroller.scrollValue - vScroller.scrollMin) < 0.001;
+				scrollEnd = !self.vNeedScrollBar || 
+				Math.abs(vScroller.scrollValue - vScroller.scrollMin) < 0.001;
 			}
 			if (dir === "bottom") {
-				scrollEnd = !self.vNeedScrollBar || Math.abs(vScroller.scrollValue - (vScroller.scrollMax - self._getVScrollBarLargeChange() + 1)) < 0.001;
+				scrollEnd = !self.vNeedScrollBar || Math.abs(vScroller.scrollValue - 
+				(vScroller.scrollMax - self._getVScrollBarLargeChange() + 1)) < 0.001;
 			}
-			if (!scrollEnd || !o.bubbleScrollingEvent || dir === "left" || dir === "right") {
+			if (!scrollEnd || !o.bubbleScrollingEvent || dir === "left" ||
+			 dir === "right") {
 				e.stopPropagation();
 				e.preventDefault();
 			}
 		},
 
 		_documentMouseUp: function (e) {
-			var self = e.data.self;
-			var ele = e.data.ele;
+			var self = e.data.self, ele = e.data.ele;
 			ele.removeClass(uiStateActive);
 			self._clearInterval();
 			$(document).unbind("mouseup", self._documentMouseUp);
 		},
 
 		_scrollerMouseOver: function (e) {
-			var self = e.data;
+			var self = e.data, originalElement, ele, addhover;
 			if (self.options.disabled) {
 				return;
 			}
-			var originalElement = $(e.srcElement || e.originalEvent.target);
-			var ele = null;
-			var addhover = false;
+			originalElement = $(e.srcElement || e.originalEvent.target);
+			ele = null;
+			addhover = false;
 
 			if (originalElement.hasClass(uiStateDefault)) {
 				ele = originalElement;
@@ -928,11 +989,12 @@
 				ele = originalElement.parent();
 				addhover = true;
 			}
-			else if (originalElement.hasClass(vbarContainerCSS) || originalElement.hasClass(hbarContainerCSS)) {
+			else if (originalElement.hasClass(vbarContainerCSS) || 
+			originalElement.hasClass(hbarContainerCSS)) {
 				ele = originalElement;
 			}
 
-			if (ele != null) {
+			if (ele !== undefined) {
 				if (addhover) {
 					ele.addClass(uiStateHover);
 				}
@@ -949,27 +1011,27 @@
 		},
 
 		_elementMouseDown: function (e) {
-			var ele = $(e.currentTarget);
-			var self = e.data;
+			var ele = $(e.currentTarget), self = e.data, 
+			scrollDirection, large, active, hbarDrag, pos, vbarDrag, pos2, f;
 			if (self.options.disabled) {
 				return;
 			}
-			var scrollDirection = "";
-			var large = false;
-			var active = false;
-			if (ele.hasClass("ui-wijsuperpanel-vbar-buttontop")) {
+			scrollDirection = "";
+			large = false;
+			active = false;
+			if (ele.hasClass("wijmo-wijsuperpanel-vbar-buttontop")) {
 				scrollDirection = "top";
 				active = true;
 			}
-			else if (ele.hasClass("ui-wijsuperpanel-vbar-buttonbottom")) {
+			else if (ele.hasClass("wijmo-wijsuperpanel-vbar-buttonbottom")) {
 				scrollDirection = "bottom";
 				active = true;
 			}
-			else if (ele.hasClass("ui-wijsuperpanel-hbar-buttonleft")) {
+			else if (ele.hasClass("wijmo-wijsuperpanel-hbar-buttonleft")) {
 				scrollDirection = "left";
 				active = true;
 			}
-			else if (ele.hasClass("ui-wijsuperpanel-hbar-buttonright")) {
+			else if (ele.hasClass("wijmo-wijsuperpanel-hbar-buttonright")) {
 				scrollDirection = "right";
 				active = true;
 			}
@@ -978,8 +1040,8 @@
 				return;
 			}
 			else if (ele.hasClass(hbarContainerCSS)) {
-				var hbarDrag = ele.find("." + scrollerHandle);
-				var pos = hbarDrag.offset();
+				hbarDrag = ele.find("." + scrollerHandle);
+				pos = hbarDrag.offset();
 				if (e.pageX < pos.left) {
 					scrollDirection = "left";
 				}
@@ -989,8 +1051,8 @@
 				large = true;
 			}
 			else if (ele.hasClass(vbarContainerCSS)) {
-				var vbarDrag = ele.find("." + scrollerHandle);
-				var pos2 = vbarDrag.offset();
+				vbarDrag = ele.find("." + scrollerHandle);
+				pos2 = vbarDrag.offset();
 				if (e.pageY < pos2.top) {
 					scrollDirection = "top";
 				}
@@ -1001,7 +1063,7 @@
 			}
 			self._clearInterval();
 			self._doScrolling(scrollDirection, self, large);
-			var f = self._fields();
+			f = self._fields();
 			self._setScrollingInterval(f, scrollDirection, self, large);
 			if (active) {
 				ele.addClass("ui-state-active");
@@ -1026,24 +1088,26 @@
 			this._doScrolling(dir, this, large);
 		},
 
-		_setScrollerValue: function (dir, scroller, smallChange, largeChange, isAdd, isLarge, self) {
+		_setScrollerValue: function (dir, scroller, smallChange, largeChange, 
+		isAdd, isLarge, self) {
 			//var o = self.options;
-			var vMin = scroller.scrollMin;
-			var change = isLarge ? largeChange : smallChange;
-			var value = scroller.scrollValue;
-			if (value == null) {
+			var vMin = scroller.scrollMin,
+			change = isLarge ? largeChange : smallChange,
+			value = scroller.scrollValue, t, vTopValue, firstStepChangeFix, data;
+			if (!value) {
 				value = vMin;
 			}
-			var t = 0;
+			t = 0;
 			if (isAdd) {
-				var vTopValue = scroller.scrollMax - largeChange + 1;
+				vTopValue = scroller.scrollMax - largeChange + 1;
 				if (Math.abs(value - vTopValue) < 0.001) {
 					self._clearInterval();
 					return false;
 				}
-				var firstStepChangeFix = scroller.firstStepChangeFix;
+				firstStepChangeFix = scroller.firstStepChangeFix;
 				t = value + change;
-				if (!isLarge && Math.abs(value - vMin) < 0.0001 && !isNaN(firstStepChangeFix)) {
+				if (!isLarge && Math.abs(value - vMin) < 0.0001 && 
+				!isNaN(firstStepChangeFix)) {
 					t += firstStepChangeFix;
 				}
 				if (t > vTopValue) {
@@ -1060,7 +1124,7 @@
 					t = vMin;
 				}
 			}
-			var data = {
+			data = {
 				oldValue: scroller.scrollValue,
 				newValue: t,
 				direction: dir,
@@ -1086,22 +1150,24 @@
 			// Whether to scroll a large change.
 			// </param>
 
-			var o = self.options;
-			var vScroller = o.vScroller;
-			var hScroller = o.hScroller;
-			var vSmall = self._getVScrollBarSmallChange();
-			var vLarge = self._getVScrollBarLargeChange();
-			var hLarge = self._getHScrollBarLargeChange();
-			var hSmall = self._getHScrollBarSmallChange();
+			var o = self.options,
+			vScroller = o.vScroller,
+			hScroller = o.hScroller,
+			vSmall = self._getVScrollBarSmallChange(),
+			vLarge = self._getVScrollBarLargeChange(),
+			hLarge = self._getHScrollBarLargeChange(),
+			hSmall = self._getHScrollBarSmallChange();
 
 			if (dir === "top" || dir === "bottom") {
-				if (!self._setScrollerValue(dir, vScroller, vSmall, vLarge, dir === "bottom", large, self)) {
+				if (!self._setScrollerValue(dir, vScroller, vSmall, vLarge, 
+				dir === "bottom", large, self)) {
 					return;
 				}
 				dir = "v";
 			}
 			else if (dir === "left" || dir === "right") {
-				if (!self._setScrollerValue(dir, hScroller, hSmall, hLarge, dir === "right", large, self)) {
+				if (!self._setScrollerValue(dir, hScroller, hSmall, hLarge, 
+				dir === "right", large, self)) {
 					return;
 				}
 				dir = "h";
@@ -1112,22 +1178,24 @@
 		_disableButtonIfNeeded: function (self) {
 			// Disables scrolling buttons.
 
-			var f = self._fields();
+			var f = self._fields(), o, buttonLeft, buttonRight, buttonTop, buttonBottom,
+			hLargeChange, hMax, hValue, hScrollMin, vLargeChange, vMax, vValue, 
+			vScrollMin;
 			if (f.intervalID > 0) {
 				window.clearInterval(f.intervalID);
 			}
-			var o = self.options;
-			var buttonLeft = f.buttonLeft;
-			var buttonRight = f.buttonRight;
-			var buttonTop = f.buttonTop;
-			var buttonBottom = f.buttonBottom;
+			o = self.options;
+			buttonLeft = f.buttonLeft;
+			buttonRight = f.buttonRight;
+			buttonTop = f.buttonTop;
+			buttonBottom = f.buttonBottom;
 
 			if (buttonLeft !== undefined) {
-				var hLargeChange = self._getHScrollBarLargeChange();
+				hLargeChange = self._getHScrollBarLargeChange();
 
-				var hMax = o.hScroller.scrollMax - hLargeChange + 1;
-				var hValue = o.hScroller.scrollValue;
-				var hScrollMin = o.hScroller.scrollMin;
+				hMax = o.hScroller.scrollMax - hLargeChange + 1;
+				hValue = o.hScroller.scrollValue;
+				hScrollMin = o.hScroller.scrollMin;
 
 				if (hValue === undefined) {
 					hValue = hScrollMin;
@@ -1146,10 +1214,10 @@
 				}
 			}
 			if (buttonTop !== undefined) {
-				var vLargeChange = self._getVScrollBarLargeChange();
-				var vMax = o.vScroller.scrollMax - vLargeChange + 1;
-				var vValue = o.vScroller.scrollValue;
-				var vScrollMin = o.vScroller.scrollMin;
+				vLargeChange = self._getVScrollBarLargeChange();
+				vMax = o.vScroller.scrollMax - vLargeChange + 1;
+				vValue = o.vScroller.scrollValue;
+				vScrollMin = o.vScroller.scrollMin;
 				if (vValue === undefined) {
 					vValue = vScrollMin;
 				}
@@ -1169,8 +1237,7 @@
 		},
 
 		_clearInterval: function () {
-			var f = this._fields();
-			var intervalID = f.internalFuncID;
+			var f = this._fields(), intervalID = f.internalFuncID;
 			if (intervalID > 0) {
 				window.clearInterval(intervalID);
 				f.internalFuncID = -1;
@@ -1178,8 +1245,7 @@
 		},
 
 		_elementMouseOut: function (event) {
-			var ele = $(event.currentTarget);
-			var self = event.data;
+			var ele = $(event.currentTarget), self = event.data;
 
 			ele.unbind("mouseout", self._elementMouseOut);
 			ele.unbind("mousedown", self._elementMouseDown);
@@ -1196,38 +1262,38 @@
 			/// The child to scroll to.
 			/// </param>
 
-			var child = $(child1);
+			var child = $(child1), f, cWrapper, tempWrapper, left, top, 
+			childOffset, templateOffset, cWrapperOffset;
 
 			if (child.size() === 0) {
 				return;
 			}
-			var f = this._fields();
-			var cWrapper = f.contentWrapper;
-			var tempWrapper = f.templateWrapper;
-			var left, top;
-			var childOffset = child.offset();
-			var templateOffset = tempWrapper.offset();
+			f = this._fields();
+			cWrapper = f.contentWrapper;
+			tempWrapper = f.templateWrapper;
+			childOffset = child.offset();
+			templateOffset = tempWrapper.offset();
 
 			childOffset.leftWidth = childOffset.left + child.outerWidth();
 			childOffset.topHeight = childOffset.top + child.outerHeight();
-			var cWrapperOffset = cWrapper.offset();
+			cWrapperOffset = cWrapper.offset();
 			cWrapperOffset.leftWidth = cWrapperOffset.left + cWrapper.outerWidth();
 			cWrapperOffset.topHeight = cWrapperOffset.top + cWrapper.outerHeight();
 
 			if (childOffset.left < cWrapperOffset.left) {
 				left = childOffset.left - templateOffset.left;
 			}
-			else
-				if (childOffset.leftWidth > cWrapperOffset.leftWidth) {
-					left = childOffset.leftWidth - templateOffset.left - cWrapper.innerWidth();
-				}
+			else if (childOffset.leftWidth > cWrapperOffset.leftWidth) {
+				left = childOffset.leftWidth - templateOffset.left - 
+				cWrapper.innerWidth();
+			}
 			if (childOffset.top < cWrapperOffset.top) {
 				top = childOffset.top - templateOffset.top;
 			}
-			else
-				if (childOffset.topHeight > cWrapperOffset.topHeight) {
-					top = childOffset.topHeight - templateOffset.top - cWrapper.innerHeight();
-				}
+			else if (childOffset.topHeight > cWrapperOffset.topHeight) {
+				top = childOffset.topHeight - templateOffset.top - 
+				cWrapper.innerHeight();
+			}
 			if (left !== undefined) {
 				this.hScrollTo(left);
 			}
@@ -1265,7 +1331,8 @@
 		scrollPxToValue: function (px, dir) {
 			/// <summary>
 			/// Convert pixel to scroll value.
-			/// For example, wijsuperpanel scrolled 50px which is value 1 after conversion.
+			/// For example, wijsuperpanel scrolled 50px 
+			///which is value 1 after conversion.
 			/// </summary>
 			/// <param name="px" type="Number">
 			/// Length of scrolling.
@@ -1274,22 +1341,23 @@
 			/// Scrolling direction. Options are: "h" and "v".
 			/// </param>
 
-			var o = this.options;
-			var m = (dir === "h" ? "outerWidth" : "outerHeight");
-			var m1 = (dir === "h" ? "contentWidth" : "contentHeight");
-			var scroller = (dir === "h" ? "hScroller" : "vScroller");
-			var f = this._fields();
-			var cWrapper = f.contentWrapper;
+			var o = this.options,
+			m = (dir === "h" ? "outerWidth" : "outerHeight"),
+			m1 = (dir === "h" ? "contentWidth" : "contentHeight"),
+			scroller = (dir === "h" ? "hScroller" : "vScroller"),
+			f = this._fields(),
+			cWrapper = f.contentWrapper,
 			//var tempWrapper = f.templateWrapper;
-			var size = f[m1];
-			var contentHeight = cWrapper[m]();
+			size = f[m1],
+			contentHeight = cWrapper[m](),
 
-			var vMin = o[scroller].scrollMin;
-			var vMax = o[scroller].scrollMax;
-			var vRange = vMax - vMin;
-			var vLargeChange = (dir === "h" ? this._getHScrollBarLargeChange() : this._getVScrollBarLargeChange());
-			var maxv = vRange - vLargeChange + 1;
-			var ret = maxv * (px / (size - contentHeight));
+			vMin = o[scroller].scrollMin,
+			vMax = o[scroller].scrollMax,
+			vRange = vMax - vMin,
+			vLargeChange = (dir === "h" ? 
+			this._getHScrollBarLargeChange() : this._getVScrollBarLargeChange()),
+			maxv = vRange - vLargeChange + 1,
+			ret = maxv * (px / (size - contentHeight));
 			if (ret < vMin) {
 				ret = vMin;
 			}
@@ -1323,20 +1391,21 @@
 			/// <returns type="Boolean">
 			/// Returns true if painting is successful, else returns false. 
 			/// </returns>
-			var self = this;
-			var ele = self.element;
+			var self = this, ele = self.element, focused, o, f, templateWrapper;
 			if (ele.is(":visible")) {
-				var focused = document.activeElement;
-				var o = self.options;
-				var f = self._fields();
+				focused = document.activeElement;
+				o = self.options;
+				f = self._fields();
 				if (!f.initialized) {
 					self._initialize(f, ele, self);
 				}
 				self._resetLargeChange(self, f, o);
 				self._bindElementEvents(self, f, ele, o);
-				var templateWrapper = f.templateWrapper;
-				templateWrapper.css({ "float": "left", left: "0px", top: "0px", width: "auto", height: "auto" });
-				// hide and show wrapper div to force the width to change for some browser.
+				templateWrapper = f.templateWrapper;
+				templateWrapper.css({ "float": "left", left: "0px", top: "0px",
+				width: "auto", height: "auto" });
+				// hide and show wrapper div to force the width to change
+				// for some browser.
 				templateWrapper.hide();
 				templateWrapper.show();
 				f.contentWidth = templateWrapper.width();
@@ -1349,7 +1418,9 @@
 				self._initScrollButtons(self, f, o);
 				self._trigger("painted");
 
-				self._paintedMark = { date: new Date(), mainWidth: ele[0].offsetWidth, mainHeight: ele[0].offsetHeight, width: f.contentWidth, height: f.contentWidth };
+				self._paintedMark = { date: new Date(), mainWidth: ele[0].offsetWidth, 
+				mainHeight: ele[0].offsetHeight, width: f.contentWidth, 
+				height: f.contentWidth };
 				if (focused !== undefined) {
 					$(focused).focus();
 				}
@@ -1401,22 +1472,25 @@
 		},
 
 		_setButtonPosition: function (self, o, scroller, dir, target, f, state) {
-			var h = dir === "h";
-			var mouseoverkey = "mouseover." + self.widgetName;
-			var decKey = h ? "buttonLeft" : "buttonTop";
-			var incKey = h ? "buttonRight" : "buttonBottom";
-			var decButton = f[decKey];
-			var incButton = f[incKey];
-			if (self._hasMode(scroller, "buttons") || self._hasMode(scroller, "buttonshover")) {
+			var h = dir === "h", mouseoverkey = "mouseover." + self.widgetName,
+			decKey = h ? "buttonLeft" : "buttonTop",
+			incKey = h ? "buttonRight" : "buttonBottom",
+			decButton = f[decKey],
+			incButton = f[incKey], html, buttons, defaultPosition;
+			if (self._hasMode(scroller, "buttons") || 
+			self._hasMode(scroller, "buttonshover")) {
 
-				var html = h ? hButtons : vButtons;
+				html = h ? hButtons : vButtons;
 				if (decButton === undefined) {
-					var buttons = $(html).appendTo(state);
+					buttons = $(html).appendTo(state);
 					buttons.bind(mouseoverkey, self, self._scrollButtonMouseOver);
-					f[decKey] = decButton = state.children(h ? ".ui-wijsuperpanel-buttonleft" : ".ui-wijsuperpanel-buttontop");
-					f[incKey] = incButton = state.children(h ? ".ui-wijsuperpanel-buttonright" : ".ui-wijsuperpanel-buttonbottom");
+					f[decKey] = decButton = state.children(h ? 
+					".wijmo-wijsuperpanel-buttonleft" : ".wijmo-wijsuperpanel-buttontop");
+					f[incKey] = incButton = state.children(h ? 
+					".wijmo-wijsuperpanel-buttonright" : 
+					".wijmo-wijsuperpanel-buttonbottom");
 				}
-				var defaultPosition = {
+				defaultPosition = {
 					my: h ? "left" : "top",
 					of: target,
 					at: h ? "left" : "top"
@@ -1439,16 +1513,16 @@
 		},
 
 		_initScrollButtons: function (self, f, o) {
-			var a = f.contentWrapper;
-			var state = f.stateContainer;
+			var a = f.contentWrapper,
+			state = f.stateContainer;
 			self._setButtonPosition(self, o, o.hScroller, "h", a, f, state);
 			self._setButtonPosition(self, o, o.vScroller, "v", a, f, state);
 		},
 
 		_getVScrollBarSmallChange: function () {
-			var o = this.options;
-			if (o.vScroller.scrollSmallChange == null) {
-				var va = this._getVScrollBarLargeChange();
+			var o = this.options, va;
+			if (!o.vScroller.scrollSmallChange) {
+				va = this._getVScrollBarLargeChange();
 				o.vScroller.scrollSmallChange = va / 2;
 			}
 			return o.vScroller.scrollSmallChange;
@@ -1459,30 +1533,31 @@
 		},
 
 		_getLargeChange: function (dir) {
-			var self = this;
-			var o = self.options;
-			var f = self._fields();
-			var v = dir === "v";
-			var scroller = v ? o.vScroller : o.hScroller;
-			var clientKey = v ? "clientHeight" : "clientWidth";
-			var offsetKey = v ? "contentHeight" : "contentWidth";
-			var autoKey = v ? "_autoVLarge" : "_autoHLarge";
+			var self = this,
+			o = self.options,
+			f = self._fields(),
+			v = dir === "v",
+			scroller = v ? o.vScroller : o.hScroller,
+			clientKey = v ? "clientHeight" : "clientWidth",
+			offsetKey = v ? "contentHeight" : "contentWidth",
+			autoKey = v ? "_autoVLarge" : "_autoHLarge",
+			hMax, hMin, hRange, content, contentWidth, wrapperWidth, percent, large;
 
-			if (scroller.scrollLargeChange != null) {
+			if (scroller.scrollLargeChange) {
 				return scroller.scrollLargeChange;
 			}
 
 			// calculate large change if empty
-			var hMax = scroller.scrollMax;
-			var hMin = scroller.scrollMin;
-			var hRange = hMax - hMin;
+			hMax = scroller.scrollMax;
+			hMin = scroller.scrollMin;
+			hRange = hMax - hMin;
 
-			var content = f.contentWrapper;
-			var contentWidth = content[0][clientKey];
-			var wrapperWidth = f[offsetKey];
+			content = f.contentWrapper;
+			contentWidth = content[0][clientKey];
+			wrapperWidth = f[offsetKey];
 
-			var percent = contentWidth / (wrapperWidth - contentWidth);
-			var large = ((hRange + 1) * percent) / (1 + percent);
+			percent = contentWidth / (wrapperWidth - contentWidth);
+			large = ((hRange + 1) * percent) / (1 + percent);
 			if (isNaN(large)) {
 				large = 0;
 			}
@@ -1493,9 +1568,9 @@
 		},
 
 		_getHScrollBarSmallChange: function () {
-			var o = this.options;
-			if (o.hScroller.scrollSmallChange == null) {
-				var va = this._getHScrollBarLargeChange();
+			var o = this.options, va;
+			if (!o.hScroller.scrollSmallChange) {
+				va = this._getHScrollBarLargeChange();
 				o.hScroller.scrollSmallChange = va / 2;
 			}
 			return o.hScroller.scrollSmallChange;
@@ -1507,26 +1582,29 @@
 
 		_initScrollBars: function (self, f, o) {
 			// Set scroll bar initial position.
-			var hScroller = o.hScroller;
-			var hMax = hScroller.scrollMax;
-			var hMin = hScroller.scrollMin;
-			var hRange = hMax - hMin;
+			var hScroller = o.hScroller,
+			hMax = hScroller.scrollMax,
+			hMin = hScroller.scrollMin,
+			hRange = hMax - hMin,
 
-			var vScroller = o.vScroller;
-			var vMax = vScroller.scrollMax;
-			var vMin = vScroller.scrollMin;
-			var vRange = vMax - vMin;
+			vScroller = o.vScroller,
+			vMax = vScroller.scrollMax,
+			vMin = vScroller.scrollMin,
+			vRange = vMax - vMin,
 
-			var hbarDrag = f.hbarDrag;
-			var vbarDrag = f.vbarDrag;
+			hbarDrag = f.hbarDrag,
+			vbarDrag = f.vbarDrag,
+			hLargeChange, track, dragLen, difference, icon, vLargeChange, 
+			track1, dragLen1, difference1, icon1;
 			if (self.hNeedScrollBar && hbarDrag.is(":visible")) {
-				var hLargeChange = self._getHScrollBarLargeChange();
-				var track = self._getTrackLen("h");
-				var dragLen = self._getDragLength(hRange, hLargeChange, track, o.hScroller.scrollMinDragLength);
+				hLargeChange = self._getHScrollBarLargeChange();
+				track = self._getTrackLen("h");
+				dragLen = self._getDragLength(hRange, hLargeChange, 
+				track, o.hScroller.scrollMinDragLength);
 				hbarDrag.width(dragLen);
-				var difference = hbarDrag.outerWidth() - hbarDrag.width();
+				difference = hbarDrag.outerWidth() - hbarDrag.width();
 				hbarDrag.width(dragLen - difference);
-				var icon = hbarDrag.children("span");
+				icon = hbarDrag.children("span");
 				icon.css("margin-left", (hbarDrag.width() - icon[0].offsetWidth) / 2);
 				if (track <= hbarDrag.outerWidth()) {
 					hbarDrag.hide();
@@ -1536,13 +1614,14 @@
 				}
 			}
 			if (self.vNeedScrollBar && vbarDrag.is(":visible")) {
-				var vLargeChange = self._getVScrollBarLargeChange();
-				var track1 = self._getTrackLen("v");
-				var dragLen1 = self._getDragLength(vRange, vLargeChange, track1, o.vScroller.scrollMinDragLength);
+				vLargeChange = self._getVScrollBarLargeChange();
+				track1 = self._getTrackLen("v");
+				dragLen1 = self._getDragLength(vRange, vLargeChange, track1, 
+				o.vScroller.scrollMinDragLength);
 				vbarDrag.height(dragLen1);
-				var difference1 = vbarDrag.outerHeight() - vbarDrag.height();
+				difference1 = vbarDrag.outerHeight() - vbarDrag.height();
 				vbarDrag.height(dragLen1 - difference1);
-				var icon1 = vbarDrag.children("span");
+				icon1 = vbarDrag.children("span");
 				icon1.css("margin-top", (vbarDrag.height() - icon1[0].offsetHeight) / 2);
 				if (track1 <= vbarDrag.outerHeight()) {
 					vbarDrag.hide();
@@ -1562,18 +1641,19 @@
 			// "h" - Horizontal scroll track.
 			// </param>
 
-			var self = this;
-			var f = self._fields();
+			var self = this,
+			f = self._fields(),
 			//var o = self.options;
-			var key = dir + "TrackLen";
+			key = dir + "TrackLen",
+			hbarContainer, vbarContainer, track, padding;
 			if (f[key] !== undefined) {
 				return f[key];
 			}
 
-			var hbarContainer = f.hbarContainer;
-			var vbarContainer = f.vbarContainer;
-			var track = 0;
-			var padding = 0;
+			hbarContainer = f.hbarContainer;
+			vbarContainer = f.vbarContainer;
+			track = 0;
+			padding = 0;
 			if (dir === "h") {
 				padding = self._getScrollContainerPadding("h");
 				track = hbarContainer.innerWidth();
@@ -1588,82 +1668,88 @@
 
 		_getScrollContainerPadding: function (paddingType) {
 			// Get the padding of the scroll bar container.
-			var self = this;
-			var f = self._fields();
-			var padding = 0;
+			var self = this,
+			f = self._fields(),
+			padding = 0, container, key;
 			if (paddingType === "h") {
-				padding = self._getScrollContainerPadding("left") + self._getScrollContainerPadding("right");
+				padding = self._getScrollContainerPadding("left") + 
+				self._getScrollContainerPadding("right");
 			}
 			else if (paddingType === "v") {
-				padding = self._getScrollContainerPadding("top") + self._getScrollContainerPadding("bottom");
+				padding = self._getScrollContainerPadding("top") + 
+				self._getScrollContainerPadding("bottom");
 			}
 			else {
-				var container;
 				if (paddingType === "left" || paddingType === "right") {
 					container = f.hbarContainer;
 				}
 				else {
 					container = f.vbarContainer;
 				}
-				var key = paddingType + "Padding";
+				key = paddingType + "Padding";
 				if (f[key] !== undefined) {
 					padding = f[key];
 					return padding;
 				}
-				padding = parseFloat(container.css("padding-" + paddingType).replace("px", ""));
+				padding = parseFloat(container.css("padding-" + 
+				paddingType).replace("px", ""));
 				f[key] = padding;
 			}
 			return padding;
 		},
 
-		_contentDragAnimate: function (dir, animated, hbarContainer, hbarDrag, stop, fireScrollEvent, dragging) {
-			var self = this;
-			var o = self.options;
-			var v = dir === "v";
-			var scroller = v ? o.vScroller : o.hScroller;
-			var tempKey = v ? "outerHeight" : "outerWidth";
-			var wrapKey = v ? "innerHeight" : "innerWidth";
-			var contentKey = v ? "contentHeight" : "contentWidth";
-			var paddingKey = v ? "top" : "left";
-			var hMin = scroller.scrollMin;
-			var hMax = scroller.scrollMax;
-			var hRange = hMax - hMin;
-			var hValue = scroller.scrollValue === undefined ? hMin : (scroller.scrollValue - hMin);
-			var hLargeChange = self._getLargeChange(dir);
-			var max = hRange - hLargeChange + 1;
-			var f = self._fields();
-			var cWrapper = f.contentWrapper;
-			var tempWrapper = f.templateWrapper;
+		_contentDragAnimate: function (dir, animated, hbarContainer, hbarDrag, 
+		stop, fireScrollEvent, dragging) {
+			var self = this,
+			o = self.options,
+			v = dir === "v",
+			scroller = v ? o.vScroller : o.hScroller,
+			tempKey = v ? "outerHeight" : "outerWidth",
+			wrapKey = v ? "innerHeight" : "innerWidth",
+			contentKey = v ? "contentHeight" : "contentWidth",
+			paddingKey = v ? "top" : "left",
+			hMin = scroller.scrollMin,
+			hMax = scroller.scrollMax,
+			hRange = hMax - hMin,
+			hValue = scroller.scrollValue === undefined ? 
+			hMin : (scroller.scrollValue - hMin),
+			hLargeChange = self._getLargeChange(dir),
+			max = hRange - hLargeChange + 1,
+			f = self._fields(),
+			cWrapper = f.contentWrapper,
+			tempWrapper = f.templateWrapper,
+			contentLeft, dragleft, track, drag, r, padding, dragAnimationOptions,
+			properties, contentAnimationOptions, userComplete, properties1, key;
 
 			if (hValue > max) {
 				hValue = max;
 			}
-			var contentLeft = (f[contentKey] - cWrapper[wrapKey]()) * (hValue / max);
+			contentLeft = (f[contentKey] - cWrapper[wrapKey]()) * (hValue / max);
 			if (Math.abs(contentLeft) < 0.001) {
 				contentLeft = 0;
 			}
 			contentLeft = Math.round(contentLeft);
-			var dragleft = -1;
+			dragleft = -1;
 			if (hbarContainer !== undefined) {
 				if (animated && hbarDrag.is(":animated") && stop !== "nonestop") {
 					hbarDrag.stop(true, false);
 				}
-				var track = self._getTrackLen(dir);
-				var drag = hbarDrag[tempKey]();
-				var r = track - drag;
-				var padding = self._getScrollContainerPadding(paddingKey);
+				track = self._getTrackLen(dir);
+				drag = hbarDrag[tempKey]();
+				r = track - drag;
+				padding = self._getScrollContainerPadding(paddingKey);
 				dragleft = (hValue / max) * r + padding;
 			}
-			if (animated && o.animationOptions != null) {
+			if (animated && o.animationOptions) {
 				if (dragleft >= 0 && dragging !== "dragging") {
-					var dragAnimationOptions = $.extend({}, o.animationOptions);
+					dragAnimationOptions = $.extend({}, o.animationOptions);
 					// not trigger scrolled when stop
 					dragAnimationOptions.complete = undefined;
-					var properties = v ? { top: dragleft} : { left: dragleft };
+					properties = v ? { top: dragleft} : { left: dragleft };
 					hbarDrag.animate(properties, dragAnimationOptions);
 				}
-				var contentAnimationOptions = $.extend({}, o.animationOptions);
-				var userComplete = o.animationOptions.complete;
+				contentAnimationOptions = $.extend({}, o.animationOptions);
+				userComplete = o.animationOptions.complete;
 				contentAnimationOptions.complete = function () {
 					self._scrollEnd(fireScrollEvent, self, dir);
 					if ($.isFunction(userComplete)) {
@@ -1674,11 +1760,11 @@
 				if (animated && tempWrapper.is(":animated") && stop !== "nonestop") {
 					tempWrapper.stop(true, false);
 				}
-				var properties1 = v ? { top: -contentLeft} : { left: -contentLeft };
+				properties1 = v ? { top: -contentLeft} : { left: -contentLeft };
 				tempWrapper.animate(properties1, contentAnimationOptions);
 			}
 			else {
-				var key = v ? "top" : "left";
+				key = v ? "top" : "left";
 				if (dragleft >= 0 && dragging !== "dragging") {
 
 					hbarDrag[0].style[key] = dragleft + "px";
@@ -1688,18 +1774,21 @@
 			}
 		},
 
-		_setDragAndContentPosition: function (fireScrollEvent, animated, dir, stop, dragging) {
-			var self = this;
-			var f = self._fields();
-			var hbarContainer = f.hbarContainer;
-			var hbarDrag = f.hbarDrag;
-			var vbarContainer = f.vbarContainer;
-			var vbarDrag = f.vbarDrag;
+		_setDragAndContentPosition: function (fireScrollEvent, animated, dir, 
+		stop, dragging) {
+			var self = this,
+			f = self._fields(),
+			hbarContainer = f.hbarContainer,
+			hbarDrag = f.hbarDrag,
+			vbarContainer = f.vbarContainer,
+			vbarDrag = f.vbarDrag;
 			if ((dir === "both" || dir === "h") && f.hScrolling) {
-				self._contentDragAnimate("h", animated, hbarContainer, hbarDrag, stop, fireScrollEvent, dragging);
+				self._contentDragAnimate("h", animated, hbarContainer, hbarDrag,
+				stop, fireScrollEvent, dragging);
 			}
 			if ((dir === "both" || dir === "v") && f.vScrolling) {
-				self._contentDragAnimate("v", animated, vbarContainer, vbarDrag, stop, fireScrollEvent, dragging);
+				self._contentDragAnimate("v", animated, vbarContainer, vbarDrag,
+				stop, fireScrollEvent, dragging);
 			}
 			if (f.intervalID > 0) {
 				window.clearInterval(f.intervalID);
@@ -1724,12 +1813,12 @@
 			if (fireEvent) {
 				// use settimeout to return to caller immediately.
 				window.setTimeout(function () {
-					var content = self.getContentElement();
+					var content = self.getContentElement(), after, d;
 					if (!content.is(":visible")) {
 						return;
 					}
-					var after = self.getContentElement().position();
-					var d = {
+					after = self.getContentElement().position();
+					d = {
 						dir: dir,
 						beforePosition: self._beforePosition,
 						afterPosition: after
@@ -1740,25 +1829,30 @@
 		},
 
 		_getDragLength: function (range, largeChange, track, min) {
-			var divide = range / largeChange;
-			var dragLength = track / divide;
-			var minidrag = min;
-			if (dragLength < minidrag || (dragLength + 2) >= track) {
+			var divide = range / largeChange,
+			dragLength = track / divide,
+			minidrag = min;
+			if (dragLength < minidrag) {
 				dragLength = minidrag;
+			}
+			else if ((dragLength + 1) >= track) {
+				dragLength = track - 1;
 			}
 			return Math.round(dragLength);
 		},
 
 		_needScrollbar: function (scroller, needscroll) {
-			var scrollbarMode = this._hasMode(scroller, "scrollbar");
-			var barVisibility = scroller.scrollBarVisibility;
-			var needScrollBar = scrollbarMode && (barVisibility === "visible" || (barVisibility === "auto" && needscroll));
+			var scrollbarMode = this._hasMode(scroller, "scrollbar"),
+			barVisibility = scroller.scrollBarVisibility,
+			needScrollBar = scrollbarMode && (barVisibility === "visible" || 
+			(barVisibility === "auto" && needscroll));
 			return needScrollBar;
 		},
 
 		_bindBarEvent: function (barContainer, barDrag, dir) {
 			var self = this;
-			barContainer.bind("mouseover." + self.widgetName, self, self._scrollerMouseOver);
+			barContainer.bind("mouseover." + self.widgetName, self, 
+			self._scrollerMouseOver);
 			barDrag.draggable({
 				axis: dir === "h" ? "x" : "y",
 				drag: function (e) {
@@ -1772,18 +1866,19 @@
 			});
 		},
 
-		_createBarIfNeeded: function (hNeedScrollBar, scrollerWrapper, dir, html, content) {
+		_createBarIfNeeded: function (hNeedScrollBar, scrollerWrapper, 
+		dir, html, content) {
 			if (hNeedScrollBar) {
-				var self = this;
-				var f = self._fields();
-				var strBarContainer = dir + "barContainer";
-				var strBarDrag = dir + "barDrag";
-				var hbar = dir === "h";
-				var contentLength = content[0][hbar ? "clientHeight" : "clientWidth"];
-				var c = f[strBarContainer] = $(html);
+				var self = this,
+				f = self._fields(),
+				strBarContainer = dir + "barContainer",
+				strBarDrag = dir + "barDrag",
+				hbar = dir === "h",
+				contentLength = content[0][hbar ? "clientHeight" : "clientWidth"],
+				c = f[strBarContainer] = $(html), targetBarLen, d;
 				scrollerWrapper.append(c);
-				var targetBarLen = c[0][hbar ? "offsetHeight" : "offsetWidth"];
-				var d = f[strBarDrag] = c.find("." + scrollerHandle);
+				targetBarLen = c[0][hbar ? "offsetHeight" : "offsetWidth"];
+				d = f[strBarDrag] = c.find("." + scrollerHandle);
 				self._bindBarEvent(c, d, dir);
 
 				content[hbar ? "height" : "width"](contentLength - targetBarLen);
@@ -1794,50 +1889,79 @@
 					targetBarContainer, referBarContainer,
 					targetNeedScrollBar, referNeedScrollBar,
 					targetScrollBarPosition, referScrollBarPosition, dir, scrollingNeed) {
-			var hbar = dir === "h";
+			var hbar = dir === "h", targetBarLen, targetPadding, targetBarPosition, 
+			barPosition1, contentPosition1, barPosition2, contentPosition2, 
+			contentLength2, referBarWidth;
 			if (targetNeedScrollBar) {
-				var targetBarLen = targetBarContainer[0][hbar ? "offsetHeight" : "offsetWidth"];
-				var targetPadding = self._getScrollContainerPadding(dir);
-				var targetBarPosition = hbar ? "top" : "left";
-				var barPosition1 = hbar ? { top: "0px", bottom: "auto", left: "auto", right: "auto"} : { left: "0px", right: "auto", top: "auto", bottom: "auto" };
-				var contentPosition1 = hbar ? { top: targetBarLen + "px"} : { left: targetBarLen + "px" };
+				targetBarLen = targetBarContainer[0][hbar ? 
+				"offsetHeight" : "offsetWidth"];
+				targetPadding = self._getScrollContainerPadding(dir);
+				targetBarPosition = hbar ? "top" : "left";
+				barPosition1 = hbar ? { top: "0px", bottom: "auto", left: "auto", 
+				right: "auto"} : { left: "0px", right: "auto", top: "auto", 
+				bottom: "auto" };
+				contentPosition1 = hbar ? { top: targetBarLen + "px"} : 
+				{ left: targetBarLen + "px" };
 
-				var barPosition2 = hbar ? { top: "auto", right: "auto", left: "auto", bottom: "0px"} : { left: "auto", right: "0px", top: "auto", bottom: "auto" };
-				var contentPosition2 = hbar ? { top: ""} : { left: "" };
+				barPosition2 = hbar ? { top: "auto", right: "auto", left: "auto",
+				bottom: "0px"} : { left: "auto", right: "0px", top: "auto", 
+				bottom: "auto" };
+				contentPosition2 = hbar ? { top: ""} : { left: "" };
 				//var contentLength = content[0][hbar? "clientHeight":"clientWidth"];
-				var contentLength2 = content[0][hbar ? "clientWidth" : "clientHeight"];
+				contentLength2 = content[0][hbar ? "clientWidth" : "clientHeight"];
 				if (targetScrollBarPosition === targetBarPosition) {
 					targetBarContainer.css(barPosition1);
 					content.css(contentPosition1);
 					if (hbar) {
-						targetBarContainer.children(".ui-wijsuperpanel-hbar-buttonleft").removeClass("ui-corner-bl").addClass("ui-corner-tl");
-						targetBarContainer.children(".ui-wijsuperpanel-hbar-buttonright").removeClass("ui-corner-br").addClass("ui-corner-tr");
-						targetBarContainer.removeClass("ui-corner-bottom").addClass("ui-corner-top");
+						targetBarContainer
+						.children(".wijmo-wijsuperpanel-hbar-buttonleft")
+						.removeClass("ui-corner-bl").addClass("ui-corner-tl");
+						targetBarContainer
+						.children(".wijmo-wijsuperpanel-hbar-buttonright")
+						.removeClass("ui-corner-br").addClass("ui-corner-tr");
+						targetBarContainer.removeClass("ui-corner-bottom")
+						.addClass("ui-corner-top");
 					}
 					else {
-						targetBarContainer.children(".ui-wijsuperpanel-vbar-buttontop").removeClass("ui-corner-tr").addClass("ui-corner-tl");
-						targetBarContainer.children(".ui-wijsuperpanel-vbar-buttonbottom").removeClass("ui-corner-br").addClass("ui-corner-bl");
-						targetBarContainer.removeClass("ui-corner-right").addClass("ui-corner-left");
+						targetBarContainer
+						.children(".wijmo-wijsuperpanel-vbar-buttontop")
+						.removeClass("ui-corner-tr").addClass("ui-corner-tl");
+						targetBarContainer
+						.children(".wijmo-wijsuperpanel-vbar-buttonbottom")
+						.removeClass("ui-corner-br").addClass("ui-corner-bl");
+						targetBarContainer.removeClass("ui-corner-right")
+						.addClass("ui-corner-left");
 					}
 				}
 				else {
 					targetBarContainer.css(barPosition2);
 					content.css(contentPosition2);
 					if (hbar) {
-						targetBarContainer.children(".ui-wijsuperpanel-hbar-buttonleft").removeClass("ui-corner-tl").addClass("ui-corner-bl");
-						targetBarContainer.children(".ui-wijsuperpanel-hbar-buttonright").removeClass("ui-corner-bl").addClass("ui-corner-br");
-						targetBarContainer.removeClass("ui-corner-top").addClass("ui-corner-bottom");
+						targetBarContainer
+						.children(".wijmo-wijsuperpanel-hbar-buttonleft")
+						.removeClass("ui-corner-tl").addClass("ui-corner-bl");
+						targetBarContainer
+						.children(".wijmo-wijsuperpanel-hbar-buttonright")
+						.removeClass("ui-corner-bl").addClass("ui-corner-br");
+						targetBarContainer.removeClass("ui-corner-top")
+						.addClass("ui-corner-bottom");
 					}
 					else {
-						targetBarContainer.children(".ui-wijsuperpanel-vbar-buttontop").removeClass("ui-corner-tl").addClass("ui-corner-tr");
-						targetBarContainer.children(".ui-wijsuperpanel-vbar-buttonbottom").removeClass("ui-corner-bl").addClass("ui-corner-br");
-						targetBarContainer.removeClass("ui-corner-left").addClass("ui-corner-right");
+						targetBarContainer
+						.children(".wijmo-wijsuperpanel-vbar-buttontop")
+						.removeClass("ui-corner-tl").addClass("ui-corner-tr");
+						targetBarContainer
+						.children(".wijmo-wijsuperpanel-vbar-buttonbottom")
+						.removeClass("ui-corner-bl").addClass("ui-corner-br");
+						targetBarContainer.removeClass("ui-corner-left")
+						.addClass("ui-corner-right");
 					}
 				}
 				//content[hbar?"height":"width"](contentLength - targetBarLen);
-				var referBarWidth = 0;
+				referBarWidth = 0;
 				if (referNeedScrollBar) {
-					referBarWidth = referBarContainer[0][hbar ? "offsetWidth" : "offsetHeight"];
+					referBarWidth = referBarContainer[0][hbar ? 
+					"offsetWidth" : "offsetHeight"];
 					if (referScrollBarPosition === "left") {
 						targetBarContainer.css("right", "0px");
 					}
@@ -1855,7 +1979,8 @@
 					referBarWidth = 0;
 				}
 
-				targetBarContainer[hbar ? "width" : "height"](contentLength2 - targetPadding);
+				targetBarContainer[hbar ? "width" : "height"](contentLength2 - 
+				targetPadding);
 				self._enableDisableScrollBar(dir, targetBarContainer, !scrollingNeed);
 			}
 			else {
@@ -1864,38 +1989,48 @@
 		},
 
 		_testScroll: function (self, f, o) {
-			var wrapper = f.templateWrapper;
-			var content = f.contentWrapper;
-			var scrollerWrapper = f.stateContainer;
-			var contentWidth = content.innerWidth();
-			var contentHeight = content.innerHeight();
-			var wrapperWidth = f.contentWidth;
-			var wrapperHeight = f.contentHeight;
+			var wrapper = f.templateWrapper,
+			content = f.contentWrapper,
+			scrollerWrapper = f.stateContainer,
+			contentWidth = content.innerWidth(),
+			contentHeight = content.innerHeight(),
+			wrapperWidth = f.contentWidth,
+			wrapperHeight = f.contentHeight,
+			hNeedScrollBar, vNeedScrollBar, hbarContainer, vbarContainer, 
+			hbarPosition, vbarPosition;
 			f.hScrolling = wrapperWidth > contentWidth;
 			f.vScrolling = wrapperHeight > contentHeight;
 
-			var hNeedScrollBar = self.hNeedScrollBar = self._needScrollbar(o.hScroller, f.hScrolling);
-			self._createBarIfNeeded(self.hNeedScrollBar, scrollerWrapper, "h", hbarHtml, content);
+			hNeedScrollBar = self.hNeedScrollBar = 
+			self._needScrollbar(o.hScroller, f.hScrolling);
+			self._createBarIfNeeded(self.hNeedScrollBar, scrollerWrapper, 
+			"h", hbarHtml, content);
 			// having h scroll bar, but no vscroll bar, we need to test vscrolling again.
 			if (hNeedScrollBar && !f.vScrolling) {
-				f.vScrolling = wrapper[0].offsetHeight > (contentHeight - f.hbarContainer[0].offsetHeight);
+				f.vScrolling = wrapper[0].offsetHeight > (contentHeight - 
+				f.hbarContainer[0].offsetHeight);
 			}
 
-			var vNeedScrollBar = self.vNeedScrollBar = self._needScrollbar(o.vScroller, f.vScrolling);
-			self._createBarIfNeeded(self.vNeedScrollBar, scrollerWrapper, "v", vbarHtml, content);
+			vNeedScrollBar = self.vNeedScrollBar = 
+			self._needScrollbar(o.vScroller, f.vScrolling);
+			self._createBarIfNeeded(self.vNeedScrollBar, scrollerWrapper, "v", 
+			vbarHtml, content);
 
 			if (vNeedScrollBar && !f.hScrolling) {
-				f.hScrolling = wrapper[0].offsetWidth > (contentWidth - f.vbarContainer[0].offsetWidth);
+				f.hScrolling = wrapper[0].offsetWidth > (contentWidth - 
+				f.vbarContainer[0].offsetWidth);
 				if (f.hScrolling) {
-					hNeedScrollBar = self.hNeedScrollBar = self._needScrollbar(o.hScroller, f.hScrolling);
-					self._createBarIfNeeded(self.hNeedScrollBar, scrollerWrapper, "h", hbarHtml, content);
+					hNeedScrollBar = self.hNeedScrollBar = 
+					self._needScrollbar(o.hScroller, f.hScrolling);
+					self._createBarIfNeeded(self.hNeedScrollBar, scrollerWrapper, "h",
+					 hbarHtml, content);
 				}
 			}
 
-			var hbarContainer = f.hbarContainer;
-			var vbarContainer = f.vbarContainer;
-			var hbarPosition = o.hScroller.scrollBarPosition;
-			var vbarPosition = o.vScroller.scrollBarPosition;
+			hbarContainer = f.hbarContainer;
+			vbarContainer = f.vbarContainer;
+			hbarPosition = o.hScroller.scrollBarPosition;
+			vbarPosition = o.vScroller.scrollBarPosition;
 
 			self._setScrollbarPosition(wrapper, self, content, hbarContainer,
 			vbarContainer, hNeedScrollBar, vNeedScrollBar, hbarPosition,
@@ -1919,12 +2054,16 @@
 			// </param>
 
 			if (bar === "v") {
-				barContainer[disable ? "addClass" : "removeClass"]("ui-wijsuperpanel-vbarcontainer-disabled");
-				barContainer.find("." + uiStateDefault)[disable ? "addClass" : "removeClass"](uiStateDisabled);
+				barContainer[disable ? "addClass" : 
+				"removeClass"]("wijmo-wijsuperpanel-vbarcontainer-disabled");
+				barContainer.find("." + uiStateDefault)[disable ? "addClass" : 
+				"removeClass"](uiStateDisabled);
 			}
 			else if (bar === "h") {
-				barContainer[disable ? "addClass" : "removeClass"]("ui-wijsuperpanel-hbarcontainer-disabled");
-				barContainer.find("." + uiStateDefault)[disable ? "addClass" : "removeClass"](uiStateDisabled);
+				barContainer[disable ? "addClass" : 
+				"removeClass"]("wijmo-wijsuperpanel-hbarcontainer-disabled");
+				barContainer.find("." + uiStateDefault)[disable ? "addClass" : 
+				"removeClass"](uiStateDisabled);
 			}
 			barContainer.children("." + scrollerHandle)[disable ? "hide" : "show"]();
 		},
@@ -1932,14 +2071,14 @@
 		_initResizer: function () {
 			// Initialize reseizer of wijsuperpanel.
 
-			var self = this;
-			var o = self.options;
-			var f = self._fields();
-			var resizer = f.resizer;
+			var self = this, o = self.options,
+			f = self._fields(),
+			resizer = f.resizer,
+			resizableOptions, oldstop;
 
-			if (resizer == null && o.allowResize) {
-				var resizableOptions = o.resizableOptions;
-				var oldstop = resizableOptions.stop;
+			if (!resizer && o.allowResize) {
+				resizableOptions = o.resizableOptions;
+				oldstop = resizableOptions.stop;
 				resizableOptions.stop = function (e) {
 					self._resizeStop(e, self);
 					if ($.isFunction(oldstop)) {
@@ -1948,7 +2087,7 @@
 				};
 				f.resizer = resizer = self.element.resizable(resizableOptions);
 			}
-			if (!o.allowResize && f.resizer != null) {
+			if (!o.allowResize && f.resizer) {
 				resizer.resizable("destroy");
 				f.resizer = null;
 			}
@@ -1969,17 +2108,18 @@
 				ele.attr("tabindex", "-1");
 				f.tabindex = true;
 			}
-			var stateContainer = f.stateContainer = $(innerElementHtml);
+			var stateContainer = f.stateContainer = $(innerElementHtml),
+			templateW;
 			// move child element to content wrapper div of wijsuperpanel.
 			f.contentWrapper = stateContainer.children();
-			var templateW = f.templateWrapper = f.contentWrapper.children();
+			templateW = f.templateWrapper = f.contentWrapper.children();
 			ele.contents().each(function (index, el) {
 				var jel = $(el);
-				if (jel.hasClass("ui-wijsuperpanel-header")) {
+				if (jel.hasClass("wijmo-wijsuperpanel-header")) {
 					f.header = jel;
 					return;
 				}
-				if (jel.hasClass("ui-wijsuperpanel-footer")) {
+				if (jel.hasClass("wijmo-wijsuperpanel-footer")) {
 					f.footer = jel;
 					return;
 				}
@@ -2006,7 +2146,7 @@
 				if ($.browser.msie) {
 					return;
 				}
-				var key1, key;
+				var key1, key, value, border;
 				key1 = key = "";
 
 				if ($.browser.webkit) {
@@ -2021,8 +2161,8 @@
 					key = "border-top-left-radius";
 					key1 = "border-radius";
 				}
-				var value = ele.css(key);
-				var border = parseInt(value);
+				value = ele.css(key);
+				border = parseInt(value, 10);
 				// adding 1 extra to out-most radius.
 
 				ele.css(key1, border + 1);
@@ -2035,9 +2175,9 @@
 		},
 
 		_setInnerElementsSize: function (f, ele) {
-			var state = f.stateContainer;
-			var content = f.contentWrapper;
-			var height = 0;
+			var state = f.stateContainer,
+			content = f.contentWrapper,
+			height = 0, style, clientHeight, clientWidth, style2;
 			if (f.header !== undefined) {
 				height += f.header.outerHeight();
 			}
@@ -2045,17 +2185,18 @@
 				height += f.footer.outerHeight();
 			}
 
-			var style = state[0].style;
-			var clientHeight = ele[0].clientHeight - height;
-			var clientWidth = ele[0].clientWidth;
-			// hide element before setting width and height to improve javascript performance in FF3.
+			style = state[0].style;
+			clientHeight = ele[0].clientHeight - height;
+			clientWidth = ele[0].clientWidth;
+			// hide element before setting width and height to improve 
+			//javascript performance in FF3.
 			style.display = "none";
 			style.height = clientHeight + "px";
 			style.width = clientWidth + "px";
-			var style2 = content[0].style;
+			style2 = content[0].style;
 			style2.height = clientHeight + "px";
 			style2.width = clientWidth + "px";
 			style.display = "";
 		}
 	});
-})(jQuery);
+}(jQuery));

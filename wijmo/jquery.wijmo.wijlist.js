@@ -1,7 +1,7 @@
 /*globals jQuery*/
 /*
  *
- * Wijmo Library 0.8.0
+ * Wijmo Library 0.9.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -20,21 +20,22 @@
  */
 "use strict";
 (function ($) {
-	var listCSS = "ui-widget ui-widget-content ui-corner-all ui-wijlist",
-		listItemCSS = "ui-wijlist-item",
+	var listCSS = "ui-widget ui-widget-content ui-corner-all wijmo-wijlist",
+		listItemCSS = "wijmo-wijlist-item",
 		listItemCSSAlternate = listItemCSS + "-alternate",
 		listItemCSSSelected = listItemCSS + "-selected",
 		listItemCSSFirst = listItemCSS + "-first",
 		listItemCSSLast = listItemCSS + "-last",
 		stateHover = "ui-state-hover",
 		uiStateActive = "ui-state-active",
-		activeItem = "ui-active-wijlistitem",
+		activeItem = "wijmo-wijlistitem-active",
 		selectedActive = listItemCSSSelected + " " + uiStateActive,
 		itemKey = "item.wijlist";
-	$.widget("ui.wijlist", {
+	$.widget("wijmo.wijlist", {
 		options: {
 			/// <summary>
-			/// Select event handler of wijlist. A function will be called when any item in the list is selected.
+			/// Select event handler of wijlist. A function will be called 
+			/// when any item in the list is selected.
 			/// Default: null.
 			/// Type: Function.
 			/// </summary>
@@ -52,7 +53,8 @@
 			/// Type: String.
 			/// </summary>
 			/// <remarks>
-			/// Options are "single" and "multiple". This option should not be set again after initialization.
+			/// Options are "single" and "multiple". This option should not be set 
+			/// again after initialization.
 			/// </remarks>
 			selectionMode: "single",
 			/// <summary>
@@ -62,13 +64,15 @@
 			/// </summary>
 			autoSize: false,
 			/// <summary>
-			/// A value specifies the max items count to display if autoSize is set to true.
+			/// A value specifies the max items count to display if 
+			///autoSize is set to true.
 			/// Default: 5.
 			/// Type: Number.
 			/// </summary>
 			maxItemsCount: 5,
 			/// <summary>
-			/// A value determines whether to add ui-state-hover class to list item when mouse enters.
+			/// A value determines whether to add ui-state-hover class to list
+			/// item when mouse enters.
 			/// Default: true.
 			/// Type: Boolean.
 			/// </summary>
@@ -92,10 +96,10 @@
 			/// </summary>
 			/// <param name="event" type="EventObject">
 			/// event object passed in to activate method.
-			///	</param>
+			/// </param>
 			/// <param name="item" type="Object">
 			/// The list item to be activated.
-			///	</param>
+			/// </param>
 			/// <returns>
 			/// returns false to cancel item focusing.
 			/// </returns>
@@ -107,10 +111,10 @@
 			/// </summary>
 			/// <param name="event" type="EventObject">
 			/// event object passed in to activate method.
-			///	</param>
+			/// </param>
 			/// <param name="item" type="Object">
 			/// The list item to be activated.
-			///	</param>
+			/// </param>
 			focus: null,
 			/// <summary>
 			/// A function called when an item loses focus.
@@ -119,10 +123,10 @@
 			/// </summary>
 			/// <param name="event" type="EventObject">
 			/// event object passed in to activate method.
-			///	</param>
+			/// </param>
 			/// <param name="item" type="Object">
 			/// The list item.
-			///	</param>
+			/// </param>
 			blur: null,
 			/// <summary>
 			/// A function called before an item is rendered.
@@ -131,7 +135,7 @@
 			/// </summary>
 			/// <param name="event" type="EventObject">
 			/// event object with this event.
-			///	</param>
+			/// </param>
 			/// <param name="item" type="Object">
 			/// item to be rendered.
 			/// item.element: LI element with this item.
@@ -139,7 +143,7 @@
 			/// item.label: label of item.
 			/// item.value: value of item.
 			/// item.text: could be set in handler to override rendered label of item.
-			///	</param>
+			/// </param>
 			itemrendering: null,
 			/// <summary>
 			/// A function called after a item is rendered.
@@ -148,10 +152,10 @@
 			/// </summary>
 			/// <param name="event" type="EventObject">
 			/// event object with this event.
-			///	</param>
+			/// </param>
 			/// <param name="item" type="Object">
 			/// item rendered.
-			///	</param>
+			/// </param>
 			itemrendered: null,
 			/// <summary>
 			/// A function called after list is rendered.
@@ -160,13 +164,14 @@
 			/// </summary>
 			/// <param name="event" type="EventObject">
 			/// event object with this event.
-			///	</param>
+			/// </param>
 			/// <param name="list" type="Object">
 			/// list rendered.
-			///	</param>
+			/// </param>
 			listrendered: null,
 			/// <summary>
-			/// A value determines whether to keep item highlight when mouse is leaving list. 
+			/// A value determines whether to keep item highlight when mouse 
+			/// is leaving list. 
 			/// Default: Boolean.
 			/// Type: false.
 			/// </summary>
@@ -174,13 +179,14 @@
 		},
 
 		_create: function () {
-			var self = this, ele = this.element;
+			var self = this, ele = this.element, o = this.options;
 			ele.addClass(listCSS).attr({
 				role: "listbox",
-				"aria-activedescendant": activeItem
+				"aria-activedescendant": activeItem,
+				"aria-multiselectable": o.selectionMode === "multiple"
 			}).bind("click." + self.widgetName, self, self._onListClick);
-			self.ul = $("<ul class='ui-wijlist-ul'></ul>").appendTo(ele);
-			if (self.options.disabled) {
+			self.ul = $("<ul class='wijmo-wijlist-ul'></ul>").appendTo(ele);
+			if (o.disabled) {
 				self.disable();
 			}
 		},
@@ -190,9 +196,23 @@
 			/// Sets Items to be rendered by the wijlist.
 			/// </summary>
 			/// <param name="items" type="Array">
-			/// Items array to be rendered.  The array contains object like {label: "label", value: "value"}.
-			///	</param>
-			this.items = items;
+			/// Items array to be rendered.  The array contains object like 
+			///{label: "label", value: "value"}.
+			/// </param>
+			var self = this, selectedItems;
+
+			self.items = items;
+			selectedItems = $.grep(items, function (a) {
+				return a.selected;
+			});
+			if (self.options.selectionMode === "single") {
+				self.selectedItems = [];
+				self.selectedItem = selectedItems.length > 0 ?
+									selectedItems[0] : undefined;
+			}
+			else {
+				self.selectedItems = selectedItems;
+			}
 		},
 
 		getList: function () {
@@ -207,7 +227,7 @@
 		},
 
 		_onListClick: function (e) {
-			if (!$(e.target).closest(".ui-wijlist-item").length) {
+			if (!$(e.target).closest(".wijmo-wijlist-item").length) {
 				return;
 			}
 			var self = e.data;
@@ -224,7 +244,8 @@
 				self.superPanel.destroy();
 			}
 
-			ele.removeClass(listCSS).removeAttr("role").removeAttr("aria-activedescendant").unbind("." + self.widgetName);
+			ele.removeClass(listCSS).removeAttr("role")
+			.removeAttr("aria-activedescendant").unbind("." + self.widgetName);
 			self.ul.remove();
 			$.Widget.prototype.destroy.apply(self, arguments);
 		},
@@ -243,7 +264,7 @@
 			/// Whether to scroll activated item to view.
 			///	</param>
 
-			var self = this, active;
+			var self = this, active, activeElement;
 			self.deactivate();
 			if (item === null || item === undefined) {
 				return;
@@ -251,13 +272,14 @@
 			if (self._trigger("focusing", event, item) === false) {
 				return;
 			}
-			active = self.active = item.element;
+			active = self.active = item;
+			activeElement = item.element;
 			if (self.options.addHoverItemClass) {
-				active.addClass(stateHover);
+				activeElement.addClass(stateHover);
 			}
-			self.active.attr("id", activeItem);
+			activeElement.attr("id", activeItem);
 			if (scrollTo && self.superPanel !== undefined) {
-				self.superPanel.scrollChildIntoView(active);
+				self.superPanel.scrollChildIntoView(activeElement);
 			}
 			self._trigger("focus", event, item);
 		},
@@ -267,12 +289,14 @@
 			/// Deactivates activated items.
 			/// </summary>
 
-			var self = this, a = this.active;
+			var self = this,
+				a = self.active, ele;
 			if (!a) {
 				return;
 			}
+			ele = a.element;
 			self._trigger("blur", null, a);
-			a.removeClass(stateHover).removeAttr("id");
+			ele.removeClass(stateHover).removeAttr("id");
 			self.active = undefined;
 		},
 
@@ -313,7 +337,7 @@
 			/// Tests that the focus is at the first item.
 			/// </summary>
 
-			return this.active && !this.active.prev().length;
+			return this.active && !this.active.element.prev().length;
 		},
 
 		last: function () {
@@ -321,7 +345,7 @@
 			/// Tests that the focus is at the last item.
 			/// </summary>
 
-			return this.active && !this.active.next().length;
+			return this.active && !this.active.element.next().length;
 		},
 
 		move: function (direction, edge, event) {
@@ -335,7 +359,7 @@
 				self.activate(event, item, true);
 				return;
 			}
-			next = self.active[direction + "All"]("." + listItemCSS).eq(0);
+			next = self.active.element[direction + "All"]("." + listItemCSS).eq(0);
 			if (next.length) {
 				self.activate(event, next.data(itemKey), true);
 			}
@@ -350,18 +374,22 @@
 			/// </summary>
 			///
 
-			var self = this, ele = this.active, item = ele.data(itemKey), singleMode, previous;
+			var self = this,
+				ele = self.active.element,
+				item, singleMode, previous;
 			if (ele === undefined) {
 				return;
 			}
+			item = ele.data(itemKey);
 			singleMode = self.options.selectionMode === "single";
 			if (singleMode) {
 				previous = self.selectedItem;
-				ele.addClass(selectedActive);
+				ele.addClass(selectedActive).attr("aria-selected", "true");
 				item.selected = true;
 				if (previous !== undefined && item !== previous) {
 					previous.selected = false;
-					previous.element.removeClass(selectedActive);
+					previous.element.removeClass(selectedActive)
+					.removeAttr("aria-selected");
 				}
 				self.selectedItem = item;
 				self._trigger("selected", event, {
@@ -373,10 +401,10 @@
 			else {
 				item.selected = !item.selected;
 				if (item.selected) {
-					ele.addClass(selectedActive);
+					ele.addClass(selectedActive).attr("aria-selected", "true");
 				}
 				else {
-					ele.removeClass(selectedActive);
+					ele.removeClass(selectedActive).removeAttr("aria-selected", "true");
 				}
 				self.selectedItems = $.grep(self.items, function (a) {
 					return a.selected;
@@ -388,26 +416,87 @@
 			}
 		},
 
-		selectItems: function (indices, triggerSelected) {
+		_findItemsByValues: function (values) {
+			var itemFound, found = [];
+
+			found = $.grep(this.items, function (itm, i) {
+				itemFound = false;
+				for (var j = 0; j < values.length; j++)
+				{
+					if (itm.value === values[j]) {
+						itemFound = true;
+					}
+				}
+				return itemFound;
+			});
+
+			return found;
+		},
+
+		_findItemsByIndices: function (indices) {
+			var self = this, len = this.items.length, found = [];
+
+			$.each(indices, function (index, value) {
+				if (value >= 0 && value < len) {
+					found.push(self.items[value]);
+				}
+			});
+
+			return found;
+		},
+
+		getItems: function (indices) {
 			/// <summary>
-			/// Selects multiple items in the list.
+			/// Find list items by indices or values.
 			/// </summary>
 			/// <param name="indices" type="Array/Number">
-			/// Indices of items to select.
+			/// This parameter could be a string, number, array of string,
+			/// array of number.
+			/// If parameter is a number or an array of number,
+			/// it's used as the index/indices of the item(s) to get.
+			/// If parameter is a string or an array of string,
+			/// it's used as the value/values of the item(s) to get.
 			/// </param>
 
-			var self = this, singleMode = this.options.selectionMode === "single", item, previous, len = this.items.length;
+			var self = this, isNumber, byArray, searchTerms, foundItems;
+
+			byArray = $.isArray(indices);
+			isNumber = (!byArray) && !isNaN(indices) || (byArray && !isNaN(indices[0]));
+			searchTerms = byArray ? indices : [indices];
+			foundItems = isNumber ? 
+			self._findItemsByIndices(searchTerms) : self._findItemsByValues(searchTerms);
+			return foundItems;
+		}, 
+
+		selectItems: function (indices, triggerSelected) {
+			/// <summary>
+			/// Selects item(s) in the list by item index/indices or value(s).
+			/// </summary>
+			/// <param name="indices" type="Array/Number">
+			/// This parameter could be a string, number, array of string,
+			/// array of number.
+			/// If parameter is a number or an array of number,
+			/// it's used as the index/indices of the item(s) to get.
+			/// If parameter is a string or an array of string,
+			/// it's used as the value/values of the item(s) to get.
+			/// </param>
+			/// <param name="triggerSelected" type="Boolean">
+			/// Whether to trigger selected event of list.
+			/// </param>
+
+			var self = this, singleMode = this.options.selectionMode === "single",
+			item, previous, foundItems;
+
+			foundItems = self.getItems(indices);
 			if (singleMode) {
-				if (indices >= 0 && indices < len) {
-					item = self.items[indices];
+				if (foundItems.length > 0)
+				{
+					item = foundItems[0];
 					item.selected = true;
 					item.element.addClass(selectedActive);
 				}
-				else {
-					return;
-				}
 				previous = self.selectedItem;
-				if (previous !== undefined && previous !== null) {
+				if (previous) {
 					previous.selected = false;
 					previous.element.removeClass(selectedActive);
 				}
@@ -416,18 +505,13 @@
 					self._trigger("selected", null, {
 						item: item,
 						previousItem: previous
-						//,
-						//data: data
 					});
 				}
 			}
 			else {
-				$.each(indices, function (index, value) {
-					if (value >= 0 && value < len) {
-						var i = self.items[value];
-						i.selected = true;
-						i.element.addClass(selectedActive);
-					}
+				$.each(foundItems, function (index, itm) {
+					itm.selected = true;
+					itm.element.addClass(selectedActive);
 				});
 				self.selectedItems = $.grep(self.items, function (a) {
 					return a.selected;
@@ -442,28 +526,27 @@
 
 		unselectItems: function (indices) {
 			/// <summary>
-			/// Unselects items by items’ indices.
+			/// Unselects items by itemsÃ¢â‚¬â„¢indices.
 			/// </summary>
 			/// <param name="indices" type="Array">
 			/// Indices of items to unselect.
 			/// </param>
 
-			var self = this, mode = this.options.selectionMode, len = this.items.length, selectedItem;
+			var self = this, mode = this.options.selectionMode, selectedItem, foundItems;
+
 			if (mode === "single") {
 				selectedItem = self.selectedItem;
-				if (selectedItem !== undefined) {
+				if (selectedItem) {
 					selectedItem.selected = false;
 					selectedItem.element.removeClass(selectedActive);
 					self.selectedItem = undefined;
 				}
 			}
 			else {
-				$.each(indices, function (index, value) {
-					if (value >= 0 && value < len) {
-						var i = self.items[value];
-						i.selected = false;
-						i.element.removeClass(selectedActive);
-					}
+				foundItems = self.getItems(indices);
+				$.each(foundItems, function (index, i) {
+					i.selected = false;
+					i.element.removeClass(selectedActive);
 				});
 				self.selectedItems = $.grep(self.items, function (a) {
 					return a.selected;
@@ -475,10 +558,9 @@
 			/// <summary>
 			/// Render items of wijlist.
 			/// </summary>
-			var self = this, ul = this.ul, o = this.options, items, count, singleMode, i, item;
+			var self = this, ul = this.ul, o = this.options, items, 
+			count, singleMode, i, item;
 			ul.empty();
-			self.selectedItem = undefined;
-			self.selectedItems = [];
 			// returns if no items to render.
 			items = self.items;
 			if (items === undefined) {
@@ -500,7 +582,9 @@
 
 
 		_renderItem: function (ul, item, index, singleMode) {
-			var self = this, li = $("<li class='ui-wijlist-item ui-corner-all'></li>"), label, url;
+			var self = this, 
+			li = $("<li role='option' class='wijmo-wijlist-item " +
+			"ui-corner-all'></li>"), label, url;
 			item.element = li;
 			item.list = self;
 			if (self._trigger("itemrendering", null, item) === false) {
@@ -525,14 +609,9 @@
 				li.prepend("<img src='" + item.imageUrl + "'>");
 			}
 			// add selected items
-			if (item.selected === true) {
+			if (item.selected) {
+				self.activate(null, item, false);
 				li.addClass(selectedActive);
-				if (singleMode && self.selectedItem === undefined) {
-					self.selectedItem = item;
-				}
-				else {
-					self.selectedItems.push(item);
-				}
 			}
 			if (index % 2 === 1) {
 				li.addClass(listItemCSSAlternate);
@@ -545,7 +624,8 @@
 			/// Reset the layout of superpanel to reflect the change in content.
 			/// </summary>
 
-			var self = this, ele = this.element, o = this.options, ul = this.ul, singleItem = ul.children(".ui-wijlist-item:first"),
+			var self = this, ele = this.element, o = this.options, ul = this.ul,
+			singleItem = ul.children(".wijmo-wijlist-item:first"),
 			adjustHeight = null, h, percent, small, vScroller, large, spOptions, pt;
 			if (!ele.is(":visible")) {
 				return false;
@@ -587,7 +667,8 @@
 			pt = ul.css("padding-top");
 			if (pt.length > 0) {
 				vScroller = self.superPanel.options.vScroller;
-				vScroller.firstStepChangeFix = self.superPanel.scrollPxToValue(parseFloat(pt), "v");
+				vScroller.firstStepChangeFix = self.superPanel
+				.scrollPxToValue(parseFloat(pt), "v");
 			}
 			else {
 				vScroller.firstStepChangeFix = 0;

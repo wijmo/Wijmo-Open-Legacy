@@ -1,19 +1,29 @@
-.ui-wijdialog-captionbutton { 
+.wijmo-wijdialog-captionbutton { 
 	height:18px;
 	padding:1px;
 	width:19px;
-	float: right;
+	display: inline-block;
 	margin-right:.2em;
 	outline:none;
+	text-align: left;
 }
-.ui-wijdialog-captionbutton:hover,
-.ui-wijdialog-captionbutton .ui-state-focus { 
+.wijmo-wijdialog-captionbutton:hover,
+.wijmo-wijdialog-captionbutton .ui-state-focus { 
 	padding: 0;
 }
-.ui-wijdialog-captionbutton .ui-icon{
+.wijmo-wijdialog-captionbutton .ui-icon{
 	margin:1px;
 }
-.ui-wijdialog .ui-wijdialog-hasframe{
+.wijmo-wijdialog .wijmo-wijdialog-hasframe{
 	padding: 0;
 }
-.ui-wijdialog-defaultdockingzone { position:fixed; bottom: 0px;left:0px; }
+.wijmo-wijdialog-defaultdockingzone { position:fixed; bottom: 0px;left:0px; }
+
+.ui-dialog-titlebar {/* extend jquery.ui.dialog.css*/
+	text-align: right;
+}
+
+/* for ie 6 minimize*/
+.wijmo-wijdialog-defaultdockingzone .ui-dialog-titlebar {
+	float:left;
+}
