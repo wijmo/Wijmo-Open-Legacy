@@ -2,7 +2,7 @@
 /*jslint white: false */
 /*
  *
- * Wijmo Library 0.9.0
+ * Wijmo Library 1.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -351,6 +351,12 @@
 						nextContent.addClass("ui-accordion-content-active");
 						prevContent.css('display', '');
 						nextContent.css('display', '');
+						if($.fn.wijlinechart) {
+							prevContent.find(".wijmo-wijlinechart").wijlinechart("redraw");//?
+							nextContent.find(".wijmo-wijlinechart").wijlinechart("redraw");//?
+						}
+						//prevContent.wijTriggerVisibility();
+						//nextContent.wijTriggerVisibility();
 						var newEv = jQuery.Event("selectedindexchanged");
 						this.element.trigger(newEv, newIndex);
 					}, this),
@@ -393,6 +399,12 @@
 					nextContent.show().addClass("ui-accordion-content-active")
 									.addClass(this._contentCornerOpened);
 				}
+				if($.fn.wijlinechart) {
+					prevContent.find(".wijmo-wijlinechart").wijlinechart("redraw");//?
+					nextContent.find(".wijmo-wijlinechart").wijlinechart("redraw");//?
+				}
+				//prevContent.wijTriggerVisibility();
+				//nextContent.wijTriggerVisibility();
 				newEv = jQuery.Event("selectedindexchanged");
 				this.element.trigger(newEv, newIndex);
 			}

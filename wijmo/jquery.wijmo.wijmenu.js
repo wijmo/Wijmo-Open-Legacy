@@ -2,7 +2,7 @@
 
 /*
 *
-* Wijmo Library 0.9.0
+* Wijmo Library 1.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -595,7 +595,7 @@
 			menucontainer = scrollcontainer.parent();
 			scrollcontainer.addClass("scrollcontainer checkablesupport");
 			menucontainer
-			.addClass("ui-widget ui-widget-content wijmo-wijmenu ui-corner-all")
+			.addClass("ui-widget ui-widget-header wijmo-wijmenu ui-corner-all")
 			.addClass("ui-helper-clearfix")
 			.attr("aria-activedescendant", "ui-active-menuitem");
 			//var containerClass = "wijmo-wijmenu-vertical";
@@ -807,12 +807,10 @@
 						clearTimeout(hideTimer);
 					}).bind("mouseleave.wijmenu",
 					function () {
-						//console.log(allSubLists);
 						hideTimer = setTimeout(function () {
-							allSubLists.each(function () {
-								self._hideSubmenu($(this));
-							});
-							//allSubLists.hide();
+							for (var i = allSubLists.length - 1; i >= 0; i--) {
+								self._hideSubmenu($(allSubLists[i]));
+							}
 						}, 500);
 					});
 				}

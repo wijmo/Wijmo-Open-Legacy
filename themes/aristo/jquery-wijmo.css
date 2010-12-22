@@ -1,14 +1,17 @@
-/*
- * jQuery UI CSS Framework @VERSION
- *
- * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+/* 
+ * 
+ * Wijmo Aristo Theme
+ * http://wijmo.com/
+ * 
+ * Copyright(c) ComponentOne, LLC.  All rights reserved.
+ * 
  * Dual licensed under the MIT or GPL Version 2 licenses.
- * http://jquery.org/license
- *
- * http://docs.jquery.com/UI/Theming/API
- */
-
-
+ * licensing@wijmo.com
+ * http://www.wijmo.com/license
+ * 
+ * Based on the Aristo theme concept created by 280 North and Pinvoke (https://github.com/280north/aristo).
+ * 
+*/
 
 a
 {
@@ -2183,14 +2186,14 @@ button.ui-button::-moz-focus-inner
  * jQuery UI AutoComplete @VERSION
  *
 */
-.ui-wijinput, .ui-wijtextbox
+.wijmo-wijinput, .wijmo-wijtextbox
 {
     background: #fff;
     -moz-box-shadow: inset 0 2px 2px #8f8f8f;
     -webkit-box-shadow: inset 0 2px 2px #8f8f8f;
     box-shadow: inset 0 2px 2px #8f8f8f;
 }
-.ui-wijinput.ui-state-focus, .ui-wijtextbox.ui-state-focus
+.wijmo-wijinput.ui-state-focus, .wijmo-wijtextbox.ui-state-focus
 {
     background: #fff;
     -moz-box-shadow: 0px 0px 5px #85b2cb, inset 0 2px 2px #8f8f8f;
@@ -2203,58 +2206,58 @@ button.ui-button::-moz-focus-inner
     -webkit-box-shadow: 0px 5px 10px rgba(0,0,0,0.8);
     box-shadow: 0px 5px 10px rgba(0,0,0,0.8);
 }
-.ui-wijcalendar .ui-datepicker-header .ui-state-default
+.wijmo-wijcalendar .ui-datepicker-header .ui-state-default
 {
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
     box-shadow: none;
 }
-.ui-wijmenu
+.wijmo-wijmenu
 {
     background: #c4c4c4 url(images/ui-bg_highlight-hard_80_c4c4c4_1x100.png) top repeat-x;
     background: #c4c4c4 linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
     background: #c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
     background: #c4c4c4 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
 }
-.ui-wijmenu .ui-state-default
+.wijmo-wijmenu .ui-state-default
 {
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
     box-shadow: none;
 }
 
-.ui-wijmenu .ui-wijmenu-child
+.wijmo-wijmenu .wijmo-wijmenu-child
 {
     -moz-box-shadow: 0px 5px 10px rgba(0,0,0,0.8);
     -webkit-box-shadow: 0px 5px 10px rgba(0,0,0,0.8);
     box-shadow: 0px 5px 10px rgba(0,0,0,0.8);
 }
-.wij-menu-ipod .ui-wijmenu-list
+.wij-menu-ipod .wijmo-wijmenu-list
 {
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
     box-shadow: none;
 }
 
-*html .ui-wijmenu-vertical, *html .ui-wijmenu .ui-wijsuperpanel, *html .ui-wijmenu .ui-wijmenu-list
+*html .wijmo-wijmenu .wijmo-wijsuperpanel, *html .wijmo-wijmenu .wijmo-wijmenu-list
 {
     background: none;
 }
 
-*html .ui-wijmenu-horizontal .ui-wijmenu-child
+*html .wijmo-wijmenu-horizontal .wijmo-wijmenu-child
 {
     background: #ffffff;
 }
 
 
-*html .ui-wijmenu .ui-wijmenu-link
+*html .wijmo-wijmenu .wijmo-wijmenu-link
 {
     border-color: #c4c4c4;
     filter: chroma(color=#c4c4c4);
 }
 
 
-.ui-wijtooltip
+.wijmo-wijtooltip
 {
     background: #000;
     background: rgba(0,0,0,0.8);
@@ -2265,28 +2268,28 @@ button.ui-button::-moz-focus-inner
     box-shadow: 0px 0px 8px #85b2cb, inset 0px 1px 0px #999;
 }
 
-.ui-wijtooltip-arrow-lb .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-lc .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-lt .ui-wijtooltip-pointer-inner
+.wijmo-wijtooltip-arrow-lb .wijmo-wijtooltip-pointer-inner, .wijmo-wijtooltip-arrow-lc .wijmo-wijtooltip-pointer-inner, .wijmo-wijtooltip-arrow-lt .wijmo-wijtooltip-pointer-inner
 {
     border-right-color: #000 !important;
 }
 
-.ui-wijtooltip-arrow-rb .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-rc .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-rt .ui-wijtooltip-pointer-inner
+.wijmo-wijtooltip-arrow-rb .wijmo-wijtooltip-pointer-inner, .wijmo-wijtooltip-arrow-rc .wijmo-wijtooltip-pointer-inner, .wijmo-wijtooltip-arrow-rt .wijmo-wijtooltip-pointer-inner
 {
     border-left-color: #000 !important;
 }
 
-.ui-wijtooltip-arrow-br .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-bc .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-bl .ui-wijtooltip-pointer-inner
+.wijmo-wijtooltip-arrow-br .wijmo-wijtooltip-pointer-inner, .wijmo-wijtooltip-arrow-bc .wijmo-wijtooltip-pointer-inner, .wijmo-wijtooltip-arrow-bl .wijmo-wijtooltip-pointer-inner
 {
     border-top-color: #000 !important;
 }
 
-.ui-wijtooltip-arrow-tb .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-tc .ui-wijtooltip-pointer-inner, .ui-wijtooltip-arrow-tt .ui-wijtooltip-pointer-inner
+.wijmo-wijtooltip-arrow-tb .wijmo-wijtooltip-pointer-inner, .wijmo-wijtooltip-arrow-tc .wijmo-wijtooltip-pointer-inner, .wijmo-wijtooltip-arrow-tt .wijmo-wijtooltip-pointer-inner
 {
     border-bottom-color: #000 !important;
 }
 
 
-.ui-wijtooltip .ui-wijtooltip-pointer
+.wijmo-wijtooltip .wijmo-wijtooltip-pointer
 {
     opacity: 0.8;
 }

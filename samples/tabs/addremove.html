@@ -1,167 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Tabs - Add/Remove</title>
-    <meta charset="utf-8" />
-    <meta name="description" content="Add or remove tabs by code." />
-    <meta name="keywords" content="" />
-    <meta name="author" content="ComponentOne" />
-    <link href="../base-reset.css" rel="stylesheet" type="text/css" />
-    <link href="../../themes/aristo/jquery-ui-1.8.4.custom.css" rel="stylesheet"
-        type="text/css" />
-    <link href="../demos-single.css" rel="stylesheet" type="text/css" />
-    <script src="../../external/jquery-1.4.3.min.js" type="text/javascript"></script>
-    <script src="../../external/jquery-ui-1.8.6.custom.min.js" type="text/javascript"></script>
-    <link href="../../themes/wijmo/jquery.ui.wijdialog.css" rel="stylesheet" type="text/css" />
-    <link href="../../themes/wijmo/jquery.ui.wijtabs.css" rel="stylesheet" type="text/css" />
-    <script src="../../wijmo/jquery.ui.wijdialog.js" type="text/javascript"></script>
-    <script src="../../wijmo/jquery.ui.wijtabs.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        $(function () {
-            $("#tabs").wijtabs({ scrollable: true });
-        });
+	<title>Tabs - Add/Remove</title>
+	<meta charset="utf-8" />
+	<meta name="description" content="Add or remove tabs by code." />
+	<meta name="keywords" content="" />
+	<meta name="author" content="ComponentOne" />
+	<link href="../base-reset.css" rel="stylesheet" type="text/css" />
+	<link href="../../themes/aristo/jquery-wijmo.css" rel="stylesheet"
+		type="text/css" />
+	<link href="../demos-single.css" rel="stylesheet" type="text/css" />
+	<script src="../../external/jquery-1.4.3.min.js" type="text/javascript"></script>
+	<script src="../../external/jquery-ui-1.8.6.custom.min.js" type="text/javascript"></script>
+	<link href="../../themes/wijmo/jquery.wijmo.wijdialog.css" rel="stylesheet" type="text/css" />
+	<link href="../../themes/wijmo/jquery.wijmo.wijtabs.css" rel="stylesheet" type="text/css" />
+	<script src="../../wijmo/jquery.wijmo.wijdialog.js" type="text/javascript"></script>
+	<script src="../../wijmo/jquery.wijmo.wijtabs.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(function () {
+			$("#tabs").wijtabs({ scrollable: true });
+		});
 
-        $(function () {
-            var $tab_title_input = $('#tab_title'), $tab_content_input = $('#tab_content');
-            var tab_counter = 2;
+		$(function () {
+			var $tab_title_input = $('#tab_title'), $tab_content_input = $('#tab_content');
+			var tab_counter = 2;
 
-            // tabs init with a custom tab template and an "add" callback filling in the content
-            var $tabs = $('#tabs').wijtabs({
-                tabTemplate: '<li><a href="#{href}">#{label}</a> <span class="ui-icon ui-icon-close">Remove Tab</span></li>',
-                add: function (event, ui) {
-                    var tab_content = $tab_content_input.val() || 'Tab ' + tab_counter + ' content.';
-                    $(ui.panel).append('<p>' + tab_content + '</p>');
-                }
-            });
+			// tabs init with a custom tab template and an "add" callback filling in the content
+			var $tabs = $('#tabs').wijtabs({
+				tabTemplate: '<li><a href="#{href}">#{label}</a> <span class="ui-icon ui-icon-close">Remove Tab</span></li>',
+				add: function (event, ui) {
+					var tab_content = $tab_content_input.val() || 'Tab ' + tab_counter + ' content.';
+					$(ui.panel).append('<p>' + tab_content + '</p>');
+				}
+			});
 
-            // modal dialog init: custom buttons and a "close" callback reseting the form inside
-            var $dialog = $('#dialog').wijdialog({
-                showStatus: false,
-                showControlBox: false,
-                autoOpen: false,
-                modal: true,
-                buttons: {
-                    'Add': function () {
-                        addTab();
-                        $(this).wijdialog('close');
-                    },
-                    'Cancel': function () {
-                        $(this).wijdialog('close');
-                    }
-                },
-                open: function () {
-                    $tab_title_input.focus();
-                },
-                close: function () {
-                    $form.find('input').val("").end()
+			// modal dialog init: custom buttons and a "close" callback reseting the form inside
+			var $dialog = $('#dialog').wijdialog({
+				showStatus: false,
+				showControlBox: false,
+				autoOpen: false,
+				modal: true,
+				buttons: {
+					'Add': function () {
+						addTab();
+						$(this).wijdialog('close');
+					},
+					'Cancel': function () {
+						$(this).wijdialog('close');
+					}
+				},
+				open: function () {
+					$tab_title_input.focus();
+				},
+				close: function () {
+					$form.find('input').val("").end()
 					.find('textarea').val("");
-                }
-            });
+				}
+			});
 
-            // addTab form: calls addTab function on submit and closes the dialog
-            var $form = $('fieldset', $dialog).submit(function () {
-                addTab();
-                $dialog.wijdialog('close');
-                return false;
-            });
+			// addTab form: calls addTab function on submit and closes the dialog
+			var $form = $('fieldset', $dialog).submit(function () {
+				addTab();
+				$dialog.wijdialog('close');
+				return false;
+			});
 
-            // actual addTab function: adds new tab using the title input from the form above
-            function addTab() {
-                var tab_title = $tab_title_input.val() || 'Tab ' + tab_counter;
-                $tabs.wijtabs('add', '#tabs-' + tab_counter, tab_title);
-                tab_counter++;
-            }
+			// actual addTab function: adds new tab using the title input from the form above
+			function addTab() {
+				var tab_title = $tab_title_input.val() || 'Tab ' + tab_counter;
+				$tabs.wijtabs('add', '#tabs-' + tab_counter, tab_title);
+				tab_counter++;
+			}
 
-            // addTab button: just opens the dialog
-            $('#add_tab')
+			// addTab button: just opens the dialog
+			$('#add_tab')
 						.button()
 						.click(function () {
-						    $dialog.wijdialog('open');
+							$dialog.wijdialog('open');
 						});
 
-            // close icon: removing the tab on click
-            // note: closable tabs gonna be an option in the future - see http://dev.jqueryui.com/ticket/3924
-            $('#tabs span.ui-icon-close').live('click', function () {
-                var index = $('li', $tabs).index($(this).parent());
-                $tabs.wijtabs('remove', index);
-            });
-        });
+			// close icon: removing the tab on click
+			// note: closable tabs gonna be an option in the future - see http://dev.jqueryui.com/ticket/3924
+			$('#tabs span.ui-icon-close').live('click', function () {
+				var index = $('li', $tabs).index($(this).parent());
+				$tabs.wijtabs('remove', index);
+			});
+		});
 
-    </script>
-    <style type="text/css">
-        #dialog label, #dialog input
-        {
-            display: block;
-        }
-        #dialog label
-        {
-            margin-top: 0.5em;
-        }
-        #dialog input, #dialog textarea
-        {
-            width: 95%;
-        }
-        #tabs
-        {
-            margin-top: 1em;
-        }
-        #tabs li .ui-icon-close
-        {
-            float: left;
-            margin: 0.4em 0.2em 0 0;
-            cursor: pointer;
-        }
-        #add_tab
-        {
-            cursor: pointer;
-        }
-    </style>
+	</script>
+	<style type="text/css">
+		#dialog label, #dialog input
+		{
+			display: block;
+		}
+		#dialog label
+		{
+			margin-top: 0.5em;
+		}
+		#dialog input, #dialog textarea
+		{
+			width: 95%;
+		}
+		#tabs
+		{
+			margin-top: 1em;
+		}
+		#tabs li .ui-icon-close
+		{
+			float: left;
+			margin: 0.4em 0.2em 0 0;
+			cursor: pointer;
+		}
+		#add_tab
+		{
+			cursor: pointer;
+		}
+	</style>
 </head>
 <body class="demo-single">
-    <div class="container">
-        <div class="header">
-            <h2>
-                Add/Remove</h2>
-        </div>
-        <div class="main demo">
-            <!-- Begin demo markup -->
-            <div id="tabs">
-                <ul>
-                    <li><a href="#tabs-1">Nunc tincidunt</a> <span class="ui-icon ui-icon-close">Remove
-                        Tab</span></li>
-                </ul>
-                <div id="tabs-1">
-                    <p>
-                        Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec
-                        arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante.
-                        Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper
-                        leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales
-                        tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel
-                        pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum.
-                        Nunc tristique tempus lectus.</p>
-                </div>
-            </div>
-            <!-- End demo markup -->
-            <div class="demo-options">
-                <!-- Begin options markup -->
-                <div id="dialog" title="Add tab">
-                    <fieldset class="ui-helper-reset">
-                        <label for="tab_title">
-                            Title</label>
-                        <input type="text" name="tab_title" id="tab_title" value="" class="ui-widget-content ui-corner-all" />
-                        <label for="tab_content">
-                            Content</label>
-                        <textarea name="tab_content" id="tab_content" class="ui-widget-content ui-corner-all"
-                            cols="" rows=""></textarea>
-                    </fieldset>
-                </div>
-                <input id="add_tab" type="button" value="Add Tab" />
-                <!-- End options markup -->
-            </div>
-        </div>
-        <div class="footer demo-description">
+	<div class="container">
+		<div class="header">
+			<h2>
+				Add/Remove</h2>
+		</div>
+		<div class="main demo">
+			<!-- Begin demo markup -->
+			<div id="tabs">
+				<ul>
+					<li><a href="#tabs-1">Nunc tincidunt</a> <span class="ui-icon ui-icon-close">Remove
+						Tab</span></li>
+				</ul>
+				<div id="tabs-1">
+					<p>
+						Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec
+						arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante.
+						Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper
+						leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales
+						tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel
+						pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum.
+						Nunc tristique tempus lectus.</p>
+				</div>
+			</div>
+			<!-- End demo markup -->
+			<div class="demo-options">
+				<!-- Begin options markup -->
+				<div id="dialog" title="Add tab">
+					<fieldset class="ui-helper-reset">
+						<label for="tab_title">
+							Title</label>
+						<input type="text" name="tab_title" id="tab_title" value="" class="ui-widget-content ui-corner-all" />
+						<label for="tab_content">
+							Content</label>
+						<textarea name="tab_content" id="tab_content" class="ui-widget-content ui-corner-all"
+							cols="" rows=""></textarea>
+					</fieldset>
+				</div>
+				<input id="add_tab" type="button" value="Add Tab" />
+				<!-- End options markup -->
+			</div>
+		</div>
+		<div class="footer demo-description">
+<p>
 
-        </div>
-    </div>
+This sample illustrates how to dynamically add tabs using the addTab function. In addition, the sample includes a function that will allow each tab to close by clicking on an 'x' on the tabs.
+</p>
+		</div>
+	</div>
 </body>
 </html>

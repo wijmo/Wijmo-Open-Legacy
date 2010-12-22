@@ -1,5 +1,57 @@
 
-Changes mode to version 0.8.1
+Changes made to version 0.8.2
+=============================
+
+** Breaking changes.**
+---------------------- 
+All widgets have been renamed (file and namespaces) to conform to jQuery UI naming patterns.
+- The widget names have not changed, in most cases you only need to change the script reference.
+- Name change to specific wijmo css classnames.
+- The decorator widgets have been renamed.
+
+Calendar
+------
+Add customizeDate to option, which allows user to customize date cells.
+
+Splitter
+------
+In nested case, adjust panels width for chrome. 
+Fix the issue that the panel2 of splitter1 is not abound with whole splitter2.
+
+Add the special css to the splitter.css for ie6 and ie7.  Fix the issue that it's hard to grab the resizing handle in ie6/7.
+
+Fixed the bug for ie 6.0 and 7.0 that user can take the panel2 out of the border by dragging the bar to the right edge of splitter.
+
+Dialog
+------
+Improve source code with JSLint.
+Change namespace,file name, css class name.
+
+DropdownDecorator
+-----------------
+Removed the z-index from the outermost element and added z-index when necessary.  The dropdown list can be covered by other dom elements.
+
+Add z-index to the outermost element when browser is ie6.  The dropdown list can be covered by other dom elements in IE6.
+
+Use stop method to stop the uncomplete animation.  Sometimes, opening the dropdownlist will push the below dom elements to
+another position.
+Add ARIA support and rename the widget namespace.
+
+Menu
+---------------------
+Fixed the css bug in IE6.0 and IE7.0. Add z-index to the outer div and the panret li element and the submenu when the submenu is opened, 
+remove these z-index when it hides
+Remove the templete item hover event and click event.
+In IE 6.0, when the submenu is shown completily, set the submenu's overflow css to empty to 
+fixed the second menu is covered by the first submenu. This is the jQuery's animation's bug.
+In IE 9.0, when the submenu is shown completily,wrap an div and unwrap the div to refresh the DOM 
+to fixed the second menu is covered.  
+
+Progressbar
+--------------------
+Remove the progressbar label's z-index to avoid cover other widget.
+
+Changes made to version 0.8.1
 -----------------------------
 
 Accordion

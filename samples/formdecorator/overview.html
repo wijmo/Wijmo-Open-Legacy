@@ -8,36 +8,37 @@
     <meta name="keywords" content="" />
     <meta name="author" content="ComponentOne" />
     <link href="../base-reset.css" rel="stylesheet" type="text/css" />
-    <link href="../../themes/aristo/jquery-ui-1.8.4.custom.css" rel="stylesheet" type="text/css" />
+    <link href="../../themes/aristo/jquery-wijmo.css" rel="stylesheet" type="text/css" />
     <link href="../demos-single.css" rel="stylesheet" type="text/css" />
-    <link type="text/css" href="../../themes/wijmo/jquery.ui.wijsuperpanel.css" rel="stylesheet" />
-    <link type="text/css" href="../../themes/wijmo/jquery.ui.wijlist.css" rel="stylesheet" />
-    <link type="text/css" href="../../themes/wijmo/jquery.ui.wijtextboxdecorator.css"
-        rel="stylesheet" />
-    <link type="text/css" href="../../themes/wijmo/jquery.ui.wijdropdowndecorator.css"
-        rel="stylesheet" />
-    <link type="text/css" href="../../themes/wijmo/jquery.ui.wijradiobuttondecorator.css"
-        rel="stylesheet" />
-    <link type="text/css" href="../../themes/wijmo/jquery.ui.wijcheckboxdecorator.css"
-        rel="stylesheet" />
+    <link href="../../themes/wijmo/jquery.wijmo.wijsuperpanel.css" rel="stylesheet" type="text/css" />
+    <link href="../../themes/wijmo/jquery.wijmo.wijlist.css" rel="stylesheet" type="text/css" />
+    <link href="../../themes/wijmo/jquery.wijmo.wijtextbox.css"
+        rel="stylesheet" type="text/css" />
+    <link href="../../themes/wijmo/jquery.wijmo.wijdropdown.css"
+        rel="stylesheet" type="text/css" />
+    <link href="../../themes/wijmo/jquery.wijmo.wijradio.css"
+        rel="stylesheet" type="text/css" />
+    <link href="../../themes/wijmo/jquery.wijmo.wijcheckbox.css"
+        rel="stylesheet" type="text/css" />
     <script src="../../external/jquery-1.4.3.min.js" type="text/javascript"></script>
     <script src="../../external/jquery-ui-1.8.6.custom.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../../external/jquery.mousewheel.min.js"></script>
-    <script type="text/javascript" src="../../wijmo/jquery.ui.wijutil.js"></script>
-    <script type="text/javascript" src="../../wijmo/jquery.ui.wijsuperpanel.js"></script>
-    <script type="text/javascript" src="../../wijmo/jquery.ui.wijlist.js"></script>
-    <script type="text/javascript" src="../../wijmo/jquery.ui.wijdropdowndecorator.js"></script>
-    <script type="text/javascript" src="../../wijmo/jquery.ui.wijradiobuttondecorator.js"></script>
-    <script type="text/javascript" src="../../wijmo/jquery.ui.wijcheckboxdecorator.js"></script>
-    <script type="text/javascript" src="../../wijmo/jquery.ui.wijtextboxdecorator.js"></script>
+    <script src="../../external/jquery.mousewheel.min.js" type="text/javascript"></script>
+    <script src="../../external/jquery.bgiframe-2.1.3-pre.js" type="text/javascript"></script>
+    <script src="../../wijmo/jquery.wijmo.wijutil.js" type="text/javascript"></script>
+    <script src="../../wijmo/jquery.wijmo.wijsuperpanel.js" type="text/javascript"></script>
+    <script src="../../wijmo/jquery.wijmo.wijlist.js" type="text/javascript"></script>
+    <script src="../../wijmo/jquery.wijmo.wijdropdown.js" type="text/javascript"></script>
+    <script src="../../wijmo/jquery.wijmo.wijradio.js" type="text/javascript"></script>
+    <script src="../../wijmo/jquery.wijmo.wijcheckbox.js" type="text/javascript"></script>
+    <script src="../../wijmo/jquery.wijmo.wijtextbox.js" type="text/javascript"></script>
     <script id="scriptInit" type="text/javascript">
         $(document).ready(function () {
-            $(":input[type='text'],:input[type='password'],:input[type='textarea']").wijtextboxdecorator();
-            $("#select1").wijdropdowndecorator({ height: 350,width: 150 });
-            $("#select2").wijdropdowndecorator();
-            $("#select3").wijdropdowndecorator();
-            $(":input[type='radio']").wijradiobuttondecorator();
-            $(":input[type='checkbox']").wijcheckboxdecorator();
+            $(":input[type='text'],:input[type='password'],:input[type='textarea']").wijtextbox();
+            $("#select1").wijdropdown({ height: 350,width: 150 });
+            $("#select2").wijdropdown();
+            $("#select3").wijdropdown();
+            $(":input[type='radio']").wijradio();
+            $(":input[type='checkbox']").wijcheckbox();
         });
     </script>
     <style type="text/css">
@@ -147,7 +148,7 @@
                 </li>
                 <li>
                     <label>
-                        CheckBoxDecorator</label>
+                        CheckBox</label>
                     <input id="checkbox1" type="checkbox" /><label for="checkbox1">checkbox1</label>
                     <input id="checkbox2" type="checkbox" /><label for="checkbox2">checkbox2</label>
                     <input id="checkbox3" type="checkbox" /><label for="checkbox3">checkbox3</label>
@@ -155,7 +156,7 @@
                 </li>
                 <li>
                     <label id="radiobutton">
-                        RadioButtonDecorator</label>
+                        Radio</label>
                     <input type="radio" name="radiobutton1" id="radio1" /><label for="radio1">radio1</label>
                     <input type="radio" name="radiobutton1" id="radio2" /><label for="radio2">radio2</label>
                     <input type="radio" name="radiobutton1" id="radio3" /><label for="radio3">radio3</label>
@@ -172,7 +173,12 @@
     </div>
     <div class="footer demo-description">
         <p>
-        </p>
-    </div>
+
+	The Wijmo Form Decorator widgets (wijradio, wijcheckbox, wijdropdown, wijtextbox) are used to decorate a standard HTML form elements. The Form Decorator widgets allow any form element to be styled uniformly in any browser. This particular sample provides demonstrations of the many incarnations of a wijlist widget. The other samples in this section will outline the features of the wijlist widget and help to get you acclimated with the widget.
+
+</p>
+
+	
+</div>
 </body>
 </html>

@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 0.9.0
+ * Wijmo Library 1.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -177,7 +177,20 @@
 			///	<summary>
 			///		A Boolean property that determines whether to autohide the calendar in pop-up mode when clicking outside of the calendar.
 			///	</summary>
-			autoHide: true
+			autoHide: true,
+			/// <summary>
+			/// Function used for customizing the content, style and attributes of a day cell.
+			/// Default: undefined.
+			/// Type: Function.
+			/// Code example: $("#element").wijcalendar({ customizeDate: function($daycell, date, dayType, hover, preview){ } });
+			/// </summary>
+			/// <param name="$daycell" type="jQuery">jQuery object that represents table cell of the date to be customized.</param>
+			/// <param name="date" type="Date">Date of the cell.</param>
+			/// <param name="dayType" type="Number">Type of the day.</param>
+			/// <param name="hover" type="Boolean">Whether mouse is over the day cell.</param>
+			/// <param name="preview" type="Object">Whether rendering in preview container.</param>
+			/// <returns type="Boolean">True if day cell content has been changed and default cell content will not be applied.</returns>
+			customizeDate: undefined
 		},
 
 		_create: function () {
@@ -285,7 +298,7 @@
 
 		refresh: function () {
 			/// <summary>Refresh the calendar.</summary>
-			this.element.html(this._getCalendarHtml());
+			this.element.empty().append(this._createCalendar());
 			this.element[(this._isRTL() ? 'add' : 'remove') + 'Class']('ui-datepicker-rtl');
 			this._bindEvents();
 		},
@@ -779,7 +792,7 @@
 			previewContainer.appendTo(document.body);
 			previewContainer.hide();
 			previewContainer.addClass('wijmo-wijcalendar ui-datepicker-inline ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all');
-			previewContainer.html(this._getCalendarHtml());
+			previewContainer.append(this._createCalendar());
 
 			this.options.displayDate = mainDate;
 			this.element.data('preview.wijcalendar', false);
@@ -845,7 +858,7 @@
 
 			this.options.displayDate = toDate;
 			this._createMonthViews();
-			newContent.html(this._getMonthGroupHtml());
+			newContent.empty().append(this._createMonthGroup());
 			newContent.appendTo(this.element);
 
 			var direction = this.options.direction || 'horizontal';
@@ -888,8 +901,9 @@
 		_playSlideAnimation: function (toDate) {
 			if (!this._isSingleMonth()) { return; }
 
-			var date = this.getDisplayDate();
-			var curTable = this.element.find('.ui-datepicker-calendar'), wrapper, slideContainer;
+			var self = this,
+				date = this.getDisplayDate(),
+				curTable = this.element.find('.ui-datepicker-calendar'), wrapper, slideContainer;
 
 			if (curTable.parent().is('.wijmo-wijcalendar-aniwrapper')) {
 				wrapper = curTable.parent();
@@ -922,9 +936,9 @@
 				}
 			}
 
-			var direction = this.options.direction || 'horizontal';
-			var goNext = toDate > date;
-			var months = [];
+			var direction = this.options.direction || 'horizontal',
+				goNext = toDate > date,
+				months = [];
 			months[months.length] = toDate;
 			var w = curTable.outerWidth(),
 				h = curTable.outerHeight();
@@ -939,20 +953,20 @@
 				wrapper.height((months.length + 1) * h);
 			}
 
-			var calendar = this;
 			$.each(months, function (index, date) {
-				if (calendar._myGrid === undefined) {
-					var mv = new wijMonthView(calendar, date);
+				if (self._myGrid === undefined) {
+					var mv = new wijMonthView(self, date)
+					$view = self._customize(mv.getHtml(true));
 					if (direction == 'horizontal') {
-						$(mv.getHtml(true)).width(w).css('float', goNext ? 'left' : 'right').appendTo(wrapper);
+						$view.width(w).css('float', goNext ? 'left' : 'right').appendTo(wrapper);
 					} else {
-						$(mv.getHtml(true)).appendTo(wrapper);
+						$view.appendTo(wrapper);
 					}
 				} else {
 					if (direction == 'horizontal') {
-						$(calendar._myGrid.getHtml(date, true)).width(w).height(h).css('float', goNext ? 'left' : 'right').appendTo(wrapper);
+						$(self._myGrid.getHtml(date, true)).width(w).height(h).css('float', goNext ? 'left' : 'right').appendTo(wrapper);
 					} else {
-						$(calendar._myGrid.getHtml(date, true)).height(h).appendTo(wrapper);
+						$(self._myGrid.getHtml(date, true)).height(h).appendTo(wrapper);
 					}
 				}
 			});
@@ -979,9 +993,9 @@
 					curTable.parent().replaceWith(curTable);
 				}
 				curTable.css({ float: '', width: '' });
-				calendar._bindEvents();
-				calendar.element.data('animating.wijcalendar', false);
-				calendar._trigger('afterSlide');
+				self._bindEvents();
+				self.element.data('animating.wijcalendar', false);
+				self._trigger('afterSlide');
 			});
 		},
 
@@ -1126,21 +1140,21 @@
 			}
 
 			var bounds = $.extend({}, cell.position(), { width: cell.width(), height: cell.height() });
-			var content = "";
+			var $content;
 			if (this._myGrid === undefined) {
 				this._createMonthViews();
 				var date = this.getDisplayDate();
 				var mv = this._getMonthView(date);
-				content = mv.getHtml(true);
+				$content = this._customize(mv.getHtml(true));
 			} else {
-				content = this._myGrid.getHtml(true);
+				$content = $(this._myGrid.getHtml(true));
 			}
 
-			var nextTable = $(content).height(h).appendTo(container);
+			var nextTable = $content.height(h).appendTo(container);
 			wrapper = $.effects.createWrapper(nextTable).css({ overflow: 'hidden' })
-			.removeClass('ui-effects-wrapper')
-			.addClass('wijmo-wijcalendar-aniwrapper')
-			.css($.extend(bounds, { border: 'solid 1px #cccccc', position: 'absolute' }));
+				.removeClass('ui-effects-wrapper')
+				.addClass('wijmo-wijcalendar-aniwrapper')
+				.css($.extend(bounds, { border: 'solid 1px #cccccc', position: 'absolute' }));
 
 			var calendar = this;
 			this.element.data('animating.wijcalendar', true);
@@ -1272,12 +1286,13 @@
 		},
 
 		_getCellClassName: function (dayType, date, previewMode) {
-			var cssCell = '';
-			var cssText = 'ui-state-default';
+			var o = this.options,
+				cssCell = '',
+				cssText = 'ui-state-default',
+				allowSelDay = (!!o.selectionMode.day || !!o.selectionMode.days);
 
-			var allowSelDay = (!!this.options.selectionMode.day || !!this.options.selectionMode.days);
 			previewMode = previewMode || false;
-			if (!previewMode && !this.options.disabled && allowSelDay && this._isSelectable(dayType)) {
+			if (!previewMode && !o.disabled && allowSelDay && this._isSelectable(dayType)) {
 				cssCell += " wijmo-wijcalendar-day-selectable";
 			}
 
@@ -1313,10 +1328,6 @@
 				}
 				if ((dayType & wijDayType.custom)) {
 					cssCell += ' wijmo-wijcalendar-customday';
-					var customDay = this.getCustomDay(date);
-					if (customDay && customDay.className) {
-						cssCell += ' ' + customDay.className;
-					}
 				}
 			}
 
@@ -1391,8 +1402,38 @@
 			this._createMonthViews();
 			var hw = new htmlTextWriter();
 			hw.write(this._getMonthGroupHtml());
-
 			return hw.toString();
+		},
+
+		_customizeDayCell: function ($dayCell) {
+			if ($dayCell.attr("state") === undefined) { $dayCell.attr("state", 'normal'); }
+			if ($dayCell.attr("daytype") === undefined) { return; }
+			if ($dayCell.attr("date") === undefined) { return; }
+
+			var dayType = parseInt($dayCell.attr("daytype"), 10),
+				date = new Date($dayCell.attr("date")),
+				hover = $dayCell.attr("state") === 'hover';
+
+			this.options.customizeDate($dayCell, date, dayType, hover);
+		},
+
+		_customize: function (html) {
+			var o = this.options, self = this, $h = $(html);
+			if (!$.isFunction(o.customizeDate)) return $h;
+
+			$.each($h.find('.wijmo-wijcalendar-day-selectable'), function (index, dayCell) {
+				self._customizeDayCell($(dayCell));
+			});
+
+			return $h;
+		},
+
+		_createCalendar: function () {
+			return this._customize($(this._getCalendarHtml()));
+		},
+
+		_createMonthGroup: function () {
+			return this._customize($(this._getMonthGroupHtml()));
 		},
 
 		_getMonthID: function (date) {
@@ -1442,11 +1483,6 @@
 			return this._monthViews[monthID];
 		},
 
-		_renderTo: function (id) {
-			var div = $(id);
-			if (div) { div.html(this._getCalendarHtml()); }
-		},
-
 		_getId: function () {
 			return this.element.attr("id");
 		},
@@ -1457,21 +1493,30 @@
 		},
 
 		_refreshDayCell: function (dayCell) {
-			var d = $(dayCell);
-			if (d.attr("state") === undefined) { d.attr("state", 'normal'); }
-			if (d.attr("daytype") === undefined) { return; }
-			if (d.attr("date") === undefined) { return; }
+			var $dc = $(dayCell), o = this.options;
+			if ($dc.attr("state") === undefined) { $dc.attr("state", 'normal'); }
+			if ($dc.attr("daytype") === undefined) { return; }
+			if ($dc.attr("date") === undefined) { return; }
 
-			var dayType = parseInt(d.attr("daytype"), 10);
-			var date = new Date(d.attr("date"));
-			d.attr('className', this._getCellClassName(dayType, date).cssCell);
-			d.removeAttr('aria-selected');
+			var dayType = parseInt($dc.attr("daytype"), 10),
+				date = new Date($dc.attr("date")),
+				hover = $dc.attr("state") === 'hover';
+
+			$dc.attr('className', this._getCellClassName(dayType, date).cssCell);
+			$dc.removeAttr('aria-selected');
 			if (dayType & wijDayType.selected) {
-				d.attr('aria-selected', true);
+				$dc.attr('aria-selected', true);
 			}
-			var txt = d.find('a');
+
+			if ($.isFunction(o.customizeDate)) {
+				if (this._customizeDayCell($dc)) {
+					return;
+				}
+			}
+
+			var txt = $dc.find('a');
 			if (txt.length > 0) {
-				txt.toggleClass("ui-state-hover", d.attr("state") === 'hover');
+				txt.toggleClass("ui-state-hover", hover);
 				txt.toggleClass("ui-state-active", ((dayType & wijDayType.selected) !== 0));
 			}
 		},
@@ -1740,29 +1785,20 @@
 			},
 
 			_fillDayCell: function (hw, date, previewMode) {
-				var o = this.calendar.options;
-				var text = date.getDate().toString();
-				if (o.showDayPadding) {
-					if (text.length === 1) {
-						text = '0' + text;
-					}
-				}
-				var tooltip = this.calendar._formatDate(o.toolTipFormat || "dddd, MMMM dd, yyyy", date);
-				var dayType = this._getDayType(date);
-				if ((dayType & wijDayType.custom)) {
-					var customDay = this._getCustomDay(date);
-					if (customDay && customDay.template) {
-						text = customDay.template;
-					}
-				}
+				var o = this.calendar.options,
+					custom = null,
+					text = date.getDate().toString(),
+					tooltip = this.calendar._formatDate(o.toolTipFormat || "dddd, MMMM dd, yyyy", date),
+					dayType = this._getDayType(date),
+					css = this.calendar._getCellClassName(dayType, date, previewMode);
 
+				text = (o.showDayPadding && text.length === 1) ? '0' + text : text;
 				hw.writeBeginTag('td');
 				hw.writeAttribute('daytype', (dayType).toString());
 				hw.writeAttribute('title', tooltip);
 				hw.writeAttribute('aria-label', tooltip);
 				hw.writeAttribute('date', date.toDateString());
 
-				var css = this.calendar._getCellClassName(dayType, date, previewMode);
 				hw.writeAttribute('class', css.cssCell);
 				hw.writeAttribute('role', 'gridcell');
 				if (!this.calendar._isSelectable(dayType)) {
@@ -1772,15 +1808,17 @@
 
 				if ((dayType & wijDayType.gap)) {
 					hw.write('&#160;');
-				} else if ((dayType & wijDayType.custom)) {
-					hw(text);
 				} else {
-					hw.writeBeginTag('a');
-					hw.writeAttribute('class', css.cssText);
-					hw.writeAttribute('href', '#');
-					hw.writeTagRightChar();
-					hw.write(text);
-					hw.writeEndTag('a');
+					if (custom && custom.content) {
+						hw.write(custom.content);
+					} else {
+						hw.writeBeginTag('a');
+						hw.writeAttribute('class', css.cssText);
+						hw.writeAttribute('href', '#');
+						hw.writeTagRightChar();
+						hw.write(text);
+						hw.writeEndTag('a');
+					}
 				}
 
 				hw.writeEndTag('td');

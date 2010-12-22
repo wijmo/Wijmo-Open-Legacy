@@ -24,6 +24,6 @@
 }
 
 /* for ie 6 minimize*/
-.wijmo-wijdialog-defaultdockingzone .ui-dialog-titlebar {
+* html .wijmo-wijdialog-defaultdockingzone .ui-dialog-titlebar {
 	float:left;
 }

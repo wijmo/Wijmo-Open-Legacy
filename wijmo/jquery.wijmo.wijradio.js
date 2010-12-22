@@ -1,7 +1,7 @@
 /*globals jQuery*/
 /*
  *
- * Wijmo Library 0.9.0
+ * Wijmo Library 1.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -60,7 +60,7 @@
 				that._radiobuttonPre + "-icon'></span></div>");
 				iconElement = boxElement.children("." + that._radiobuttonPre + "-icon");
 				radiobuttonElement.append(boxElement);
-				iconElement.addClass("ui-icon ui-icon-radio-off");
+				iconElement.addClass("ui-icon ui-icon-radio-on");
 				that.element.data("iconElement", iconElement);
 				that.element.data("boxElement", boxElement);
 				if (that.element.is(":disabled")) {
@@ -72,7 +72,7 @@
 				if (targetLabel.length === 0 || targetLabel.html() === "") {
 					boxElement.addClass(that._radiobuttonPre + "-relative");
 				}
-				that._refresh();
+				that._setDefaul();
 				//			boxElement.css("margin-top","9px");
 
 				that.element.bind("click.checkbox", function () {
@@ -112,6 +112,17 @@
 					.addClass("ui-state-default");
 				});
 
+			}
+		},
+
+		_setDefaul: function () {
+			if (this.element.attr("checked")) {
+				this.element.parents(".wijmo-wijradio")
+				.find("." + this._radiobuttonPre + "-box").children()
+				.removeClass("ui-icon-radio-on ui-icon-radio-off")
+				.addClass("ui-icon-radio-off");
+				this.element.data("boxElement").removeClass("ui-state-default")
+				.addClass("ui-state-active").attr("aria-checked", true);
 			}
 		},
 

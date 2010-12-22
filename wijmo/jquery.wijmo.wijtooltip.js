@@ -1,7 +1,7 @@
 /*globals window document clearTimeout setTimeout jQuery */
 /*
 *
-* Wijmo Library 0.9.0
+* Wijmo Library 1.0.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -14,7 +14,6 @@
 * Wijmo Tooltip widget.
 * 
 * Depends:
-*   jquery-1.4.2.js
 *	jquery.ui.core.js
 *	jquery.ui.widget.js
 *
@@ -24,147 +23,150 @@
 	$.widget("wijmo.wijtooltip", {
 		options: {
 			/// <summary>
-			///A value that sets the tooltip's content.
-			///Remarks:The value can be a string,html code,or a function.If it's a
+			/// A value that sets the tooltip's content.
+			/// Remarks:The value can be a string,html code,or a function.If it's a
 			/// function,then the content will be the function's return value.
-			///Type:String or Function.
-			///Default:"".
-			///Code example:$(".selector").wijtooltip("option","content","my content").
-			///</summary>
+			/// Type:String or Function.
+			/// Default:"".
+			/// Code example:$(".selector").wijtooltip("option","content","my content").
+			/// </summary>
 			content: '',
 			/// <summary>
-			///Specifies a value that sets the tooltip's title
-			///Type:String or Function.
-			///Default:"".
-			///Code example:$(".selector").wijtooltip("option","title","my title");
-			///Remark:The value can be a string,HTML,or a function.If it is a function,
-			///then the content will be the function's return value.
-			///</summary>
+			/// Specifies a value that sets the tooltip's title
+			/// Type:String or Function.
+			/// Default:"".
+			/// Code example:$(".selector").wijtooltip("option","title","my title");
+			/// Remark:The value can be a string,HTML,or a function.If it is a function,
+			/// then the content will be the function's return value.
+			/// </summary>
 			title: "",
 			/// <summary>
 			/// A value that determines how to close the tooltip.
-			///Behaviors include auto or sticky.
-			///Type:String.
-			///Default:"auto".
-			///Code example:$(".selector").wijtooltip("option","closeBehavior","auto").
-			///</summary>
+			/// Behaviors include auto or sticky.
+			/// Type:String.
+			/// Default:"auto".
+			/// Code example:$(".selector").wijtooltip("option","closeBehavior","auto").
+			/// </summary>
 			closeBehavior: 'auto',
 			/// <summary>
-			///If true,then the tooltip moves with the mouse.
-			///Type:Boolean.
-			///Default:false.
-			///Code example:$(".selector").wijtooltip("option","mouseTrailing",false).
-			///</summary>
+			/// If true,then the tooltip moves with the mouse.
+			/// Type:Boolean.
+			/// Default:false.
+			/// Code example:$(".selector").wijtooltip("option","mouseTrailing",false).
+			/// </summary>
 			mouseTrailing: false,
 			/// <summary>
-			///Sets the show tooltip's event
-			///Remarks:The value should be 'hover','click','focus','rightClick','custom'.
-			///Type:String
-			///Default:"hover".
-			///Code example:$(".selector").wijtooltip("option","triggers","hover").
-			///</summary>
+			/// Sets the show tooltip's event
+			/// Remarks:The value should be 'hover','click','focus','rightClick','custom'.
+			/// Type:String
+			/// Default:"hover".
+			/// Code example:$(".selector").wijtooltip("option","triggers","hover").
+			/// </summary>
 			triggers: 'hover',
 			/// <summary>
-			///Sets the tooltip's position mode .For example here is the jQuery ui 
-			///position's position:{my:'top left',at:'right buttom',offset:null}. 
-			///Type:Object.
-			///Default:{
+			/// Sets the tooltip's position mode .For example here is the jQuery ui 
+			/// position's position:{my:'top left',at:'right buttom',offset:null}. 
+			/// Type:Object.
+			/// Default:{
 			///	my: 'left bottom',
 			///	at: 'right top',
 			///	offset: null
-			///}
-			///Code expamle:$(".selector").wijtooltip("option","position",
+			/// }
+			/// Code expamle:$(".selector").wijtooltip("option","position",
 			///{my: 'left bottom',at: 'right top',offset: '0 0'}).
-			///</summary>
+			/// </summary>
 			position: {
 				my: 'left bottom',
 				at: 'right top',
 				offset: null
 			},
 			/// <summary>
-			///Determines whether to show the callout element.
-			///Type:Boolean.
-			///Default:true.
-			///Code example:$(".selector").wijtooltip("option","showCallout",true).
-			///</summary>
+			/// Determines whether to show the callout element.
+			/// Type:Boolean.
+			/// Default:true.
+			/// Code example:$(".selector").wijtooltip("option","showCallout",true).
+			/// </summary>
 			showCallout: true,
 			/// <summary>
-			///Determines the animation effect that will be shown.
-			///Remarks:This should be an object value.Possible values include:'animated',
-			///'duration',and 'easing'.This property works with jQuery animation.
-			///Type:Object.
-			///Default:{animated: 'fade',duration:500}.
-			///Code example:$(".selector").wijtooltip("option","showAnimation",
-			///{animated:fade,duration:500}).
-			///</summary>
+			/// Determines the animation effect that will be shown.
+			/// Remarks:This should be an object value.Possible values include:'animated',
+			/// 'duration',and 'easing'.This property works with jQuery animation.
+			/// Type:Object.
+			/// Default:{animated: 'fade',duration:500}.
+			/// Code example:$(".selector").wijtooltip("option","showAnimation",
+			/// {animated:fade,duration:500}).
+			/// </summary>
 			showAnimation: { animated: 'fade', duration: 500 },
 			/// <summary>
-			////Determines the animation effect that will be hidden.
-			///Remarks:This should be an object value,like the showAnimation property.
-			///If 'animated' set to false. then hide the tooltip without animation.
-			///Type:Object.
-			///Default:{animated: 'fade',duration:500}.
-			///Code example:$(".selector").wijtooltip("option","hideAnimation",
-			///{animated:'fade',duration:500}).
-			///</summary>
+			/// Determines the animation effect that will be hidden.
+			/// Remarks:This should be an object value,like the showAnimation property.
+			/// If 'animated' set to false. then hide the tooltip without animation.
+			/// Type:Object.
+			/// Default:{animated: 'fade',duration:500}.
+			/// Code example:$(".selector").wijtooltip("option","hideAnimation",
+			/// {animated:'fade',duration:500}).
+			/// </summary>
 			hideAnimation: { animated: 'fade', duration: 500 },
 			/// <summary>
-			///Determines the length of the delay before the tooltip appears.
-			///Type:Number
-			///Default:0.
-			///Code example:$(".selector").wijtooltip("option","showDelay",200).
-			///</summary>
+			/// Determines the length of the delay before the tooltip appears.
+			/// Type:Number
+			/// Default:0.
+			/// Code example:$(".selector").wijtooltip("option","showDelay",200).
+			/// </summary>
 			showDelay: 150,
 			/// <summary>
-			///Determines the length of the delay before the tooltip disappears.
-			///Type:Number.
-			///Default:0.
-			///Code example:$(".selector").wijtooltip("option","hideDelay",200).
-			///</summary>
+			/// Determines the length of the delay before the tooltip disappears.
+			/// Type:Number.
+			/// Default:0.
+			/// Code example:$(".selector").wijtooltip("option","hideDelay",200).
+			/// </summary>
 			hideDelay: 150,
 			/// <summary>
-			///Sets the callout's offset changing animation.
-			///Remarks:The value is an object,
-			///like the following:{duration:100,easing:'swing'}.
-			///Type:Object.
-			///Default:{}.
-			///Code example:$(".selector")
-			///.wijtooltip("option","calloutAnimation",{duration:200}).
-			///</summary>
+			/// Sets the callout's offset changing animation.
+			/// Remarks:The value is an object,
+			/// like the following:{duration:100,easing:'swing'}.
+			/// Type:Object.
+			/// Default:{}.
+			/// Code example:$(".selector")
+			/// .wijtooltip("option","calloutAnimation",{duration:200}).
+			/// </summary>
 			calloutAnimation: {},
 			/// <summary>
-			///Determines the callout's class style.If true,
-			///then the callout triangle will be filled.
-			///Type:Boolean.
-			///Default:true.
-			///Code example:$(".selector").wijtooltip("option","calloutFilled",true).
-			///</summary>
+			/// Determines the callout's class style.If true,
+			/// then the callout triangle will be filled.
+			/// Type:Boolean.
+			/// Default:true.
+			/// Code example:$(".selector").wijtooltip("option","calloutFilled",true).
+			/// </summary>
 			calloutFilled: true,
 
 			modal: false
 
 		},
 		_setOption: function (key, value) {
+			var self = this;
 			if ($.isPlainObject(value)) {
-				value = $.extend(this.options[key], value);
+				value = $.extend(self.options[key], value);
 			}
 			//console.log(value);
 			if (key === "position") {
-				this.element.data("oldPos", this.options[key]);
+				self.element.data("oldPos", self.options[key]);
 			}
-			$.Widget.prototype._setOption.apply(this, arguments);
-			if ($.isFunction(this["_set_" + key])) {
-				this["_set_" + key](value);
+			$.Widget.prototype._setOption.apply(self, arguments);
+			if ($.isFunction(self["_set_" + key])) {
+				self["_set_" + key](value);
 			}
 		},
 		_setPositionOffset: function (flag) {
-			var domElement = this.element.data("domElements"), calloutAnimation,
-			arrowClass, horition, arr, value, offset, array;
-			domElement.callout.stop(true, true);
+			var self = this, 
+			callout = self.element.data("domElements").callout, calloutAnimation,
+			arrowClass, horition, arr, value, offset, array,
+			o = self.options;
+			callout.stop(true, true);
 			calloutAnimation = $.extend({ duration: 1000 }, 
-			this.options.calloutAnimation);
+			o.calloutAnimation);
 			//var tooltip = this.element.data("tooltip");
-			arrowClass = this.element.data("arrowClass")
+			arrowClass = self.element.data("arrowClass")
 			.replace(/wijmo-wijtooltip-arrow-/, "");
 			horition = false;
 			arr = ["tr", "tc", "tl", "bl", "bc", "br"];
@@ -174,7 +176,7 @@
 				}
 			});
 			value = "";
-			offset = this.options.position.offset;
+			offset = o.position.offset;
 			if (offset) {
 				array = offset.split(" ");
 				if (array.length === 2) {
@@ -189,19 +191,19 @@
 			if (value !== "") {
 				if (flag) {
 					if (horition) {
-						domElement.callout.css("left", value + "px");
+						callout.css("left", value + "px");
 					}
 					else {
-						domElement.callout.css("top", value + "px");
+						callout.css("top", value + "px");
 					}
 				}
 				else {
 					if (horition) {
-						domElement.callout.animate({ left: value },
+						callout.animate({ left: value },
 						calloutAnimation.duration, calloutAnimation.easing);
 					}
 					else {
-						domElement.callout.animate({ top: value },
+						callout.animate({ top: value },
 						calloutAnimation.duration, calloutAnimation.easing);
 					}
 				}
@@ -210,42 +212,49 @@
 		},
 
 		_set_triggers: function () {
-			//this._unbindTargetElements();+
-			this.element.unbind(".tooltip");
 			this._attachEventToElement();
 		},
 
 		_set_position: function (value) {
-			if (this.options.showCallout) {
-				if (!this.isCreateTooltip) {
-					this._createTooltip();
-					this.isCreateTooltip = true;
+			var self = this, oldpos;
+			if (self.options.showCallout) {
+				if (!self.isCreateTooltip) {
+					self._createTooltip();
+					self.isCreateTooltip = true;
 				}
-				var oldpos = this.element.data("oldPos");
+				oldpos = self.element.data("oldPos");
 				if (oldpos.my !== value.my || oldpos.at !== value.at) {
-					this._setCalloutCss();
-					this._setposition();
+					self._setCalloutCss();
+					self._setposition();
 				}
-				this._setPositionOffset();
+				self._setPositionOffset();
 			}
 
 		},
 
+		_removeCalloutCss: function () {
+			var ele = this.element.data("tooltip");
+			if (ele) {
+				ele.removeClass("wijmo-wijtooltip-arrow-tr " +
+				"wijmo-wijtooltip-arrow-tc wijmo-wijtooltip-arrow-tl " +
+				"wijmo-wijtooltip-arrow-br wijmo-wijtooltip-arrow-bc " +
+				"wijmo-wijtooltip-arrow-bl wijmo-wijtooltip-arrow-rb " +
+				"wijmo-wijtooltip-arrow-rc wijmo-wijtooltip-arrow-rt " +
+				"wijmo-wijtooltip-arrow-lb wijmo-wijtooltip-arrow-lc " +
+				"wijmo-wijtooltip-arrow-lt");
+			}
+		},
+
 		_set_showCallOut: function (value) {
-			this.element.removeClass("wijmo-wijtooltip-arrow-tr " +
-			"wijmo-wijtooltip-arrow-tc wijmo-wijtooltip-arrow-tl " +
-			"wijmo-wijtooltip-arrow-br wijmo-wijtooltip-arrow-bc " +
-			"wijmo-wijtooltip-arrow-bl wijmo-wijtooltip-arrow-rb " +
-			"wijmo-wijtooltip-arrow-rc wijmo-wijtooltip-arrow-rt " +
-			"wijmo-wijtooltip-arrow-lb wijmo-wijtooltip-arrow-lc " +
-			"wijmo-wijtooltip-arrow-lt");
-			var domElement = this.element.data("domElements");
+			var self = this, domElement;
+			self._removeCalloutCss();
+			domElement = self.element.data("domElements");
 			if (value) {
-				if (!this.isCreateTooltip) {
-					this._createTooltip();
-					this.isCreateTooltip = true;
+				if (!self.isCreateTooltip) {
+					self._createTooltip();
+					self.isCreateTooltip = true;
 				}
-				this._setCalloutCss();
+				self._setCalloutCss();
 				if (domElement) {
 					domElement.callout.show();
 				}
@@ -257,11 +266,12 @@
 			}
 		},
 		_set_closeBehavior: function () {
-			if (!this.isCreateTooltip) {
-				this._createTooltip();
-				this.isCreateTooltip = true;
+			var self = this;
+			if (!self.isCreateTooltip) {
+				self._createTooltip();
+				self.isCreateTooltip = true;
 			}
-			this._setCloseBtnCss();
+			self._setCloseBtnCss();
 		},
 		_set_mouseTrailing: function () {
 			this.element.unbind(".tooltip");
@@ -271,14 +281,15 @@
 		destroy: function () {
 			/// <summary>Removes the wijtooltip functionality completely.
 			///This returns the element back to its pre-init state.</summary>
-			this.element.unbind(".tooltip");
-			this.isCreateTooltip = false;
-			$.Widget.prototype.destroy.apply(this);
-			if (this.element.data("tooltip")) {
-				this.element.data("tooltip").remove();
+			var self = this, ele = self.element;
+			ele.unbind(".tooltip");
+			self.isCreateTooltip = false;
+			$.Widget.prototype.destroy.apply(self);
+			if (ele.data("tooltip")) {
+				ele.data("tooltip").remove();
 			}
-			this.element.attr("title", this.title);
-			this.element.removeData("tooltip").removeData("arrowClass")
+			ele.attr("title", self.title);
+			ele.removeData("tooltip").removeData("arrowClass")
 			.removeData("domElements").removeData("fixedArrowClass").removeData("offset")
 			.removeData("oldPos").removeData("showDelay");
 		},
@@ -288,24 +299,26 @@
 		},
 
 		_create: function () {
-			this.element.data("oldPos", this.options.position);
-			this.options.position.of = this.element;
-			this._attachEventToElement();
-			this.element.data("offset", this.options.position.offset);
-			this.isCreateTooltip = false;
+			var self = this, o = self.options, ele = self.element;
+			ele.data("oldPos", o.position);
+			o.position.of = ele;
+			self._attachEventToElement();
+			ele.data("offset", o.position.offset);
+			self.isCreateTooltip = false;
 		},
 
 		_createTooltip: function () {
-			this._setStructure();
-			this._initializeDomElements();
-			var domElement = this.element.data("domElements"),
-			tooltip = this.element.data("tooltip");
-			if (this.element.attr("id") !== "") {
-				tooltip.attr("aria-describedby", this.element.attr("id"));
+			var self = this, domElement, tooltip, ele = self.element;
+			self._setStructure();
+			self._initializeDomElements();
+			domElement = ele.data("domElements");
+			tooltip = ele.data("tooltip");
+			if (ele.attr("id") !== "") {
+				tooltip.attr("aria-describedby", ele.attr("id"));
 			}
 			tooltip.hide();
-			this._setCalloutCss();
-			if (this.options.showCallout) {
+			self._setCalloutCss();
+			if (self.options.showCallout) {
 				domElement.callout.show();
 			}
 			else {
@@ -314,7 +327,7 @@
 		},
 
 		_setStructure: function () {
-			var tooltip = $("<div>"),			
+			var tooltip = $("<div>"), self = this,			
 			container = $("<div class='wijmo-wijtooltip-container'>"),
 			callout = $("<div class='ui-widget-content wijmo-wijtooltip-pointer '>" +
 			"<div class='wijmo-wijtooltip-pointer-inner'></div></div>"),
@@ -325,7 +338,7 @@
 			closebtn.addClass("wijmo-wijtooltip-close ui-state-default ui-corner-all");
 			closespan.addClass("ui-icon ui-icon-close");
 			closebtn.append(closespan);
-			this.element.data("domElements", {
+			self.element.data("domElements", {
 				container: container,
 				callout: callout,
 				closebtn: closebtn,
@@ -341,13 +354,12 @@
 			//container.addClass("ui-widget-content");
 			tooltip.css("position", "absolute").attr("role", "tooltip");
 			tooltip.appendTo("body");
-			this.element.data("tooltip", tooltip);
-			this._setCloseBtnCss();
+			self.element.data("tooltip", tooltip);
+			self._setCloseBtnCss();
 		},
 
 		_setCloseBtnCss: function () {
 			var domElement = this.element.data("domElements");
-
 			if (this.options.closeBehavior === "sticky") {
 				domElement.closebtn.show();
 			}
@@ -357,12 +369,13 @@
 		},
 
 		_setCalloutCss: function () {
-			if (!this.options.showCallout) {
-				this.options.position.offset = this.element.data("offset");
+			var self = this,
+			o = this.options, my = o.position.my, arrat, oldcss,
+			arr = my.split(" "), cssname = '', tooltip;
+			if (!o.showCallout) {
+				o.position.offset = self.element.data("offset");
 				return;
 			}
-			var o = this.options, my = o.position.my, arrat, oldcss,
-			arr = my.split(" "), cssname = '', tooltip;
 			if (arr.length === 2) {
 				cssname += arr[0].substr(0, 1);
 				cssname += arr[1].substr(0, 1);
@@ -380,76 +393,71 @@
 			if (cssname.substr(0, 1) === 'c') {
 				cssname = cssname.substr(1, 1) + cssname.substr(0, 1);
 			}
-			if (this.element.data('arrowClass')) {
-				oldcss = this.element.data('arrowClass');
+			if (self.element.data('arrowClass')) {
+				oldcss = self.element.data('arrowClass');
 				oldcss = oldcss.substr(oldcss.length - 2, 1);
 			}
-
 			cssname = 'wijmo-wijtooltip-arrow-' + cssname;
-			tooltip = this.element.data("tooltip");
-			tooltip.removeClass("wijmo-wijtooltip-arrow-tr " +
-			"wijmo-wijtooltip-arrow-tc wijmo-wijtooltip-arrow-tl " +
-			"wijmo-wijtooltip-arrow-br wijmo-wijtooltip-arrow-bc " +
-			"wijmo-wijtooltip-arrow-bl wijmo-wijtooltip-arrow-rb " +
-			"wijmo-wijtooltip-arrow-rc wijmo-wijtooltip-arrow-rt " +
-			"wijmo-wijtooltip-arrow-lb wijmo-wijtooltip-arrow-lc " +
-			"wijmo-wijtooltip-arrow-lt");
+			tooltip = self.element.data("tooltip");
+			self._removeCalloutCss();
 			tooltip.addClass(cssname);
-			this.element.data("arrowClass", cssname);
+			self.element.data("arrowClass", cssname);
 
 		},
 
 		_initializeDomElements: function () {
-			var tooltip = this.element.data("tooltip");
-			tooltip.bind("mouseout", $.proxy(this._onMouseOutTooltipElement, this));
-			tooltip.bind("mouseover", $.proxy(this._onMouseOverTooltipElement, this));
-			this.element.data("domElements").closebtn
-			.bind("click", $.proxy(this._onClickCloseBtn, this));
+			var self = this,
+			tooltip = self.element.data("tooltip");
+			tooltip.bind("mouseout", $.proxy(self._onMouseOutTooltipElement, self));
+			tooltip.bind("mouseover", $.proxy(self._onMouseOverTooltipElement, self));
+			self.element.data("domElements").closebtn
+			.bind("click", $.proxy(self._onClickCloseBtn, self));
 		},
 
 		_attachEventToElement: function () {
-			if (this.title === undefined) {
-				this.title = this.element.attr("title");
-				this.element.attr("title", "");
+			var self = this, o = self.options, ele = self.element;
+			if (self.title === undefined) {
+				self.title = ele.attr("title");
+				ele.attr("title", "");
 			}
-			var self = this;
-			this.element.unbind('.tooltip');
-			if (this.options.mouseTrailing) {
-				this.element.bind("mousemove.tooltip", function () {
+			
+			ele.unbind('.tooltip');
+			if (o.mouseTrailing) {
+				ele.bind("mousemove.tooltip", function () {
 					self._setposition();
 					self.show();
 				});
 			}
 
-			switch (this.options.triggers) {
+			switch (o.triggers) {
 			case "hover":
-				this.element.bind("mouseover.tooltip", function () {
+				ele.bind("mouseover.tooltip", function () {
 					self.show();
 				}).bind("mouseout.tooltip", function () {
-					if (self.options.closeBehavior === "sticky" || self.options.modal ||
-					self.options.closeBehavior === "none") {
+					if (o.closeBehavior === "sticky" || o.modal ||
+					o.closeBehavior === "none") {
 						return;
 					}
 					self.hide();
 				});
 				break;
 			case "click":
-				this.element.bind("click.tooltip", function () {
+				ele.bind("click.tooltip", function () {
 					self.show();
 				});
 				break;
 			case "focus":
-				this.element.bind("focus.tooltip", function () {
+				ele.bind("focus.tooltip", function () {
 					self.show();
 				}).bind("blur.tooltip", function () {
-					if (self.options.closeBehavior === "sticky") {
+					if (o.closeBehavior === "sticky") {
 						return;
 					}
 					self.hide();
 				});
 				break;
 			case "rightClick":
-				this.element.bind("contextmenu.tooltip", function (e) {
+				ele.bind("contextmenu.tooltip", function (e) {
 					self.show();
 					e.preventDefault();
 				});
@@ -479,50 +487,54 @@
 
 		// end tooltip mouse events
 		_onMouseOutTooltipElement: function (e) {
-			if (this.options.closeBehavior === "sticky" ||
-			this.options.closeBehavior === "none") {
+			var self = this, o = self.options;
+			if (o.closeBehavior === "sticky" ||
+			o.closeBehavior === "none") {
 				return;
 			}
-			if (!this._isPointInsideRectWithOutBorder({
+			if (!self._isPointInsideRectWithOutBorder({
 				X: e.pageX,
 				Y: e.pageY
-			}, this.element.data("tooltip"))) {
-				this.hide();
+			}, self.element.data("tooltip"))) {
+				self.hide();
 			}
 		},
 
 		_onMouseOverTooltipElement: function (e) {
-			if (this.options.closeBehavior === "auto" && !this.options.mouseTrailing) {
-				if (!this.element.data("currentElement") ||
-				this._isPointInsideRectWithOutBorder({
+			var self = this, o = self.options, ele = self.element;
+			if (o.closeBehavior === "auto" && !o.mouseTrailing) {
+				if (!ele.data("currentElement") ||
+				self._isPointInsideRectWithOutBorder({
 					X: e.pageX,
 					Y: e.pageY
-				}, this.element.data("currentElement"))) {
-					this.hide();
+				}, ele.data("currentElement"))) {
+					self.hide();
 				}
 			}
 		},
 
-		_onClickCloseBtn: function () {
+		_onClickCloseBtn: function (e) {
 			this.hide();
+			e.preventDefault();
 		},
 		//begin tooltip mouse events
 
 		//end tooltip mouse events
 		_setposition: function () {
-			var tooltip = this.element.data("tooltip"),
+			var self = this, o = self.options, ele = self.element,
+			tooltip = ele.data("tooltip"),
 			isHidden = tooltip.is(":hidden"), option, offsetstr, arrowClass, str, strArr,
-			offset, domelement, borderTop, borderLeft, borderRight, borderBottom,
+			offset, callout, borderTop, borderLeft, borderRight, borderBottom,
 			top, left, right, bottom, position;
 			if (isHidden) {
 				tooltip.show();
 			}
-			option = $.extend(this.options.position, {});
+			option = $.extend(o.position, {});
 			tooltip.css({ left: 0, top: 0 });
 			//if (!this.element.data("fixed")) {
 			offsetstr = "";
-			if (this.options.showCallout) {
-				arrowClass = this.element.data("arrowClass");
+			if (o.showCallout) {
+				arrowClass = ele.data("arrowClass");
 				str = arrowClass.substr(arrowClass.length - 2, 2);
 				strArr = str.split("");
 				offset = [];
@@ -531,19 +543,19 @@
 				//offset[1] = parseInt(offset[1]);
 				offset[0] = offset[1] = 0;
 				//console.log(arrowClass);
-				domelement = this.element.data("domElements");
-				borderTop = domelement.callout.css("border-top-width")
+				callout = ele.data("domElements").callout;
+				borderTop = callout.css("border-top-width")
 				.replace(/px/g, '') * 1;
-				borderLeft = domelement.callout.css("border-left-width")
+				borderLeft = callout.css("border-left-width")
 				.replace(/px/g, '') * 1;
-				borderRight = domelement.callout.css("border-right-width")
+				borderRight = callout.css("border-right-width")
 				.replace(/px/g, '') * 1;
-				borderBottom = domelement.callout.css("border-bottom-width")
+				borderBottom = callout.css("border-bottom-width")
 				.replace(/px/g, '') * 1;
-				top = domelement.callout.css("top").replace(/px/g, '') * 1;
-				left = domelement.callout.css("left").replace(/px/g, '') * 1;
-				right = domelement.callout.css("right").replace(/px/g, '') * 1;
-				bottom = domelement.callout.css("bottom").replace(/px/g, '') * 1;
+				top = callout.css("top").replace(/px/g, '') * 1;
+				left = callout.css("left").replace(/px/g, '') * 1;
+				right = callout.css("right").replace(/px/g, '') * 1;
+				bottom = callout.css("bottom").replace(/px/g, '') * 1;
 
 				switch (strArr[0]) {
 				case "l":
@@ -580,37 +592,36 @@
 			 offset: offsetstr, collision: 'none none' });
 			position = tooltip.offset();
 			tooltip.css({ left: 0, top: 0 });
-			this.element.data("fixedArrowClass", false);
+			ele.data("fixedArrowClass", false);
 			tooltip.position({ my: option.my, at: option.at, of: option.of,
 			 offset: offsetstr, collision: option.collision });
-			if (this.options.showCallout) {
-				this._calloutflip(position);
-				this._set_unfilledCallout();
+			if (o.showCallout) {
+				self._calloutflip(position);
+				self._set_unfilledCallout();
 			}
-			if (isHidden && !(this.options.relativeTo === "mouse" &&
-			this.options.mouseTrailing)) {
+			if (isHidden && !(o.relativeTo === "mouse" &&
+			o.mouseTrailing)) {
 				tooltip.hide();
 			}
 		},
 
 		_set_unfilledCallout: function (calloutCss) {
-			
+			var self = this, ele = self.element, tooltip = ele.data("tooltip"),
+			domObject = ele.data("domElements"),
+			innerCallout = domObject.callout.children();
 			if (!calloutCss) {
-				calloutCss = this.element.data("arrowClass");
-				if (this.element.data("fixedArrowClass")) {
-					calloutCss = this.element.data("fixedArrowClass");
+				calloutCss = ele.data("arrowClass");
+				if (ele.data("fixedArrowClass")) {
+					calloutCss = ele.data("fixedArrowClass");
 				}
 			}
-			var tooltip = this.element.data("tooltip"),
-			domObject = this.element.data("domElements"),
-			innerCallout = domObject.callout.children();
 			innerCallout.css({
 				"border-left-color": "",
 				"border-top-color": "",
 				"border-bottom-color": "",
 				"border-right-color": ""
 			});
-			if (this.options.calloutFilled) {
+			if (self.options.calloutFilled) {
 				switch (calloutCss) {
 				case "lt":
 				case "lc":
@@ -641,10 +652,10 @@
 		},
 
 		_calloutflip: function (position) {
-			var tooltip = this.element.data("tooltip"),
-			changeset = { left: false, top: false },
+			var self = this, ele = self.element, tooltip = ele.data("tooltip"),
+			changeset = { left: false, top: false }, o = self.options,
 			win = $(window), over, cssname;
-			if (this.options.position.at[0] !== 'center') {
+			if (o.position.at[0] !== 'center') {
 				if (position.left < 0) {
 					changeset.left = true;
 				}
@@ -653,7 +664,7 @@
 					changeset.left = true;
 				}
 			}
-			if (this.options.position[1] !== 'center') {
+			if (o.position[1] !== 'center') {
 				over = position.top + tooltip.height() - win.height() - win.scrollTop();
 				if (position.top < 0) {
 					changeset.top = true;
@@ -662,7 +673,7 @@
 					changeset.top = true;
 				}
 			}
-			cssname = this.element.data("arrowClass");
+			cssname = ele.data("arrowClass");
 			cssname = cssname.substr(cssname.length - 2, 2);
 			if (changeset.left) {
 				if (cssname.indexOf('l') > -1) {
@@ -681,41 +692,35 @@
 				}
 			}
 			if (changeset.left || changeset.top) {
-				tooltip.removeClass("wijmo-wijtooltip-arrow-tr " +
-				"wijmo-wijtooltip-arrow-tc wijmo-wijtooltip-arrow-tl " +
-				"wijmo-wijtooltip-arrow-br wijmo-wijtooltip-arrow-bc " +
-				"wijmo-wijtooltip-arrow-bl wijmo-wijtooltip-arrow-rb " +
-				"wijmo-wijtooltip-arrow-rc wijmo-wijtooltip-arrow-rt " +
-				"wijmo-wijtooltip-arrow-lb wijmo-wijtooltip-arrow-lc " +
-				"wijmo-wijtooltip-arrow-lt");
+				self._removeCalloutCss();
 				tooltip.addClass("wijmo-wijtooltip-arrow-" + cssname);
 			}
-			this.element.data("fixedArrowClass", cssname);
+			ele.data("fixedArrowClass", cssname);
 		},
 		_showTooltip: function () {
-			var o = this.options, aimateOptions, animations, duration, easing,
+			var self = this, ele = self.element, 
+			o = self.options, aimateOptions, animations, duration, easing,
 			ea = {
-				ui: this,
+				ui: self,
 				cancel: false
 			},
-			tooltip = this.element.data("tooltip");
+			tooltip = ele.data("tooltip");
 			if (!tooltip) {
 				return;
 			}
-			this._trigger("showing", ea);
+			self._trigger("showing", ea);
 			if (ea.cancel) {
 				return;
 			}
-			this._showModal();
-			tooltip.css("z-index", this._getMaxZIndex());
-			if (o.showAnimation.animated && !this.options.mouseTrailing) {
+			self._showModal();
+			tooltip.css("z-index", 99999);
+			if (o.showAnimation.animated && !o.mouseTrailing) {
 				aimateOptions = {
 					show: true,
 					context: tooltip,
-					complete: $.proxy(function () {
-						this._trigger("shown");
-
-					}, this)
+					complete: function () {
+						self._trigger("shown");
+					}
 				};
 				animations = $.wijmo.wijtooltip.animations;
 				duration = o.showAnimation.duration;
@@ -735,32 +740,36 @@
 			}
 			else {
 				tooltip.show();
-				this._trigger("shown");
+				self._trigger("shown");
 			}
-			this._setPositionOffset(true);
+			self._setPositionOffset(true);
 			//this._setCalloutOffset();
 		},
 		_hideTooltip: function () {
-			var o = this.options,
+			var self = this, o = self.options,
 			ea = new $.Event('hidding.tooltip'), tooltip, aimateOptions,
 			animations, duration, easing;
 			ea.data = {
-				ui: this,
+				ui: self,
 				cancel: false
 			};
-			this._trigger("hidding");
+			self._trigger("hidding");
 			if (ea.data.cancel) {
 				return;
 			}
-			this._hideModal();
-			tooltip = this.element.data("tooltip");
+			self._hideModal();
+			tooltip = self.element.data("tooltip");
+			if (!tooltip) {
+				return;
+			}
 			if (o.hideAnimation.animated) {
 				aimateOptions = {
 					show: false,
 					context: tooltip,
-					complete: $.proxy(function () {
-						this._trigger("hidden");
-					}, this)
+					complete: function () {
+						self._trigger("hidden");
+						tooltip.css("z-index", "");
+					}
 				};
 				animations = $.wijmo.wijtooltip.animations;
 				duration = o.hideAnimation.duration;
@@ -780,15 +789,16 @@
 			}
 			else {
 				tooltip.hide();
-				this._trigger("hidden");
+				self._trigger("hidden");
+				tooltip.css("z-index", "");
 			}
 		},
 		_setText: function () {
-			var domElement = this.element.data("domElements"), strtitle,
-			currentElement = this.element, strret, title, titlevalue,
-			content = this.options.content, self = this;
+			var self = this, ele = self.element, 
+			domElement = ele.data("domElements"), strtitle, strret, title, titlevalue,
+			content = self.options.content;
 			if ($.isFunction(content)) {
-				strret = content.call(self.element, function (data) {
+				strret = content.call(ele, function (data) {
 					if (data) {
 						domElement.container.html(data);
 					}
@@ -803,16 +813,16 @@
 				}
 				else {
 
-					domElement.container.html(currentElement ?
-					this.title : '');
+					domElement.container.html(ele ?
+					self.title : '');
 				}
 			}
 
 			domElement.title.show();
-			title = this.options.title;
+			title = self.options.title;
 			titlevalue = "";
 			if ($.isFunction(title)) {
-				strtitle = title.call(this.element, function (data) {
+				strtitle = title.call(ele, function (data) {
 					if (data) {
 						titlevalue = data;
 					}
@@ -833,21 +843,6 @@
 			else {
 				domElement.title.hide();
 			}
-		},
-
-		_getMaxZIndex: function () {
-			var zindex = 0;
-			$("*").each(function () {
-				var index = $(this).css("z-index");
-				if (!isNaN(index)) {
-					index = parseInt(index, 10);
-					if (index > zindex) {
-						zindex = index;
-					}
-				}
-
-			});
-			return zindex + 1;
 		},
 
 		_getDocHeight: function () {
@@ -902,44 +897,46 @@
 		},
 
 		_showModal: function () {
-			if (this.options.modal) {
-				var modalDiv = $("<div>");
+			var self = this, modalDiv;
+			if (self.options.modal) {
+				modalDiv = $("<div>");
 				modalDiv.addClass("ui-widget-overlay")
-				.css("z-index", this._getMaxZIndex())
-				.width(this._getDocWidth()).height(this._getDocHeight());
+				.css("z-index", 99000)
+				.width(self._getDocWidth()).height(self._getDocHeight());
 				modalDiv.appendTo("body");
-				this.element.data("modalDiv", modalDiv);
+				self.element.data("modalDiv", modalDiv);
 			}
 		},
 
 		_hideModal: function () {
 			if (this.element.data("modalDiv")) {
-				this.element.data("modalDiv").remove();
+				this.element.data("modalDiv").css("z-index", "").remove();
 			}
 		},
 
 		//begin public methods
 		show: function () {
 			/// <summary>Shows the tooltip</summary>
-			if (!this.isCreateTooltip) {
-				this._createTooltip();
-				this.isCreateTooltip = true;
+			var self = this, tooltip, ele = self.element;
+			if (!self.isCreateTooltip) {
+				self._createTooltip();
+				self.isCreateTooltip = true;
 			}
-			var tooltip = this.element.data("tooltip");
+			tooltip = ele.data("tooltip");
 			tooltip.stop(true, true);
-			this._setText();
+			self._setText();
 			//this._setheight();
 
-			if (this.element.data("arrowClass")) {
-				tooltip.removeClass(this.element.data("arrowClass"));
+			if (ele.data("arrowClass")) {
+				tooltip.removeClass(ele.data("arrowClass"));
 			}
-			this._setCalloutCss();
+			self._setCalloutCss();
 			//tooltip.hide();
-			this._setposition();
-			clearTimeout(this.element.data("showDelay"));
+			self._setposition();
+			clearTimeout(ele.data("showDelay"));
 			//this.element.show();
-			this.element.data("showDelay", 
-			setTimeout($.proxy(this._showTooltip, this), this.options.showDelay));
+			ele.data("showDelay", 
+			setTimeout($.proxy(self._showTooltip, self), self.options.showDelay));
 			//this._showTooltip();
 			//var self = this;
 			//var calloutInner = self.element.data("domElements")
@@ -950,37 +947,39 @@
 			/// <summary>show the tooltip at a point position</summary>
 			/// <param name="point" type="Object">It's a point.
 			///the value should like{x:0,y:0}</param>
-			if (!this.isCreateTooltip) {
-				this._createTooltip();
-				this.isCreateTooltip = true;
-			}
-			var tooltip = this.element.data("tooltip"), borderRight, borderBottom,
-			offsetx, offsety, calloutcss, domelement, borderTop, borderLeft,
+			var tooltip, borderRight, borderBottom, self = this, ele = self.element,
+			offsetx, offsety, calloutcss, callout, borderTop, borderLeft,
 			borderh, borderv, offset, width, height, collision, newCss, arr;
+
+			if (!self.isCreateTooltip) {
+				self._createTooltip();
+				self.isCreateTooltip = true;
+			}
+			tooltip = ele.data("tooltip");
 			tooltip.stop(true, true);
-			this._setText();
+			self._setText();
 			//this._setheight();
 			tooltip.offset({ left: 0, top: 0 });
 			tooltip.show();
 			offsetx = 0;
 			offsety = 0;
-			calloutcss = this.element.data("arrowClass");
-			domelement = this.element.data("domElements");
-			offsetx = domelement.callout.position().left;
-			offsety = domelement.callout.position().top;
-			borderTop = domelement.callout.css("border-top-width").replace(/px/g, '') * 1;
-			borderLeft = domelement.callout.css("border-left-width")
+			calloutcss = ele.data("arrowClass");
+			callout = ele.data("domElements").callout;
+			offsetx = callout.position().left;
+			offsety = callout.position().top;
+			borderTop = callout.css("border-top-width").replace(/px/g, '') * 1;
+			borderLeft = callout.css("border-left-width")
 			.replace(/px/g, '') * 1;
-			borderRight = domelement.callout.css("border-right-width")
+			borderRight = callout.css("border-right-width")
 			.replace(/px/g, '') * 1;
-			borderBottom = domelement.callout.css("border-bottom-width")
+			borderBottom = callout.css("border-bottom-width")
 			.replace(/px/g, '') * 1;
 			borderh = borderLeft === 0 ? borderRight : borderLeft;
 			borderv = borderTop === 0 ? borderBottom : borderTop;
 			offset = {};
 			width = tooltip.width();
 			height = tooltip.height();
-			collision = (this.options.position.collision || "flip").split(" ");
+			collision = (self.options.position.collision || "flip").split(" ");
 			if (collision.length === 1) {
 				collision[1] = collision[0];
 			}
@@ -1035,7 +1034,7 @@
 				break;
 			}
 			//console.log(offset);
-			newCss = this._showAtflip(calloutcss, offset);
+			newCss = self._showAtflip(calloutcss, offset);
 			///let the position out of the target element.
 			arr = [];
 			arr[0] = newCss.substr(0, 1);
@@ -1057,32 +1056,33 @@
 				}
 			});
 			//console.log(offset);
-			this._set_unfilledCallout(newCss);
+			self._set_unfilledCallout(newCss);
 			tooltip.offset(offset);
 			tooltip.hide();
-			this.element.data("showDelay", 
-			setTimeout($.proxy(this._showTooltip, this), this.options.showDelay));
+			ele.data("showDelay", 
+			setTimeout($.proxy(self._showTooltip, self), self.options.showDelay));
 
 		},
 
 		_showAtflip: function (calloutcss, offset) {
-			var collision = (this.options.position.collision || "flip").split(" "),
-			cssname, tooltip, width, height, domelement, borderTop, borderLeft,
+			var self = this, ele = self.element,
+			collision = (self.options.position.collision || "flip").split(" "),
+			cssname, tooltip, width, height, callout, borderTop, borderLeft,
 			borderRight, borderBottom, win;
 			if (collision[0] !== "flip" && collision[1] !== "flip") {
 				return;
 			}
 			cssname = calloutcss.substr(calloutcss.length - 2, 2);
-			tooltip = this.element.data("tooltip");
+			tooltip = ele.data("tooltip");
 			width = tooltip.width();
 			height = tooltip.height();
-			domelement = this.element.data("domElements");
-			borderTop = domelement.callout.css("border-top-width").replace(/px/g, '') * 1;
-			borderLeft = domelement.callout.css("border-left-width")
+			callout = ele.data("domElements").callout;
+			borderTop = callout.css("border-top-width").replace(/px/g, '') * 1;
+			borderLeft = callout.css("border-left-width")
 			.replace(/px/g, '') * 1;
-			borderRight = domelement.callout.css("border-right-width")
+			borderRight = callout.css("border-right-width")
 			.replace(/px/g, '') * 1;
-			borderBottom = domelement.callout.css("border-bottom-width")
+			borderBottom = callout.css("border-bottom-width")
 			.replace(/px/g, '') * 1;
 			win = $(window);
 			if (collision[1] === "flip") {
@@ -1113,23 +1113,18 @@
 					}
 				}
 			}
-			tooltip.removeClass("wijmo-wijtooltip-arrow-tr " +
-			"wijmo-wijtooltip-arrow-tc wijmo-wijtooltip-arrow-tl " +
-			"wijmo-wijtooltip-arrow-br wijmo-wijtooltip-arrow-bc " +
-			"wijmo-wijtooltip-arrow-bl wijmo-wijtooltip-arrow-rb " +
-			"wijmo-wijtooltip-arrow-rc wijmo-wijtooltip-arrow-rt " +
-			"wijmo-wijtooltip-arrow-lb wijmo-wijtooltip-arrow-lc " +
-			"wijmo-wijtooltip-arrow-lt");
+			self._removeCalloutCss();
 			tooltip.addClass("wijmo-wijtooltip-arrow-" + cssname);
 			return cssname;
 		},
 
 		hide: function () {
 			/// <summary>Hides the tooltip</summary>
-			clearTimeout(this.element.data("showDelay"));
-			clearTimeout(this.element.data("hideDelay"));
-			this.element.data("hideDelay", 
-			setTimeout($.proxy(this._hideTooltip, this), this.options.hideDelay));
+			var self = this, ele = self.element;
+			clearTimeout(ele.data("showDelay"));
+			clearTimeout(ele.data("hideDelay"));
+			ele.data("hideDelay", 
+			setTimeout($.proxy(self._hideTooltip, self), self.options.hideDelay));
 			//this._hideTooltip();
 		}
 

@@ -1,7 +1,7 @@
 /*globals window document jQuery */
 /*
  *
- * Wijmo Library 0.9.0
+ * Wijmo Library 1.0.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -1493,14 +1493,16 @@
 				defaultPosition = {
 					my: h ? "left" : "top",
 					of: target,
-					at: h ? "left" : "top"
+					at: h ? "left" : "top",
+					collision: "none"
 				};
 				$.extend(defaultPosition, scroller.decreaseButtonPosition);
 				decButton.position(defaultPosition);
 				defaultPosition = {
 					my: h ? "right" : "bottom",
 					of: target,
-					at: h ? "right" : "bottom"
+					at: h ? "right" : "bottom",
+					collision: "none"
 				};
 				$.extend(defaultPosition, scroller.increaseButtonPosition);
 				incButton.position(defaultPosition);
