@@ -7,37 +7,34 @@
     <meta name="description" content="%description%" />
     <meta name="keywords" content="" />
     <meta name="author" content="ComponentOne" />
-    <link href="../base-reset.css" rel="stylesheet" type="text/css" />
-    <link href="../../themes/aristo/jquery-ui-1.8.4.custom.css" rel="stylesheet" type="text/css" />
-    <link href="../demos-single.css" rel="stylesheet" type="text/css" />
-    <link type="text/css" href="../../themes/wijmo/jquery.ui.wijsuperpanel.css" rel="stylesheet" />
-    <link type="text/css" href="../../themes/wijmo/jquery.ui.wijlist.css" rel="stylesheet" />
-    <link type="text/css" href="../../themes/wijmo/jquery.ui.wijtextboxdecorator.css"
-        rel="stylesheet" />
-    <link type="text/css" href="../../themes/wijmo/jquery.ui.wijdropdowndecorator.css"
-        rel="stylesheet" />
-    <link type="text/css" href="../../themes/wijmo/jquery.ui.wijradiobuttondecorator.css"
-        rel="stylesheet" />
-    <link type="text/css" href="../../themes/wijmo/jquery.ui.wijcheckboxdecorator.css"
-        rel="stylesheet" />
-    <script src="../../external/jquery-1.4.3.min.js" type="text/javascript"></script>
-    <script src="../../external/jquery-ui-1.8.6.custom.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../../external/jquery.mousewheel.min.js"></script>
-    <script type="text/javascript" src="../../wijmo/jquery.ui.wijutil.js"></script>
-    <script type="text/javascript" src="../../wijmo/jquery.ui.wijsuperpanel.js"></script>
-    <script type="text/javascript" src="../../wijmo/jquery.ui.wijlist.js"></script>
-    <script type="text/javascript" src="../../wijmo/jquery.ui.wijdropdowndecorator.js"></script>
-    <script type="text/javascript" src="../../wijmo/jquery.ui.wijradiobuttondecorator.js"></script>
-    <script type="text/javascript" src="../../wijmo/jquery.ui.wijcheckboxdecorator.js"></script>
-    <script type="text/javascript" src="../../wijmo/jquery.ui.wijtextboxdecorator.js"></script>
+    
+    <link href="../../themes/rocket/jquery-wijmo.css" rel="stylesheet" type="text/css" />
+    
+    <link href="../../themes/wijmo/jquery.wijmo.wijsuperpanel.css" rel="stylesheet" type="text/css" />
+    <link href="../../themes/wijmo/jquery.wijmo.wijlist.css" rel="stylesheet" type="text/css" />
+    <link href="../../themes/wijmo/jquery.wijmo.wijtextbox.css" rel="stylesheet" type="text/css" />
+    <link href="../../themes/wijmo/jquery.wijmo.wijdropdown.css" rel="stylesheet" type="text/css" />
+    <link href="../../themes/wijmo/jquery.wijmo.wijradio.css" rel="stylesheet" type="text/css" />
+    <link href="../../themes/wijmo/jquery.wijmo.wijcheckbox.css" rel="stylesheet" type="text/css" />
+    <script src="../../external/jquery-1.6.2.min.js" type="text/javascript"></script>
+    <script src="../../external/jquery-ui-1.8.16.custom.min.js" type="text/javascript"></script>
+    <script src="../../external/jquery.mousewheel.min.js" type="text/javascript"></script>
+    <script src="../../external/jquery.bgiframe-2.1.3-pre.js" type="text/javascript"></script>
+    <script src="../../wijmo/jquery.wijmo.wijutil.js" type="text/javascript"></script>
+    <script src="../../wijmo/jquery.wijmo.wijsuperpanel.js" type="text/javascript"></script>
+    <script src="../../wijmo/jquery.wijmo.wijlist.js" type="text/javascript"></script>
+    <script src="../../wijmo/jquery.wijmo.wijdropdown.js" type="text/javascript"></script>
+    <script src="../../wijmo/jquery.wijmo.wijradio.js" type="text/javascript"></script>
+    <script src="../../wijmo/jquery.wijmo.wijcheckbox.js" type="text/javascript"></script>
+    <script src="../../wijmo/jquery.wijmo.wijtextbox.js" type="text/javascript"></script>
     <script id="scriptInit" type="text/javascript">
         $(document).ready(function () {
-            $(":input[type='text'],:input[type='password'],:input[type='textarea']").wijtextboxdecorator();
-            $("#select1").wijdropdowndecorator({ height: 350,width: 150 });
-            $("#select2").wijdropdowndecorator();
-            $("#select3").wijdropdowndecorator();
-            $(":input[type='radio']").wijradiobuttondecorator();
-            $(":input[type='checkbox']").wijcheckboxdecorator();
+            $(":input[type='text'],:input[type='password'],textarea").wijtextbox();
+            $("#select1").wijdropdown();
+            $(":input[type='radio']").wijradio();
+            $(":input[type='checkbox']").wijcheckbox();
+            $("#wijmo-button").button();
+            $("#wijmo-button").click(function () { return false; });
         });
     </script>
     <style type="text/css">
@@ -46,10 +43,18 @@
             display: block;
         }
         
+        .formdecorator
+        {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
         .formdecorator li
         {
             clear: both;
-        }      
+            margin-bottom: 1em;
+        }
     </style>
 </head>
 <body class="demo-single">
@@ -63,25 +68,19 @@
             <form action="overview.html">
             <ul class="formdecorator">
                 <li>
-                    <label for="textbox">
+                    <h3>
                         Input
-                    </label>
+                    </h3>
                     <input id="textbox" type="text" />
                 </li>
                 <li>
-                    <label for="pass">
-                        Password
-                    </label>
-                    <input id="pass" type="password" />
+                    <h3>
+                        TextArea</h3>
+                    <textarea id="area" rows="2" cols="50"></textarea>
                 </li>
                 <li>
-                    <label for="area">
-                        TextArea</label>
-                    <textarea id="area" rows="10" cols="50"></textarea>
-                </li>
-                <li>
-                    <label for="select1">
-                        Dropdown with Optgroups</label>
+                    <h3>
+                        Dropdown with Optgroups</h3>
                     <select id="select1">
                         <optgroup label="A-G">
                             <option>A</option>
@@ -103,63 +102,26 @@
                     </select>
                 </li>
                 <li>
-                    <label>
-                        Dropdown</label>
-                    <select id="select2">
-                        <option value="A">OptionA</option>
-                        <option value="B">OptionB</option>
-                        <option value="C">OptionC</option>
-                        <option value="D">OptionD</option>
-                        <option value="E">OptionE</option>
-                    </select>
-                </li>
-                <li>
-                    <label>
-                        Dropdown with scrollbar</label>
-                    <select id="select3">
-                        <option value="A">OptionA</option>
-                        <option value="B">OptionB</option>
-                        <option value="C">OptionC</option>
-                        <option value="D">OptionD</option>
-                        <option value="E">OptionE</option>
-                        <option value="F">OptionF</option>
-                        <option value="G">OptionG</option>
-                        <option value="H">OptionH</option>
-                        <option value="I">OptionI</option>
-                        <option value="J">OptionJ</option>
-                        <option value="K">OptionK</option>
-                        <option value="L">OptionL</option>
-                        <option value="M">OptionM</option>
-                        <option value="N">OptionN</option>
-                        <option value="O">OptionO</option>
-                        <option value="P">OptionP</option>
-                        <option value="Q">OptionQ</option>
-                        <option value="R">OptionR</option>
-                        <option value="S">OptionS</option>
-                        <option value="T">OptionT</option>
-                        <option value="U">OptionU</option>
-                        <option value="V">OptionV</option>
-                        <option value="W">OptionW</option>
-                        <option value="X">OptionX</option>
-                        <option value="Y">OptionY</option>
-                        <option value="Z">OptionZ</option>
-                    </select>
-                </li>
-                <li>
-                    <label>
-                        CheckBoxDecorator</label>
+                    <h3>
+                        CheckBox</h3>
                     <input id="checkbox1" type="checkbox" /><label for="checkbox1">checkbox1</label>
                     <input id="checkbox2" type="checkbox" /><label for="checkbox2">checkbox2</label>
                     <input id="checkbox3" type="checkbox" /><label for="checkbox3">checkbox3</label>
                     <input id="checkbox4" type="checkbox" /><label for="checkbox4">checkbox4</label>
                 </li>
                 <li>
-                    <label id="radiobutton">
-                        RadioButtonDecorator</label>
+                    <h3 id="radiobutton">
+                        Radio</h3>
                     <input type="radio" name="radiobutton1" id="radio1" /><label for="radio1">radio1</label>
                     <input type="radio" name="radiobutton1" id="radio2" /><label for="radio2">radio2</label>
                     <input type="radio" name="radiobutton1" id="radio3" /><label for="radio3">radio3</label>
                     <input type="radio" name="radiobutton1" id="radio4" /><label for="radio4">radio4</label>
+                </li>
+                <li>
+                    <h3>
+                        Button</h3>
+                    <button id="wijmo-button">
+                        Submit</button>
                 </li>
             </ul>
             </form>
@@ -172,6 +134,9 @@
     </div>
     <div class="footer demo-description">
         <p>
+            The Wijmo Form Decorator widgets (wijradio, wijcheckbox, wijdropdown, wijtextbox)
+            are used to decorate a standard HTML form elements. The Form Decorator widgets allow
+            any form element to be styled uniformly in any browser.
         </p>
     </div>
 </body>

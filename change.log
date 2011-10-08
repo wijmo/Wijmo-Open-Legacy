@@ -1,6 +1,509 @@
+Wijmo-Open v1.5.0
+=================
 
-Changes mode to version 0.8.1
------------------------------
+The fifth major release of of Wijmo Open v1 contains a number of bug fixes and support for jQuery globalize (breaking change).
+
+* Fixes
+
+	Tree
+	----
+	Changed expandAnimation.effect to expandAnimation.animated, collapseanimation.effect to collapseAnimation.animated.  
+
+	Dialog
+	------
+	Fixed bug when setting the 'contentUrl' option.
+	Fixed bug when drag & size the dialog when dialog has external content.
+
+	Menu
+	----
+	Fixed the issue that "blur" and "focus" event fired twice.
+
+Wijmo-Open v1.4.1
+=================
+
+* Enhancements
+
+	Accordion
+	---------
+		In addition to TAB key, added ability to navigate accordion panes using 
+		the up/down left/right keys - when  accordion header has focus, 
+		pressing up/down left/right keys will change focus between headers, 
+		pressing enter will activate the content of the selected header.
+		Unit test for the new feature is provided.
+
+* Fixes
+
+	Tooltip
+	-------
+	- Fixed the issue that when the mouseTrailing is true, mouse mouse, the tooltip doesn't follow with mouse. 
+	- Fixed a bug: when the value's type is float, the progress's behavior is wrong.
+
+	DropDown
+	---------
+	- Fixed the issue that setting the value to select will be not reflected in the wijdropdown.
+
+	Splitter
+	---------
+	- Fixed the issue that expander can't be shown correctly in the nested splitter.
+	- Fixed the issue that hover style wasn't applied to the bar when hovering over the bar.
+
+	Calendar
+	--------
+	- UI actions don't take effect when using jQuery 1.6.2.
+
+
+Wijmo-Open v1.4.0
+=================
+
+The fourth major release of of Wijmo v1 contains a number of bug fixes and breaking changes.
+
+* Breaking changes
+
+	Tabs
+	----
+		Renamed the 'disabled' option to 'disabledIndexes'
+		Renamed the 'enable' method to 'enableTab', renamed the 'disable' method to 'disableTab'
+
+	Accordion
+	---------
+		Parameters for "beforeSelectedIndexChanged"/"selectedIndexChanged" events was changed:
+
+* Enhancements
+
+	Dialog
+	------
+		New event: stateChanged - Raised when the state ("minimized", "maximized", "normal") of this dialog is changed.
+		New event: blur - Raised when the dialog lose focus.
+
+
+* Fixes
+
+Superpanel
+----------
+Prevent right and middle clicking takes effect on scrollbar.
+Fixed bug: Exception on option "autoRefresh" set to true.
+
+Tabs
+------
+Fixed bug: Setting disabled option to true, tabs still can be selected.
+
+Dialog
+------
+Fixed bug: "Open" method will reload iframe of the dialog.
+Fixed bug: beforeClose has some issues on iframe mode.  
+
+Menu
+--------
+Fixed bug: javascript error is observe after navigating with access key and pressing any key.
+Fixed bug: when focus is on a menuitem, pressing the enter key wasn't navigating the link's url.
+Fixed bug: when the disabled option is set to true, the sub menu was still opening.
+Fixed bug: when the template item is input element, it will throw an exception in IE 8
+Fixed bug: incorrect style was applied when the trigger event was set to rtclick and you moused from an item which has submenu
+Modify the aria-activedescendant to an menu item id.
+
+Tooltip
+---------
+Change the ajaxCallback option's default value from false to null.
+Fixed bug: setting the content option was not setting the content of the tooltip.
+
+Splitter
+--------
+Fixed the issue that dragging the expander bar will throw an exception in ie7.
+Added disabled option support.
+Resetting panel1 option will override previous panel1 settings in firefox(because the "use strict").
+
+slider
+---------
+Fixed a bug: the height of slider is error when setting it in control.
+Fixed issue: if the mouse release util the mouse out on decrese or increse button, the track still take effect.
+
+Progressbar
+-----------
+Fixed the issue that value option need be set to reflect the setting of labelFormatString and toolTipFormatString option.
+Fixed bug: when setting maxValue option's value more than 100, the progressbar renders incorrectly.
+
+Calendar
+--------
+Now accepts string type date value.
+
+Accordion
+---------
+"ui-helper-clearfix" css class was added to accordion widget (16002).
+Javascript error is observed after setting "ExpandDirection" option to "Top" or "Left" from widget constructor
+disabled option does not work.
+Multiple issue are observed  when ExpandDirection property is set to "left/right" and more than one accordion is on the page	
+
+Expander
+--------
+"Javascript runtime error" observe while expand the content of expander when animated option set to false.
+
+Wijmo-Open v1.3.0
+=================
+
+The third major release of of Wijmo 1.x contains a number of bug fixes, breaking changes, and a new upload widget.
+
+* Breaking changes:
+	We standardized on event naming to ensure consistency within the toolkit.  All events are now lower camel-case.
+	For example, pageindexchanging was renamed to pageIndexChanging.
+
+* Enhancements:
+	The getState and reset methods were added to the dialog.
+	The slider now has a minRange option that keeps the thumbs at a minium distance.
+	The dropdown now has a refresh method.
+	The event pattern for accordion/expander has changed.  The old pattern: $("#accordion").bind("selectedindexchanged", handler) 
+		has been changed to: $("#accordion").bind("wijaccordionelectedIndexChanged", handler).  You can also bind the handler in the
+		ctor: $("#accordion").wijaccordion({ selectedIndexChanged: function (e, index) {}})
+
+
+Dialog
+------
+The "dragstop" & "resizestop" events weren't being raised.
+The base css class name was changed.
+
+superpanel
+----------
+Incorrect scrollValue after dragging the scrollbar.
+
+radio
+-----
+Fixed a bug, change the radio group selector.
+
+checkbox
+---------
+Getting the value of the checkbox in the change event wasn't working in chrome.
+
+
+Wijmo-Open v1.2.0
+=================
+
+Changes for jQuery 1.6 compatability.
+
+Totally reworked the sample explorer.
+
+Enhancements to the AristO theme.
+
+menu
+----
+The menu no longer closes and immediately reopens when navigating submenus.
+
+superpanel
+----------
+Fixed issue : Setting margin in css of handle prevent scrolling to end with continuing pressing down button.
+Fixed issue : The scrolled event won't be triggered when scrollTo method is invoked programmatically.
+
+dropdown
+--------
+Modify the dropdown list's width to select element's width.
+
+tabs
+----
+Changed the default value of tabTemplate, panelTempate, spinner to empty string ('').
+
+Wijmo-Open v1.1.6
+=================
+
+dropdown
+------------
+Add the select element's attributes to the widget.
+
+Menu
+------
+If menu is shown as context menu, right clicking the target element was not dislaying/hiding the menu correctly.
+
+splitter
+--------
+provide the panel2.collapsed option setting.
+
+checkbox
+--------
+Fixed issue: when the checkbox element is disabled, the checkbox widget can still be checked.
+
+dialog
+------
+Fixed issue : reopen the dialog and iframe content need to be reloaded.
+Fixed issue : override setoption method error.
+ 
+calendar
+---------
+Decade view is not reset to month view in popup mode.
+
+superpanel
+----------
+Changed the options of the scrollBarMode enumerator.  "scrollbar"->"scrollBar", "buttonshover" --> "buttonsHover".
+The old two options "scrollbar" and "buttonshover" are obsoleted.
+Added disabled option of the animationOptions support.
+
+tooltip
+-------
+Setting "showCallout" to false was causing the widget to throw an exception.
+When a page has two modal tooltips, showing the second tooltip and dismissing it was still leaving the modal layer visible.
+
+tabs
+-------
+Fixed a 'use strict' issue in FF4.
+Pages are not inserted inside the content DIV in Left/Right alignment.
+
+
+Wijmo-Open v1.1.5
+===================
+
+tabs
+-----
+Added 'beforeShow' event, by which user can customize the tab content.
+Two new samples werw added to sample collection: ajax.html and customcontent.html 
+
+tooltip
+-------
+Fixed callout css issue in IE7 and IE6. 
+Fixed the flip collision issue in IE7 and IE6.
+
+progressbar
+-----------
+Refactored the wijprogressbar.
+When the filldirection is north and lableAlign is north, if the progressbar's value label is not show completely in browsers beside IE.
+Modified the label css from 'lb_***' to 'wijmo-progressbar-lb-***'.
+The destroy method wasn't removing filldirection css class.
+When filldirection is 'north' or 'south', the value div has 'ui-corner-left' css class.
+Having labelAlign to running and fillDirection to south wasn't working.
+The fillDirection=north/south and labelAlign=north/south/east wasn't rendering correctly in non-ie browsers.
+Removed startTask and stopTask methods.
+
+menu
+----
+In flyout mode, mousing slowly between two items was hiding the curent menu.
+Submenu was hiding when mousing over a checkbox menu item.
+Remove the link "#" behavior.
+Modify the keyboard behaviors.
+Mousing over an item which contains child items, the item's css class changed from 'ui-state-hover' to 'ui-state-active'.
+
+dialog
+------
+Fixed bug the position is changed after call the open method of the dialog when dialog restore from minimized.
+The pin method wasn't working after the dialog was restored from a minimized state.
+
+Splitter
+--------
+Fixed the issue that expander isn't centered on the bar for the new style.
+
+Wijmo-Open v1.1.4
+===================
+
+Fixed Firefox 4 Release Candidate issues with the following widgets:
+- Tooltip
+- Calendar
+- Superpanel
+
+Synced with jQuery UI 1.8.11
+
+menu
+------
+Add 'showDelay' and 'hideDelay' options to control showDelay and hideDelay in flyout menu mode. 
+
+tooltip, superpanel
+--------------------
+In setoption method, if the value is a PlainObject, the option value seted wrong.
+
+Splitter
+--------
+Support setting orientation/splitterDistance/panel1/panel2/fullSplit options using jquery options setting pattern.
+Fixed the issue with the unit test for splitter.  Changed the expected class name from wijmo-splitter-wrapper to wijmo-wijsplitter-wrapper.
+Fixed the issue that setting resizeSettings.ghost takes no effect.
+Fixed the issue that resizing the parent splitter can't refresh the child splitter when the child splitter with full-split was put into the panel2 of the parent splitter in chrome and safari.
+Refactored the wijsplitter widget for more readable and maintainable.
+Change all icon classes to a single arrow. ui-icon-triangle-1-w, ui-icon-triangle-1-e, ui-icon-triangle-1-s, ui-icon-triangle-1-n. 
+Also adjust centering of the tag for new styling.
+
+
+Wijmo-Open v1.1.3
+===================
+
+** The slider widget can now take an input element as its selector.
+** Added listItems options to the list widget.
+
+calendar
+-------
+Changed event name 'hidding' to 'hiding'.
+Fixed issue with yui compressor.
+
+popup
+------
+Changed event name 'hidding' to 'hiding'.
+
+dialog
+------
+Fixed bug when minimize the dialog the iframe content will reload.(on FF & Webkit)
+Add owner context of the specified seletor.
+$(".wijmo-wijdialog-captionbutton", self.uiDialog)
+
+dropdown
+---------
+Fixed bug with destroy method. remove the 'a' element.
+
+accordion
+------
+Fixed bug with incorrect selectedIndex value when page contains two or more accordion widgets.
+
+superpanel
+----------
+Add two events:
+	-hScrollerActivating
+	-vScrollerActivating
+Fixed bug: When scroller.scrollBarVisibility is set to "true", two horizontal scrollbar painted.
+
+Util
+-----
+modify the missplled word 'hidding' to 'hiding'.
+
+Menu
+------
+Fixed a bug when the trigger option is "" click the document, paint the superpanel.
+
+
+Wijmo-Open v1.1.2
+=================
+
+** Breaking changes
+
+   Menu - The options that govern the use of animation have been refactored.  If your using custom animation be aware of the following changes.
+		The following options were removed:
+			* animated
+			* showAnimated
+			* hideAnimated
+			* duration
+			* showDuration
+			* hideDuration
+		  The following options were added:
+			* animation
+			* showAnimation
+			* hideAnimation
+			* slidingAnimation
+
+	Splitter - The resizeSettings options has changed.  the following options were removed:
+				* duration
+				* easing
+				* disabled
+			   The following options were added to resizeSettings option:
+				* animationOptions
+
+SuperPanel
+----------
+Add trim method to trim the items which are splitted from the scrollMode.  Fix the issue that selectMode is set to
+"scrollBar, buttons", the navigation buttons can't be shown on the superpanel.
+
+Menu
+-------
+In sliding menu, change the 'wij-menu-breadcrumb' element's class from 'ui-widget-default' to 'ui-state-default'.
+Use the default jQuery UI's effect when displaying/hiding a submenu. 
+
+Tooltip
+--------
+Fixed bug: Modify the misspelled word "hidding".
+Added ajaxCallback option to allow the contents of the tooltip to be set dynamically.
+Add animation option. if showAnimation or hideAnimation is not sepecified, use this option's value.
+Added a group option.  Prior versions created a unique tooltip dom element for each element in the matched set. We now create one tooltip element for each group.  
+
+
+Wijmo-Open v1.0.1
+=============================
+
+"use strict" has been moved into the main closure for all widgets.
+
+Menu
+-------
+Fixed bug: Setting the animated and duration options wasn't effecting animation.
+
+Calendar
+-------
+Fixed bug: Exception is fired when clicking a weekend day if the weekDay selection is allowed.
+
+Splitter
+-------- 
+Fixed bug : ghost function in Splitter wasn't working correctly.
+Remove increment from option.
+
+Dropdown
+--------
+Fixed bug : Bind event (change,click) was not working in select .
+Attach select element event to dropdown.
+
+Splitter
+-------- 
+wijsplitter code appears a new problem. This makes the sample of wijmo-open can¡¯t work.
+
+Dialog
+------
+Fixed: Fire event "resize" when maximized. 
+Fixed: Icon class when using "toggle" method.
+
+Changes made to version 0.9.0
+=============================
+
+Accordion
+------
+wijlinechart that located inside hidden accordion pane now updated automatically when pane visibility state changed.
+Fixed problem with wrong jquery.wijmo.wijutil references for the samples and unit test.
+"use strict"; moved into the function scope.
+
+Expander
+------
+Fixed problem with wrong jquery.wijmo.wijutil references for the samples and unit test.
+"use strict"; moved into the function scope.
+
+Changes made to version 0.8.2
+=============================
+
+** Breaking changes.**
+---------------------- 
+All widgets have been renamed (file and namespaces) to conform to jQuery UI naming patterns.
+- The widget names have not changed, in most cases you only need to change the script reference.
+- Name change to specific wijmo css classnames.
+- The decorator widgets have been renamed.
+
+Calendar
+------
+Add customizeDate to option, which allows user to customize date cells.
+
+Splitter
+------
+In nested case, adjust panels width for chrome. 
+Fix the issue that the panel2 of splitter1 is not abound with whole splitter2.
+
+Add the special css to the splitter.css for ie6 and ie7.  Fix the issue that it's hard to grab the resizing handle in ie6/7.
+
+Fixed the bug for ie 6.0 and 7.0 that user can take the panel2 out of the border by dragging the bar to the right edge of splitter.
+
+Dialog
+------
+Improve source code with JSLint.
+Change namespace,file name, css class name.
+
+DropdownDecorator
+-----------------
+Removed the z-index from the outermost element and added z-index when necessary.  The dropdown list can be covered by other dom elements.
+
+Add z-index to the outermost element when browser is ie6.  The dropdown list can be covered by other dom elements in IE6.
+
+Use stop method to stop the uncomplete animation.  Sometimes, opening the dropdownlist will push the below dom elements to
+another position.
+Add ARIA support and rename the widget namespace.
+
+Menu
+---------------------
+Fixed the css bug in IE6.0 and IE7.0. Add z-index to the outer div and the panret li element and the submenu when the submenu is opened, 
+remove these z-index when it hides
+Remove the templete item hover event and click event.
+In IE 6.0, when the submenu is shown completily, set the submenu's overflow css to empty to 
+fixed the second menu is covered by the first submenu. This is the jQuery's animation's bug.
+In IE 9.0, when the submenu is shown completily,wrap an div and unwrap the div to refresh the DOM 
+to fixed the second menu is covered.  
+
+Progressbar
+--------------------
+Remove the progressbar label's z-index to avoid cover other widget.
+
+
+Changes made to version 0.8.1
+=============================
 
 Accordion
 ---------
@@ -11,13 +514,27 @@ CheckBoxDecorator
 -----------------
 Modified checkboxElement.click.  The checkbox was not being checked/unchecked 
 when placed inside a dialog widget.
+Fixed a bug that can't use the space bar to check/uncheck a checkbox.  Added the keydown event handle th handle the space key down. 
+Add ARIA support and rename the widget namespace.
 
 Menu, ToolTip
 -------------
 Upgrade bgiframe from 2.1.1 to 2.1.3-pre.  This version fixed the issue that iframe is 
 still created on the win7 and ie7/8/9.
+Fixed the callout not shown correctly. Changed the call out border from dotted to solid.
+Add an event before show the submenu.
+Add Aria support.
+Fixed the keyboard enter key event not show the submenu and hide the last submenu correctly.
+Rename the widget namespace.
+When click the close button, the url will set a '#' at the end. Fixed this bug.
 
-progressbar
+
+Progressbar
 -----------
 Fixed not shown corectly when the fillDirection set to 'north' or 'south' 
 and labelAlign set to 'north' or south.
+Fixed the progress value is not corectly. When the indicatorIncrement is one, don't caculate the progress value. 
+Add ARIA support and rename the widget namespace.
+
+
+
