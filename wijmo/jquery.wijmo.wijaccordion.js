@@ -238,7 +238,7 @@ amplify*/
 			var o = this.options;
 			selector = selector ? selector : o.header;
 			this.headers = this.element.find(selector);
-			this.headers.each(jQuery.proxy(this._initHeader, this));
+			this.headers.each($.proxy(this._initHeader, this));
 		},
 		_initHeader: function (index, elem) {
 			var o = this.options, rightToLeft = this.element.data("rightToLeft"),
@@ -382,7 +382,7 @@ amplify*/
 				animOptions = {
 					toShow: nextContent,
 					toHide: prevContent,
-					complete: jQuery.proxy(function () {
+					complete: $.proxy(function () {
 						prevContent.removeClass("ui-accordion-content-active");
 						nextContent.addClass("ui-accordion-content-active");
 						prevContent.css('display', '');
@@ -450,9 +450,9 @@ amplify*/
 		_bindLiveEvents: function () {
 			this.element.find('.ui-accordion-header')
 			.live(this.options.event + ".wijaccordion",
-									jQuery.proxy(this._onHeaderClick, this))
+									$.proxy(this._onHeaderClick, this))
 			.live("keydown.wijaccordion",
-									jQuery.proxy(this._onHeaderKeyDown, this))
+									$.proxy(this._onHeaderKeyDown, this))
 			.live("mouseenter.wijaccordion",
 							function () { $(this).addClass('ui-state-hover'); })
 			.live("mouseleave.wijaccordion",
