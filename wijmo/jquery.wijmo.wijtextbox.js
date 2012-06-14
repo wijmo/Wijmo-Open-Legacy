@@ -1,7 +1,7 @@
 /*globals jQuery */
 /*
 *
-* Wijmo Library 1.5.0
+* Wijmo Library 2.1.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -25,19 +25,18 @@
 		},
 		_create: function () {
 			var self = this, e = self.element,
-				eleTag = self.element[0].tagName.toLowerCase(),
-				eleType = self.element.attr("type");
+				allowedNodes = { 'input': true, 'textarea': true },
+				allowedInputTypes = { 'text': true, 'password': true, 
+					'email': true, 'url': true },
+				nodeName = e.get(0).nodeName.toLowerCase();
 
-			eleType = eleType == null ? '' : eleType.toLowerCase();
-
-			if (!(eleTag === "input" || eleTag === "textarea")) {
+			if (!allowedNodes.hasOwnProperty(nodeName)) {
 				return;
 			}
-
-			if (!(eleType === "text" || eleType === "password")) {
-				if (eleTag === "input") {
-					return;
-				}
+			if ((nodeName === 'input') &&
+				!allowedInputTypes.hasOwnProperty(self.element.attr("type")
+				.toLowerCase())) {
+				return;
 			}
 
 			e.addClass("wijmo-wijtextbox ui-widget ui-state-default ui-corner-all");
@@ -54,8 +53,19 @@
 			}).bind("blur." + self.widgetName, function () {
 				e.removeClass("ui-state-focus");
 			});
+			
+			//for case 20899
+			if (e.is(":disabled")) {
+				self._setOption("disabled", true);
+				e.addClass("ui-state-disabled");
+			} else {
+				self._setOption("disabled", false);
+				e.removeClass("ui-state-disabled");
+			}
 		},
 		destroy: function () {
+			/// Remove the functionality completely. 
+			/// This will return the element back to its pre-init state.
 			var self = this;
 			self.element.removeClass("ui-widget ui-state-default ui-corner-all " +
 			"ui-state-hover ui-state-active wijmo-wijtextbox")

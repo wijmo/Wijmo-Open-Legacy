@@ -2067,7 +2067,7 @@ button.ui-button::-moz-focus-inner
     box-shadow: inset 0 3px 10px rgba(0,0,0,0.25);
 }
 
-.wijmo-wijsuperpanel  .wijmo-wijsuperpanel-handle
+.wijmo-wijsuperpanel .wijmo-wijsuperpanel-handle
 {
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
@@ -2102,14 +2102,14 @@ button.ui-button::-moz-focus-inner
     border-top: solid 1px #d3d3d3;
 }
 
-.wijmo-wijcalendar-day-selectable .ui-state-default
+.wijmo-wijcalendar-table .wijmo-wijcalendar-day-selectable .ui-state-default
 {
     background: none;
     border: solid 1px transparent;
     color: #404040;
 }
 
-.wijmo-wijcalendar-day-selectable .ui-state-highlight
+.wijmo-wijcalendar-table .wijmo-wijcalendar-day-selectable .ui-state-highlight
 {
     background: #9eca38 url(images/ui-bg_highlight-soft_15_9eca38_1x100.png) 50% 50% repeat-x;
     border: 1px solid #9eca38;
@@ -2122,7 +2122,7 @@ button.ui-button::-moz-focus-inner
 
 
 
-.wijmo-wijcalendar-day-selectable .ui-state-hover
+.wijmo-wijcalendar-table .wijmo-wijcalendar-day-selectable .ui-state-hover
 {
     -moz-box-shadow: inset 1px 1px 0 rgba(255,255,255,0.15);
     -webkit-box-shadow: inset 1px 1px 0 rgba(255,255,255,0.15);
@@ -2133,7 +2133,6 @@ button.ui-button::-moz-focus-inner
     color: #fafafa;
     text-shadow: none;
 }
-
 .wijmo-wijmenu .wijmo-wijmenu-separator
 {
     border: 1px solid #00a6dd;
@@ -2146,7 +2145,7 @@ button.ui-button::-moz-focus-inner
     line-height: 22px;
 }
 
-.wijmo-wijcalendar-day-selectable .ui-state-active
+.wijmo-wijcalendar-table .wijmo-wijcalendar-day-selectable .ui-state-active
 {
     -moz-box-shadow: inset 1px 1px 0 rgba(255,255,255,0.15);
     -webkit-box-shadow: inset 1px 1px 0 rgba(255,255,255,0.15);
@@ -2157,7 +2156,7 @@ button.ui-button::-moz-focus-inner
     color: #fafafa;
 }
 
-.wijmo-wijcalendar-day-selectable .ui-priority-secondary
+.wijmo-wijcalendar-table .wijmo-wijcalendar-day-selectable .ui-priority-secondary
 {
     -moz-box-shadow: inset 1px 1px 0 rgba(255,255,255,0.05);
     -webkit-box-shadow: inset 1px 1px 0 rgba(255,255,255,0.05);
@@ -2321,4 +2320,42 @@ a.ui-button:link, a.ui-button
 .wijmo-wijmenu .wijmo-wijmenu-link label
 {
     color: #404040;
+}
+/* Ribbon */
+.wijmo-wijribbon-group .wijmo-wijribbon-abbrevgroup:hover .wijmo-wijribbon-text
+{
+    color: #fafafa;
+}
+div.wijmo-wijribbon .ui-icon
+{
+    background-image: url("images/wijmo-ui-icons_000000_240x112.png");
+}
+div.wijmo-wijribbon-simple span.ui-icon, div.wijmo-wijribbon .ui-state-active .ui-icon, .wijmo-wijribbon .wijmo-wijribbon-group .ui-button:hover .ui-icon, div.wijmo-wijribbon-modes span.ui-icon, .wijmo-wijribbon-group .wijmo-wijribbon-abbrevgroup:hover .ui-icon, .wijmo-wijribbon-group .wijmo-wijribbon-abbrevgroup:hover .wijmo-wijribbon-abbrevicon
+{
+    background-image: url("images/wijmo-ui-icons_ffffff_240x112.png");
+}
+.wijmo-wijeditor .ui-tabs .ui-tabs-nav li.ui-tabs-selected
+{
+    padding-bottom: 0;
+}
+div.wijmo-wijribbon-simple .ui-button-text-icon-secondary .ui-button-text
+{
+    color: #fafafa;
+}
+
+
+div.wijmo-wijribbon .ui-state-active .ui-button-text
+{
+    border: solid 1px transparent;
+    border-radius: 4px;
+}
+
+.wijmo-wijev-event-dialog .wijmo-wijinput-input, 
+.wijmo-wijev-event-dialog .wijmo-wijtextbox
+{
+    color: #404040;
+}
+/* Grid highlight row icon fix */
+.wijmo-wijgrid .ui-state-highlight .ui-state-active .ui-icon {
+    background-image: url("images/ui-icons_00a6dd_256x240.png");
 }

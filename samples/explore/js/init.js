@@ -1,25 +1,28 @@
 $(document).ready(function () {
 
-
+    $('.new a').append('<span class="new-icon">New</span>');
+    $('.new-parent a').append('<span class="new-icon-parent">New</span>');
     var cnt = $('#content').children('div').length - 1;
     $('#themes').change(function () {
         $("link[title='rocket-jqueryui']").attr("href", $(this).val());
     }).wijdropdown();
 
-    $('.code-button').button({ text: false, icons: { primary: 'ui-icon-carat-2-e-w'} });
-//    $('#arrow-up').button({ text: false, icons: { primary: 'ui-icon-carat-1-n'} });
-//    $('#arrow-down').button({ text: false, icons: { primary: 'ui-icon-carat-1-s'} });
+    $('.code-button').button({ icons: { primary: 'ui-icon-carat-2-e-w'} });
+    //    $('#arrow-up').button({ text: false, icons: { primary: 'ui-icon-carat-1-n'} });
+    //    $('#arrow-down').button({ text: false, icons: { primary: 'ui-icon-carat-1-s'} });
     $('#flyout').button({ text: false, icons: { primary: 'ui-icon-triangle-2-e-w'} });
     $('#close-code').button({ text: false, icons: { primary: 'ui-icon-close'} });
-//    $('#arrows').buttonset();
+    //    $('#arrows').buttonset();
     $('#switcher').buttonset();
 
     $('.listitem').hover(
         function () {
             $(this).find('a:first').stop().animate({ paddingLeft: '20px', paddingTop: '12px', fontSize: '16px' }, { duration: 250, easing: "easeOutCirc" }).addClass('listitem-hover');
+            $(this).find('.new-icon-parent').fadeOut();
         },
         function () {
             $(this).find('a:first').stop().animate({ paddingLeft: '8px', paddingTop: '8px', fontSize: '10px' }, { duration: 350, easing: "easeOutCirc" }).removeClass('listitem-hover');
+            $(this).find('.new-icon-parent').fadeIn();
         }
     );
     $('.listitem-inner').hover(
@@ -30,8 +33,6 @@ $(document).ready(function () {
             $(this).find('a').stop().animate({ paddingLeft: '8px', paddingTop: '8px', fontSize: '10px' }, { duration: 350, easing: "easeOutCirc" }).removeClass('listitem-hover');
         }
     );
-
-
     if (jQuery.browser.msie && jQuery.browser.version == "6.0") {
 
     } else {
@@ -66,24 +67,12 @@ $(document).ready(function () {
         return false;
     });
 
-
-
-    $('#charts-parent').hoverIntent(
+    $('.parent-item').hoverIntent(
         function () {
-            $('#charts-children').fadeIn();
+            $(this).find('ul').fadeIn();
         },
         function () {
-            $('#charts-children').fadeOut('fast');
-        }
-    );
-
-
-    $('#input-parent').hoverIntent(
-        function () {
-            $('#input-children').fadeIn();
-        },
-        function () {
-            $('#input-children').fadeOut('fast');
+            $(this).find('ul').fadeOut('fast');
         }
     );
 
@@ -151,6 +140,7 @@ jQuery(function ($) {
             .end();
         $("#placer").hide();
 
+
         $('div#secondary')
 					.find('#side-menu-list')
 						.load(section + '/index.html .demos-nav li', function () {
@@ -188,6 +178,8 @@ jQuery(function ($) {
 
 						    $('#side-menu-list').wijmenu("destroy").wijmenu({ orientation: 'vertical', showAnimation: { animated: "slide", option: { direction: "right" }, duration: 350, easing: "easeOutCirc"} });
 
+						    $('#side-menu-list .new a').append('<span class="ui-icon ui-icon-star side-menu-new"></span>');
+
 						    //updateDemoNotes();
 						}).end();
 
@@ -198,7 +190,7 @@ jQuery(function ($) {
 
     function loadDemo(path) {
         var directory = path.match(/([^\/]+)\/[^\/\.]+\.html$/)[1];
-        $(":wijmo-wijdialog").not("#view-code").wijdialog("close").wijdialog("destroy").remove();
+        $(":wijmo-wijdialog").not("#view-code").wijdialog("destroy").remove();
 
         $.get(path, function (data) {
             var source = data;
@@ -209,8 +201,7 @@ jQuery(function ($) {
             data = data.replace(/<\/?head.*>/ig, ""); //Remove head tag
             data = data.replace(/<\/?!doctype.*>/ig, ""); //Remove doctype
             data = data.replace(/<title.*>.*<\/title>/ig, ""); // Remove title tags
-            data = data.replace(/((href|src)=["'])(?!(http|#|\${))/ig, "$1" + directory + "/");
-
+            data = data.replace(/((href|src)=["'])(?!(http|#))/ig, "$1" + directory + "/");
             $(".content-inner").hide("slide", { direction: "down" }, 400, function () {
                 $('.widget-description').hide().empty();
                 $('.widget-title').css('opacity', '0');

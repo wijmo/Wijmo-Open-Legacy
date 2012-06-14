@@ -2,7 +2,7 @@
 
 /*
 *
-* Wijmo Library 1.5.0
+* Wijmo Library 2.1.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -253,7 +253,8 @@
 				north: "bottom", south: "top"
 			};
 			self.min = o.minValue;
-			self.max = o.maxValue;
+			//self.max = o.maxValue;
+			self.max = o.max = o.maxValue; //fixed bug when jui update to 1.8.18
 			element.addClass(wijpbCss);
 			$.ui.progressbar.prototype._create.apply(self, arguments);
 			self.label = $("<span>")
@@ -541,7 +542,7 @@
 				o = self.options,
 				indicatorIncrement = o.indicatorIncrement,
 				curValue = step / 100,
-				percent = $.wijmo.wijprogressbar.div((curValue - self.min), 
+				percent = $.wijmo.wijprogressbar.div((curValue - self.min),
 					(self.max - self.min)) * 100,
 				ln = 0, arrP, base,
 				resultPrecision = 2;
@@ -556,7 +557,7 @@
 
 
 				if (indicatorIncrement !== 1) {
-					percent = Math.floor(percent * base / indicatorIncrement) * 
+					percent = Math.floor(percent * base / indicatorIncrement) *
 						indicatorIncrement / base;
 				}
 				else {
@@ -571,7 +572,7 @@
 				}
 			}
 			//self._lastStep = percent;
-			self._refreshProgress(Number(percent.toFixed(resultPrecision)), 
+			self._refreshProgress(Number(percent.toFixed(resultPrecision)),
 				Number(curValue.toFixed(resultPrecision)));
 
 			if (o.labelAlign === "running") {
@@ -627,14 +628,14 @@
 			var self = this,
 				element = self.element;
 
-			element.empty().attr("aria-valuemax", "")
-				.attr("aria-valuemin", "")
-				.attr("aria-valuenow", "")
-				.attr("title", "")
-				.attr("role", "")
+			element.attr("title", "")
 				.removeClass(wijpbCss + " " +
 					wijpbCss + "-east " + wijpbCss + "-west " +
 					wijpbCss + "-north " + wijpbCss + "-south");
+
+			if (self.label) {
+				self.label.remove();
+			}
 
 			//Add for support disabled option at 2011/7/8
 			if (self.disabledDiv) {
@@ -642,7 +643,7 @@
 				self.disabledDiv = null;
 			}
 			//end for disabled option
-			$.Widget.prototype.destroy.apply(this, arguments);
+			$.ui.progressbar.prototype.destroy.apply(this, arguments);
 		}
 	});
 
@@ -691,7 +692,7 @@
 			}
 			catch (e1) {
 			}
-			return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / 
+			return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) /
 				Math.pow(10, m);
 		},
 		div: function (arg1, arg2) {

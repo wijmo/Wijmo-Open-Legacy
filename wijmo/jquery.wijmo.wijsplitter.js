@@ -1,7 +1,7 @@
 /*globals window,document,jQuery*/
 /*
 *
-* Wijmo Library 1.5.0
+* Wijmo Library 2.1.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -17,7 +17,7 @@
 *	jquery.ui.widget.js
 *	jquery.ui.resizable.js
 *	jquery.ui.mouse.js
-*	jquery.ui.wijutil.js
+*	jquery.wijmo.wijutil.js
 *
 */
 (function ($) {
@@ -158,7 +158,7 @@
 			///	A value defines the animation while the bar of splitter 
 			/// is beeing dragged.
 			/// Default: {}.
-			/// Type: Dictionary.
+			/// Type: Object.
 			///	</summary>
 			resizeSettings: {
 				animationOptions: {
@@ -193,7 +193,7 @@
 			///	<summary>
 			///	Defines the information for top or left panel of splitter.
 			/// Default: {}.
-			/// Type: Dictionary.
+			/// Type: Object.
 			///	</summary>
 			panel1: {
 				///	<summary>
@@ -221,7 +221,7 @@
 			///	<summary>
 			///	Defines the information for bottom or right panel of splitter.
 			/// Default: {}.
-			/// Type: Dictionary.
+			/// Type: Object.
 			///	</summary>
 			panel2: {
 				///	<summary>
@@ -249,7 +249,7 @@
 
 		_setOption: function (key, value) {
 			var self = this,
-				o = self.options,
+				o = self.options, expander,
 				oldValue = $.extend({}, o[key]);
 
 			if (key === "fullSplit") {
@@ -257,9 +257,11 @@
 			} else if ($.isPlainObject(o[key])) {
 				if (key === "panel1" &&
 					value.collapsed !== undefined) {
+					//if(value.collapsed�� { o.panel2.collapsed = false; }
 					self._setPanel1Collapsed(value.collapsed);
 				} else if (key === "panel2" &&
 					value.collapsed !== undefined) {
+					//if(value.collapsed�� { o.panel1.collapsed = false; }
 					self._setPanel2Collapsed(value.collapsed);
 				}
 				o[key] = $.extend(true, o[key], value);
@@ -277,6 +279,11 @@
 				} else if (key === "splitterDistance") {
 					self.refresh(false, false);
 					self._trigger("sized");
+				} else if (key === "showExpander") {
+					expander = self._fields.expander;
+					if (expander && expander.length) {
+						expander.css("display", value ? "" : "none");
+					}
 				}
 			}
 
@@ -296,8 +303,6 @@
 				width: element.width(),
 				height: element.height()
 			};
-
-			element.data("fields", self._fields);
 
 			if (o.fullSplit) {
 				self._setFullSplit(true);
@@ -344,30 +349,62 @@
 				disabledHeight = ele.outerHeight();
 
 			return $("<div></div>")
-						.addClass("ui-disabled")
-						.css({
-							"z-index": "99999",
-							position: "absolute",
-							width: disabledWidth,
-							height: disabledHeight,
-							left: eleOffset.left,
-							top: eleOffset.top
-						});
+				.addClass("ui-disabled")
+				.css({
+					"z-index": "99999",
+					position: "absolute",
+					width: disabledWidth,
+					height: disabledHeight,
+					left: eleOffset.left,
+					top: eleOffset.top
+				});
 		},
 
 		destroy: function () {
 			var self = this,
 				element = self.element,
 				fields = self._fields,
+				wrapper = fields.wrapper,
 				expander = fields.expander,
 				bar = fields.bar,
 				panel1 = fields.panel1,
-				originalContent = fields.originalContent,
 				originalStyle = fields.originalStyle,
-				widgetName = self.widgetName;
+				widgetName = self.widgetName,
+				oriPnl1Content = fields.oriPnl1Content,
+				oriPnl2Content = fields.oriPnl2Content,
+				oriPnl1ContentStyle = fields.oriPnl1ContentStyle,
+				oriPnl2ContentStyle = fields.oriPnl2ContentStyle;
 
 			if (panel1 && panel1.is(":ui-resizable")) {
 				panel1.resizable('destroy');
+			}
+
+			if (oriPnl1Content) {
+				oriPnl1Content.removeClass(vSplitterCssPrefix + pnl1ContentCss +
+				" " + hSplitterCssPrefix + pnl1ContentCss +
+				" " + widgetContentCss);
+
+				if (oriPnl1ContentStyle === undefined) {
+					oriPnl1Content.removeAttr("style");
+				} else {
+					oriPnl1Content.attr("style", oriPnl1ContentStyle);
+				}
+
+				oriPnl1Content.appendTo(element);
+			}
+
+			if (oriPnl2Content) {
+				oriPnl2Content.removeClass(vSplitterCssPrefix + pnl2ContentCss +
+				" " + hSplitterCssPrefix + pnl2ContentCss +
+				" " + widgetContentCss);
+
+				if (oriPnl2ContentStyle === undefined) {
+					oriPnl2Content.removeAttr("style");
+				} else {
+					oriPnl2Content.attr("style", oriPnl2ContentStyle);
+				}
+
+				oriPnl2Content.appendTo(element);
 			}
 
 			panel1.unbind('.' + widgetName);
@@ -375,8 +412,8 @@
 			bar.unbind('.' + widgetName);
 			$(window).unbind('.' + widgetName);
 
-			element.html(originalContent);
-			element.removeAttr("class");
+			wrapper.remove();
+			element.removeClass(vSplitterCss + " " + hSplitterCss);
 
 			if (originalStyle === undefined) {
 				element.removeAttr("style");
@@ -388,6 +425,8 @@
 				self.disabledDiv.remove();
 				self.disabledDiv = null;
 			}
+
+			self._fields = null;
 		},
 
 		refresh: function (size, state) {
@@ -436,7 +475,6 @@
 			pnl1Content = element.find(">div:eq(0)");
 			pnl2Content = element.find(">div:eq(1)");
 			fields.originalStyle = element.attr("style");
-			fields.originalContent = element.html();
 
 			//create wrapper
 			wrapper = $("<div></div>").appendTo(element);
@@ -447,6 +485,9 @@
 			//create panel1 content if needed.
 			if (pnl1Content.length === 0) {
 				pnl1Content = $("<div></div>");
+			} else {
+				fields.oriPnl1Content = pnl1Content;
+				fields.oriPnl1ContentStyle = pnl1Content.attr("style");
 			}
 
 			pnl1Content.appendTo(pnl1);
@@ -471,6 +512,9 @@
 			//create panel2 content if needed.
 			if (pnl2Content.length === 0) {
 				pnl2Content = $("<div></div>");
+			} else {
+				fields.oriPnl2Content = pnl2Content;
+				fields.oriPnl2ContentStyle = pnl2Content.attr("style");
 			}
 
 			pnl2Content.appendTo(pnl2);
@@ -565,7 +609,7 @@
 		_updateExpanderCss: function () {
 			var self = this,
 				o = self.options,
-				element = self.element,
+			//element = self.element,
 				fields = self._fields,
 				expander = fields.expander,
 				icon = fields.icon,
@@ -639,15 +683,18 @@
 					distance = width - barW;
 				}
 
+				//todo: missing logic of both collapse equals "true".
 				if (o.panel1.collapsed) {
 					//element.addClass(vSplitterCssPrefix + collapsedCss);
 					expander.addClass(vSplitterCssPrefix + collapsedCss);
 					pnl1.css("display", "none");
+					pnl2.css("display", "");
 					distance = 0;
 				} else {
 					//element.addClass(vSplitterCssPrefix + expandedCss);
 					expander.addClass(vSplitterCssPrefix + expandedCss);
 					pnl1.css("display", "");
+					pnl2.css("display", o.panel2.collapsed ? "none" : "");
 				}
 
 				pnl1.height(height).width(distance);
@@ -675,11 +722,13 @@
 					//element.addClass(hSplitterCssPrefix + collapsedCss);
 					expander.addClass(hSplitterCssPrefix + collapsedCss);
 					pnl1.css("display", "none");
+					pnl2.css("display", "");
 					distance = 0;
 				} else {
 					//element.addClass(hSplitterCssPrefix + expandedCss);
 					expander.addClass(hSplitterCssPrefix + expandedCss);
 					pnl1.css("display", "");
+					pnl2.css("display", o.panel2.collapsed ? "none" : "");
 				}
 
 				pnl2Content.outerHeight(height - distance - barH, true);
@@ -971,29 +1020,30 @@
 	"use strict";
 	$.ui.plugin.add("resizable", "wijanimate", {
 		stop: function (event, ui) {
-			var self = $(this).data("resizable"), 
-				o = self.options, 
-				element = self.element, 
-				pr = self._proportionallyResizeElements, 
-				ista = pr.length && (/textarea/i).test(pr[0].nodeName), 
+			var self = $(this).data("resizable"),
+				o = self.options,
+				element = self.element,
+				pr = self._proportionallyResizeElements,
+				ista = pr.length && (/textarea/i).test(pr[0].nodeName),
 				soffseth = ista && $.ui.hasScroll(pr[0], 'left') ?
 							 0 : self.sizeDiff.height,
-				soffsetw = ista ? 0 : self.sizeDiff.width, 
+				soffsetw = ista ? 0 : self.sizeDiff.width,
 				style, left, top;
 
 			element.css("width", self.originalSize.width)
 				.css("height", self.originalSize.height);
 
-			style = { width: (self.size.width - soffsetw), 
-					height: (self.size.height - soffseth) };
-			left = (parseInt(element.css('left'), 10) + 
+			style = { width: (self.size.width - soffsetw),
+				height: (self.size.height - soffseth)
+			};
+			left = (parseInt(element.css('left'), 10) +
 					(self.position.left - self.originalPosition.left)) || null;
-			top = (parseInt(element.css('top'), 10) + 
+			top = (parseInt(element.css('top'), 10) +
 					(self.position.top - self.originalPosition.top)) || null;
 
-			element.animate($.extend(style, top && left ? { 
+			element.animate($.extend(style, top && left ? {
 				top: top,
-				left: left 
+				left: left
 			} : {}), {
 				duration: o.animateDuration,
 				easing: o.animateEasing,
@@ -1020,4 +1070,4 @@
 			});
 		}
 	});
-}(jQuery));
+} (jQuery));

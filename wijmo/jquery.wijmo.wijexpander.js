@@ -2,7 +2,7 @@
 /*jslint white: false */
 /*
 *
-* Wijmo Library 1.5.0
+* Wijmo Library 2.1.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.

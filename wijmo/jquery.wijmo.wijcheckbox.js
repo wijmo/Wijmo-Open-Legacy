@@ -1,7 +1,7 @@
 /*globals jQuery*/
 /*
  *
- * Wijmo Library 1.5.0
+ * Wijmo Library 2.1.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -27,7 +27,7 @@
 		_init: function () {
 			var self = this,
 				ele = self.element,
-                o = self.options,
+				o = self.options,
 				checkboxElement, label, targetLabel, boxElement, iconElement;
 			if (ele.is(":checkbox")) {
 				if (!ele.attr("id")) {
@@ -61,8 +61,8 @@
 				}
 				boxElement = $("<div class='" + self._csspre +
 				"-box ui-widget ui-state-" +
-                (o.disabled ? "disabled" : "default") +
-                " ui-corner-all'><span class='" +
+				(o.disabled ? "disabled" : "default") +
+				" ui-corner-all'><span class='" +
 				self._csspre + "-icon'></span></div>");
 				iconElement = boxElement.children("." + self._csspre + "-icon");
 				checkboxElement.append(boxElement);
@@ -79,8 +79,8 @@
 				if (targetLabel.length === 0 || targetLabel.html() === "") {
 					boxElement.addClass(self._csspre + "-relative");
 				}
-				ele.bind("click.checkbox", function () {
-					self.refresh();
+				ele.bind("click.checkbox", function (e) {
+					self.refresh(e);
 				}).bind("focus.checkbox", function () {
 					if (o.disabled) {
 						return;
@@ -97,21 +97,17 @@
 						if (o.disabled) {
 							return;
 						}
-						ele.attr("checked", !ele.get(0).checked);
 						self.refresh();
 					}
 				});
-				checkboxElement.click(function () {
-					//if (targetLabel.length === 0 || targetLabel.html() === "") {
-					if (o.disabled) {
-						return;
-					}
-					ele.get(0).checked = !ele.get(0).checked;
-					//ele.focus().change();
-					self.refresh();
-					//}
 
+				boxElement.bind("click.checkbox", function (e) {
+					ele.get(0).checked = !ele.get(0).checked;
+					ele.change();
+					ele.focus();
+					self.refresh(e);
 				});
+
 				self.refresh();
 				checkboxElement.bind("mouseover.checkbox", function (e) {
 					if (o.disabled) {
@@ -126,19 +122,28 @@
 					boxElement.removeClass("ui-state-hover").not(".ui-state-focus")
 					.addClass("ui-state-default");
 				});
+				
+				//update for fixed tooltip can't take effect 
+				checkboxElement.attr("title", ele.attr("title"));
 			}
 		},
 
-		refresh: function () {
+		refresh: function (e) {
+			/// Use the refresh method to set the checkbox element's style.
 			var self = this;
 			self.element.data("iconElement")
 			.toggleClass("ui-icon ui-icon-check", self.element.get(0).checked);
 			self.element.data("boxElement")
 			.toggleClass("ui-state-active", self.element.get(0).checked)
 			.attr("aria-checked", self.element.get(0).checked);
+			if (e) {
+				e.stopPropagation();
+			}
 		},
 
 		destroy: function () {
+			/// Remove the functionality completely. 
+			/// This will return the element back to its pre-init state.
 			var self = this, boxelement = self.element.parent().parent();
 			boxelement.children("div." + self._csspre + "-box").remove();
 			self.element.unwrap();

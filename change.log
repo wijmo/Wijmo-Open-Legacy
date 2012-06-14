@@ -1,3 +1,174 @@
+Wijmo-Open v2.1.0
+=================
+
+New Knockout Integration Library
+--------------------------------
+Added an optional integration library for wijmo to work with knockout. Knockout is a library for 
+adding MVVM support in JavaScript. We have added support to each widget so that they can be 
+initialized from declarative syntax in markup. Each widget can also be bound to observables in 
+Knockout which is live two-way binding to a Model. This is a powerful new feature for building 
+applications with Wijmo and Knockout.
+
+list
+--------------------------------------
+For juice: Added adjust option for list.
+
+
+Wijmo-Open v2.0.8
+=================
+
+menu
+---------
+Removed “wijmo-wijmenu-link” class when templating.
+Fixed a bug where the menu could not be displayed above other elements depending on the triggerElement.
+
+
+Wijmo-Open v2.0.7
+=================
+
+dialog
+------
+Fixed a bug to disable resizing when resizable option is set to false.
+
+DropDown
+--------
+Fixed a issue that double-clicking the trigger button expands the dropdown menu inline
+
+tooltip
+--------
+Fixed a bug that when destroy the tooltip, the tooltip element doesn't get removed from the DOM.
+
+list
+------
+Fixed a bug that will throw an exception when prevent selecting the item.
+Updated addItem method to allow the user to update the list content.
+
+video
+------
+Update setoption for "disabled" and  "showControlsOnHover ".
+
+
+Wijmo-Open v2.0.6
+=================
+
+* Fixes:
+
+Accordion
+---------
+	[16943] [IE8][Win7] "Invalid argument" Javascript error is
+			observed after clicking on any pane of the accordion in IE8
+
+video
+------
+added fullScreenButtonVisible option to wijvideo.
+added getWidth, setWidth, getHeight, setHeight methods.
+add "showControlsOnHover " option .
+
+radio
+------
+fixed a bug that disabled style doesn't not work.
+
+menu
+----
+fixed an issue that select event doesn't fire when a node has children and menu's mode is sliding.
+
+Dropdown
+------
+fixed an issue that the dropdown can't show items from forum.
+fix refresh problem when use wijdropdown in eventCalendars.
+fixed issue that can't get drop down value with keydown operation.
+
+Video
+------
+add class to prevent from overriding the origin css of tooltip.
+Add comment to methods.
+
+Progressbar/Splitter
+--------------------
+Fix the issues with destroy method.
+
+Slider
+------
+Fixed the issue that increment/decrement button can still work even though the slider is disabled.
+Update destroy method.
+
+Superpanel
+-------------
+add refresh method which refreshes the superpanel.
+add scroll event which is called immediately after scrolling occurs.
+
+checkbox
+-------------
+Fixed bug that Wijcheckbox change event get the wrong checked value.
+Fixed bug that wijcheckbox can't checked when the label is front of the checkbox.
+
+calendar
+-------------
+Fixed an issue that popped up calendar automatically close when there is previous selection happen.
+Fixed an issue that the selected year 2011 is change to year 2001 after selecting with quick navigation in certain scenarios
+Enhanced the selection behavior, allows unselect a selected date by pressing the ctrl key.
+
+popup
+____________
+When you have an autocomplete (or wijmo combobox) inside a wijpopup, when you select on the dropdown list it close both wigets.
+Fixed an issue when nested popup is used.
+
+
+Wijmo-Open v2.0.0
+=================
+
+* New Widgets:
+
+	Video Player
+	------------
+
+* Enhancements: 
+
+	Superpanel
+	-------------
+	add refresh method which refreshes the superpanel.
+	add scroll event which is called immediately after scrolling occurs.
+
+* Fixes:
+
+	Accordion
+	---------
+	Unable to select the desire panel after all the panels are open in certain scenarios
+	Fixed bug with destroy method.
+
+	Dropdown
+	------
+	fix refresh problem when use wijdropdown in eventCalendars.
+
+	Video
+	------
+	add class to prevent from overriding the origin css of tooltip.
+
+	Progressbar/Splitter
+	--------------------
+	Fix the issues with destroy method.
+
+	Slider
+	------
+	Fixed the issue that increment/decrement button can still work even though the slider is disabled.
+	Update destroy method.
+
+	Superpanel
+	-------------
+	add refresh method which refreshes the superpanel.
+	add scroll event which is called immediately after scrolling occurs.
+
+	checkbox
+	-------------
+	Fixed bug that Wijcheckbox change event get the wrong checked value.
+	Fixed bug that wijcheckbox can't checked when the label is front of the checkbox.
+
+	calendar
+	-------------
+	Fixed an issue that popped up calendar automatically close when there is previous selection happen.
+	Fixed an issue that the selected year 2011 is change to year 2001 after selecting with quick navigation in certain scenarios
+
+
 Wijmo-Open v1.5.0
 =================
 

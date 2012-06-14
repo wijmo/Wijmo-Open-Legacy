@@ -116,7 +116,7 @@
     position: relative;
     font-size: 1px;
     height: 2px;
-    z-index: 999;
+    z-index: 99; /* change to keep same as wijmo-wijsplitter-v-bar*/
 }
 
 .wijmo-wijsplitter-horizontal .ui-resizable-s

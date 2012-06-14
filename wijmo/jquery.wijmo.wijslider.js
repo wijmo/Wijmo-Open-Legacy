@@ -1,7 +1,7 @@
 /*globals window,document,jQuery*/
 /*
 *
-* Wijmo Library 1.5.0
+* Wijmo Library 2.1.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -42,11 +42,11 @@
 			/// </param>
 			/// <param name="data" type="Object">
 			/// An object that contains all the button infos.
-			/// data.buttonType: a string value indicates the type name of button. 
+			/// data.buttonType: A string value that indicates the type name of button. 
 			/// </param>
 			buttonMouseOver: null,
 			/// <summary>
-			/// Raised when the mouse is leave the decrement button or increment button.
+			/// Raised when the mouse leaves the decrement button or increment button.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example: 
@@ -62,7 +62,7 @@
 			/// </param>
 			/// <param name="data" type="Object">
 			/// An object that contains all the button infos.
-			/// data.buttonType: a string value indicates the type name of button. 
+			/// data.buttonType: A string value that indicates the type name of button. 
 			/// </param>
 			buttonMouseOut: null,
 			/// <summary>
@@ -82,7 +82,7 @@
 			/// </param>
 			/// <param name="data" type="Object">
 			/// An object that contains all the button infos.
-			/// data.buttonType: a string value indicates the type name of button. 
+			/// data.buttonType: A string value that indicates the type name of button. 
 			/// </param>
 			buttonMouseDown: null,
 			/// <summary>
@@ -102,11 +102,11 @@
 			/// </param>
 			/// <param name="data" type="Object">
 			/// An object that contains all the button infos.
-			/// data.buttonType: a string value indicates the type name of button. 
+			/// data.buttonType: A string value that indicates the type name of button. 
 			/// </param>
 			buttonMouseUp: null,
 			/// <summary>
-			/// Raised when the decrement button or incremen tbutton  has been clicked.
+			/// Raised when the decrement or increment button is clicked.
 			/// Default: null.
 			/// Type: Function.
 			/// Code example: 
@@ -122,13 +122,18 @@
 			/// </param>
 			/// <param name="data" type="Object">
 			/// An object that contains all the button infos.
-			/// data.buttonType: a string value indicates the type name of button.
+			/// data.buttonType: A string value that indicates the type name of button.
 			/// </param>
 			buttonClick: null,
 			/// <summary>
-			/// A value determines whether the fill may be dragged between the buttons. 
+			/// Determines whether the user is able to 
+			/// drag the fill between the buttons. 
 			/// Default: true.
 			/// Type: Boolean.
+			/// Code example:
+			///  $("#selector").wijslider({
+			///      dragFill: false
+			///  });
 			/// </summary>
 			dragFill: true,
 			/// <summary>
@@ -136,6 +141,11 @@
 			/// one another.
 			/// Default: 0.
 			/// Type: Number.
+			/// Code example:
+			///  $("#selector").wijslider({
+			///      minRange: 25
+			///  });
+			/// </summary>
 			minRange: 0
 		},
 
@@ -146,7 +156,7 @@
 
 			var self = this;
 
-			$.Widget.prototype._setOption.apply(self, arguments);
+			$.ui.slider.prototype._setOption.apply(self, arguments);
 			this.options[key] = value;
 
 			//Add for support disabled option at 2011/7/8
@@ -170,6 +180,8 @@
 				increBtnHeight, thumb, thumbWidth, thumbHeight,
 				dbtop, ibtop, dbleft, ibleft;
 
+			self._oriStyle = element.attr("style");
+			
 			if (element.is(":input")) {
 				if (o.orientation === "horizontal") {
 					jqElement = $("<div></div>")
@@ -204,8 +216,10 @@
 					.after($(document.body).children("div:last")).hide();
 
 				//Add for support disabled option at 2011/7/8
-				if (o.disabled) {
+				if (o.disabledState) {
+					var dis = o.disabled;
 					self.disable();
+					o.disabled = dis;
 				}
 				//end for disabled option
 
@@ -241,9 +255,9 @@
 			thumb = element.find(".ui-slider-handle");
 			thumbWidth = thumb.outerWidth();
 			thumbHeight = thumb.outerHeight();
-			//update code for height and width canculation at 2011/7/12
+			//update code for height and width calculation at 2011/7/12
 			//element.removeAttr("style");
-			//end for height and width canculation
+			//end for height and width calculation
 
 			if (o.orientation === "horizontal") {
 				dbtop = ctrlHeight / 2 - decreBtnHeight / 2;
@@ -267,8 +281,10 @@
 			}
 
 			//Add for support disabled option at 2011/7/8
-			if (o.disabled) {
+			if (o.disabledState) {
+				var dis = o.disabled;
 				self.disable();
+				o.disabled = dis;
 			}
 			//end for disabled option
 
@@ -302,19 +318,20 @@
 
 			return $("<div></div>")
 						.addClass("ui-disabled")
-						.css({
-							"z-index": "99999",
-							position: "absolute",
-							width: disabledWidth,
-							height: disabledHeight,
-							left: eleOffset.left,
-							top: eleOffset.top
-						});
+				.css({
+					"z-index": "99999",
+					position: "absolute",
+					width: disabledWidth,
+					height: disabledHeight,
+					left: eleOffset.left,
+					top: eleOffset.top
+				});
 		},
 
 		destroy: function () {
 			///	<summary>
-			///		Destroy Slider widget and reset the DOM element.
+			///	Remove the slider functionality completely. 
+			/// This will return the element back to its pre-init state.
 			///	</summary>
 			var self = this, decreBtn, increBtn;
 			decreBtn = this._getDecreBtn();
@@ -322,9 +339,23 @@
 			decreBtn.unbind('.' + self.widgetName);
 			increBtn.unbind('.' + self.widgetName);
 			$.ui.slider.prototype.destroy.apply(this, arguments);
-			this.element.parent().removeAttr("class");
-			this.element.parent().html("");
-
+			
+			//update for destroy by wh at 2011/11/11
+			//this.element.parent().removeAttr("class");
+			//this.element.parent().html("");
+			$("a", self.element.parent()).remove();
+			self.element.unbind('.' + self.widgetName);
+			self.element.unwrap();
+			if (self._oriStyle === undefined) {
+				self.element.removeAttr("style");
+			} else {
+				self.element.attr("style", self._oriStyle);
+			}
+			self.element.removeData(self.widgetName)
+			.removeData("originalStyle")
+			.removeData("originalContent");
+			//end
+			
 			//Add for support disabled option at 2011/7/8
 			if (self.disabledDiv) {
 				self.disabledDiv.remove();
@@ -409,6 +440,11 @@
 
 		_decreBtnMouseOver: function (e) {
 			var self = e.data, data, decreBtn;
+			
+			if (self.options.disabledState) {
+				return;
+			}
+
 			data = { buttonType: "decreButton" };
 			self._trigger('buttonMouseOver', e, data);
 			//
@@ -418,6 +454,11 @@
 
 		_increBtnMouseOver: function (e) {
 			var self = e.data, data, increBtn;
+
+			if (self.options.disabledState) {
+				return;
+			}
+
 			data = { buttonType: "increButton" };
 			self._trigger('buttonMouseOver', e, data);
 			//
@@ -427,6 +468,11 @@
 
 		_decreBtnMouseOut: function (e) {
 			var self = e.data, data, decreBtn;
+
+			if (self.options.disabledState) {
+				return;
+			}
+
 			data = { buttonType: "decreButton" };
 			self._trigger('buttonMouseOut', e, data);
 			//
@@ -436,6 +482,11 @@
 
 		_increBtnMouseOut: function (e) {
 			var self = e.data, data, increBtn;
+
+			if (self.options.disabledState) {
+				return;
+			}
+
 			data = { buttonType: "increButton" };
 			self._trigger('buttonMouseOut', e, data);
 			//
@@ -445,6 +496,11 @@
 
 		_decreBtnMouseDown: function (e) {
 			var self = e.data, data, decreBtn;
+
+			if (self.options.disabledState) {
+				return;
+			}
+
 			data = { buttonType: "decreButton" };
 			self._trigger('buttonMouseDown', e, data);
 			//
@@ -472,6 +528,10 @@
 
 		_documentMouseUp: function (e) {
 			var self = e.data.self, ele = e.data.ele;
+			if (self.options.disabledState) {
+				return;
+			}
+
 			ele.removeClass("ui-state-active");
 
 			if (self._intervalID !== null) {
@@ -485,6 +545,11 @@
 		_intervalID: null,
 		_increBtnMouseDown: function (e) {
 			var self = e.data, data, increBtn;
+
+			if (self.options.disabledState) {
+				return;
+			}
+
 			data = { buttonType: "increButton" };
 			self._trigger('buttonMouseDown', e, data);
 			//
@@ -511,6 +576,11 @@
 
 		_decreBtnMouseUp: function (e) {
 			var self = e.data, data, decreBtn;
+
+			if (self.options.disabledState) {
+				return;
+			}
+
 			data = { buttonType: "decreButton" };
 			self._trigger('buttonMouseUp', e, data);
 			//
@@ -522,6 +592,11 @@
 
 		_increBtnMouseUp: function (e) {
 			var self = e.data, data, increBtn;
+
+			if (self.options.disabledState) {
+				return;
+			}
+
 			data = { buttonType: "increButton" };
 			self._trigger('buttonMouseUp', e, data);
 			//
@@ -541,7 +616,15 @@
 
 		_decreBtnClick: function (e) {
 			var self = e.data, data;
-			//
+
+			if (self.options.disabledState) {
+				return;
+			}
+			
+			//note: step1: slide the slider btn, the change event has fired;
+			//step2: then click the decre button, the change event don't fired.
+			self._mouseSliding = false;
+			//end
 			self._decreBtnHandle(self);
 			data = { buttonType: "decreButton", value: self.value() };
 			self._trigger('buttonClick', e, data);
@@ -557,7 +640,14 @@
 
 		_increBtnClick: function (e) {
 			var self = e.data, data;
-			//
+
+			if (self.options.disabledState) {
+				return;
+			}
+			//note: step1: slide the slider btn, the change event has fired;
+			//step2: then click the decre button, the change event don't fired.
+			self._mouseSliding = false;
+			//end
 			self._increBtnHandle(self);
 			data = { buttonType: "increButton", value: self.value() };
 			self._trigger('buttonClick', e, data);
@@ -614,7 +704,10 @@
 			var self = this;
 			if (this.options.dragFill) {
 				this._preventClickEvent = false;
-				this.element.bind('click', function (event) {
+				//update for unbind by wh at 2011/11/11
+				//this.element.bind('click', function (event) {
+				this.element.bind('click.' + self.widgetName, function (event) {
+				//end for unbind
 					if (self._dragFillStart > 0) {
 						self._dragFillStart = 0;
 					} else {

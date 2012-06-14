@@ -74,20 +74,38 @@ a:hover
 }
 .widget-title
 {
-    background: #65358a;
-    color: #fafafa;
-    text-transform: uppercase;
-    font-weight: bold;
+
     font-family: "Museo900" , Georgia, "Times New Roman" , Times, serif;
-    display: inline-block;
-    zoom:1;
-    *display: inline;
-    padding: 8px 10px;
-    margin-bottom: 1em;
+}
+.widget-name
+{
+    background: #f3f3f3;
+    color: #c8c7c7;
+    text-shadow: 1px 1px 0 #fff;
+        padding: 5px 10px;
+        -webkit-border-top-left-radius: 4px;
+-webkit-border-top-right-radius: 4px;
+-moz-border-radius-topleft: 4px;
+-moz-border-radius-topright: 4px;
+border-top-left-radius: 4px;
+border-top-right-radius: 4px;
+font-size: 1.5em;
+text-transform: uppercase;
+float: left;
 }
 .widget-demo-title
 {
-   font-family: "Museo700Italic" , Georgia, "Times New Roman" , Times, serif; 
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.65);
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.15);
+    color: #F1F1F1;
+    float: right;
+    font-family: Arial;
+    font-size: 16px;
+    margin:4px 10px 0;
+    padding: 4px;
+    text-decoration: none;
+float: left;
 }
 #header
 {
@@ -188,6 +206,7 @@ a:hover
     color: #f1f1f1;
     height: 12px;
     line-height: 12px;
+    position: relative;
 }
 .listitem a:hover
 {
@@ -248,27 +267,22 @@ margin: 1em 0 0;
 {
     position: absolute;
     right: 0;
-    top: 78px;
-    height: 22px;
-    width: 22px;
+    top: 70px;
     -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.50);
     -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.50);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.50);
 }
 .widget-demo
 {
-    background: #feffff; /* Old browsers */
-    background: -moz-linear-gradient(top, #feffff 0%, #F3F3F3 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#feffff), color-stop(100%,#F3F3F3)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #feffff 0%,#F3F3F3 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #feffff 0%,#F3F3F3 100%); /* Opera11.10+ */
-    background: -ms-linear-gradient(top, #feffff 0%,#F3F3F3 100%); /* IE10+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#F3F3F3',GradientType=0 ); /* IE6-9 */
-    background: linear-gradient(top, #feffff 0%,#F3F3F3 100%); /* W3C */    
+clear: both;
+    background: #f3f3f3; /* Old browsers */
     padding: 1em;
-    -moz-border-radius: 8px;
-    -webkit-border-radius: 8px;
-    border-radius: 8px;
+-webkit-border-radius: 8px;
+-webkit-border-top-left-radius: 0;
+-moz-border-radius: 8px;
+-moz-border-radius-topleft: 0;
+border-radius: 8px;
+border-top-left-radius: 0;
     position: relative;
     z-index: 13;
     color: #333;
@@ -289,7 +303,6 @@ margin: 1em 0 0;
     position: relative;
     top: -8px;
     z-index: 2;
-    font-style: italic;
     -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.50);
     -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.50);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.50);
@@ -297,7 +310,6 @@ margin: 1em 0 0;
 
 #secondary
 {
-/*    background: transparent url(images/callout.png) no-repeat top right;*/
     position: absolute;
     right: 0px;
     top: 74px;
@@ -340,14 +352,13 @@ border-bottom-left-radius: 4px;
     margin: 2px 0;
 }
 
-#secondary .wijmo-wijmenu-link.ui-state-hover
+#secondary .wijmo-wijmenu-link.ui-state-hover, #secondary .wijmo-wijmenu-link
 {
-    background: #03a7de;
+    background: none;
     border: solid 1px transparent;
     box-shadow: none;
-
 }
-
+/*
 #secondary .demo-config-on a
 {
     background: #65358A;
@@ -368,29 +379,36 @@ border-bottom-right-radius: 4px;
 {
     background: #65358a;
 }
-
+*/
 #secondary .wijmo-wijmenu-list
 {
     padding-top: 5px;
 }
 
+#secondary .wijmo-wijmenu-item a
+{
+     text-shadow: 1px 1px 2px rgba(0,0,0,0.25);
+}
 #secondary .wijmo-wijmenu-item:hover
 {
-    background: url("images/header_background_blue.png") no-repeat scroll right top transparent;
-    border-radius: 0 0 0 0;
+    background-image: url(images/header_background_blue.png);
+    background-repeat: repeat-y;
+    background-position: right top;
+    border-radius: 0;
     margin-right: -11px;
-    margin-top: -3px;
+    margin-top: -4px;
     padding-right: 11px;
-    padding-top: 5px;
+    padding-top: 6px;
 }
 #secondary .demo-config-on, #secondary .demo-config-on:hover
 {
-    background: url("images/header_background.png") no-repeat scroll left top transparent;
+    background: transparent url(images/header_background.png)  repeat-y left top;  
     padding-left: 12px;
-    padding-top: 5px;
+    padding-top: 6px;
     border-radius: 0;
     margin-top: -4px;
 }
+
 
 
 
@@ -592,7 +610,7 @@ border-bottom-right-radius: 4px;
     position: absolute;
     left: 108px;
     top: 0px;
-    width: 153px;
+    width: 253px;
     z-index: 10;
     padding-left: 4px;
     *height: 100px;
@@ -604,6 +622,42 @@ border-bottom-right-radius: 4px;
     list-style: none;
     position: absolute;
     left: 89px;
+    top: 0px;
+    width: 153px;
+    z-index: 10;
+    padding-left: 4px;
+}
+#forms-children
+{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+    left: 98px;
+    top: 0px;
+    width: 153px;
+    z-index: 10;
+    padding-left: 4px;
+}
+#gauges-children
+{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+    left: 110px;
+    top: 0px;
+    width: 193px;
+    z-index: 10;
+    padding-left: 4px;
+}
+#multimedia-children
+{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+    left: 139px;
     top: 0px;
     width: 153px;
     z-index: 10;
@@ -622,3 +676,42 @@ border-bottom-right-radius: 4px;
 {
     width: 86%;
 } 
+/*
+.new-icon
+{
+    background: transparent url(images/new.png) no-repeat top;
+    display: block;
+    float: left;
+    height: 24px;
+    position: absolute;
+    right: -12px;
+    text-indent: -9999px;
+    top: -4px;
+    width: 24px;
+    z-index: 1;
+}
+*/
+
+.new-icon, .new-icon-parent
+{
+    background: transparent url(images/new.png) no-repeat;
+    padding: 3px;
+    text-indent: -9999px;
+    position: absolute;
+    display: block;
+    right: -26px;
+    top: 9%;
+    width: 24px;
+    height: 24px;
+}
+
+#secondary .wijmo-wijmenu-text
+{
+    padding-right: 16px;
+    padding-left: 3px;
+}
+#secondary .side-menu-new
+{
+    position: absolute;
+    right: 10px;
+}

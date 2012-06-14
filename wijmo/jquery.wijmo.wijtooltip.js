@@ -1,7 +1,7 @@
 /*globals window document clearTimeout setTimeout jQuery */
 /*
 *
-* Wijmo Library 1.5.0
+* Wijmo Library 2.1.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -14,9 +14,11 @@
 * Wijmo Tooltip widget.
 * 
 * Depends:
+*	jQuery.1.7.1.js
 *	jquery.ui.core.js
 *	jquery.ui.widget.js
-*
+*	jQuery.ui.position.js
+*	jquery.bgiframe-2.1.3-pre.js
 */
 (function ($) {
 	"use strict";
@@ -33,23 +35,27 @@
 	$.widget("wijmo.wijtooltip", {
 		options: {
 			/// <summary>
-			/// A value that indicates the tooltip's content.
+			/// Sets the tooltip's content..
 			/// Type: String or Function.
 			/// Default: "".
-			/// Remarks: The value can be a string, html code or function.
+			/// Remarks: The value can be a string, html code, or a function. 
+			/// If it is a function, then the content will be 
+			/// the function's return value.
 			/// Code example: $(".selector").wijtooltip("option", "content", "content").
 			/// </summary>
 			content: '',
 			/// <summary>
-			/// A value that indicates the tooltip's title.
+			/// Specifies a value that sets the tooltip��s title.
 			/// Type: String or Function.
 			/// Default: "".
 			/// Code example: $(".selector").wijtooltip("option", "title", "title");
-			/// Remark: The value can be a string, HTML or function.
+			/// Remark: The value can be a string, html code, or a function. 
+			/// If it is a function, then the title will be 
+			/// the function's return value.
 			/// </summary>
 			title: "",
 			/// <summary>
-			/// A value that indicates the mode to close the tooltip.
+			/// Determines how to close the tooltip. Behaviors include auto or sticky.
 			/// Type: String.
 			/// Default: "auto".
 			/// Options: "auto", "none" and "sticky".
@@ -58,14 +64,14 @@
 			/// </summary>
 			closeBehavior: 'auto',
 			/// <summary>
-			/// A value that indicates whether to move with the mouse.
+			/// If true, then the tooltip moves with the mouse. 
 			/// Type: Boolean.
 			/// Default: false.
 			/// Code example: $(".selector").wijtooltip("option", "mouseTrailing", false).
 			/// </summary>
 			mouseTrailing: false,
 			/// <summary>
-			/// A value that indicates the events to show the tooltip.
+			/// Sets the event that will cause the tooltip to appear.
 			/// Type: String
 			/// Default: "hover".
 			/// Options: "hover", "click", "focus", "rightClick", "custom".
@@ -73,7 +79,10 @@
 			/// </summary>
 			triggers: 'hover',
 			/// <summary>
-			/// A value that indicates the position settings for the tooltip.
+			/// Sets the tooltip's position mode in relation to the 'relativeTo', 
+			/// 'offsetX', and 'offsetY' properties. For example, 
+			/// here is the jQuery ui position's position:
+			/// {my:'top left',at:'right bottom',offset:}.
 			/// Type: Object.
 			/// Default: { my: "left bottom", at: "right top", offset: null}
 			/// Code expamle: $(".selector").wijtooltip("option", "position",
@@ -85,63 +94,69 @@
 				offset: null
 			},
 			/// <summary>
-			/// A value that indicates whether to show the callout.
+			/// Determines whether to show the callout element.
 			/// Type: Boolean.
 			/// Default: true.
 			/// Code example: $(".selector").wijtooltip("option", "showCallout", true).
 			/// </summary>
 			showCallout: true,
 			/// <summary>
-			/// Sets showAnimation and hideAnimation if not specified individually.
+			/// Sets showAnimation and hideAnimation if they are 
+			/// not specified individually.
 			/// Default: { animated: "fade", duration: 500, easing: null }.
 			/// Type: Object.
 			/// Remark: User's standard animation setting syntax from other widgets.
+			/// Code example:
+			/// $(".selector").wijtooltip("option", "animation", 
+			/// {animated: "fade", duration: 400, easing: null})
 			/// </summary>
 			animation: { animated: "fade", duration: 500, easing: null },
 			/// <summary>
-			/// A value that indicates the animation effect when tooltip is shown.
+			/// Determines the animation effect that will be shown. 
 			/// Type: Object.
-			/// Default: {animated: "fade", duration: 500, easing: null}.
-			/// Remarks: If animated sub option is set to false, 
-			///			 then no effect will be applied when tooltip is shown.
+			/// Default: {}.
+			/// Remarks: This should be an object value. Possible values include:
+			/// 'animated', 'duration', and 'easing'. 
+			/// This property works with jQuery animation..
 			/// Code example: $(".selector").wijtooltip("option", "showAnimation",
 			///				{animated: "fade", duration: 500, easing: "linear"}).
 			/// </summary>
 			showAnimation: {},
 			/// <summary>
-			/// A value that indicates the animation effect when tooltip is hidden.
+			/// Determines whether the animation effect can be seen.
 			/// Type: Object.
 			/// Default: {animated: 'fade', duration:500, easing: null}.
-			/// Remarks: If animated sub option is set to false, 
-			///			 then no effect will be applied when tooltip is hidden.
+			/// Remarks: This should be an object value, 
+			/// like the showAnimation property. 
 			/// Code example: $(".selector").wijtooltip("option", "hideAnimation",
 			///				{animated: "fade", duration: 500, easing: null}).
 			/// </summary>
 			hideAnimation: {},
 			/// <summary>
-			/// A value that indicates the delay before the tooltip showing.
+			/// Determines the length of the delay before the tooltip appears. 
 			/// Type: Number
 			/// Default: 150.
 			/// Code example: $(".selector").wijtooltip("option", "showDelay", 200).
 			/// </summary>
 			showDelay: 150,
 			/// <summary>
-			/// A value that indicates the delay before the tooltip hiding.
+			/// Determines the length of the delay before the tooltip disappears.
 			/// Type: Number.
 			/// Default: 150.
 			/// Code example: $(".selector").wijtooltip("option", "hideDelay", 200).
 			/// </summary>
 			hideDelay: 150,
 			/// <summary>
-			/// A value that indicates the animation for the callout.
+			/// Sets the callout's offset changing animation..
 			/// Type: Object.
-			/// Default: {duration: 1000}.
+			/// Default: {duration: 1000, disabled: false, easing: null}.
 			/// Code example: $(".selector").wijtooltip("option",
 			///				"calloutAnimation", {easing: "swing", duration: 200}).
 			/// </summary>
 			calloutAnimation: { duration: 1000, disabled: false, easing: null },
 			/// <summary>
-			/// A value that indicates whether to fill the callout.
+			/// Determines the callout's class style. 
+			/// If true, then the callout triangle will be filled..
 			/// Type: Boolean.
 			/// Default: true.
 			/// Code example: $(".selector").wijtooltip("option", "calloutFilled", true).
@@ -210,7 +225,8 @@
 			/// </param>
 			shown: null,
 			/// <summary>
-			/// Triggered before hiding the tooltip.
+			/// Triggered before hiding the tooltip.If data.cancel is 
+			/// set to true, then the tooltip is no longer hidden
 			/// Default: null.
 			/// Type: Function.
 			/// Code example:
@@ -274,7 +290,7 @@
 				self._callbacked = false;
 			}
 			else {
-				self._setText()
+				self._setText();
 			}
 		},
 
@@ -324,6 +340,11 @@
 		},
 
 		widget: function () {
+			/// <summary>
+			/// Returns the wijtooltip element.
+			/// Code example:
+			/// $(��#tooltip��).wijtooltip(��widget��);
+			/// </summary>
 			return this._tooltip;
 		},
 
@@ -331,12 +352,14 @@
 		show: function () {
 			/// <summary>
 			///	Shows the tooltip
+			/// Code example:
+			/// $("#tooltip").wijtooltip("show");
 			/// </summary>
 			var self = this,
 				tooltip = self._tooltip,
 				o = self.options;
 
-			if (!tooltip) {
+			if (!tooltip || o.disabled) {
 				return;
 			}
 
@@ -352,10 +375,11 @@
 				o.ajaxCallback.call(self.element);
 				return;
 			}
+			self._setText();
 
 			tooltip._showAnimationTimer =
 				setTimeout(function () {
-					self._setText();
+					//self._setText();
 					oldTipPos = tooltip.offset();
 					if (o.mouseTrailing) {
 						self._setCalloutCss();
@@ -373,6 +397,8 @@
 			///	</summary>
 			/// <param name="point" type="Object">
 			///	A point value that indicates the position that tooltip will be shown.
+			/// Code example:
+			/// $("#tooltip").wijtooltip("showAt", {x:100, y:120});
 			/// </param>
 			var self = this,
 				tooltip = self._tooltip,
@@ -472,6 +498,8 @@
 		hide: function () {
 			/// <summary>
 			///	Hides the tooltip
+			/// Code example:
+			/// $("#tooltip").wijtooltip("hide");
 			/// </summary>
 			var self = this,
 				tooltip = self._tooltip;
@@ -537,10 +565,15 @@
 
 			if (o.mouseTrailing) {
 				element.bind("mousemove.tooltip", function (e) {
+					if (o.disabled) {
+						return;
+					}
 					var offset = o.position.offset || "",
 					offsets = offset.split(" ");
 					if (offsets.length === 2) {
-						self.showAt({ x: e.pageX + parseInt(offsets[0]), y: e.pageY + parseInt(offsets[1]) });
+						self.showAt({ x: e.pageX + parseInt(offsets[0], 10),
+							y: e.pageY + parseInt(offsets[1], 10)
+						});
 					}
 					else {
 						self.showAt({ x: e.pageX, y: e.pageY });
@@ -549,23 +582,23 @@
 			}
 
 			switch (o.triggers) {
-				case "hover":
-					element.bind("mouseover.tooltip", $.proxy(self.show, self))
+			case "hover":
+				element.bind("mouseover.tooltip", $.proxy(self.show, self))
 				.bind("mouseout.tooltip", $.proxy(self._hideIfNeeded, self));
-					break;
-				case "click":
-					element.bind("click.tooltip", $.proxy(self.show, self));
-					break;
-				case "focus":
-					element.bind("focus.tooltip", $.proxy(self.show, self))
+				break;
+			case "click":
+				element.bind("click.tooltip", $.proxy(self.show, self));
+				break;
+			case "focus":
+				element.bind("focus.tooltip", $.proxy(self.show, self))
 				.bind("blur.tooltip", $.proxy(self._hideIfNeeded, self));
-					break;
-				case "rightClick":
-					element.bind("contextmenu.tooltip", function (e) {
-						self.show();
-						e.preventDefault();
-					});
-					break;
+				break;
+			case "rightClick":
+				element.bind("contextmenu.tooltip", function (e) {
+					self.show();
+					e.preventDefault();
+				});
+				break;
 			}
 		},
 
@@ -575,7 +608,7 @@
 				closeBehavior = o.closeBehavior;
 
 			if (closeBehavior === "sticky" || o.modal ||
-				closeBehavior === "none") {
+				closeBehavior === "none" || o.disabled) {
 				return;
 			}
 
@@ -830,33 +863,33 @@
 				bottom = parseF(callout.css("bottom"));
 
 				switch (arrCalloutShape[0]) {
-					case "l":
-						offset[0] = border.right;
-						break;
-					case "r":
-						offset[0] = -border.left;
-						break;
-					case "b":
-						offset[1] = bottom;
-						break;
-					case "t":
-						offset[1] = -top;
-						break;
+				case "l":
+					offset[0] = border.right;
+					break;
+				case "r":
+					offset[0] = -border.left;
+					break;
+				case "b":
+					offset[1] = bottom;
+					break;
+				case "t":
+					offset[1] = -top;
+					break;
 				}
 
 				switch (arrCalloutShape[1]) {
-					case "t":
-						offset[1] = -top;
-						break;
-					case "b":
-						offset[1] = bottom;
-						break;
-					case "r":
-						offset[0] = right;
-						break;
-					case "l":
-						offset[0] = -left;
-						break;
+				case "t":
+					offset[1] = -top;
+					break;
+				case "b":
+					offset[1] = bottom;
+					break;
+				case "r":
+					offset[0] = right;
+					break;
+				case "l":
+					offset[0] = -left;
+					break;
 				}
 
 				sOffset = offset.join(" ");
@@ -957,18 +990,18 @@
 
 			if (self.options.calloutFilled) {
 				switch (arrCalloutSharp[0]) {
-					case "l":
-						innerCallout.css("border-right-color", borderColor);
-						break;
-					case "t":
-						innerCallout.css("border-bottom-color", borderColor);
-						break;
-					case "r":
-						innerCallout.css("border-left-color", borderColor);
-						break;
-					case "b":
-						innerCallout.css("border-top-color", borderColor);
-						break;
+				case "l":
+					innerCallout.css("border-right-color", borderColor);
+					break;
+				case "t":
+					innerCallout.css("border-bottom-color", borderColor);
+					break;
+				case "r":
+					innerCallout.css("border-left-color", borderColor);
+					break;
+				case "b":
+					innerCallout.css("border-top-color", borderColor);
+					break;
 				}
 			}
 		},
@@ -1066,6 +1099,17 @@
 			var obj = { data: "" }, retValue;
 			if ($.isFunction(content)) {
 				retValue = content.call(this.element, obj);
+				if (obj.data !== "") {
+					return obj.data;
+				}
+				else {
+					return retValue;
+				}
+			} else if (window[content] &&
+					$.isFunction(window[content])) {
+				// if window[content/title] is a function, then get the
+				// function value.
+				retValue = window[content].call(this.element, obj);
 				if (obj.data !== "") {
 					return obj.data;
 				}
@@ -1197,9 +1241,10 @@
 
 				if (tooltip.count <= 0) {
 					tooltip.remove();
+					$.wijmo.wijtooltip._tooltips[key] = null;
 				}
 
-				$.wijmo.wijtooltip._tooltips[key] = null;
+
 				//tooltip = null;
 			}
 		}

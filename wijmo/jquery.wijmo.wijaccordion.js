@@ -1,8 +1,16 @@
-/*globals jQuery,$*/
+/*globals jQuery,$,window,alert,document,confirm,location,setTimeout, Globalize,
+amplify*/
 /*jslint white: false */
+/*jslint nomen: false*/
+/*jslint browser: true*/
+/*jslint continue: true*/
+/*jslint devel: true*/
+/*jslint forin: true*/
+/*jslint maxlen: 110*/
+
 /*
  *
- * Wijmo Library 1.5.0
+ * Wijmo Library 2.1.0
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -306,7 +314,7 @@
 				headers = this.element.children(".ui-accordion-header"),
 				prevHeader = this.element.find(".ui-accordion-header.ui-state-active"),
 				rightToLeft = this.element.data("rightToLeft"),
-				newIndex, prevIndex, nextContent, prevContent, ev,
+				newIndex, prevIndex, nextContent, prevContent,
 				animOptions, proxied, proxiedDuration, animations, duration, easing;
 			if (typeof index === "number") {
 				nextHeader = $(headers[index]);
@@ -319,10 +327,17 @@
 			}
 			if (nextHeader.hasClass("ui-state-active")) {
 				if (o.requireOpenedPane) {
-					return false;
+					// fix for
+					// [17869] Unable to select the desire panel 
+					// after all the panels are open in certain scenarios
+					if (prevHeader.length === nextHeader.length &&
+						prevHeader.index() === nextHeader.index()) {
+						return false;
+					}
+				} else {
+					prevHeader = nextHeader;
+					nextHeader = $(null);
 				}
-				prevHeader = nextHeader;
-				nextHeader = $(null);
 			}
 			else if (!o.requireOpenedPane) {
 				prevHeader = $(null);
@@ -339,7 +354,8 @@
 			if (prevHeader.length === 0 && nextHeader.length === 0) {
 				return false;
 			}
-			if (!this._trigger("beforeSelectedIndexChanged", null, { newIndex: newIndex, prevIndex: prevIndex })) {
+			if (!this._trigger("beforeSelectedIndexChanged", null,
+					{ newIndex: newIndex, prevIndex: prevIndex })) {
 				return false;
 			}
 
@@ -377,7 +393,8 @@
 						}
 						//prevContent.wijTriggerVisibility();
 						//nextContent.wijTriggerVisibility();
-						this._trigger("selectedIndexChanged", null, { newIndex: newIndex, prevIndex: prevIndex });
+						this._trigger("selectedIndexChanged", null,
+								{ newIndex: newIndex, prevIndex: prevIndex });
 					}, this),
 					horizontal: this.element.hasClass("ui-helper-horizontal"),
 					rightToLeft: this.element.data("rightToLeft"),
@@ -446,7 +463,7 @@
 							function () { $(this).removeClass('ui-state-focus'); });
 		},
 		_unbindLiveEvents: function () {
-			this.element.find('.ui-accordion-header').die("wijaccordion");
+			this.element.find('.ui-accordion-header').die(".wijaccordion");
 		},
 		_onHeaderClick: function (e) {
 			if (!this.options.disabled) {
@@ -458,7 +475,7 @@
 			if (this.options.disabled || e.altKey || e.ctrlKey) {
 				return;
 			}
-			var keyCode = $.ui.keyCode, o = this.options,
+			var keyCode = $.ui.keyCode,
 				focusedHeader = this.element.find(".ui-accordion-header.ui-state-focus"),
 				focusedInd, headers = this.element.find(".ui-accordion-header");
 			if (focusedHeader.length > 0) {
@@ -485,6 +502,7 @@
 					case keyCode.ENTER:
 						this.activate(e.currentTarget);
 						e.preventDefault();
+						break;
 				}
 
 			}
@@ -633,6 +651,7 @@
 				options.toHide.filter(":hidden").each(options.complete).end()
 					.filter(":visible").stop(true, true).animate(hideProps, {
 						step: function (now, settings) {
+							var val;
 							if (settings.prop === options.horizontal ?
 													"width" : "height") {
 								percentDone = (settings.end - settings.start === 0) ? 0 :
@@ -640,9 +659,14 @@
 							(settings.end - settings.start);
 							}
 
+							val = (percentDone * showProps[settings.prop].value);
+							if (val < 0) {
+								//fix for 16943:
+								val = 0;
+							}
 							options.toShow[0].style[settings.prop] =
-							(percentDone * showProps[settings.prop].value) +
-							showProps[settings.prop].unit;
+											val + showProps[settings.prop].unit;
+
 						},
 						duration: options.duration,
 						easing: options.easing,

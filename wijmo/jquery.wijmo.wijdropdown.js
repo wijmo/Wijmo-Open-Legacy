@@ -1,7 +1,7 @@
 /*globals jQuery,document,window*/
 /*
 *
-* Wijmo Library 1.5.0
+* Wijmo Library 2.1.0
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -13,9 +13,12 @@
 * * Wijmo Dropdown widget.
 * 
 * Depends:
-*  jquery-1.4.2.js
-*	jquery.ui.core.js
-*	jquery.ui.widget.js
+*	jquery.js
+*	jquery.ui.js
+*	jquery.mousewheel.js
+*	jquery.bgiframe.js
+*	jquery.wijmo.wijsuperpanel.js
+
 *
 */
 (function ($) {
@@ -45,9 +48,15 @@
 				return;
 			}
 
-			self._activeItem = null;
-			self._createSelect();
-			self._bindEvents();
+			if (ele.is(":visible")) {
+				self._activeItem = null;
+				self._createSelect();
+				self._bindEvents();
+				self.needInit = false;
+			}
+			else {
+				self.needInit = true;
+			}
 		},
 
 		_createSelect: function () {
@@ -55,8 +64,7 @@
 				ele = self.element,
 				width = ele.width(),
 				eleWidth = width,
-				//height = ele.height(),
-				isVisible = ele.is(":visible"),
+			//height = ele.height(),
 				selectWrap = ele.wrap("<div></div>").parent()
 					.addClass("ui-helper-hidden"),
 				container = selectWrap.wrap("<div></div>")
@@ -94,8 +102,8 @@
 				.append(labelWrap)
 				.append(rightTrigger)
 				.append(listContainer);
-			eleWidth += parseInt(label.css("padding-left").replace(/px/, ""));
-			eleWidth += parseInt(label.css("padding-right").replace(/px/, ""));
+			eleWidth += parseInt(label.css("padding-left").replace(/px/, ""), 10);
+			eleWidth += parseInt(label.css("padding-right").replace(/px/, ""), 10);
 			eleWidth -= 16;
 			container.width(eleWidth);
 
@@ -108,16 +116,17 @@
 			self._value = ele.val();
 			self._selectWrap = selectWrap;
 			self._labelWrap = labelWrap;
-
-			if (!isVisible) {
-				container.hide();
-			}
-
+			self._container = container;
+			
+			//update for fixed tooltip can't take effect
+			container.attr("title",ele.attr("title"));
+			ele.removeAttr("title");
 		},
 
 		_buildList: function (list, listContainer, eleWidth) {
 			var self = this,
 				ele = self.element, height;
+			
 			listContainer.show();
 
 			ele.children().each(function (i, n) {
@@ -141,14 +150,24 @@
 					list.append(group);
 				}
 			});
-
+			
+			//update for fixing height setting is incorrect when 
+			//execute refresh at 2011/11/30
+			listContainer.height("");
+			//end for height setting
+			
 			height = listContainer.height();
 			height = list.outerHeight() < height ? list.outerHeight() : height;
+
 			listContainer.css({
 				height: height,
 				width: eleWidth
 			});
-
+			
+			//update for fixing can't show all dropdown items by wuhao at 2012/2/24
+			list.setOutWidth(list.parent().parent().innerWidth() - 18);
+			//end for issue
+			
 			if (listContainer.data("wijsuperpanel")) {
 				listContainer.wijsuperpanel("paintPanel");
 				self.superpanel = listContainer.data("wijsuperpanel");
@@ -159,7 +178,15 @@
 			if ($.fn.bgiframe) {
 				self.superpanel.element.bgiframe();
 			}
-			list.setOutWidth(list.parent().parent().innerWidth());
+			
+			//update for fixing can't show all dropdown items by wuhao at 2012/2/24
+			//list.setOutWidth(list.parent().parent().innerWidth());
+			if (!self.superpanel.vNeedScrollBar) {
+				list.setOutWidth(list.parent().parent().innerWidth());
+				self.superpanel.refresh();
+			}
+			//end for issue
+			
 			listContainer.hide();
 		},
 
@@ -250,6 +277,10 @@
 				var target = $(e.target);
 				if (target.closest("li.wijmo-dropdown-item", $(this)).length > 0) {
 					self._setValue();
+					listContainer.css("z-index", "");
+					if ($.browser.msie && /^[6,7].[0-9]+/.test($.browser.version)) {
+						listContainer.parent().css("z-index", "");
+					}
 					listContainer.hide();
 					self.oldVal = ele.val();
 					ele.val(self._value);
@@ -268,31 +299,46 @@
 				switch (e.which) {
 				case keyCode.UP:
 				case keyCode.LEFT:
-					self.previous();
+					self._previous();
 					self._setValue();
+					//update for issue that can't get value with keydown
+					//by wh at 2012/1/19
+					self._setValueToEle();
+					//end for issue about keydown
 					break;
 				case keyCode.DOWN:
 				case keyCode.RIGHT:
-					self.next();
+					self._next();
 					self._setValue();
+					//update for issue that can't get value with keydown
+					//by wh at 2012/1/19
+					self._setValueToEle();
+					//end for issue about keydown
 					break;
 				case keyCode.PAGE_DOWN:
-					self.nextPage();
+					self._nextPage();
 					self._setValue();
+					//update for issue that can't get value with keydown
+					//by wh at 2012/1/19
+					self._setValueToEle();
+					//end for issue about keydown
 					break;
 				case keyCode.PAGE_UP:
-					self.previousPage();
+					self._previousPage();
 					self._setValue();
+					//update for issue that can't get value with keydown
+					//by wh at 2012/1/19
+					self._setValueToEle();
+					//end for issue about keydown
 					break;
 				case keyCode.ENTER:
 				case keyCode.NUMPAD_ENTER:
 					self._setValue();
 					self._listContainer.hide();
-					self.oldVal = ele.val();
-					ele.val(self._value);
-					if (self.oldVal !== self._value) {
-						ele.trigger("change");
-					}
+					//update for issue that can't get value with keydown
+					//by wh at 2012/1/19
+					self._setValueToEle();
+					//end for issue about keydown
 					break;
 				}
 				if (e.which !== keyCode.TAB) {
@@ -360,7 +406,10 @@
 				listContainer.parent().css("z-index", "99999");
 			}
 			if (showingAnimation) {
-				listContainer.stop().show(
+				//update for fixing 20652 issue by wh at 2012/3/19
+				//listContainer.stop().show(
+				listContainer.show(
+				//end for fixing issue 20652
 				showingAnimation.effect,
 				showingAnimation.options,
 				showingAnimation.speed,
@@ -381,7 +430,10 @@
 				return;
 			}
 			if (hidingAnimation) {
-				listContainer.stop(false, true).hide(
+				//update for fixing 20652 issue by wh at 2012/3/19
+				//listContainer.stop(false, true).hide(
+				listContainer.hide(
+				//end for fixing issue 20652
 				hidingAnimation.effect,
 				hidingAnimation.options,
 				hidingAnimation.speed,
@@ -425,6 +477,16 @@
 				}
 			}
 		},
+		
+		_setValueToEle: function () {
+			var self = this, ele = self.element;
+			
+			self.oldVal = ele.val();
+			ele.val(self._value);
+			if (self.oldVal !== self._value) {
+				ele.trigger("change");
+			}
+		},
 
 		_initActiveItem: function () {
 			var self = this;
@@ -452,36 +514,62 @@
 			}
 		},
 
-		next: function () {
+		_next: function () {
 			this._move("next", "first");
 		},
 
-		previous: function () {
+		_previous: function () {
 			this._move("prev", "last");
 		},
 
-		nextPage: function () {
+		_nextPage: function () {
 			this._movePage("first");
 		},
 
-		previousPage: function () {
+		_previousPage: function () {
 			this._movePage("last");
 		},
 
 		refresh: function () {
+			/// Use the refresh method to set the drop-down element's style.
 			var self = this, containerWidth;
-			if (!self._list) {
-				return;
-			}
 
-			self._listContainer.show();
-			containerWidth = self._listContainer.width();
-			self._list.empty();
-			self._buildList(self._list, self._listContainer, containerWidth);
-			self._value = self.element.val();
-			self._initActiveItem();
-			if (self._activeItem) {
-				self._label.text(self._activeItem.text());
+			if (self.needInit) {
+				if (self.element.is(":visible")) {
+					self._activeItem = null;
+					self._createSelect();
+					self._bindEvents();
+					self._init();
+					self.needInit = false;
+				}
+			}
+			else {
+				if (!self._list) {
+					return;
+				}
+				
+				self._listContainer.show();
+				//update for fixing width settings is wrong when
+				//execute refresh method at 2011/11/30
+				//containerWidth = self._listContainer.width();
+				self._selectWrap.removeClass("ui-helper-hidden");
+				containerWidth = self.element.width();
+				containerWidth += parseInt(self._label.css("padding-left")
+				.replace(/px/, ""), 10);
+				containerWidth += parseInt(self._label.css("padding-right")
+				.replace(/px/, ""), 10);
+				containerWidth -= 16;
+				self._container.width(containerWidth);
+				self._selectWrap.addClass("ui-helper-hidden");
+				//end for fixing width settings at 2011/11/30
+				
+				self._list.empty();
+				self._buildList(self._list, self._listContainer, containerWidth);
+				self._value = self.element.val();
+				self._initActiveItem();
+				if (self._activeItem) {
+					self._label.text(self._activeItem.text());
+				}
 			}
 		},
 
@@ -546,11 +634,19 @@
 		},
 
 		destroy: function () {
+			
+			//update for fixed tooltip can't take effect
+			this.element.attr("title", this._container.attr("title"));
+			
+			/// Remove the functionality completely. 
+			/// This will return the element back to its pre-init state.
 			this.element.closest(".wijmo-wijdropdown")
 			.find(">div.wijmo-dropdown-trigger,>div.wijmo-dropdown," +
 			">a").remove();
 			this.element.unwrap().unwrap().removeData("maxZIndex");
+
 			$.Widget.prototype.destroy.apply(this);
+
 		}
 	});
 } (jQuery));
