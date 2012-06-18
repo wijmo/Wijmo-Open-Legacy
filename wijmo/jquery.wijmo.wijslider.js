@@ -1,7 +1,7 @@
 /*globals window,document,jQuery*/
 /*
 *
-* Wijmo Library 2.1.0
+* Wijmo Library 2.1.1
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -162,9 +162,39 @@
 			//Add for support disabled option at 2011/7/8
 			if (key === "disabled") {
 				self._handleDisabledOption(value, self.element.parent());
+			} else if (key === "range") {
+				self._setRangeOption(value);
 			}
 			//end for disabled option
 			return this;
+		},
+		
+		_setRangeOption:function(value) {
+			var self = this,
+			element = self.element,
+			o = self.options;
+			
+			if ( value ) {
+				if ( value === true ) {
+					if ( !o.values ) {
+						o.values = [ self._valueMin(), self._valueMin() ];
+					}
+					if ( o.values.length && o.values.length !== 2 ) {
+						o.values = [ o.values[0], o.values[0] ];
+					}
+				}
+
+				self.range = $( "<div></div>" )
+					.appendTo( self.element )
+					.addClass( "ui-slider-range" +
+					// note: this isn't the most fittingly semantic framework class for this element,
+					// but worked best visually with a variety of themes
+					" ui-widget-header" + 
+					( ( o.range === "min" || o.range === "max" ) ? " ui-slider-range-" + o.range : "" ) );
+			} else {
+				self.range.remove();
+			}
+			self._refreshValue();
 		},
 
 		_create: function () {
@@ -702,7 +732,10 @@
 
 		_mouseInit: function () {
 			var self = this;
-			if (this.options.dragFill) {
+			//update for knockout: 
+			//animate works only for every other click
+			//if (this.options.dragFill)
+			if (this.options.dragFill && this.options.range) {
 				this._preventClickEvent = false;
 				//update for unbind by wh at 2011/11/11
 				//this.element.bind('click', function (event) {

@@ -1,7 +1,7 @@
 /*globals jQuery,document,window*/
 /*
 *
-* Wijmo Library 2.1.0
+* Wijmo Library 2.1.1
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -114,6 +114,7 @@
 			self._listContainer = listContainer;
 			self._list = list;
 			self._value = ele.val();
+			self._selectedIndex = ele.find("option :selected").index();
 			self._selectWrap = selectWrap;
 			self._labelWrap = labelWrap;
 			self._container = container;
@@ -282,11 +283,12 @@
 						listContainer.parent().css("z-index", "");
 					}
 					listContainer.hide();
-					self.oldVal = ele.val();
-					ele.val(self._value);
-					if (self.oldVal !== self._value) {
-						ele.trigger("change");
-					}
+					self._setValueToEle();
+					//self.oldVal = ele.val();
+					//ele.val(self._value);
+					//if (self.oldVal !== self._value) {
+					//	ele.trigger("change");
+					//}
 				}
 				ele.click();
 			});
@@ -461,6 +463,7 @@
 			if (self._activeItem) {
 				self._label.text(self._activeItem.text());
 				self._value = self._activeItem.data("value");
+				self._selectedIndex = self._activeItem.index();
 
 				if (self.superpanel.vNeedScrollBar) {
 					top = self._activeItem.offset().top;
@@ -479,22 +482,39 @@
 		},
 		
 		_setValueToEle: function () {
-			var self = this, ele = self.element;
+			var self = this, ele = self.element,
+				oldSelectedItem = ele.find("option[selected]"),
+				oldSelectedIndex = oldSelectedItem.index(),
+				selectedIndex = self._selectedIndex;
 			
-			self.oldVal = ele.val();
-			ele.val(self._value);
-			if (self.oldVal !== self._value) {
+			//self.oldVal = ele.val();
+			//ele.val(self._value);
+			if (oldSelectedIndex !== selectedIndex) {
+				oldSelectedItem.removeAttr('selected');
+				ele.children("option:eq(" + selectedIndex + ")").attr("selected", true);
+				
 				ele.trigger("change");
 			}
+			//if (self.oldVal !== self._value) {
+			//	ele.trigger("change");
+			//}
 		},
 
 		_initActiveItem: function () {
 			var self = this;
 			if (self._value !== undefined) {
-				self._list.find("li.wijmo-dropdown-item").each(function () {
-					if ($(this).data("value") === self._value) {
+				if (self._selectedIndex === -1) {
+					self._activate(self._list.find("li.wijmo-dropdown-item").eq(0));
+					return;
+				}
+				self._list.find("li.wijmo-dropdown-item").each(function (idx) {
+					if (idx === self._selectedIndex) {
 						self._activate($(this));
+						return false;
 					}
+					//if ($(this).data("value") === self._value) {
+					//	self._activate($(this));
+					//}
 				});
 			}
 		},
@@ -566,6 +586,7 @@
 				self._list.empty();
 				self._buildList(self._list, self._listContainer, containerWidth);
 				self._value = self.element.val();
+				self._selectedIndex = ele.find("option :selected").index();
 				self._initActiveItem();
 				if (self._activeItem) {
 					self._label.text(self._activeItem.text());

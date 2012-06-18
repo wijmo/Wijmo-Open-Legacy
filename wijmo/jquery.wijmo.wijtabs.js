@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 2.1.0
+ * Wijmo Library 2.1.1
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -558,7 +558,7 @@
 
 				 // inline tab
 				 if (fragmentId.test(href)) {
-					 self.panels = self.panels.add(self._sanitizeSelector(href));
+					 self.panels = self.panels.add(self._sanitizeSelector(href), self.element);
 				 }
 
 				 // remote tab
@@ -804,7 +804,7 @@
 					 var el = this,
 				$li = $(this).closest('li'),
 				$hide = self.panels.filter(':not(.ui-tabs-hide)'),
-				$show = $(self._sanitizeSelector(this.hash));
+				$show = $(self._sanitizeSelector(this.hash), self.element);
 
 					 // If tab is already selected and not collapsible or tab disabled or
 					 // or is already loading or click callback returns false stop here.
@@ -1151,7 +1151,7 @@
 			 this.xhr = $.ajax($.extend({}, o.ajaxOptions, {
 				 url: url,
 				 success: function (r, s) {
-					 $(self._sanitizeSelector(a.hash)).html(r);
+					 $(self._sanitizeSelector(a.hash), self.element).html(r);
 
 					 // take care of tab labels
 					 self._cleanup();

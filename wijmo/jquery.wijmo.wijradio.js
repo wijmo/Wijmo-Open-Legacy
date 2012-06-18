@@ -1,7 +1,7 @@
 /*globals jQuery*/
 /*
  *
- * Wijmo Library 2.1.0
+ * Wijmo Library 2.1.1
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -88,7 +88,9 @@
 				//			boxElement.css("margin-top","9px");
 
 				ele.bind("click.checkbox", function () {
-					ele.focus();
+					//fixed bug:
+					//the "focus()" event fires twice when the radio is clicked
+					//ele.focus();
 					self._refresh();
 				}).bind("focus.checkbox", function () {
 					if (self.options.disabled) {
@@ -105,7 +107,10 @@
 
 				radiobuttonElement.click(function () {
 					if (targetLabel.length === 0 || targetLabel.html() === "") {
-						ele.attr("checked", true).focus();
+						//fixed bug:
+						//the "focus()" event fires twice when the radio is clicked
+						ele.attr("checked", true);
+						//ele.attr("checked", true).focus();
 						self._refresh();
 						ele.change();
 					}

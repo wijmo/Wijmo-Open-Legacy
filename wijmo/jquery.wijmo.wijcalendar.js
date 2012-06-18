@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 2.1.0
+ * Wijmo Library 2.1.1
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -1547,7 +1547,7 @@
 					}
 				}).bind('click.wijcalendar', $.proxy(this._onNavButtonClicked, this));
 
-				this.element.unbind.bind({
+				this.element.unbind().bind({
 					"mouseup.wijcalendar": $.proxy(this._onMouseUp, this)
 				});
 				
@@ -2204,7 +2204,7 @@
 		_refreshDate: function (date) {
 			if (date < this._startDate || date > this._endDate) { return; }
 			var o = this.calendar.options;
-			var offset = (Math.round(Math.abs(date - this._startDate) / (24 * 60 * 60 * 1000)));
+			var offset = (Math.floor(Math.abs(date - this._startDate) / (24 * 60 * 60 * 1000)));
 			var row = Math.floor(offset / this.calendar.options.dayCols),
 							col = Math.floor(offset % this.calendar.options.dayCols);
 			if (o.showWeekNumbers) { col++; }

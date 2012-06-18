@@ -1,7 +1,7 @@
 /*globals window document jQuery */
 /*
 *
-* Wijmo Library 2.1.0
+* Wijmo Library 2.1.1
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -650,6 +650,12 @@
 			var self = this, o = self.options;
 			o.vScroller.dir = "v";
 			o.hScroller.dir = "h";
+
+			//Add support for touch
+			//if (window.wijmoApplyWijTouchUtilEvents) {
+			//    $ = window.wijmoApplyWijTouchUtilEvents($);
+			//}
+
 			self.paintPanel();
 			self._initResizer();
 			if (self.options.disabled) {
@@ -1876,8 +1882,11 @@
 					padding = f[key];
 					return padding;
 				}
-				padding = parseFloat(container.css("padding-" +
-				paddingType).replace("px", ""));
+				//padding = parseFloat(container.css("padding-" +
+				//paddingType).replace("px", ""));
+				if (container && container.css) {
+					padding = parseFloat(container.css("padding-" + paddingType));
+				}
 				f[key] = padding;
 			}
 			return padding;

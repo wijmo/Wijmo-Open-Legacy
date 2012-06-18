@@ -1,11 +1,11 @@
 /*
 *
-* Wijmo KnockoutJS Binding Library 2.0.8
+* Wijmo KnockoutJS Binding Library 2.1.1
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
 * 
-* Dual licensed under the Wijmo Commercial or GNU GPL Version 3 licenses.
+* Dual licensed under the MIT or GPL Version 2 licenses.
 * licensing@wijmo.com
 * http://wijmo.com/license
 *
@@ -790,6 +790,26 @@ createCustomBinding({
         checkable: {},
         orientation: {}
     }
+});
+
+createCustomBinding({
+    widgetName: "wijtextbox",
+    observableOptions: {}
+});
+
+createCustomBinding({
+    widgetName: "wijdropdown",
+    observableOptions: {}
+});
+
+createCustomBinding({
+    widgetName: "wijcheckbox",
+    observableOptions: {}
+});
+
+createCustomBinding({
+    widgetName: "wijradio",
+    observableOptions: {}
 });
 
 

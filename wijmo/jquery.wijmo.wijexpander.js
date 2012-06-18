@@ -2,7 +2,7 @@
 /*jslint white: false */
 /*
 *
-* Wijmo Library 2.1.0
+* Wijmo Library 2.1.1
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -23,6 +23,8 @@
 */
 (function ($) {
 	"use strict";
+
+
 	$.widget("wijmo.wijexpander", {
 		// widget options
 		options: {
@@ -201,6 +203,11 @@
 		_create: function () {
 			var elems = this.element.children(), header, content;
 
+			// enable touch support:
+			if (window.wijmoApplyWijTouchUtilEvents) {
+				$ = window.wijmoApplyWijTouchUtilEvents($);
+			}
+
 			// do not call base c1headercontentcontrol _create method here since we don't 
 			// want to place c1headercontentcontrol classes on the widget element
 			this.element.addClass(
@@ -227,6 +234,7 @@
 		},
 		// widget initialization:
 		_init: function () {
+
 			var o = this.options;
 			this._onDirectionChange(o.expandDirection, false);
 			if (o.contentUrl) {

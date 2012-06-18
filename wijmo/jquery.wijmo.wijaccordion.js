@@ -10,7 +10,7 @@ amplify*/
 
 /*
  *
- * Wijmo Library 2.1.0
+ * Wijmo Library 2.1.1
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -279,6 +279,10 @@ amplify*/
 
 		},
 		_create: function () {
+			// enable touch support:
+			if (window.wijmoApplyWijTouchUtilEvents) {
+				$ = window.wijmoApplyWijTouchUtilEvents($);
+			}
 			this.element.addClass(
 			"wijmo-wijaccordion ui-accordion ui-widget ui-accordion-icons " +
 			"ui-helper-reset ui-helper-clearfix");
