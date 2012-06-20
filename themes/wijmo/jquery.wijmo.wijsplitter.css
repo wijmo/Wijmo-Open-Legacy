@@ -52,22 +52,22 @@
     z-index: 999;
 }
 
-.wijmo-wijsplitter-vertical .wijmo-wijsplitter-v-expanded
+.wijmo-wijsplitter-vertical .wijmo-wijsplitter-v-panel1-expanded
 {
     border-right: medium none;
     overflow: hidden;
     padding: 12px 0;
     left: -8px;
     width: 6px;
-    z-index: 999;
+    z-index: 99;
 }
 
-.wijmo-wijsplitter-vertical .wijmo-wijsplitter-v-expanded .ui-icon
+.wijmo-wijsplitter-vertical .wijmo-wijsplitter-v-panel1-expanded .ui-icon
 {
     margin-left: -6px;
 }
 
-.wijmo-wijsplitter-vertical .wijmo-wijsplitter-v-collapsed
+.wijmo-wijsplitter-vertical .wijmo-wijsplitter-v-panel1-collapsed
 {
     border-left: medium none;
     overflow: hidden;
@@ -77,7 +77,37 @@
     z-index: 999;
 }
 
-.wijmo-wijsplitter-vertical .wijmo-wijsplitter-v-collapsed .ui-icon
+.wijmo-wijsplitter-vertical .wijmo-wijsplitter-v-panel1-collapsed .ui-icon
+{
+    margin-left: -6px;
+}
+
+.wijmo-wijsplitter-vertical .wijmo-wijsplitter-v-panel2-expanded
+{
+    border-right: medium none;
+    overflow: hidden;
+    padding: 12px 0;
+    right: -8px;
+    width: 6px;
+    z-index: 999;
+}
+
+.wijmo-wijsplitter-vertical .wijmo-wijsplitter-v-panel2-expanded .ui-icon
+{
+    margin-left: -6px;
+}
+
+.wijmo-wijsplitter-vertical .wijmo-wijsplitter-v-panel2-collapsed
+{
+    border-left: medium none;
+    overflow: hidden;
+    padding: 12px 0;
+    left: -8px;
+    width: 6px;
+    z-index: 999;
+}
+
+.wijmo-wijsplitter-vertical .wijmo-wijsplitter-v-panel2-collapsed .ui-icon
 {
     margin-left: -6px;
 }
@@ -116,7 +146,7 @@
     position: relative;
     font-size: 1px;
     height: 2px;
-    z-index: 99; /* change to keep same as wijmo-wijsplitter-v-bar*/
+    z-index: 999;
 }
 
 .wijmo-wijsplitter-horizontal .ui-resizable-s
@@ -148,7 +178,7 @@
 }
 
 
-.wijmo-wijsplitter-horizontal .wijmo-wijsplitter-h-expanded
+.wijmo-wijsplitter-horizontal .wijmo-wijsplitter-h-panel1-expanded
 {
     border-bottom: none;
     height: 8px;
@@ -158,12 +188,12 @@
     z-index: 999;
 }
 
-.wijmo-wijsplitter-horizontal .wijmo-wijsplitter-h-expanded .ui-icon
+.wijmo-wijsplitter-horizontal .wijmo-wijsplitter-h-panel1-expanded .ui-icon
 {
     margin-top: -4px;
 }
 
-.wijmo-wijsplitter-horizontal .wijmo-wijsplitter-h-collapsed
+.wijmo-wijsplitter-horizontal .wijmo-wijsplitter-h-panel1-collapsed
 {
     border-top: none;
     height: 8px;
@@ -173,7 +203,37 @@
     z-index: 999;
 }
 
-.wijmo-wijsplitter-horizontal .wijmo-wijsplitter-h-collapsed .ui-icon
+.wijmo-wijsplitter-horizontal .wijmo-wijsplitter-h-panel1-collapsed .ui-icon
+{
+    margin-top: -4px;
+}
+
+.wijmo-wijsplitter-horizontal .wijmo-wijsplitter-h-panel2-expanded
+{
+    border-bottom: none;
+    height: 8px;
+    overflow: hidden;
+    padding: 0 10px;
+    bottom: -10px;
+    z-index: 999;
+}
+
+.wijmo-wijsplitter-horizontal .wijmo-wijsplitter-h-panel2-expanded .ui-icon
+{
+    margin-top: -4px;
+}
+
+.wijmo-wijsplitter-horizontal .wijmo-wijsplitter-h-panel2-collapsed
+{
+    border-top: none;
+    height: 8px;
+    overflow: hidden;
+    padding: 0 10px;
+    top: -10px;
+    z-index: 999;
+}
+
+.wijmo-wijsplitter-horizontal .wijmo-wijsplitter-h-panel2-collapsed .ui-icon
 {
     margin-top: -4px;
 }

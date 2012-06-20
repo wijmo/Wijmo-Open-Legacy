@@ -1,7 +1,7 @@
 /*globals jQuery,document,window*/
 /*
 *
-* Wijmo Library 2.1.1
+* Wijmo Library 2.1.2
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -114,7 +114,9 @@
 			self._listContainer = listContainer;
 			self._list = list;
 			self._value = ele.val();
-			self._selectedIndex = ele.find("option :selected").index();
+			//self._selectedIndex = ele.find("option:selected").index();
+			self._selectedIndex = $('option',ele)
+									.index(ele.find("option:selected")),
 			self._selectWrap = selectWrap;
 			self._labelWrap = labelWrap;
 			self._container = container;
@@ -463,7 +465,9 @@
 			if (self._activeItem) {
 				self._label.text(self._activeItem.text());
 				self._value = self._activeItem.data("value");
-				self._selectedIndex = self._activeItem.index();
+				//self._selectedIndex = self._activeItem.index();
+				self._selectedIndex = $('li.wijmo-dropdown-item',listContainer)
+											.index(self._activeItem);
 
 				if (self.superpanel.vNeedScrollBar) {
 					top = self._activeItem.offset().top;
@@ -484,14 +488,15 @@
 		_setValueToEle: function () {
 			var self = this, ele = self.element,
 				oldSelectedItem = ele.find("option[selected]"),
-				oldSelectedIndex = oldSelectedItem.index(),
+				//oldSelectedIndex = oldSelectedItem.index(),
+				oldSelectedIndex = $('option',ele).index(oldSelectedItem),
 				selectedIndex = self._selectedIndex;
 			
 			//self.oldVal = ele.val();
 			//ele.val(self._value);
 			if (oldSelectedIndex !== selectedIndex) {
 				oldSelectedItem.removeAttr('selected');
-				ele.children("option:eq(" + selectedIndex + ")").attr("selected", true);
+				ele.find("option:eq(" + selectedIndex + ")").attr("selected", true);
 				
 				ele.trigger("change");
 			}
@@ -586,7 +591,9 @@
 				self._list.empty();
 				self._buildList(self._list, self._listContainer, containerWidth);
 				self._value = self.element.val();
-				self._selectedIndex = ele.find("option :selected").index();
+				//self._selectedIndex = ele.find("option :selected").index();
+				self._selectedIndex = $('option',ele)
+									.index(ele.find("option:selected")),
 				self._initActiveItem();
 				if (self._activeItem) {
 					self._label.text(self._activeItem.text());

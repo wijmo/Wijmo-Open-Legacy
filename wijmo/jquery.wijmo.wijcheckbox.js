@@ -1,24 +1,24 @@
 /*globals jQuery*/
 /*
- *
- * Wijmo Library 2.1.1
- * http://wijmo.com/
- *
- * Copyright(c) ComponentOne, LLC.  All rights reserved.
- * 
- * Dual licensed under the MIT or GPL Version 2 licenses.
- * licensing@wijmo.com
- * http://www.wijmo.com/license
- *
- * * Wijmo CheckBoxDecorator widget.
- * 
- * Depends:
- *  jquery-1.4.2.js
- *	jquery.ui.core.js
- *	jquery.ui.widget.js
- *
- *
- */
+*
+* Wijmo Library 2.1.2
+* http://wijmo.com/
+*
+* Copyright(c) ComponentOne, LLC.  All rights reserved.
+* 
+* Dual licensed under the MIT or GPL Version 2 licenses.
+* licensing@wijmo.com
+* http://www.wijmo.com/license
+*
+* * Wijmo CheckBoxDecorator widget.
+* 
+* Depends:
+*  jquery-1.4.2.js
+*	jquery.ui.core.js
+*	jquery.ui.widget.js
+*
+*
+*/
 (function ($) {
 	"use strict";
 	var checkboxId = 0;
@@ -80,6 +80,9 @@
 					boxElement.addClass(self._csspre + "-relative");
 				}
 				ele.bind("click.checkbox", function (e) {
+					if (o.disabled) {
+						return;
+					}
 					self.refresh(e);
 				}).bind("focus.checkbox", function () {
 					if (o.disabled) {
@@ -102,6 +105,9 @@
 				});
 
 				boxElement.bind("click.checkbox", function (e) {
+					if (o.disabled) {
+						return;
+					}
 					ele.get(0).checked = !ele.get(0).checked;
 					ele.change();
 					ele.focus();
@@ -122,7 +128,7 @@
 					boxElement.removeClass("ui-state-hover").not(".ui-state-focus")
 					.addClass("ui-state-default");
 				});
-				
+
 				//update for fixed tooltip can't take effect 
 				checkboxElement.attr("title", ele.attr("title"));
 			}

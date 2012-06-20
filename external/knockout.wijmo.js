@@ -70,26 +70,6 @@
                     }
                     var observableOption = options.observableOptions[key],
                         optType = observableOption.type;
-                    /*
-                    * ko.computed can't observe the value like "value: percent() * 100",
-                    * So it should be removed and observe values in custombindings.update now. 
-                    ko.computed({
-                    read: function () {
-                    var val = ko.toJS(ko.utils.unwrapObservable(value));
-                    if (updatingFromEvents) {
-                    return;
-                    }
-                    if (optType && optType === 'numeric') {
-                    var parsedVal = parseFloat(val);
-                    val = isNaN(parsedVal) ? val : parsedVal;
-                    }
-                    updatingFromOtherObservables = true;
-                    $(element)[widgetName]("option", key, val);
-                    updatingFromOtherObservables = false;
-                    },
-                    disposeWhenNodeIsRemoved: element
-                    });
-                    */
                     if (!ko.isObservable(value)) {
                         return true;
                     }
@@ -108,15 +88,6 @@
                                 } else {
                                     var newVal = $(element)[widgetName]("option", key);
 
-                                    //if (optType && optType === 'array' && value.removeAll) {
-                                    // //value.removeAll();
-                                    // //ko.utils.arrayPushAll(value, newVal);
-                                    // //////take advantage of push accepting variable arguments
-                                    // ////value.push.apply(value, newItems);   
-                                    // value(newVal);
-                                    //} else {
-                                    // value(newVal);
-                                    //}
                                     //TODO: If newVal is reference type, we should extend it before assignment
                                     value(newVal);
                                 }
@@ -125,10 +96,6 @@
                             });
                         });
                     }
-                    //if (ko.isObservable(value) && value.subscribe) {
-                    //	value.subscribe(function (newValue) {
-                    //	});
-                    //}
                 });
             };
 
@@ -144,10 +111,6 @@
                 //	Inside a nested binding context, this parameter will be set to the current data item 
                 //	(e.g., inside a with: person binding, viewModel will be set to person).
 
-                //If return, the binding.update will not fire again.
-                //if (updatingFromEvents) {
-                //    return;
-                //}
                 var valueUnwrapped = ko.utils.unwrapObservable(valueAccessor());
                 $.each(valueUnwrapped, function (key, value) {
                     //The observable can be used like following: style: { width: percentMax() * 100 + '%' },
@@ -164,9 +127,7 @@
                             val = isNaN(parsedVal) ? val : parsedVal;
                         }
                         if (!equals(val, widgetVal)) {
-                            //updatingFromOtherObservables = true;
                             updateOptions(element, widgetName, key, val);
-                            //updatingFromOtherObservables = false;
                         }
                     }
 
@@ -176,7 +137,6 @@
             executeOptions = function (element, widgetName) {
                 var data = $(element).data(widgetName + '_ko'), hash = (data) ? data : {};
                 if (!$.isEmptyObject(hash)) {
-                    //console.log("*** executing hash");
                     $(element).data(widgetName + '_ko', 0);
                     for (var key in hash) {
                         var val = hash[key];
@@ -259,430 +219,424 @@
             disabled: {},
             stacked: {},
             header: {
-        },
-        dataSource: {},
-        seriesList: {
-            type: 'array',
-            attachEvents: ['serieschanged']
-        },
-        seriesStyles: {
-            type: 'array'
-        },
-        seriesHoverStyles: {
-            type: 'array'
+            },
+            dataSource: {},
+            seriesList: {
+                type: 'array',
+                attachEvents: ['serieschanged']
+            },
+            seriesStyles: {
+                type: 'array'
+            },
+            seriesHoverStyles: {
+                type: 'array'
+            }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijbubblechart",
-    observableOptions: {
-        disabled: {},
-        dataSource: {},
-        seriesList: {
-            type: 'array',
-            attachEvents: ['serieschanged']
-        },
-        seriesStyles: {
-            type: 'array'
-        },
-        seriesHoverStyles: {
-            type: 'array'
+    createCustomBinding({
+        widgetName: "wijbubblechart",
+        observableOptions: {
+            disabled: {},
+            dataSource: {},
+            seriesList: {
+                type: 'array',
+                attachEvents: ['serieschanged']
+            },
+            seriesStyles: {
+                type: 'array'
+            },
+            seriesHoverStyles: {
+                type: 'array'
+            }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijcompositechart",
-    observableOptions: {
-        disabled: {},
-        dataSource: {},
-        seriesList: {
-            type: 'array',
-            attachEvents: ['serieschanged']
-        },
-        seriesStyles: {
-            type: 'array'
-        },
-        seriesHoverStyles: {
-            type: 'array'
+    createCustomBinding({
+        widgetName: "wijcompositechart",
+        observableOptions: {
+            disabled: {},
+            dataSource: {},
+            seriesList: {
+                type: 'array',
+                attachEvents: ['serieschanged']
+            },
+            seriesStyles: {
+                type: 'array'
+            },
+            seriesHoverStyles: {
+                type: 'array'
+            }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijlinechart",
-    observableOptions: {
-        disabled: {},
-        dataSource: {},
-        seriesList: {
-            type: 'array',
-            attachEvents: ['serieschanged']
-        },
-        seriesStyles: {
-            type: 'array'
-        },
-        seriesHoverStyles: {
-            type: 'array'
+    createCustomBinding({
+        widgetName: "wijlinechart",
+        observableOptions: {
+            disabled: {},
+            dataSource: {},
+            seriesList: {
+                type: 'array',
+                attachEvents: ['serieschanged']
+            },
+            seriesStyles: {
+                type: 'array'
+            },
+            seriesHoverStyles: {
+                type: 'array'
+            }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijpiechart",
-    observableOptions: {
-        disabled: {},
-        dataSource: {},
-        seriesList: {
-            type: 'array',
-            attachEvents: ['serieschanged']
-        },
-        seriesStyles: {
-            type: 'array'
-        },
-        seriesHoverStyles: {
-            type: 'array'
+    createCustomBinding({
+        widgetName: "wijpiechart",
+        observableOptions: {
+            disabled: {},
+            dataSource: {},
+            seriesList: {
+                type: 'array',
+                attachEvents: ['serieschanged']
+            },
+            seriesStyles: {
+                type: 'array'
+            },
+            seriesHoverStyles: {
+                type: 'array'
+            }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijscatterchart",
-    observableOptions: {
-        disabled: {},
-        dataSource: {},
-        seriesList: {
-            type: 'array',
-            attachEvents: ['serieschanged']
-        },
-        seriesStyles: {
-            type: 'array'
-        },
-        seriesHoverStyles: {
-            type: 'array'
+    createCustomBinding({
+        widgetName: "wijscatterchart",
+        observableOptions: {
+            disabled: {},
+            dataSource: {},
+            seriesList: {
+                type: 'array',
+                attachEvents: ['serieschanged']
+            },
+            seriesStyles: {
+                type: 'array'
+            },
+            seriesHoverStyles: {
+                type: 'array'
+            }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijlineargauge",
-    observableOptions: {
-        disabled: {},
-        min: {
-            type: 'numeric'
-        },
-        max: {
-            type: 'numeric'
-        },
-        value: {
-            type: 'numeric'
-        },
-        ranges: {
-            type: 'array'
+    createCustomBinding({
+        widgetName: "wijlineargauge",
+        observableOptions: {
+            disabled: {},
+            min: {
+                type: 'numeric'
+            },
+            max: {
+                type: 'numeric'
+            },
+            value: {
+                type: 'numeric'
+            },
+            ranges: {
+                type: 'array'
+            }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijradialgauge",
-    observableOptions: {
-        disabled: {},
-        min: {
-            type: 'numeric'
-        },
-        max: {
-            type: 'numeric'
-        },
-        value: {
-            type: 'numeric'
-        },
-        ranges: {
-            type: 'array'
+    createCustomBinding({
+        widgetName: "wijradialgauge",
+        observableOptions: {
+            disabled: {},
+            min: {
+                type: 'numeric'
+            },
+            max: {
+                type: 'numeric'
+            },
+            value: {
+                type: 'numeric'
+            },
+            ranges: {
+                type: 'array'
+            }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijslider",
-    observableOptions: {
-        disabled: {},
-        animate: {},
-        max: {
-            type: 'numeric'
-        },
-        min: {
-            type: 'numeric'
-        },
-        orientation: {},
-        range: {},
-        step: {
-            type: 'numeric'
-        },
-        value: {
-            type: 'numeric',
-            attachEvents: ['change', 'slide']
-        },
-        values: {
-            type: 'array',
-            attachEvents: ['change', 'slide']
-        },
-        dragFill: {},
-        minRange: {
-            type: 'numeric'
+    createCustomBinding({
+        widgetName: "wijslider",
+        observableOptions: {
+            disabled: {},
+            animate: {},
+            max: {
+                type: 'numeric'
+            },
+            min: {
+                type: 'numeric'
+            },
+            orientation: {},
+            range: {},
+            step: {
+                type: 'numeric'
+            },
+            value: {
+                type: 'numeric',
+                attachEvents: ['change', 'slide']
+            },
+            values: {
+                type: 'array',
+                attachEvents: ['change', 'slide']
+            },
+            dragFill: {},
+            minRange: {
+                type: 'numeric'
+            }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijprogressbar",
-    observableOptions: {
-        disabled: {},
-        value: {
-            type: 'numeric',
-            attachEvents: ['change']
-        },
-        labelAlign: {},
-        maxValue: {
-            type: 'numeric'
-        },
-        minValue: {
-            type: 'numeric'
-        },
-        fillDirection: {},
-        orientation: {},
-        labelFormatString: {},
-        toolTipFormatString: {},
-        indicatorIncrement: {
-            type: 'numeric'
-        },
-        indicatorImage: {},
-        animationDelay: {
-            type: 'numeric'
-        },
-        animationOptions: {}
-    }
-});
-
-createCustomBinding({
-    widgetName: "wijrating",
-    observableOptions: {
-        disabled: {},
-        min: {
-            type: 'numeric'
-        },
-        max: {
-            type: 'numeric'
-        },
-        value: {
-            type: 'numeric',
-            attachEvents: ['rated', 'reset']
-        },
-        count: {
-            type: 'numeric'
-        },
-        totalValue: {
-            type: 'numeric'
-        },
-        split: {
-            type: 'numeric'
+    createCustomBinding({
+        widgetName: "wijprogressbar",
+        observableOptions: {
+            disabled: {},
+            value: {
+                type: 'numeric',
+                attachEvents: ['change']
+            },
+            labelAlign: {},
+            maxValue: {
+                type: 'numeric'
+            },
+            minValue: {
+                type: 'numeric'
+            },
+            fillDirection: {},
+            orientation: {},
+            labelFormatString: {},
+            toolTipFormatString: {},
+            indicatorIncrement: {
+                type: 'numeric'
+            },
+            indicatorImage: {},
+            animationDelay: {
+                type: 'numeric'
+            },
+            animationOptions: {}
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijgallery",
-    observableOptions: {
-        disabled: {},
-        autoPlay: {},
-        showTimer: {},
-        interval: {
-            type: 'numeric'
-        },
-        showCaption: {},
-        //data: {
-        //	type: 'array'
-        //},
-        showCounter: {},
-        showPager: {},
-        thumbnails: {},
-        thumbsDisplay: {
-            type: 'numeric'
+    createCustomBinding({
+        widgetName: "wijrating",
+        observableOptions: {
+            disabled: {},
+            min: {
+                type: 'numeric'
+            },
+            max: {
+                type: 'numeric'
+            },
+            value: {
+                type: 'numeric',
+                attachEvents: ['rated', 'reset']
+            },
+            count: {
+                type: 'numeric'
+            },
+            totalValue: {
+                type: 'numeric'
+            },
+            split: {
+                type: 'numeric'
+            }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijcarousel",
-    observableOptions: {
-        disabled: {},
-        auto: {},
-        showTimer: {},
-        interval: {
-            type: 'numeric'
-        },
-        loop: {},
-        //data: {
-        //	type: 'array'
-        //},
-        showPager: {},
-        showCaption: {},
-        display: {
-            type: 'numeric'
-        },
-        preview: {},
-        step: {
-            type: 'numeric'
+    createCustomBinding({
+        widgetName: "wijgallery",
+        observableOptions: {
+            disabled: {},
+            autoPlay: {},
+            showTimer: {},
+            interval: {
+                type: 'numeric'
+            },
+            showCaption: {},
+            showCounter: {},
+            showPager: {},
+            thumbnails: {},
+            thumbsDisplay: {
+                type: 'numeric'
+            }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijsplitter",
-    observableOptions: {
-        disabled: {},
-        showExpander: {},
-        splitterDistance: {
-            type: 'numeric',
-            attachEvents: ['sized']
-        },
-        fullSplit: {}
-    }
-});
+    createCustomBinding({
+        widgetName: "wijcarousel",
+        observableOptions: {
+            disabled: {},
+            auto: {},
+            showTimer: {},
+            interval: {
+                type: 'numeric'
+            },
+            loop: {},
+            showPager: {},
+            showCaption: {},
+            display: {
+                type: 'numeric'
+            },
+            preview: {},
+            step: {
+                type: 'numeric'
+            }
+        }
+    });
 
-createCustomBinding({
-    widgetName: "wijsuperpanel",
-    observableOptions: {
-        disabled: {},
-        allowResize: {},
-        autoRefresh: {},
-        mouseWheelSupport: {},
-        showRounder: {}
-    }
-});
+    createCustomBinding({
+        widgetName: "wijsplitter",
+        observableOptions: {
+            disabled: {},
+            showExpander: {},
+            splitterDistance: {
+                type: 'numeric',
+                attachEvents: ['sized']
+            },
+            fullSplit: {}
+        }
+    });
 
-createCustomBinding({
-    widgetName: "wijtooltip",
-    observableOptions: {
-        disabled: {},
-        closeBehavior: {},
-        mouseTrailing: {},
-        showCallout: {},
-        showDelay: {
-            type: 'numeric'
-        },
-        hideDelay: {
-            type: 'numeric'
-        },
-        calloutFilled: {},
-        modal: {},
-        triggers: {}
-    }
-});
+    createCustomBinding({
+        widgetName: "wijsuperpanel",
+        observableOptions: {
+            disabled: {},
+            allowResize: {},
+            autoRefresh: {},
+            mouseWheelSupport: {},
+            showRounder: {}
+        }
+    });
 
-createCustomBinding({
-    widgetName: "wijvideo",
-    observableOptions: {
-        disabled: {},
-        fullScreenButtonVisible: {},
-        showControlsOnHover: {}
-    }
-});
+    createCustomBinding({
+        widgetName: "wijtooltip",
+        observableOptions: {
+            disabled: {},
+            closeBehavior: {},
+            mouseTrailing: {},
+            showCallout: {},
+            showDelay: {
+                type: 'numeric'
+            },
+            hideDelay: {
+                type: 'numeric'
+            },
+            calloutFilled: {},
+            modal: {},
+            triggers: {}
+        }
+    });
 
-createCustomBinding({
-    widgetName: "wijtabs",
-    observableOptions: {
-        disabled: {},
-        collapsible: {}
-    }
-});
+    createCustomBinding({
+        widgetName: "wijvideo",
+        observableOptions: {
+            disabled: {},
+            fullScreenButtonVisible: {},
+            showControlsOnHover: {}
+        }
+    });
 
-createCustomBinding({
-    widgetName: "wijexpander",
-    observableOptions: {
-        disabled: {},
-        allowExpand: {},
-        expanded: {
-            attachEvents: ['aftercollapse', 'afterexpand']
-        },
-        expandDirection: {}
-    }
-});
+    createCustomBinding({
+        widgetName: "wijtabs",
+        observableOptions: {
+            disabled: {},
+            collapsible: {}
+        }
+    });
 
-createCustomBinding({
-    widgetName: "wijdialog",
-    observableOptions: {
-        disabled: {},
-        autoOpen: {},
-        draggable: {},
-        modal: {},
-        resizable: {}
-    }
-});
+    createCustomBinding({
+        widgetName: "wijexpander",
+        observableOptions: {
+            disabled: {},
+            allowExpand: {},
+            expanded: {
+                attachEvents: ['aftercollapse', 'afterexpand']
+            },
+            expandDirection: {}
+        }
+    });
 
-createCustomBinding({
-    widgetName: "wijcalendar",
-    observableOptions: {
-        disabled: {},
-        showTitle: {},
-        showWeekDays: {},
-        showWeekNumbers: {},
-        showOtherMonthDays: {},
-        showDayPadding: {},
-        allowPreview: {},
-        allowQuciPick: {},
-        popupMode: {},
-        selectedDates: {
-            type: 'array',
-            attachEvents: ['selecteddateschanged'],
-            onChange: function (widgetInstance, viewModelValue, originalEventArgs) {
-                var dates = originalEventArgs[1].dates;
-                if (ko.isObservable(viewModelValue)) {
-                    viewModelValue(dates);
-                } else {
-                    viewModelValue = dates;
+    createCustomBinding({
+        widgetName: "wijdialog",
+        observableOptions: {
+            disabled: {},
+            autoOpen: {},
+            draggable: {},
+            modal: {},
+            resizable: {}
+        }
+    });
+
+    createCustomBinding({
+        widgetName: "wijcalendar",
+        observableOptions: {
+            disabled: {},
+            showTitle: {},
+            showWeekDays: {},
+            showWeekNumbers: {},
+            showOtherMonthDays: {},
+            showDayPadding: {},
+            allowPreview: {},
+            allowQuciPick: {},
+            popupMode: {},
+            selectedDates: {
+                type: 'array',
+                attachEvents: ['selecteddateschanged'],
+                onChange: function (widgetInstance, viewModelValue, originalEventArgs) {
+                    var dates = originalEventArgs[1].dates;
+                    if (ko.isObservable(viewModelValue)) {
+                        viewModelValue(dates);
+                    } else {
+                        viewModelValue = dates;
+                    }
                 }
             }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijaccordion",
-    observableOptions: {
-        disabled: {},
-        requireOpenedPane: {},
-        selectedIndex: {
-            attachEvents: ['selectedindexchanged']
+    createCustomBinding({
+        widgetName: "wijaccordion",
+        observableOptions: {
+            disabled: {},
+            requireOpenedPane: {},
+            selectedIndex: {
+                attachEvents: ['selectedindexchanged']
+            }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijtree",
-    observableOptions: {
-        disabled: {},
-        allowTriState: {},
-        autoCheckNodes: {},
-        autoCollapse: {},
-        showCheckBoxes: {},
-        showExpandCollapse: {},
-        nodes: {
-            type: "array",
-            attachEvents: ['nodeCheckChanged', 'nodeCollapsed', 'nodeExpanded',
+    createCustomBinding({
+        widgetName: "wijtree",
+        observableOptions: {
+            disabled: {},
+            allowTriState: {},
+            autoCheckNodes: {},
+            autoCollapse: {},
+            showCheckBoxes: {},
+            showExpandCollapse: {},
+            nodes: {
+                type: "array",
+                attachEvents: ['nodeCheckChanged', 'nodeCollapsed', 'nodeExpanded',
                                'nodeTextChanged', 'selectedNodeChanged']
+            }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijgrid",
-    observableOptions: {
-        disabled: {},
-        data: {
-            type: 'array',
-            attachEvents: ['aftercelledit'],
-            onChange: function (widgetInstance, viewModelValue, originalEventArgs) {
-                var cell = originalEventArgs[1].cell,
+    createCustomBinding({
+        widgetName: "wijgrid",
+        observableOptions: {
+            disabled: {},
+            data: {
+                type: 'array',
+                attachEvents: ['aftercelledit'],
+                onChange: function (widgetInstance, viewModelValue, originalEventArgs) {
+                    var cell = originalEventArgs[1].cell,
                         rowIndex = cell.row().dataItemIndex,
                         dataKey = cell.column().dataKey,
                         newValue = cell.value(),
@@ -691,210 +645,216 @@ createCustomBinding({
                             : viewModelValue[rowIndex];
 
 
-                if ($.isFunction(rowToUpdate[dataKey])) {
-                    rowToUpdate[dataKey](newValue);
-                } else {
-                    rowToUpdate[dataKey] = newValue;
+                    if ($.isFunction(rowToUpdate[dataKey])) {
+                        rowToUpdate[dataKey](newValue);
+                    } else {
+                        rowToUpdate[dataKey] = newValue;
+                    }
                 }
             }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijevcal",
-    observableOptions: {
-        disabled: {},
-        eventsData: {
-            type: 'array',
-            attachEvents: ['eventsdatachanged']
-        },
-        /* note, appointments options is deprecated, 
-        use eventsData option instead*/
-        appointments: {
-            type: 'array',
-            attachEvents: ['eventsdatachanged']
+    createCustomBinding({
+        widgetName: "wijevcal",
+        observableOptions: {
+            disabled: {},
+            eventsData: {
+                type: 'array',
+                attachEvents: ['eventsdatachanged']
+            },
+            appointments: {
+                type: 'array',
+                attachEvents: ['eventsdatachanged']
+            }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijpager",
-    observableOptions: {
-        disabled: {},
-        pageCount: { type: "numeric" },
-        pageIndex: {
-            type: "numeric",
-            attachEvents: ['pageindexchanged']
+    createCustomBinding({
+        widgetName: "wijpager",
+        observableOptions: {
+            disabled: {},
+            pageCount: { type: "numeric" },
+            pageIndex: {
+                type: "numeric",
+                attachEvents: ['pageindexchanged']
+            }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijeditor",
-    observableOptions: {
-        disabled: {},
-        editorMode: {},
-        showPathSelector: {},
-        mode: {},
-        showFooter: {}
-    }
-});
-
-createCustomBinding({
-    widgetName: "wijlist",
-    observableOptions: {
-        disabled: {},
-        listItems: {
-            type: 'array'
-        },
-        selectionMode: {},
-        autoSize: {},
-        maxItemsCount: {
-            type: 'numeric'
-        },
-        addHoverItemClass: {},
-        keepHightlightOnMouseLeave: {}
-    }
-});
-
-createCustomBinding({
-    widgetName: "wijcombobox",
-    observableOptions: {
-        disabled: {},
-        data: {
-            type: 'array'
-        },
-        labelText: {},
-        showTrigger: {},
-        triggerPosition: {},
-        autoFilter: {},
-        autoComplete: {},
-        highlightMatching: {},
-        selectionMode: {},
-        isEditable: {},
-        selectedIndex: {
-            type: 'numeric',
-            attachEvents: ['changed']
+    createCustomBinding({
+        widgetName: "wijeditor",
+        observableOptions: {
+            disabled: {},
+            editorMode: {},
+            showPathSelector: {},
+            mode: {},
+            showFooter: {}
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "wijmenu",
-    observableOptions: {
-        disabled: {},
-        trigger: {},
-        triggerEvent: {},
-        mode: {},
-        checkable: {},
-        orientation: {}
-    }
-});
-
-createCustomBinding({
-    widgetName: "wijtextbox",
-    observableOptions: {}
-});
-
-createCustomBinding({
-    widgetName: "wijdropdown",
-    observableOptions: {}
-});
-
-createCustomBinding({
-    widgetName: "wijcheckbox",
-    observableOptions: {}
-});
-
-createCustomBinding({
-    widgetName: "wijradio",
-    observableOptions: {}
-});
-
-
-//jQuery UI Bindings
-
-createCustomBinding({
-    widgetName: "accordion",
-    observableOptions: {
-        disabled: {}
-    }
-});
-
-createCustomBinding({
-    widgetName: "autocomplete",
-    observableOptions: {
-        disabled: {},
-        source: {}
-    }
-});
-
-createCustomBinding({
-    widgetName: "button",
-    observableOptions: {
-        disabled: {},
-        label: {}
-    }
-});
-
-createCustomBinding({
-    widgetName: "datepicker",
-    observableOptions: {
-        disabled: {}
-    }
-});
-
-createCustomBinding({
-    widgetName: "dialog",
-    observableOptions: {
-        disabled: {},
-        autoOpen: {},
-        draggable: {},
-        modal: {},
-        resizable: {}
-    }
-});
-
-createCustomBinding({
-    widgetName: "progressbar",
-    observableOptions: {
-        disabled: {},
-        value: {
-            type: 'numeric'
+    createCustomBinding({
+        widgetName: "wijlist",
+        observableOptions: {
+            disabled: {},
+            listItems: {
+                type: 'array'
+            },
+            selectionMode: {},
+            autoSize: {},
+            maxItemsCount: {
+                type: 'numeric'
+            },
+            addHoverItemClass: {},
+            keepHightlightOnMouseLeave: {}
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "slider",
-    observableOptions: {
-        disabled: {},
-        value: {
-            type: 'numeric',
-            attachEvents: ['change']
-        },
-        min: {
-            type: 'numeric'
-        },
-        max: {
-            type: 'numeric'
-        },
-        values: {
-            type: 'array',
-            attachEvents: ['change']
+    createCustomBinding({
+        widgetName: "wijcombobox",
+        observableOptions: {
+            disabled: {},
+            data: {
+                type: 'array'
+            },
+            labelText: {},
+            showTrigger: {},
+            triggerPosition: {},
+            autoFilter: {},
+            autoComplete: {},
+            highlightMatching: {},
+            selectionMode: {},
+            isEditable: {},
+            selectedIndex: {
+                type: 'numeric',
+                attachEvents: ['changed']
+            }
         }
-    }
-});
+    });
 
-createCustomBinding({
-    widgetName: "tabs",
-    observableOptions: {
-        disabled: {},
-        selected: {
-            type: 'numeric'
+    createCustomBinding({
+        widgetName: "wijmenu",
+        observableOptions: {
+            disabled: {},
+            trigger: {},
+            triggerEvent: {},
+            mode: {},
+            checkable: {},
+            orientation: {}
         }
-    }
-});
+    });
+
+    createCustomBinding({
+        widgetName: "wijtextbox",
+        observableOptions: {
+            disabled: {}
+        }
+    });
+
+    createCustomBinding({
+        widgetName: "wijdropdown",
+        observableOptions: {
+            disabled: {}
+        }
+    });
+
+    createCustomBinding({
+        widgetName: "wijcheckbox",
+        observableOptions: {
+            disabled: {}
+        }
+    });
+
+    createCustomBinding({
+        widgetName: "wijradio",
+        observableOptions: {
+            disabled: {}
+        }
+    });
+
+
+    //jQuery UI Bindings
+
+    createCustomBinding({
+        widgetName: "accordion",
+        observableOptions: {
+            disabled: {}
+        }
+    });
+
+    createCustomBinding({
+        widgetName: "autocomplete",
+        observableOptions: {
+            disabled: {},
+            source: {}
+        }
+    });
+
+    createCustomBinding({
+        widgetName: "button",
+        observableOptions: {
+            disabled: {},
+            label: {}
+        }
+    });
+
+    createCustomBinding({
+        widgetName: "datepicker",
+        observableOptions: {
+            disabled: {}
+        }
+    });
+
+    createCustomBinding({
+        widgetName: "dialog",
+        observableOptions: {
+            disabled: {},
+            autoOpen: {},
+            draggable: {},
+            modal: {},
+            resizable: {}
+        }
+    });
+
+    createCustomBinding({
+        widgetName: "progressbar",
+        observableOptions: {
+            disabled: {},
+            value: {
+                type: 'numeric'
+            }
+        }
+    });
+
+    createCustomBinding({
+        widgetName: "slider",
+        observableOptions: {
+            disabled: {},
+            value: {
+                type: 'numeric',
+                attachEvents: ['change']
+            },
+            min: {
+                type: 'numeric'
+            },
+            max: {
+                type: 'numeric'
+            },
+            values: {
+                type: 'array',
+                attachEvents: ['change']
+            }
+        }
+    });
+
+    createCustomBinding({
+        widgetName: "tabs",
+        observableOptions: {
+            disabled: {},
+            selected: {
+                type: 'numeric'
+            }
+        }
+    });
 
 } (jQuery, ko));

@@ -17,8 +17,11 @@
 	<script src="../../wijmo/jquery.wijmo.wijsplitter.js" type="text/javascript"></script>
 	<script id="scriptInit" type="text/javascript">
 		$(document).ready(function () {
-			$("#vsplitter").wijsplitter({ orientation: "vertical" });
-			$("#hsplitter").wijsplitter({ orientation: "horizontal" });
+		    $("#vsplitter1").wijsplitter({ orientation: "vertical" });
+		    $("#vsplitter2").wijsplitter({ orientation: "vertical", collapsingPanel: "panel2" });
+		    $("#hsplitter1").wijsplitter({ orientation: "horizontal" });
+		    $("#hsplitter2").wijsplitter({ orientation: "horizontal", collapsingPanel: "panel2" });
+
 		});
 	</script>
 	<style type="text/css">
@@ -27,11 +30,12 @@
 			height: 210px;
 		}
 		
-		#vsplitter, #hsplitter
-		{
-			width: 200px;
-			height: 200px;
-		}
+		 #vsplitter1, #hsplitter1, #vsplitter2, #hsplitter2
+        {
+            width: 200px;
+            height: 200px;
+        }
+        
 		
 		.layout
 		{
@@ -48,31 +52,57 @@
 		<div class="main demo">
 			<!-- Begin demo markup -->
 			<div class="splitterContainer">
-				<div class="layout">
-					<h3>Vertical</h3>
-					<div id="vsplitter">
-						<div>
-							panel1
-						</div>
-						<div>
-							panel2
-						</div>
-					</div>
-				</div>
-				<div class="layout" style="width: 100px;">
-					&nbsp;</div>
-				<div class="layout">
-					<h3>Horizontal</h3>
-					<div id="hsplitter">
-						<div>
-							panel1
-						</div>
-						<div>
-							panel2
-						</div>
-					</div>
-				</div>
-			</div>
+                <div class="layout">
+                    <h3>
+                        Vertical</h3>
+                    <h4>
+                        Collapsing Panel: panel1</h4>
+                    <div id="vsplitter1">
+                        <div>
+                            panel1
+                        </div>
+                        <div>
+                            panel2
+                        </div>
+                    </div>
+                    <h4>
+                        Collapsing Panel: panel2</h4>
+                    <div id="vsplitter2">
+                        <div>
+                            panel1
+                        </div>
+                        <div>
+                            panel2
+                        </div>
+                    </div>
+                </div>
+                <div class="layout" style="width: 100px;">
+                    &nbsp;</div>
+                <div class="layout">
+                    <h3>
+                        Horizontal</h3>
+                    <h4>
+                        Collapsing Panel: panel1</h4>
+                    <div id="hsplitter1">
+                        <div>
+                            panel1
+                        </div>
+                        <div>
+                            panel2
+                        </div>
+                    </div>
+                    <h4>
+                        Collapsing Panel: panel2</h4>
+                    <div id="hsplitter2">
+                        <div>
+                            panel1
+                        </div>
+                        <div>
+                            panel2
+                        </div>
+                    </div>
+                </div>
+            </div>
 			<!-- End demo markup -->
 			<div class="demo-options">
 				<!-- Begin options markup -->

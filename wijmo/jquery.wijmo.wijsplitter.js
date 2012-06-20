@@ -1,7 +1,7 @@
 /*globals window,document,jQuery*/
 /*
 *
-* Wijmo Library 2.1.1
+* Wijmo Library 2.1.2
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -29,10 +29,20 @@
 		hSplitterCssPrefix = splitterCssPrefix + "h-",
 		vSplitterCssPrefix = splitterCssPrefix + "v-",
 		contentCssSuffix = "-content",
-		pnl1Css = "panel1",
-		pnl2Css = "panel2",
-		pnl1ContentCss = pnl1Css + contentCssSuffix,
-		pnl2ContentCss = pnl2Css + contentCssSuffix,
+		//pnl1Css = "panel1",
+		//pnl2Css = "panel2",
+		panelCss = {
+			panel1: {
+				n: "panel1",
+				content: "panel1" + contentCssSuffix
+			},
+			panel2: {
+				n: "panel2",
+				content: "panel2" + contentCssSuffix
+			}
+		},
+		//pnl1ContentCss = pnl1Css + contentCssSuffix,
+		//pnl2ContentCss = pnl2Css + contentCssSuffix,
 		barCss = "bar",
 		expanderCss = "expander",
 		widgetHeaderCss = "ui-widget-header",
@@ -244,7 +254,14 @@
 				/// Type: String.
 				///	</summary>
 				scrollBars: "auto"
-			}
+			},
+			/// <summary>
+			/// Specifies which panel should be collapsed after clicking the expander of splitter.
+			/// Possible values are: "panel1" & "panel2".
+			/// Default: "panel1".
+			/// Type: String.
+			/// </summary>
+			collapsingPanel: "panel1"
 		},
 
 		_setOption: function (key, value) {
@@ -273,6 +290,8 @@
 
 			if (oldValue !== value) {
 				if (key === "orientation") {
+					self.refresh();
+				} else if (key === "collapsingPanel") {
 					self.refresh();
 				} else if (key === "fullSplit") {
 					self.refresh(true, false);
@@ -368,6 +387,7 @@
 				expander = fields.expander,
 				bar = fields.bar,
 				panel1 = fields.panel1,
+				panel2 = fields.panel2,
 				originalStyle = fields.originalStyle,
 				widgetName = self.widgetName,
 				oriPnl1Content = fields.oriPnl1Content,
@@ -375,13 +395,13 @@
 				oriPnl1ContentStyle = fields.oriPnl1ContentStyle,
 				oriPnl2ContentStyle = fields.oriPnl2ContentStyle;
 
-			if (panel1 && panel1.is(":ui-resizable")) {
-				panel1.resizable('destroy');
+			if (panel1 && panel1.n.is(":ui-resizable")) {
+				panel1.n.resizable('destroy');
 			}
 
 			if (oriPnl1Content) {
-				oriPnl1Content.removeClass(vSplitterCssPrefix + pnl1ContentCss +
-				" " + hSplitterCssPrefix + pnl1ContentCss +
+				oriPnl1Content.removeClass(vSplitterCssPrefix + panel1.contentCss +
+				" " + hSplitterCssPrefix + panel1.contentCss +
 				" " + widgetContentCss);
 
 				if (oriPnl1ContentStyle === undefined) {
@@ -394,8 +414,8 @@
 			}
 
 			if (oriPnl2Content) {
-				oriPnl2Content.removeClass(vSplitterCssPrefix + pnl2ContentCss +
-				" " + hSplitterCssPrefix + pnl2ContentCss +
+				oriPnl2Content.removeClass(vSplitterCssPrefix + panel2.contentCss +
+				" " + hSplitterCssPrefix + panel2.contentCss +
 				" " + widgetContentCss);
 
 				if (oriPnl2ContentStyle === undefined) {
@@ -407,7 +427,7 @@
 				oriPnl2Content.appendTo(element);
 			}
 
-			panel1.unbind('.' + widgetName);
+			panel1.n.unbind('.' + widgetName);
 			expander.unbind('.' + widgetName);
 			bar.unbind('.' + widgetName);
 			$(window).unbind('.' + widgetName);
@@ -456,8 +476,8 @@
 			self._updateElements();
 
 			if (size || size === undefined) {
-				if (panel1 && panel1.is(":ui-resizable")) {
-					panel1.resizable('destroy');
+				if (panel1 && panel1.n.is(":ui-resizable")) {
+					panel1.n.resizable('destroy');
 				}
 
 				self._initResizer();
@@ -469,28 +489,27 @@
 				element = self.element,
 				o = self.options,
 				fields = self._fields,
-				wrapper, pnl1, pnl2, pnl1Content, pnl2Content,
-				bar, expander, icon;
+				wrapper, bar, expander, icon,
+				pnl1 = { n: null, content: element.find(">div:eq(0)")},
+				pnl2 = { n: null, content: element.find(">div:eq(1)")};
 
-			pnl1Content = element.find(">div:eq(0)");
-			pnl2Content = element.find(">div:eq(1)");
 			fields.originalStyle = element.attr("style");
 
 			//create wrapper
 			wrapper = $("<div></div>").appendTo(element);
 
 			//create panel1
-			pnl1 = $("<div></div>").appendTo(wrapper);
+			pnl1.n = $("<div></div>").appendTo(wrapper);
 
 			//create panel1 content if needed.
-			if (pnl1Content.length === 0) {
-				pnl1Content = $("<div></div>");
+			if (pnl1.content.length === 0) {
+				pnl1.content = $("<div></div>");
 			} else {
-				fields.oriPnl1Content = pnl1Content;
-				fields.oriPnl1ContentStyle = pnl1Content.attr("style");
+				fields.oriPnl1Content = pnl1.content;
+				fields.oriPnl1ContentStyle = pnl1.content.attr("style");
 			}
 
-			pnl1Content.appendTo(pnl1);
+			pnl1.content.appendTo(pnl1.n);
 
 			//create bar.
 			bar = $("<div></div>").appendTo(wrapper);
@@ -507,23 +526,21 @@
 			icon = $("<span></span>").appendTo(expander);
 
 			//create panel2
-			pnl2 = $("<div></div>").appendTo(wrapper);
+			pnl2.n = $("<div></div>").appendTo(wrapper);
 
 			//create panel2 content if needed.
-			if (pnl2Content.length === 0) {
-				pnl2Content = $("<div></div>");
+			if (pnl2.content.length === 0) {
+				pnl2.content = $("<div></div>");
 			} else {
-				fields.oriPnl2Content = pnl2Content;
-				fields.oriPnl2ContentStyle = pnl2Content.attr("style");
+				fields.oriPnl2Content = pnl2.content;
+				fields.oriPnl2ContentStyle = pnl2.content.attr("style");
 			}
 
-			pnl2Content.appendTo(pnl2);
+			pnl2.content.appendTo(pnl2.n);
 
 			fields.wrapper = wrapper;
 			fields.panel1 = pnl1;
-			fields.pnl1Content = pnl1Content;
 			fields.panel2 = pnl2;
-			fields.pnl2Content = pnl2Content;
 			fields.bar = bar;
 			fields.expander = expander;
 			fields.icon = icon;
@@ -536,10 +553,8 @@
 				isVertical = o.orientation === "vertical",
 				fields = self._fields,
 				wrapper = fields.wrapper,
-				pnl1 = fields.panel1,
-				pnl2 = fields.panel2,
-				pnl1Content = fields.pnl1Content,
-				pnl2Content = fields.pnl2Content,
+				collapsingPanel = o.collapsingPanel,
+				otherPanel = o.collapsingPanel === 'panel1' ? 'panel2': 'panel1',
 				bar = fields.bar,
 				expander = fields.expander,
 				icon = fields.icon;
@@ -561,17 +576,20 @@
 			wrapper.attr("class", wrapperCss);
 
 			//add class to panel1
-			pnl1.removeClass(vSplitterCssPrefix + pnl1Css + " " +
-					hSplitterCssPrefix + pnl1Css)
+			fields[collapsingPanel].n.removeClass(
+					vSplitterCssPrefix + panelCss[collapsingPanel].n + " " +
+					hSplitterCssPrefix + panelCss[collapsingPanel].n)
 				.addClass((isVertical ? vSplitterCssPrefix :
-					hSplitterCssPrefix) + pnl1Css);
+					hSplitterCssPrefix) + panelCss[collapsingPanel].n);
 
 			//add class to panel1 content.
-			pnl1Content.removeClass(vSplitterCssPrefix + pnl1ContentCss +
-				" " + hSplitterCssPrefix + pnl1ContentCss +
-				" " + widgetContentCss)
+			fields[collapsingPanel].content.removeClass(
+					vSplitterCssPrefix + panelCss[collapsingPanel].content + " " +
+					hSplitterCssPrefix + panelCss[collapsingPanel].content + " " +
+					widgetContentCss)
 				.addClass((isVertical ? vSplitterCssPrefix :
-					hSplitterCssPrefix) + pnl1ContentCss + " " + widgetContentCss);
+					hSplitterCssPrefix) + panelCss[collapsingPanel].content + " " + widgetContentCss);
+
 
 			//add class to bar.
 			bar.attr("class", (isVertical ? vSplitterCssPrefix :
@@ -589,17 +607,20 @@
 					(isVertical ? "w" : "n"));
 
 			//add class to panel2
-			pnl2.removeClass(vSplitterCssPrefix + pnl2Css + " " +
-					hSplitterCssPrefix + pnl2Css)
+			fields[otherPanel].n.removeClass(
+					vSplitterCssPrefix + panelCss[otherPanel].n + " " +
+					hSplitterCssPrefix + panelCss[otherPanel].n)
 				.addClass((isVertical ? vSplitterCssPrefix :
-					hSplitterCssPrefix) + pnl2Css);
+					hSplitterCssPrefix) + panelCss[otherPanel].n);
 
 			//add class to panel2 content.
-			pnl2Content.removeClass(vSplitterCssPrefix + pnl1ContentCss +
-				" " + hSplitterCssPrefix + pnl1ContentCss +
-				" " + widgetContentCss)
+			fields[otherPanel].content.removeClass(
+					vSplitterCssPrefix + panelCss[otherPanel].content + " " +
+					hSplitterCssPrefix + panelCss[otherPanel].content + " " +
+					widgetContentCss)
 				.addClass((isVertical ? vSplitterCssPrefix :
-					hSplitterCssPrefix) + pnl2ContentCss + " " + widgetContentCss);
+					hSplitterCssPrefix) + panelCss[otherPanel].content + " " +
+					widgetContentCss);
 
 			// if panel1.collapsed = true, then we need update 
 			// the expander icon's css.
@@ -609,24 +630,22 @@
 		_updateExpanderCss: function () {
 			var self = this,
 				o = self.options,
-			//element = self.element,
+				//element = self.element,
 				fields = self._fields,
 				expander = fields.expander,
 				icon = fields.icon,
 				isVertical = o.orientation === "vertical",
+				panel2IsCollapsing = o.collapsingPanel !== "panel1",
 				cssPrefix = isVertical ? vSplitterCssPrefix : hSplitterCssPrefix,
-				collapsedExpCorner1Css = isVertical ? "tr" : "bl",
-				collapsedExpCorner2Css = "br",
-				collapsedIconCss = isVertical ? "e" : "s",
-				expandedExpCorner1Css = isVertical ? "bl" : "tr",
-				expandedExpCorner2Css = "tl",
-				expandedIconCss = isVertical ? "w" : "n";
+				collapsedExpCorner1Css = ["bl", "tr", "tr", "bl"][isVertical * 2+ panel2IsCollapsing],
+				collapsedExpCorner2Css = ["br", "tl"][+panel2IsCollapsing],
+				collapsedIconCss = ["s", "n", "e", "w"][isVertical * 2 + panel2IsCollapsing],
+				expandedExpCorner1Css = ["tr", "bl", "bl", "tr"][isVertical * 2 + panel2IsCollapsing],
+				expandedExpCorner2Css = ["tl", "br"][+panel2IsCollapsing],
+				expandedIconCss = ["n", "s", "w", "e"][isVertical * 2 + panel2IsCollapsing];
 
-			//			element.removeClass(cssPrefix + expandedCss +
-			//				" " + cssPrefix + collapsedCss);
-
-			expander.removeClass(cssPrefix + expandedCss +
-				" " + cssPrefix + collapsedCss +
+			expander.removeClass(cssPrefix + o.collapsingPanel + "-" + expandedCss +
+				" " + cssPrefix + o.collapsingPanel + "-" + collapsedCss +
 				" " + cornerCssPrefix + collapsedExpCorner1Css +
 				" " + cornerCssPrefix + collapsedExpCorner2Css +
 				" " + cornerCssPrefix + expandedExpCorner1Css +
@@ -635,17 +654,17 @@
 			icon.removeClass(arrowCssPrefix + collapsedIconCss +
 				" " + arrowCssPrefix + expandedIconCss);
 
-			if (o.panel1.collapsed) {
+			if (o.panel1.collapsed || o.panel2.collapsed) {
 				//element.addClass(cssPrefix + collapsedCss);
 				expander.addClass(cornerCssPrefix + collapsedExpCorner1Css +
 					" " + cornerCssPrefix + collapsedExpCorner2Css +
-					" " + cssPrefix + collapsedCss);
+					" " + cssPrefix + o.collapsingPanel + "-" + collapsedCss);
 				icon.addClass(arrowCssPrefix + collapsedIconCss);
 			} else {
 				//element.addClass(cssPrefix + expandedCss);
 				expander.addClass(cornerCssPrefix + expandedExpCorner1Css +
 					" " + cornerCssPrefix + expandedExpCorner2Css +
-					" " + cssPrefix + expandedCss);
+					" " + cssPrefix + o.collapsingPanel + "-" + expandedCss);
 				icon.addClass(arrowCssPrefix + expandedIconCss);
 			}
 		},
@@ -655,12 +674,11 @@
 				element = self.element,
 				o = self.options,
 				distance = o.splitterDistance,
-				fields = self._fields,
+				collapsingPanel = o.collapsingPanel,
+				otherPanel = o.collapsingPanel === 'panel1' ? 'panel2': 'panel1', fields = self._fields,
 				wrapper = fields.wrapper,
 				pnl1 = fields.panel1,
-				pnl1Content = fields.pnl1Content,
 				pnl2 = fields.panel2,
-				pnl2Content = fields.pnl2Content,
 				bar = fields.bar,
 				expander = fields.expander,
 				width = element.width(),
@@ -679,29 +697,51 @@
 
 				wrapper.width(width * 2);
 
-				if (o.panel2.collapsed && !o.panel1.collapsed) {
-					distance = width - barW;
-				}
-
-				//todo: missing logic of both collapse equals "true".
 				if (o.panel1.collapsed) {
-					//element.addClass(vSplitterCssPrefix + collapsedCss);
-					expander.addClass(vSplitterCssPrefix + collapsedCss);
-					pnl1.css("display", "none");
-					pnl2.css("display", "");
+					if (collapsingPanel === "panel1") {
+						expander.addClass(vSplitterCssPrefix + "panel1" + "-" + collapsedCss);
+					}
+					fields.panel1.n.css("display", "none");
+					fields.panel2.n.css("display", "");
 					distance = 0;
 				} else {
-					//element.addClass(vSplitterCssPrefix + expandedCss);
-					expander.addClass(vSplitterCssPrefix + expandedCss);
-					pnl1.css("display", "");
-					pnl2.css("display", o.panel2.collapsed ? "none" : "");
+					if (collapsingPanel === "panel1") {
+						expander.addClass(vSplitterCssPrefix + "panel1" + "-" + expandedCss);
+					}
+					fields.panel1.n.css("display", "");
+					fields.panel2.n.css("display", o.panel2.collapsed ? "none" : "");
 				}
 
-				pnl1.height(height).width(distance);
-				pnl1Content.outerHeight(height, true);
+				if (o.panel2.collapsed) {
+					if (collapsingPanel === "panel2") {
+						expander.addClass(vSplitterCssPrefix + "panel2" + "-" + collapsedCss); 
+					}
+					fields.panel2.n.css("display", "none");
+					distance = (collapsingPanel === "panel1") ?
+							width - barW: width;
+				} else {
+					if (collapsingPanel === "panel2") {
+						expander.addClass(vSplitterCssPrefix + "panel2" + "-" + expandedCss);
+					}
+					fields.panel2.n.css("display", "");
+				}
+
+				if (!o.panel1.collapsed && !o.panel2.collapsed) {
+					expander.addClass(vSplitterCssPrefix + o.collapsingPanel + "-" + expandedCss);
+				}
+
+				if (collapsingPanel === "panel1") {
+					fields.panel1.n.height(height).width(distance);
+					fields.panel2.n.height(height).width(width - distance - barW);
+				} else {
+					fields.panel1.n.height(height).width(distance - barW);
+					fields.panel2.n.height(height).width(width - distance);
+					fields.panel2.content.width(width - distance);
+				}
+
+				fields.panel1.content.outerHeight(height, true);
 				bar.outerHeight(height, true);
-				pnl2.height(height).width(width - distance - barW);
-				pnl2Content.outerHeight(height, true);
+				fields.panel2.content.outerHeight(height, true);
 
 				expander.css("cursor", "pointer")
 					.css("top", height / 2 - expander.outerHeight(true) / 2);
@@ -712,29 +752,46 @@
 					distance = height - barH;
 				}
 
-				if (o.panel2.collapsed && !o.panel1.collapsed) {
-					distance = height - barH;
-				}
-
-				pnl1Content.outerHeight(distance, true);
-
 				if (o.panel1.collapsed) {
-					//element.addClass(hSplitterCssPrefix + collapsedCss);
-					expander.addClass(hSplitterCssPrefix + collapsedCss);
-					pnl1.css("display", "none");
-					pnl2.css("display", "");
+					if (collapsingPanel === "panel1") {
+						expander.addClass(hSplitterCssPrefix + "panel1" + "-" + collapsedCss);
+					}
+					fields.panel1.n.css("display", "none");
+					fields.panel2.n.css("display", "");
 					distance = 0;
 				} else {
-					//element.addClass(hSplitterCssPrefix + expandedCss);
-					expander.addClass(hSplitterCssPrefix + expandedCss);
-					pnl1.css("display", "");
-					pnl2.css("display", o.panel2.collapsed ? "none" : "");
+					if (collapsingPanel === "panel1") {
+						expander.addClass(hSplitterCssPrefix + "panel1" + "-" + expandedCss);
+					}
+					fields.panel1.n.css("display", "");
+					fields.panel2.n.css("display", o.panel2.collapsed ? "none" : "");
 				}
 
-				pnl2Content.outerHeight(height - distance - barH, true);
+				if (o.panel2.collapsed) {
+					if (collapsingPanel === "panel2") {
+						expander.addClass(hSplitterCssPrefix + "panel2" + "-" + collapsedCss);
+					}
+					fields.panel2.n.css("display", "none");
+					distance = (collapsingPanel === "panel1") ?
+							height - barH: height;
+				} else {
+					if (collapsingPanel === "panel2") {
+						expander.addClass(hSplitterCssPrefix + "panel2" + "-" + expandedCss);
+					}
+					fields.panel2.n.css("display", "");
+				}
 
-				pnl1.width(width).height(distance);
-				pnl2.width(width).height(height - distance - barH);
+				if (collapsingPanel === "panel1") {
+					fields.panel1.n.width(width).height(distance);
+					fields.panel2.n.width(width).height(height - distance - barH);
+					fields.panel1.content.outerHeight(distance, true);
+					fields.panel2.content.outerHeight(height - distance - barH, true);
+				} else {
+					fields.panel1.n.width(width).height(distance - barH);
+					fields.panel2.n.width(width).height(height - distance);
+					fields.panel1.content.outerHeight(distance - barH, true);
+					fields.panel2.content.outerHeight(height - distance, true);
+				}
 
 				expander.css("cursor", "pointer")
 					.css("left", width / 2 - expander.outerWidth(true) / 2);
@@ -755,30 +812,38 @@
 		_setPanel1Collapsed: function (collapsed, e) {
 			var self = this,
 				o = self.options,
-				oldCollapsed = o.panel1.collapsed;
+				oldCollapsed = o.panel1.collapsed,
+				resizableHandle = $(".ui-resizable-handle", self.element);
 
 			if (oldCollapsed === collapsed) {
 				return;
 			}
 
-			if (!self._trigger(oldCollapsed ? "expand" : "collapse", e, null)) {
-				return;
+			if (o.collapsingPanel === 'panel1') {
+				if (!self._trigger(oldCollapsed ? "expand" : "collapse", e, null)) {
+					return;
+				}
 			}
 
 			o.panel1.collapsed = collapsed;
 
 			if (collapsed) {
 				o.panel2.collapsed = false;
+				if (o.collapsingPanel === 'panel2')
+					resizableHandle.hide();
 			} else {
-				$(".ui-resizable-handle", self.element).show();
+				resizableHandle.show();
 			}
 
 			self._updateElements();
 			self._updateExpanderCss();
-			self._trigger(collapsed ? "collapsed" : "expanded", e, null);
+
+			if (o.collapsingPanel === 'panel1') {
+				self._trigger(collapsed ? "collapsed" : "expanded", e, null);
+			}
 		},
 
-		_setPanel2Collapsed: function (collapsed) {
+		_setPanel2Collapsed: function (collapsed, e) {
 			var self = this,
 				o = self.options,
 				oldCollapsed = o.panel2.collapsed,
@@ -788,16 +853,28 @@
 				return;
 			}
 
+			if (o.collapsingPanel === 'panel2') {
+				if (!self._trigger(oldCollapsed ? "expand" : "collapse", e, null)) {
+					return;
+				}
+			}
+
 			o.panel2.collapsed = collapsed;
 
 			if (collapsed) {
 				o.panel1.collapsed = false;
-				resizableHandle.hide();
+				if (o.collapsingPanel === 'panel1')
+					resizableHandle.hide();
 			} else {
 				resizableHandle.show();
 			}
 
 			self._updateElements();
+			self._updateExpanderCss();
+
+			if (o.collapsingPanel === 'panel2') {
+				self._trigger(collapsed ? "collapsed" : "expanded", e, null);
+			}
 		},
 
 		_bindEvents: function () {
@@ -806,7 +883,6 @@
 				fields = self._fields,
 				bar = fields.bar,
 				expander = fields.expander,
-				panel1 = fields.panel1,
 				widgetName = self.widgetName;
 
 			expander.bind("mouseover." + widgetName, function (e) {
@@ -834,12 +910,11 @@
 
 				expander.removeClass(stateActiveCss);
 
-				if (o.panel2.collapsed) {
-					self._setPanel2Collapsed(!o.panel2.collapsed);
-					return;
+				if (o.collapsingPanel === 'panel1') {
+					self._setPanel1Collapsed(!o.panel1.collapsed, e);
+				} else {
+					self._setPanel2Collapsed(!o.panel2.collapsed, e);
 				}
-
-				self._setPanel1Collapsed(!o.panel1.collapsed, e);
 			});
 
 			bar.bind("mouseover." + widgetName, function (e) {
@@ -855,7 +930,7 @@
 				bar.removeClass(stateHoverCss);
 			});
 
-			panel1.bind("animating." + widgetName, function (e) {
+			fields.panel1.n.bind("animating." + widgetName, function (e) {
 				if (o.disabled) {
 					return;
 				}
@@ -902,7 +977,8 @@
 				o = self.options,
 				fields = self._fields,
 				bar = fields.bar,
-				panel1 = fields.panel1,
+				collapsingPanel = o.collapsingPanel,
+				otherPanel = o.collapsingPanel === 'panel1' ? 'panel2': 'panel1',
 				resizeSettings = o.resizeSettings,
 				animation = resizeSettings.animationOptions,
 				duration = animation.disabled ? 0 : animation.duration,
@@ -913,14 +989,14 @@
 
 			if (o.orientation === "vertical") {
 				barW = bar.outerWidth(true);
-				maxW = width - barW - o.panel2.minSize;
-				minW = o.panel1.minSize;
+				maxW = width - barW - o[otherPanel].minSize;
+				minW = o[collapsingPanel].minSize;
 
 				if (minW < 2) {
 					minW = 2;
 				}
 
-				panel1.resizable({
+				fields.panel1.n.resizable({
 					wijanimate: true,
 					minWidth: minW,
 					maxWidth: maxW,
@@ -938,14 +1014,14 @@
 				});
 			} else {
 				barH = bar.outerHeight(true);
-				maxH = height - barH - o.panel2.minSize;
-				minH = o.panel1.minSize;
+				maxH = height - barH - o[otherPanel].minSize;
+				minH = o[collapsingPanel].minSize;
 
 				if (minH < 2) {
 					minH = 2;
 				}
 
-				panel1.resizable({
+				fields.panel1.n.resizable({
 					wijanimate: true,
 					minHeight: minH,
 					maxHeight: maxH,
@@ -964,7 +1040,7 @@
 			}
 
 			resizableHandle = $(".ui-resizable-handle", element);
-			if (o.panel2.collapsed) {
+			if (o[otherPanel].collapsed) {
 				resizableHandle.hide();
 			} else {
 				resizableHandle.show();
@@ -982,7 +1058,7 @@
 				fields = self._fields,
 				panel1 = fields.panel1,
 				distance = o.orientation === "vertical" ?
-					panel1.width() : panel1.height();
+					panel1.n.width() : panel1.n.height();
 
 			if (o.splitterDistance === distance) {
 				return;
@@ -998,17 +1074,17 @@
 				o = self.options,
 				pnlScrollBars = [o.panel1.scrollBars, o.panel2.scrollBars];
 
-			$.each([fields.pnl1Content, fields.pnl2Content], function (idx, pnlContent) {
+			$.each([fields.panel1, fields.panel2], function (idx, pnl) {
 				if (pnlScrollBars[idx] === "auto") {
-					pnlContent.css("overflow", "auto");
+					pnl.content.css("overflow", "auto");
 				} else if (pnlScrollBars[idx] === "both") {
-					pnlContent.css("overflow", "scroll");
+					pnl.content.css("overflow", "scroll");
 				} else if (pnlScrollBars[idx] === "none") {
-					pnlContent.css("overflow", "hidden");
+					pnl.content.css("overflow", "hidden");
 				} else if (pnlScrollBars[idx] === "horizontal") {
-					pnlContent.css("overflow-x", "scroll").css("overflow-y", "hidden");
+					pnl.content.css("overflow-x", "scroll").css("overflow-y", "hidden");
 				} else if (pnlScrollBars[idx] === "vertical") {
-					pnlContent.css("overflow-x", "hidden").css("overflow-y", "scroll");
+					pnl.content.css("overflow-x", "hidden").css("overflow-y", "scroll");
 				}
 			});
 		}
