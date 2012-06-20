@@ -1,3 +1,30 @@
+Wijmo-Open v2.1.2
+=================
+checkbox
+--------
+disabled checkboxes could be checked.
+
+Knockout Integration Library
+-----------------------------
+Added support for disabled option in form decorators.
+Cleaned up unused and commented code.
+
+Wijmo-Open v2.1.1
+=================
+
+calendar
+--------
+The result selection has one day off when calling selectDate method in some GMT offset.
+Fixed javascript error thrown in IE8.
+
+tabs
+-------
+selection is incorrect when more than one tabs widget exists on the same page.
+
+dropdown
+--------
+Fixed a bug when multiple items occur with the same value in options.
+
 Wijmo-Open v2.1.0
 =================
 
