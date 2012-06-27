@@ -1,7 +1,7 @@
 /*globals jQuery*/
 /*
 *
-* Wijmo Library 2.1.2
+* Wijmo Library 2.1.3
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -24,6 +24,27 @@
 	var checkboxId = 0;
 	$.widget("wijmo.wijcheckbox", {
 		_csspre: "wijmo-checkbox",
+		options: {
+			/// <summary>
+			/// A value determines the checked state of the checkbox
+			/// Type: Boolean.
+			/// Default: null.
+			/// </summary>
+			checked: null,
+			/// <summary>
+			/// A function called when checked state is changed.
+			/// Default: null.
+			/// Type: Function.
+			/// Code example:
+			/// Supply a function as an option.
+			///  $("#tags").wijcheckbox({changed: function(e, data) { } });
+			/// Bind to the event by type: wijcheckboxchanged
+			/// $("#tags").bind("wijcheckboxchanged", function(e, data) {} );
+			/// </summary>
+			/// <param name="e" type="EventObj">
+			/// The jquery event object.
+			changed: null
+			},
 		_init: function () {
 			var self = this,
 				ele = self.element,
@@ -68,6 +89,7 @@
 				checkboxElement.append(boxElement);
 				ele.data("iconElement", iconElement);
 				ele.data("boxElement", boxElement);
+				ele.data("checkboxElement", checkboxElement);
 
 				boxElement.removeClass(self._csspre + "-relative")
 				.attr("role", "checkbox")
@@ -84,6 +106,9 @@
 						return;
 					}
 					self.refresh(e);
+					self._trigger("changed", null, {
+						checked: self.options.checked
+					});
 				}).bind("focus.checkbox", function () {
 					if (o.disabled) {
 						return;
@@ -112,8 +137,12 @@
 					ele.change();
 					ele.focus();
 					self.refresh(e);
+					self._trigger("changed", null, {
+						checked: self.options.checked
+					});
 				});
 
+				self._initCheckState();
 				self.refresh();
 				checkboxElement.bind("mouseover.checkbox", function (e) {
 					if (o.disabled) {
@@ -133,15 +162,46 @@
 				checkboxElement.attr("title", ele.attr("title"));
 			}
 		},
+		
+        _setOption: function (key, value) {
+        	var self = this,
+        	originalCheckedState = self.options.checked;
+        	
+            $.Widget.prototype._setOption.apply(this, arguments);
 
+            if (key === 'checked') {
+            	self.element.get(0).checked = value;
+            	self.refresh();
+            	if (originalCheckedState !== value) {
+    				self._trigger("changed", null, {
+    					checked: value
+    				});
+            	}
+            }
+        },
+
+		_initCheckState: function() {
+			var self = this, o = self.options;
+			
+			if (o.checked !== undefined && 
+					o.checked !== null) {
+				self.element.get(0).checked = o.checked;
+			}
+		},
+		
 		refresh: function (e) {
 			/// Use the refresh method to set the checkbox element's style.
-			var self = this;
+			var self = this, o = self.options;
+
+			o.checked  = self.element.get(0).checked;
 			self.element.data("iconElement")
 			.toggleClass("ui-icon ui-icon-check", self.element.get(0).checked);
 			self.element.data("boxElement")
 			.toggleClass("ui-state-active", self.element.get(0).checked)
 			.attr("aria-checked", self.element.get(0).checked);
+			
+			self.element.data("checkboxElement")
+			.toggleClass("ui-state-checked", self.element.get(0).checked);
 			if (e) {
 				e.stopPropagation();
 			}

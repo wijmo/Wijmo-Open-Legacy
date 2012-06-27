@@ -1,7 +1,7 @@
 /*globals jQuery*/
 /*
  *
- * Wijmo Library 2.1.2
+ * Wijmo Library 2.1.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -23,9 +23,32 @@
 	var radiobuttonId = 0;
 	$.widget("wijmo.wijradio", {
 		_radiobuttonPre: "wijmo-wijradio",
+		options: {
+			/// <summary>
+			/// A value determines the checked state of the radio
+			/// Type: Boolean.
+			/// Default: null.
+			/// </summary>
+			checked: null,
+			/// <summary>
+			/// A function called when checked state is changed.
+			/// Default: null.
+			/// Type: Function.
+			/// Code example:
+			/// Supply a function as an option.
+			///  $("#tags").wijradio({changed: function(e, data) { } });
+			/// Bind to the event by type: wijradiochanged
+			/// $("#tags").bind("wijradiochanged", function(e, data) {} );
+			/// </summary>
+			/// <param name="e" type="EventObj">
+			/// The jquery event object.
+			changed: null
+			},
+			
 		_create: function () {
 			var self = this,
 				ele = self.element,
+				eleChkState,
 				radiobuttonElement, label, targetLabel, boxElement, iconElement;
 
 			if (ele.is(":radio")) {
@@ -72,6 +95,7 @@
 				iconElement.addClass("ui-icon ui-icon-radio-on");
 				ele.data("iconElement", iconElement);
 				ele.data("boxElement", boxElement);
+				ele.data("radiobuttonElement", radiobuttonElement);
 				
 
 				boxElement.removeClass(self._radiobuttonPre + "-relative")
@@ -87,17 +111,27 @@
 				self._setDefaul();
 				//			boxElement.css("margin-top","9px");
 
-				ele.bind("click.checkbox", function () {
+				ele.bind("click.radio", function () {
 					//fixed bug:
 					//the "focus()" event fires twice when the radio is clicked
 					//ele.focus();
+					if (self.options.disabled) {
+						return;
+					}
+					eleChkState = self.options.checked;
 					self._refresh();
-				}).bind("focus.checkbox", function () {
+					if (eleChkState !== self.element.is(":checked")) {
+						self._trigger("changed", null, {
+							checked: self.options.checked
+						});
+					}
+
+				}).bind("focus.radio", function () {
 					if (self.options.disabled) {
 						return;
 					}
 					boxElement.removeClass("ui-state-default").addClass("ui-state-focus");
-				}).bind("blur.checkbox", function () {
+				}).bind("blur.radio", function () {
 					if (self.options.disabled) {
 						return;
 					}
@@ -106,23 +140,32 @@
 				});
 
 				radiobuttonElement.click(function () {
+					if (self.options.disabled) {
+						return;
+					}
 					if (targetLabel.length === 0 || targetLabel.html() === "") {
 						//fixed bug:
 						//the "focus()" event fires twice when the radio is clicked
+						eleChkState = self.options.checked;
 						ele.attr("checked", true);
 						//ele.attr("checked", true).focus();
 						self._refresh();
 						ele.change();
+						if (eleChkState !== self.element.is(":checked")) {
+							self._trigger("changed", null, {
+								checked: self.options.checked
+							});
+						}
 					}
 
 				});
 
-				radiobuttonElement.bind("mouseover.checkbox", function () {
+				radiobuttonElement.bind("mouseover.radio", function () {
 					if (self.options.disabled) {
 						return;
 					}
 					boxElement.removeClass("ui-state-default").addClass("ui-state-hover");
-				}).bind("mouseout.checkbox", function () {
+				}).bind("mouseout.radio", function () {
 					if (self.options.disabled) {
 						return;
 					}
@@ -134,8 +177,30 @@
 				radiobuttonElement.attr("title", ele.attr("title"));
 			}
 		},
+		
+        _setOption: function (key, value) {
+        	var self = this,
+        	originalCheckedState = self.options.checked;
+            $.Widget.prototype._setOption.apply(this, arguments);
+
+            if (key === 'checked') {
+            	self.element.attr("checked",value);
+            	self._refresh();
+            	if (originalCheckedState !== value) {
+    				self._trigger("changed", null, {
+    					checked: value
+    				});
+            	}
+            }
+        },
 
 		_setDefaul: function () {
+			var self = this, o = self.options;
+			
+			if (o.checked !== undefined && 
+					o.checked !== null) {
+				this.element.attr("checked",o.checked);
+			}
 			if (this.element.attr("checked")) {
 				this.element.parents(".wijmo-wijradio")
 				.find("." + this._radiobuttonPre + "-box").children()
@@ -143,11 +208,12 @@
 				.addClass("ui-icon-radio-off");
 				this.element.data("boxElement").removeClass("ui-state-default")
 				.addClass("ui-state-active").attr("aria-checked", true);
+				this.element.data("radiobuttonElement").addClass("ui-state-checked");
 			}
 		},
 
 		_refresh: function () {
-			var name = this.element.attr("name") || "", self = this;
+			var name = this.element.attr("name") || "", self = this, radioEle;
 			if (name === "") {
 				return;
 			}
@@ -160,17 +226,37 @@
 				.find("." + self._radiobuttonPre + "-box")
 				.removeClass("ui-state-active").addClass("ui-state-default")
 				.attr("aria-checked", false);
-			});
+				
+				$(n).parents(".wijmo-wijradio").removeClass("ui-state-checked");
+				
+				radioEle = $(n).parents(".wijmo-wijradio").find(":radio");
+				if (radioEle.wijradio("option", "checked") && radioEle[0] !== self.element[0]) {
+					radioEle.wijradio("setCheckedOption", false);
+				}
+		});
 
 			if (self.element.is(":checked")) {
 				self.element.data("iconElement")
 				.removeClass("ui-icon-radio-on").addClass("ui-icon-radio-off");
 				self.element.data("boxElement").removeClass("ui-state-default")
 				.addClass("ui-state-active").attr("aria-checked", true);
+				self.element.data("radiobuttonElement").addClass("ui-state-checked");
 			}
-
+			
+			self.options.checked  = self.element.is(":checked");
 		},
 
+		setCheckedOption: function(value) {
+			var self = this, o= self.options;
+			
+        	if (o.checked !== null && o.checked !== value) {
+        		o.checked = value;
+				self._trigger("changed", null, {
+					checked: value
+				});
+        	}
+		},
+		
 		refresh: function () {
 			/// Use the refresh method to set the radio button's style.
 			this._refresh();

@@ -1,7 +1,7 @@
 /*globals jQuery*/
 /*
  *
- * Wijmo Library 2.1.2
+ * Wijmo Library 2.1.3
  * http://wijmo.com/
  *
  * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -1033,6 +1033,7 @@
 			if (!ele.is(":visible")) {
 				return false;
 			}
+			
 			if (o.autoSize) {
 				adjustHeight = singleItem.outerHeight(true) * o.maxItemsCount;
 			}
@@ -1060,6 +1061,12 @@
 
 				$.extend(spOptions, o.superPanelOptions);
 				self.superPanel = ele.wijsuperpanel(spOptions).data("wijsuperpanel");
+				//update for fixing can't show all dropdown items by wuhao 
+				if (self.superPanel.vNeedScrollBar) {
+					ul.setOutWidth(ele.innerWidth() - 18);
+					self.superPanel.refresh();
+				}
+				//end for issue
 			}
 			else {
 				vScroller = self.superPanel.options.vScroller;

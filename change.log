@@ -1,3 +1,31 @@
+
+Wijmo-Open v2.1.3
+=================
+Form Decorator
+--------------
+Updated css to align better in certain scenarios
+
+Themes
+------
+Updated all themes to used the improved ui-helper-clearfix pattern.
+
+calendar
+--------
+Added "displayDate" to _setOption.
+
+menu
+----
+Added a new option "direction", its value is "ltr" or "rtl" to support right-to-left rendering.
+Fixed an issue in the deactivate method.
+
+list
+----
+Fixed an issue when showing all items in combobox.
+
+radio, checkbox
+---------------
+Add "checked" and "changed" option to support knockout bindings
+
 Wijmo-Open v2.1.2
 =================
 checkbox

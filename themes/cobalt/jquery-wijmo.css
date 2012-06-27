@@ -43,18 +43,15 @@
     clear: both;
     visibility: hidden;
 }
-.ui-helper-clearfix
-{
-    display: inline-block;
+.ui-helper-clearfix:before, .ui-helper-clearfix:after {
+	content: "";
+	display: table;
 }
-/* required comment for clearfix to work in Opera \*/
-* html .ui-helper-clearfix
-{
-    height: 1%;
+.ui-helper-clearfix:after {
+	clear: both;
 }
-.ui-helper-clearfix
-{
-    display: block;
+.ui-helper-clearfix {
+	zoom: 1;
 }
 /* end clearfix */
 .ui-helper-zfix
@@ -121,7 +118,7 @@
 .ui-widget
 {
     font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
-    font-size: 1.1em;
+    font-size: 100%;
 }
 .ui-widget .ui-widget
 {

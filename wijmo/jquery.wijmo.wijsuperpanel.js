@@ -1,7 +1,7 @@
 /*globals window document jQuery */
 /*
 *
-* Wijmo Library 2.1.2
+* Wijmo Library 2.1.3
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -611,37 +611,37 @@
 				self.options[key] = value;
 			}
 			switch (key) {
-			case "allowResize":
-				self._initResizer();
-				break;
-			case "disabled":
-				if (value) {
-					if (hd !== undefined) {
-						hd.draggable("disable");
+				case "allowResize":
+					self._initResizer();
+					break;
+				case "disabled":
+					if (value) {
+						if (hd !== undefined) {
+							hd.draggable("disable");
+						}
+						if (vd !== undefined) {
+							vd.draggable("disable");
+						}
+						if (r !== undefined) {
+							r.resizable("disable");
+						}
 					}
-					if (vd !== undefined) {
-						vd.draggable("disable");
+					else {
+						if (hd !== undefined) {
+							hd.draggable("enable");
+						}
+						if (vd !== undefined) {
+							vd.draggable("enable");
+						}
+						if (r !== undefined) {
+							r.resizable("enable");
+						}
 					}
-					if (r !== undefined) {
-						r.resizable("disable");
-					}
-				}
-				else {
-					if (hd !== undefined) {
-						hd.draggable("enable");
-					}
-					if (vd !== undefined) {
-						vd.draggable("enable");
-					}
-					if (r !== undefined) {
-						r.resizable("enable");
-					}
-				}
-				break;
-			case "mouseWheelSupport":
-			case "keyboardSupport":
-				self._bindElementEvents(self, f, self.element, o);
-				break;
+					break;
+				case "mouseWheelSupport":
+				case "keyboardSupport":
+					self._bindElementEvents(self, f, self.element, o);
+					break;
 			}
 			return self;
 		},
@@ -1372,8 +1372,8 @@
 		},
 
 		_getScorllOffset: function (child1) {
-			
-			var child = $(child1), f, cWrapper, tempWrapper,// left, top,
+
+			var child = $(child1), f, cWrapper, tempWrapper, // left, top,
 			childOffset, templateOffset, cWrapperOffset,
 			tDistance, bDistance, lDistance, rDistance,
 			result = { left: null, top: null };
@@ -1801,6 +1801,12 @@
 				else {
 					hbarDrag.show();
 				}
+
+				//fixed bug the dragger will be reset after refresh
+				if (self._isDragging == true) {
+					$(document).trigger("mouseup");
+					self._isDragging = false;
+				}
 			}
 			if (self.vNeedScrollBar && vbarDrag.is(":visible")) {
 				vLargeChange = self._getVScrollBarLargeChange();
@@ -1819,6 +1825,12 @@
 				}
 				else {
 					vbarDrag.show();
+				}
+
+				//fixed bug the dragger will be reset after refresh
+				if (self._isDragging == true) {
+					$(document).trigger("mouseup");
+					self._isDragging = false;
 				}
 			}
 			self._setDragAndContentPosition(false, false, "both");
@@ -2061,6 +2073,9 @@
 			self._scrollerMouseOver);
 			barDrag.draggable({
 				axis: dir === "h" ? "x" : "y",
+				start: function (e, data) {
+					self._isDragging = true;
+				},
 				drag: function (e, data) {
 					self._dragging(e, data, self);
 				},
@@ -2068,6 +2083,7 @@
 				stop: function (e) {
 					self._dragStop(e, self, dir);
 					$(e.target).removeClass("ui-state-active");
+					self._isDragging = false;
 				}
 			});
 		},
@@ -2105,9 +2121,9 @@
 				content[hbar ? "height" : "width"](contentLength);
 
 				// fixed bug on forum when set contentlength ,the width or height is changed.
-//				f[hbar ? "contentWidth" : "contentHeight"] = 
-//                f.templateWrapper[hbar ? "width" : "height"]();
-	
+				//				f[hbar ? "contentWidth" : "contentHeight"] = 
+				//                f.templateWrapper[hbar ? "width" : "height"]();
+
 			}
 		},
 

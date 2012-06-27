@@ -761,17 +761,68 @@
     createCustomBinding({
         widgetName: "wijcheckbox",
         observableOptions: {
-            disabled: {}
+            disabled: {},
+            checked: {
+                type: 'bool',
+                attachEvents: ['changed']
+            }
         }
     });
 
     createCustomBinding({
         widgetName: "wijradio",
         observableOptions: {
+            disabled: {},
+            checked: {
+                type: 'bool',
+                attachEvents: ['changed']
+            }
+        }
+    });
+
+    createCustomBinding({
+        widgetName: "wijribbon",
+        observableOptions: {
             disabled: {}
         }
     });
 
+    createCustomBinding({
+        widgetName: "wijinputdate",
+        observableOptions: {
+            disabled: {},
+            date: {
+                attachEvents: ['dateChanged', 'textChanged']
+            }
+        }
+    });
+
+    createCustomBinding({
+        widgetName: "wijinputmask",
+        observableOptions: {
+            disabled: {},
+            text: {
+                attachEvents: ['textChanged']
+            }
+        }
+    });
+
+    createCustomBinding({
+        widgetName: "wijinputnumber",
+        observableOptions: {
+            disabled: {},
+            max: {
+                type: 'numeric'
+            },
+            min: {
+                type: 'numeric'
+            },
+            value: {
+                type: 'numeric',
+                attachEvents: ['valueChanged', 'textChanged']
+            }
+        }
+    });
 
     //jQuery UI Bindings
 

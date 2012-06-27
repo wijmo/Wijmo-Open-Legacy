@@ -2,7 +2,7 @@
 
 /*
 *
-* Wijmo Library 2.1.2
+* Wijmo Library 2.1.3
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -159,6 +159,14 @@
 			/// </summary>
 			orientation: 'horizontal',
 			/// <summary>
+			/// A value that indicates menu's direction.
+			/// Default: "ltr".
+			/// Type: String.
+			/// Remark: The value should be "ltr" or "rtl".
+			/// Code example: $(".selector").wijmenu("option", "direction", "rtl")
+			/// </summary>
+			direction: 'ltr',
+			/// <summary>
 			/// Determines the iPod-style menu's maximum height.
 			/// Default: 200.
 			/// Type: Number.
@@ -273,6 +281,7 @@
 			// in the page before init the menu.
 			var self = this,
 				o = self.options,
+				direction = o.direction,
 				mode = o.mode,
 				parentWidget,
 				ele = self.element, sublist, breadcrumb,
@@ -302,7 +311,8 @@
 				}
 				var activeItem = self.activeItem,
 					isRoot, link,
-					orientation = o.orientation;
+					orientation = o.orientation,
+					direction = o.direction;
 
 				if (activeItem) {
 					isRoot = activeItem._isRoot();
@@ -336,9 +346,10 @@
 							if (mode === "flyout" && 
 							$.wijmo.wijmenu._hasVisibleSubMenus(activeItem) > 0) {
 								if (sublist.is(":hidden")) {
-									activeItem._showFlyoutSubmenu(event);
-									self.activate(event, 
-										activeItem._getFirstSelectableSubItem());
+									activeItem._showFlyoutSubmenu(event, function () {
+										self.activate(event, 
+											activeItem._getFirstSelectableSubItem());
+									});
 								}
 							}
 						}
@@ -346,63 +357,43 @@
 					break;
 				case keycode.RIGHT:
 					if (orientation === "horizontal" && isRoot && mode === "flyout") {
-						self.next(event);
+						if (direction === "rtl") {
+							self.previous(event);
+						} else {
+							self.next(event);
+						}
 						self._preventEvent(event);
 					}
 					else {
 						if (activeItem) {
-							if (mode === "flyout" && 
-							$.wijmo.wijmenu._hasVisibleSubMenus(activeItem) > 0) {
-								if (sublist.is(":hidden")) {
-									activeItem._showFlyoutSubmenu(event);
-									self.activate(event, 
-										activeItem._getFirstSelectableSubItem());
-								}
-							}
-							else if (mode === "sliding") {
-								if (sublist.length > 0) {
-									activeItem._getLink().trigger("click",
-										activeItem._getFirstSelectableSubItem());
-								}
+							parentWidget = activeItem.getParent();
+							if (direction === "rtl") {
+								self._keyDownToCloseSubmenu(mode, event, parentWidget);
+							} else {
+								self._keyDownToOpenSubmenu(activeItem, 
+									mode, event, sublist);
 							}
 						}
 					}
 					break;
 				case keycode.LEFT:
 					if (orientation === "horizontal" && isRoot && mode === "flyout") {
-						self.previous(event);
+						if (direction === "rtl") {
+							self.next(event);
+						} else {
+							self.previous(event);
+						}
 						self._preventEvent(event);
 					}
 					else {
 						if (activeItem) {
 							parentWidget = activeItem.getParent();
 						}
-
-						if (mode === "flyout") {
-							if (parentWidget) {
-								parentWidget._hideCurrentSubmenu();
-								self.activate(event, parentWidget);
-							}
-						}
-						else {
-							if (o.backLink && self._backLink &&
-				self._backLink.is(":visible")) {
-								self._backLink.trigger("click", function () {
-									if (parentWidget) {
-										self.activate(event, parentWidget);
-									}
-								});
-							}
-							breadcrumb = $(".wijmo-wijmenu-breadcrumb",
-				self.domObject.menucontainer).find("li a");
-							if (breadcrumb.length > 0) {
-								breadcrumb.eq(breadcrumb.length - 2).trigger("click", 
-								function () {
-									if (parentWidget) {
-										self.activate(event, parentWidget);
-									}
-								});
-							}
+						
+						if (direction === "rtl") {
+							self._keyDownToOpenSubmenu(activeItem, mode, event, sublist);
+						} else {
+							self._keyDownToCloseSubmenu(mode, event, parentWidget);
 						}
 					}
 					break;
@@ -429,6 +420,50 @@
 					break;
 				}
 			});
+		},
+		
+		_keyDownToOpenSubmenu: function (activeItem, mode, event, sublist) {
+			var self = this;
+			if (mode === "flyout" && $.wijmo.wijmenu._hasVisibleSubMenus(activeItem) > 0) {
+				if (sublist.is(":hidden")) {
+					activeItem._showFlyoutSubmenu(event, function () {
+						self.activate(event, activeItem._getFirstSelectableSubItem());
+					});
+				}
+			} else if (mode === "sliding") {
+				if (sublist.length > 0) {
+					activeItem._getLink().trigger("click", 
+						activeItem._getFirstSelectableSubItem());
+				}
+			}
+		},
+		
+		_keyDownToCloseSubmenu: function (mode, event, parentWidget) {
+			var self = this,
+				o = self.options,
+				breadcrumb;
+			if (mode === "flyout") {
+				if (parentWidget) {
+					parentWidget._hideCurrentSubmenu();
+					self.activate(event, parentWidget);
+				}
+			} else {
+				if (o.backLink && self._backLink && self._backLink.is(":visible")) {
+					self._backLink.trigger("click", function () {
+						if (parentWidget) {
+							self.activate(event, parentWidget);
+						}
+					});
+				}
+				breadcrumb = $(".wijmo-wijmenu-breadcrumb", self.domObject.menucontainer).find("li a");
+				if (breadcrumb.length > 0) {
+					breadcrumb.eq(breadcrumb.length - 2).trigger("click", function () {
+						if (parentWidget) {
+							self.activate(event, parentWidget);
+						}
+					});
+				}
+			}
 		},
 
 		_createMenuItems: function () {
@@ -577,10 +612,14 @@
 			if (!active) {
 				return;
 			}
-			active._getLink()
-			.removeClass("ui-state-focus")
-			.removeAttr("id");
-			self._trigger("blur");
+			//Fix an issue that the class can't be removed sometimes when playing animation
+			//in FF/Webkit.
+			setTimeout(function () {
+				active._getLink()
+				.removeClass("ui-state-focus")
+				.removeAttr("id");
+				self._trigger("blur");
+			}, 0);
 			self.activeItem = null;
 		},
 
@@ -802,9 +841,10 @@
 		},
 
 		_set_mode: function (value) {
-			this._destroy();
-			this.options.mode = value;
-			this.refresh();
+			var self = this;
+			self._destroy();
+			self.options.mode = value;
+			self.refresh();
 		},
 
 		_set_backLink: function (value) {
@@ -819,10 +859,21 @@
 				
 			}
 		},
+		
+		_set_direction: function (value) {
+			var self = this;
+			self._destroy();
+			self.refresh();
+		},
 
 		_set_orientation: function (value) {
 			var self = this,
-				menuContainer = self.domObject.menucontainer;
+				menuContainer = self.domObject.menucontainer,
+				direction = self.options.direction,
+				cssPre = "ui-icon-triangle-1-",
+				directionClass = direction === "rtl" ? "w" : "e",
+				oldCss = value === "horizontal" ? directionClass : "s",
+				newCss = value === "horizontal" ? "s" : directionClass;
 
 			menuContainer
 			.removeClass(self.cssPre + "-vertical " + self.cssPre + "-horizontal");
@@ -832,10 +883,6 @@
 					if (n.getItems().length === 0) {
 						return;
 					}
-
-					var cssPre = "ui-icon-triangle-1-",
-					oldCss = value === "horizontal" ? "e" : "s",
-					newCss = value === "horizontal" ? "s" : "e";
 					n._getLink().find("." + cssPre + oldCss)
 					.removeClass(cssPre + oldCss + " " + cssPre + newCss)
 					.addClass(cssPre + newCss);
@@ -967,6 +1014,7 @@
 				ele = self.element,
 				menuCss = "wijmo-wijmenu",
 				o = self.options,
+				direction = o.direction,
 				scrollcontainer, menucontainer, domObject, triggerEle, breadcrumb;
 
 			if (self.domObject) {
@@ -985,6 +1033,9 @@
 				return;
 			}
 
+			if (direction === "rtl") {
+				self._rootMenu.addClass(menuCss + "-rtl");
+			}
 			scrollcontainer.addClass("scrollcontainer checkablesupport");
 			menucontainer.addClass("ui-widget ui-widget-header " + menuCss +
 				" ui-corner-all ui-helper-clearfix")
@@ -1256,6 +1307,7 @@
 				ele = self._getSublist(),
 				container = self.domObject.menucontainer.attr("role", "menu"),
 				o = self.options, //fixPadding,
+				direction = o.direction,
 				breadcrumb = $('<ul class="wijmo-wijmenu-breadcrumb ui-state-default' +
 					' ui-corner-all ui-helper-clearfix"></ul>'),
 				crumbDefaultHeader = $('<li class="wijmo-wijmenu-breadcrumb-text">' +
@@ -1324,8 +1376,13 @@
 				parentUl = itemWidget._getParentOrMenu()._getSublist();
 				parentLeft = (parentUl.data("topmenu")) ?
 					0 : parseFloat(ele.css('left'));
-				nextLeftVal = Math.round(parentLeft -
-					parseFloat(container.width()));
+				if (direction === "rtl") {
+					nextLeftVal = Math.round(parentLeft +
+							parseFloat(container.width()));
+				} else {
+					nextLeftVal = Math.round(parentLeft -
+							parseFloat(container.width()));
+				}
 				footer = $('.wijmo-wijmenu-footer', container);
 				setPrevMenu = function (backlink, current) {
 					var b = backlink,
@@ -1382,12 +1439,19 @@
 								}
 								var b = $(this), prevLeftVal;
 								ele.stop(true, true);
-								prevLeftVal = parseInt(ele.css('left'), 10) +
-								parseInt(container.width(), 10);
-								///to fix click the back button too quickly.
-								///The menu display wrong.
-								if (prevLeftVal > parentLeft) {
-									return;
+								if (direction === "rtl") {
+									prevLeftVal = 
+										parseInt(ele.css('left').replace("px", ""), 10) -
+										parseInt(container.width(), 10);
+								} else {
+									prevLeftVal = 
+										parseInt(ele.css('left').replace("px", ""), 10) +
+										parseInt(container.width(), 10);
+									///to fix click the back button too quickly.
+									///The menu display wrong.
+									if (prevLeftVal > parentLeft) {
+										return;
+									}
 								}
 								self._slidingAnimation(ele, prevLeftVal,
 								function () {
@@ -1426,7 +1490,11 @@
 
 						if (!currentCrumb
 							.is('.wijmo-wijmenu-current-crumb')) {
-							newLeftVal = - (currentCrumb.prevAll().length) * 180;
+							if (direction === "rtl") {
+								newLeftVal = + (currentCrumb.prevAll().length) * 180;
+							} else {
+								newLeftVal = - (currentCrumb.prevAll().length) * 180;
+							}
 
 							self._slidingAnimation(ele, newLeftVal, function () {
 								setPrevMenu(null, itemWidget);
@@ -1522,18 +1590,18 @@
 				return;
 			}
 
+			self._trigger("showing", e, self);
 			menucontainer.show();
 			self._setPosition(triggerEle);
 			self.nowIndex++;
 			self._setZindex(menucontainer, self.nowIndex);
 			menucontainer.hide();
-			self._trigger("showing", e, self);
 
 			animationOptions = {
 				context: menucontainer,
 				show: true
 			};
-			direction = "left";
+			direction = o.direction === "rtl" ? "right" : "left";
 			
 			showAnimation = $.extend({}, { option: { direction: direction} },
 					o.animation, o.showAnimation);
@@ -1627,7 +1695,12 @@
 
 		_getPosition: function () {
 			var o = this.options,
-				pOption = { my: 'left top',
+				direction = o.direction,
+				pOption = direction === "rtl" ? {
+					my: 'right top',
+					at: 'right bottom'
+				}: { 
+					my: 'left top',
 					at: 'left bottom'
 				};
 
@@ -1828,6 +1901,13 @@
 			default:
 				break;
 			}
+		},
+		
+		index: function () {
+			/// <summary>
+			/// return index of the item.
+			/// </summary>
+			return this.element.index();
 		},
 
 		_set_selected: function (value) {
@@ -2298,7 +2378,10 @@
 			var self = this,
 				link = self._getLink(),
 				menu = self._getMenu(),
-				submenuIcon = link.children("span.ui-icon:last");
+				direction = menu.options.direction,
+				submenuIcon = direction === "rtl" ? 
+					link.children("span.ui-icon:first") :
+					link.children("span.ui-icon:last");
 
 			//if the arugment 'hasSubmenu' was not specified
 			if (hasSubmenu === undefined) {
@@ -2307,7 +2390,11 @@
 
 			if (hasSubmenu && !link.is(":input")) {
 				if (submenuIcon.length === 0) {
-					submenuIcon = $("<span>").appendTo(link);
+					if (direction === "rtl") {
+						submenuIcon = $("<span>").prependTo(link);
+					} else {
+						submenuIcon = $("<span>").appendTo(link);
+					}
 				}
 
 				if (self._isRoot() &&
@@ -2317,7 +2404,11 @@
 				}
 				else
 				{
-					submenuIcon.attr('class', 'ui-icon ui-icon-triangle-1-e');
+					if (direction === "rtl") {
+						submenuIcon.attr('class', 'ui-icon ui-icon-triangle-1-w');
+					} else {
+						submenuIcon.attr('class', 'ui-icon ui-icon-triangle-1-e');
+					}
 				}
 			}
 			else {
@@ -2569,7 +2660,7 @@
 			}
 		},
 
-		_displaySubmenu: function (e) {
+		_displaySubmenu: function (e, callback) {
 			var self = this,
 				menu = self._getMenu(),
 				o = menu.options,
@@ -2598,8 +2689,7 @@
 				context: sublist,
 				show: true
 			};
-			direction = "left";
-			
+			direction = o.direction === "rtl" ? "right" : "left";
 			if (o.orientation === "horizontal") {
 				if (self._isRoot()) {
 					direction = "up";
@@ -2612,6 +2702,9 @@
 				//fix for tfs issue 20975
 				if (sublist.is(":hidden")) {
 					self._hideSubmenu(true);
+				}
+				if (callback) {
+					callback();
 				}
 			});
 
@@ -2637,15 +2730,24 @@
 			var self = this,
 				menu = this._getMenu(),
 				o = menu.options,
-				pOption = { my: 'left top',
-					at: 'right top'
-				};
+				direction = o.direction,
+				pOption = direction === "rtl" ? {
+						my: 'right top',
+						at: 'left top'
+					} : { 
+						my: 'left top',
+						at: 'right top'
+					};
 
 			//If the menu's orientation is horizontal, 
 			//set the first level submenu's position to horizontal. 
 			if (o.orientation === "horizontal") {
 				if (self._isRoot()) {
-					pOption = { my: 'left top',
+					pOption = direction === "rtl" ? {
+						my: 'right top',
+						at: 'right bottom'
+					} : { 
+						my: 'left top',
 						at: 'left bottom'
 					};
 				}
@@ -2665,11 +2767,18 @@
 				menu = self._getMenu(),
 				width = menu.domObject.menucontainer.width();
 
-			sublist.css({
-				width: width,
-				left: width
-			})
-			.addClass('ui-widget-content');
+			if (menu.options.direction === "rtl") {
+				sublist.css({
+					width: width,
+					left: -width
+				});
+			} else {
+				sublist.css({
+					width: width,
+					left: width
+				});
+			}
+			sublist.addClass('ui-widget-content');
 
 			$.each(self.getItems(), function (i, n) {
 				if (n.getItems().length) {
@@ -2907,7 +3016,7 @@
 			});
 		},
 
-		_showFlyoutSubmenu: function (e) {
+		_showFlyoutSubmenu: function (e, callback) {
 			var self = this,
 				menu = this._getMenu(),
 				curList = menu._currentMenuList, i;
@@ -2922,7 +3031,7 @@
 					}
 				}
 			}
-			self._displaySubmenu(e);
+			self._displaySubmenu(e, callback);
 		},
 		
 		getItems: function () {

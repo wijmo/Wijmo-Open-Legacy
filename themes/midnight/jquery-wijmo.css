@@ -18,8 +18,9 @@
 }
 .ui-helper-hidden-accessible
 {
-    position: absolute;
-    left: -99999999px;
+    position: absolute !important;
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px,1px,1px,1px);
 }
 .ui-helper-reset
 {
@@ -40,18 +41,15 @@
     clear: both;
     visibility: hidden;
 }
-.ui-helper-clearfix
-{
-    display: inline-block;
+.ui-helper-clearfix:before, .ui-helper-clearfix:after {
+	content: "";
+	display: table;
 }
-/* required comment for clearfix to work in Opera \*/
-* html .ui-helper-clearfix
-{
-    height: 1%;
+.ui-helper-clearfix:after {
+	clear: both;
 }
-.ui-helper-clearfix
-{
-    display: block;
+.ui-helper-clearfix {
+	zoom: 1;
 }
 /* end clearfix */
 .ui-helper-zfix
@@ -119,7 +117,7 @@
 .ui-widget
 {
     font-family: Georgia, "Times New Roman" , Times, serif;
-    font-size: 1.2em;
+    font-size: 100%;
 }
 .ui-widget .ui-widget
 {
@@ -1896,4 +1894,13 @@ div.wijmo-wijribbon-simple span.ui-icon, div.wijmo-wijribbon .ui-state-active .u
 .wijmo-wijeditor-container .wijmo-wijsplitter-h-panel1-content
 {
     background: none;
+}
+/*fix for 19332 : [C1EventsCalendar] Borders and lines of time slot are not displayed clearly when “Theme” is set as midnight:*/
+.wijmo-wijev-view .ui-widget-content
+{
+    border-color: #838388;
+}
+div.wijmo-wijev .wijmo-wijev-view .ui-state-highlight
+{	
+	background-color: #515152;
 }

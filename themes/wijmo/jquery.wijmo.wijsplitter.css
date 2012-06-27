@@ -28,7 +28,7 @@
 {
     right: -7px;
     width: 10px;
-    z-index: 999;
+    z-index: 1000;
     display: block;
     background-color: white;
     filter: alpha(opacity=0);
@@ -153,7 +153,7 @@
 {
     bottom: -7px;
     height: 10px;
-    z-index: 999;
+    z-index: 1000;
     display: block;
     background-color: white;
     filter: alpha(opacity=0);

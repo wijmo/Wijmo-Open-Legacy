@@ -21,8 +21,9 @@
 }
 .ui-helper-hidden-accessible
 {
-    position: absolute;
-    left: -99999999px;
+    position: absolute !important;
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px,1px,1px,1px);
 }
 .ui-helper-reset
 {
@@ -43,18 +44,15 @@
     clear: both;
     visibility: hidden;
 }
-.ui-helper-clearfix
-{
-    display: inline-block;
+.ui-helper-clearfix:before, .ui-helper-clearfix:after {
+	content: "";
+	display: table;
 }
-/* required comment for clearfix to work in Opera \*/
-* html .ui-helper-clearfix
-{
-    height: 1%;
+.ui-helper-clearfix:after {
+	clear: both;
 }
-.ui-helper-clearfix
-{
-    display: block;
+.ui-helper-clearfix {
+	zoom: 1;
 }
 /* end clearfix */
 .ui-helper-zfix
@@ -125,7 +123,7 @@
 .ui-widget
 {
     font-family: Arial,sans-serif;
-    font-size: 1.1em;
+    font-size: 100%;
 }
 .ui-widget .ui-widget
 {

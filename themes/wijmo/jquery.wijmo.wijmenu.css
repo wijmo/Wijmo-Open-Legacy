@@ -38,6 +38,10 @@ margin:1px 0;
 padding:0;
 }
 
+.wijmo-wijmenu .wijmo-wijmenu-rtl .wijmo-wijmenu-item {
+	float: right;
+}
+
 .wijmo-wijmenu .wijmo-wijmenu-list .wijmo-wijmenu-item {
 background:none;
 border:none;
@@ -92,14 +96,14 @@ margin:1px 0;
 
 .wijmo-wijmenu-horizontal .wijmo-wijmenu-list .ui-widget-header
 {
-    width: auto;
-    clear: none;
-    margin: -1px 2px -2px 1px;
+	width: auto;
+	clear: none;
+	margin: -1px 2px -2px 1px;
 }
 .wijmo-wijmenu-horizontal .wijmo-wijmenu-child .ui-widget-header
 {
-    width: 98%;
-    margin: 1px 0;
+	width: 98%;
+	margin: 1px 0;
 }
 
 
@@ -253,6 +257,16 @@ float:right;
 
 .wijmo-wijmenu .wijmo-wijmenu-item .wijmo-wijmenu-text,.wijmo-wijmenu-horizontal .wijmo-wijmenu-parent .ui-icon,.wijmo-wijmenu-breadcrumb a,.wijmo-wijmenu-breadcrumb span,.wijmo-wijmenu-breadcrumb .wijmo-wijmenu-prev-list a .ui-icon {
 float:left;
+}
+
+.wijmo-wijmenu .wijmo-wijmenu-rtl .ui-icon-triangle-1-w
+{
+	float: left;
+}
+
+.wijmo-wijmenu .wijmo-wijmenu-rtl .wijmo-wijmenu-item .wijmo-wijmenu-text
+{
+	float: right;
 }
 
 .wijmo-wijmenu .wijmo-wijmenu-link .wijmo-wijmenu-icon-left {
