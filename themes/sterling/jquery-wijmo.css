@@ -35,14 +35,6 @@
     font-size: 100%;
     list-style: none;
 }
-.ui-helper-clearfix:after
-{
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
-}
 .ui-helper-clearfix:before, .ui-helper-clearfix:after {
 	content: "";
 	display: table;
@@ -53,7 +45,6 @@
 .ui-helper-clearfix {
 	zoom: 1;
 }
-/* end clearfix */
 .ui-helper-zfix
 {
     width: 100%;

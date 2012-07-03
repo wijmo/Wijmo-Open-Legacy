@@ -1,6 +1,6 @@
 /*
 *
-* Wijmo KnockoutJS Binding Library 2.1.1
+* Wijmo KnockoutJS Binding Library 2.1.4
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -811,10 +811,10 @@
         widgetName: "wijinputnumber",
         observableOptions: {
             disabled: {},
-            max: {
+            maxValue: {
                 type: 'numeric'
             },
-            min: {
+            minValue: {
                 type: 'numeric'
             },
             value: {

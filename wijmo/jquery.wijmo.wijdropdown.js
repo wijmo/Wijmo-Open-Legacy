@@ -1,7 +1,7 @@
 /*globals jQuery,document,window*/
 /*
 *
-* Wijmo Library 2.1.3
+* Wijmo Library 2.1.4
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -557,7 +557,7 @@
 
 		refresh: function () {
 			/// Use the refresh method to set the drop-down element's style.
-			var self = this, containerWidth;
+			var self = this, ele = self.element, containerWidth;
 
 			if (self.needInit) {
 				if (self.element.is(":visible")) {

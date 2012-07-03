@@ -1,7 +1,7 @@
 /*globals window document jQuery */
 /*
 *
-* Wijmo Library 2.1.3
+* Wijmo Library 2.1.4
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -1002,7 +1002,7 @@
 			originalElement[h ? "outerWidth" : "outerHeight"](true),
 			proportion = left / track,
 			topValue = (scroller.scrollMax - scroller.scrollLargeChange + 1),
-			v = proportion * topValue, arg;
+			v = proportion * topValue, arg, scrollValue, val;
 			if (v < scroller.scrollMin) {
 				v = scroller.scrollMin;
 			}
@@ -1018,7 +1018,14 @@
 				// event is canceled in scrolling.
 				return;
 			}
-			scroller.scrollValue = v;
+
+			if (self.customScroll) {
+				val = Math.abs(self.customScroll);
+				scrollValue = self.scrollPxToValue(val, scroller.dir)
+			}
+			scroller.scrollValue = scrollValue || v;
+			self.customScroll = undefined;
+
 			self._setDragAndContentPosition(true, false, dir, "dragging");
 		},
 
@@ -1210,7 +1217,8 @@
 			//var o = self.options;
 			var vMin = scroller.scrollMin,
 			change = isLarge ? largeChange : smallChange,
-			value = scroller.scrollValue, t, vTopValue, firstStepChangeFix, data;
+			value = scroller.scrollValue, t, vTopValue, firstStepChangeFix, data,
+			scrollValue, val;
 			if (!value) {
 				value = vMin;
 			}
@@ -1250,7 +1258,14 @@
 			if (!self._scrolling(true, self, data)) {
 				return false;
 			}
-			scroller.scrollValue = t;
+
+			if (self.customScroll) {
+				val = Math.abs(self.customScroll);
+				scrollValue = self.scrollPxToValue(val, scroller.dir)
+			}
+			scroller.scrollValue = scrollValue || t;
+			self.customScroll = undefined;
+
 			return true;
 		},
 
@@ -1371,7 +1386,7 @@
 			ele.removeClass(uiStateHover);
 		},
 
-		_getScorllOffset: function (child1) {
+		_getScrollOffset: function (child1) {
 
 			var child = $(child1), f, cWrapper, tempWrapper, // left, top,
 			childOffset, templateOffset, cWrapperOffset,
@@ -1434,7 +1449,7 @@
 			/// <param name="child" type="DOMElement/JQueryObj">
 			/// The child to scroll to.
 			/// </param>
-			var offset = this._getScorllOffset(child1);
+			var offset = this._getScrollOffset(child1);
 			return offset.top !== null || offset.left !== null;
 		},
 
@@ -1445,7 +1460,7 @@
 			/// <param name="child" type="DOMElement/JQueryObj">
 			/// The child to scroll to.
 			/// </param>
-			var offset = this._getScorllOffset(child1),
+			var offset = this._getScrollOffset(child1),
 				left = offset.left,
 				top = offset.top;
 
@@ -2023,6 +2038,8 @@
 				d.beforePosition = self.getContentElement().position();
 				self._beforePosition = d.beforePosition;
 				r = self._trigger("scrolling", null, d);
+
+				self.customScroll = d.customScroll;
 			}
 			return r;
 		},

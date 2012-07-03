@@ -1,4 +1,15 @@
 
+Wijmo-Open v2.1.4
+=================
+dropdown
+-----------
+Updated refresh method: Was cauging a js error in eventcalendar.
+
+menu
+----
+Stop event propagation when menu is shown as a context menu.
+
+
 Wijmo-Open v2.1.3
 =================
 Form Decorator

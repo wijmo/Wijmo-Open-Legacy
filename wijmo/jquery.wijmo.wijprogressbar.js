@@ -2,7 +2,7 @@
 
 /*
 *
-* Wijmo Library 2.1.3
+* Wijmo Library 2.1.4
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.

@@ -2,7 +2,7 @@
 
 /*
 *
-* Wijmo Library 2.1.3
+* Wijmo Library 2.1.4
 * http://wijmo.com/
 *
 * Copyright(c) ComponentOne, LLC.  All rights reserved.
@@ -284,7 +284,7 @@
 				direction = o.direction,
 				mode = o.mode,
 				parentWidget,
-				ele = self.element, sublist, breadcrumb,
+				ele = self.element, sublist,
 				keycode = $.ui.keyCode;
 
 			//fix for issus 20651 by Chandler.Zheng on 2012/03/19
@@ -311,8 +311,7 @@
 				}
 				var activeItem = self.activeItem,
 					isRoot, link,
-					orientation = o.orientation,
-					direction = o.direction;
+					orientation = o.orientation;
 
 				if (activeItem) {
 					isRoot = activeItem._isRoot();
@@ -424,7 +423,8 @@
 		
 		_keyDownToOpenSubmenu: function (activeItem, mode, event, sublist) {
 			var self = this;
-			if (mode === "flyout" && $.wijmo.wijmenu._hasVisibleSubMenus(activeItem) > 0) {
+			if (mode === "flyout" && 
+					$.wijmo.wijmenu._hasVisibleSubMenus(activeItem) > 0) {
 				if (sublist.is(":hidden")) {
 					activeItem._showFlyoutSubmenu(event, function () {
 						self.activate(event, activeItem._getFirstSelectableSubItem());
@@ -455,7 +455,8 @@
 						}
 					});
 				}
-				breadcrumb = $(".wijmo-wijmenu-breadcrumb", self.domObject.menucontainer).find("li a");
+				breadcrumb = $(".wijmo-wijmenu-breadcrumb", 
+					self.domObject.menucontainer).find("li a");
 				if (breadcrumb.length > 0) {
 					breadcrumb.eq(breadcrumb.length - 2).trigger("click", function () {
 						if (parentWidget) {
@@ -612,8 +613,8 @@
 			if (!active) {
 				return;
 			}
-			//Fix an issue that the class can't be removed sometimes when playing animation
-			//in FF/Webkit.
+			//Fix an issue that the class can't be removed sometimes when 
+			//playing animation in FF/Webkit.
 			setTimeout(function () {
 				active._getLink()
 				.removeClass("ui-state-focus")
@@ -919,10 +920,11 @@
 		_set_trigger: function (value) {
 			var self = this,
 				o = self.options,
-				triggerEle = self._getTriggerEle();
+				triggerEle;
 
 			self._killtrigger();
 			o.trigger = value;
+			triggerEle = self._getTriggerEle();
 			if (triggerEle.length > 0) {
 				self._initTrigger(triggerEle);
 			}
@@ -949,16 +951,19 @@
 					if (o.mode !== "popup") {
 						self._displayMenu(e);
 					}
+					e.stopPropagation();
 				});
 				break;
 			case "mouseenter":
 				triggerEle.bind(event + namespace, function (e) {
 					self._displayMenu(e);
+					e.stopPropagation();
 				});
 				break;
 			case "dblclick":
 				triggerEle.bind(event + namespace, function (e) {
 					self._displayMenu(e);
+					e.stopPropagation();
 				});
 				break;
 			case "rtclick":
@@ -966,6 +971,7 @@
 					menuContainer.hide();
 					self._displayMenu(e);
 					e.preventDefault();
+					e.stopPropagation();
 				});
 				break;
 			}
@@ -981,7 +987,8 @@
 					triggerEle = $(triggerEle.get(0).contentWindow.document);
 				}
 				if (triggerEle && triggerEle.length > 0) {
-					triggerEle.unbind(".wijmenuEvent");
+					triggerEle.unbind(".wijmenuEvent")
+						.unbind("wijmenuEvent");
 				}
 			}
 		},
@@ -2732,12 +2739,12 @@
 				o = menu.options,
 				direction = o.direction,
 				pOption = direction === "rtl" ? {
-						my: 'right top',
-						at: 'left top'
-					} : { 
-						my: 'left top',
-						at: 'right top'
-					};
+					my: 'right top',
+					at: 'left top'
+				} : { 
+					my: 'left top',
+					at: 'right top'
+				};
 
 			//If the menu's orientation is horizontal, 
 			//set the first level submenu's position to horizontal. 
