@@ -359,7 +359,7 @@ amplify*/
 				return false;
 			}
 			if (!this._trigger("beforeSelectedIndexChanged", null,
-					{ newIndex: newIndex, prevIndex: prevIndex })) {
+					{ newIndex: newIndex, prevIndex: prevIndex, newContent: nextContent, prevContent: prevContent })) {
 				return false;
 			}
 
