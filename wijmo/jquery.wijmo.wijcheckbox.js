@@ -1,10 +1,10 @@
 /*globals jQuery*/
 /*
 *
-* Wijmo Library 2.1.4
+* Wijmo Library 2.2.0
 * http://wijmo.com/
 *
-* Copyright(c) ComponentOne, LLC.  All rights reserved.
+* Copyright(c) GrapeCity, Inc.  All rights reserved.
 * 
 * Dual licensed under the MIT or GPL Version 2 licenses.
 * licensing@wijmo.com
@@ -163,6 +163,13 @@
 			}
 		},
 		
+        _create: function () {
+			// enable touch support:
+			if (window.wijmoApplyWijTouchUtilEvents) {
+				$ = window.wijmoApplyWijTouchUtilEvents($);
+			}
+        },
+        
         _setOption: function (key, value) {
         	var self = this,
         	originalCheckedState = self.options.checked;

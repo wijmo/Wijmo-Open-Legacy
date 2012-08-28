@@ -1,9 +1,9 @@
 /*
 *
-* Wijmo KnockoutJS Binding Library 2.1.4
+* Wijmo KnockoutJS Binding Library 2.2.0
 * http://wijmo.com/
 *
-* Copyright(c) ComponentOne, LLC.  All rights reserved.
+* Copyright(c) GrapeCity, Inc.  All rights reserved.
 * 
 * Dual licensed under the MIT or GPL Version 2 licenses.
 * licensing@wijmo.com
@@ -337,6 +337,10 @@
             value: {
                 type: 'numeric'
             },
+            face: {},
+            pointer: {},
+            labels: {},
+            disabled: {},
             ranges: {
                 type: 'array'
             }
@@ -347,6 +351,10 @@
         widgetName: "wijradialgauge",
         observableOptions: {
             disabled: {},
+            face: {},
+            pointer: {},
+            cap: {},
+            labels: {},
             min: {
                 type: 'numeric'
             },
@@ -632,6 +640,15 @@
         widgetName: "wijgrid",
         observableOptions: {
             disabled: {},
+            pageIndex: {
+                type: 'numeric'
+            },
+            pageSize: {
+                type: 'numeric'
+            },
+            totalRows: {
+                type: 'numeric'
+            },
             data: {
                 type: 'array',
                 attachEvents: ['aftercelledit'],
@@ -689,7 +706,11 @@
             editorMode: {},
             showPathSelector: {},
             mode: {},
-            showFooter: {}
+            showFooter: {},
+            text: {
+                type: 'string',
+                attachEvents: ['textChanged']
+            }
         }
     });
 
@@ -727,6 +748,9 @@
             isEditable: {},
             selectedIndex: {
                 type: 'numeric',
+                attachEvents: ['changed']
+            },
+            selectedValue: {
                 attachEvents: ['changed']
             }
         }

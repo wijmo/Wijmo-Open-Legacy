@@ -2,10 +2,10 @@
 /*jslint white: false */
 /*
 *
-* Wijmo Library 2.1.4
+* Wijmo Library 2.2.0
 * http://wijmo.com/
 *
-* Copyright(c) ComponentOne, LLC.  All rights reserved.
+* Copyright(c) GrapeCity, Inc.  All rights reserved.
 * 
 * Dual licensed under the MIT or GPL Version 2 licenses.
 * licensing@wijmo.com
@@ -247,7 +247,7 @@
 				.attr({
 					"aria-expanded": "false",
 					tabIndex: -1
-				})
+				})				
 				.find("> .ui-icon").addClass(this._triangleIconClosed);
 			} else {
 				this.element.find("> .ui-expander-header")
@@ -261,7 +261,8 @@
 				.addClass(this._triangleIconOpened);
 				this.element.find("> .ui-widget-content")
 				.addClass("ui-expander-content-active")
-				.addClass(this._contentCornerOpened);
+				.addClass(this._contentCornerOpened)
+				.wijTriggerVisibility();
 			}
 			if (o.disabled) {
 				this.element.addClass("ui-state-disabled");
@@ -476,8 +477,9 @@
 					complete: jQuery.proxy(function () {
 						this.element.find("> .ui-widget-content")
 						.addClass("ui-expander-content-active")
-						.addClass(this._contentCornerOpened);
-						this._trigger("afterExpand");
+						.addClass(this._contentCornerOpened)
+						.wijTriggerVisibility();
+						this._trigger("afterExpand")						
 						this.element.find("> .ui-widget-content").css('display', '');
 					}, this),
 					horizontal: this.element.hasClass("ui-helper-horizontal")

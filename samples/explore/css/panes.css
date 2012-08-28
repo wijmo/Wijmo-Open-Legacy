@@ -1,0 +1,47 @@
+BODY {
+	MARGIN: 0px; -webkit-text-size-adjust: 100%
+}
+.page {
+	BOTTOM: 0px; TOP: 0px; RIGHT: 0px; LEFT: 0px
+}
+.row {
+	POSITION: absolute; OVERFLOW: hidden
+}
+.col {
+	POSITION: absolute; OVERFLOW: hidden
+}
+.page {
+	POSITION: absolute; OVERFLOW: hidden
+}
+.row {
+	RIGHT: 0px; LEFT: 0px
+}
+.col {
+	BOTTOM: 0px; TOP: 0px
+}
+.scroll-x {
+	OVERFLOW-X: auto; -webkit-overflow-scrolling: touch
+}
+.scroll-y {
+	OVERFLOW-Y: auto; -webkit-overflow-scrolling: touch
+}
+.fill {
+	POSITION: absolute; WIDTH: 100%; BOTTOM: 0px; HEIGHT: 100%; TOP: 0px; RIGHT: 0px; LEFT: 0px
+}
+.pane {
+	POSITION: absolute; WIDTH: 100%; BOTTOM: 0px; HEIGHT: 100%; TOP: 0px; RIGHT: 0px; LEFT: 0px
+}
+.pane {
+	DISPLAY: none
+}
+.iemobile .page {
+	BOTTOM: -6px
+}
+
+@media Unknown    
+{
+.iemobile .page {
+	BOTTOM: 75px
+}
+
+}

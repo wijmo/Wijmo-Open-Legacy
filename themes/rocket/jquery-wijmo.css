@@ -3,7 +3,7 @@
  * Wijmo Rocket Theme
  * http://wijmo.com/
  * 
- * Copyright(c) ComponentOne, LLC.  All rights reserved.
+ * Copyright(c) GrapeCity, Inc.  All rights reserved.
  * 
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * licensing@wijmo.com
@@ -1928,7 +1928,7 @@ button.ui-button::-moz-focus-inner
     color: #404040;
     border: solid 1px #e1e1e1;
 }
-.wijmo-checkbox .wijmo-checkbox-box, div.wijmo-wijradio-box
+.wijmo-checkbox .wijmo-checkbox-box, .wijmo-wijradio div.wijmo-wijradio-box
 {
     background: #f1f1f1;
     border: solid 1px #e1e1e1;
@@ -1952,7 +1952,7 @@ button.ui-button::-moz-focus-inner
     text-shadow: none;
 }
 
-.wijmo-checkbox .ui-state-active, .wijmo-wijradio .ui-state-active
+.wijmo-checkbox .ui-state-active, .wijmo-wijradio .wijmo-wijradio-box.ui-state-active
 {
     -moz-box-shadow: inset 1px 1px 0 rgba(255,255,255,0.15);
     -webkit-box-shadow: inset 1px 1px 0 rgba(255,255,255,0.15);
@@ -2346,4 +2346,9 @@ div.wijmo-wijribbon .ui-state-active .ui-button-text
 /* Grid highlight row icon fix */
 .wijmo-wijgrid .ui-state-highlight .ui-state-active .ui-icon {
     background-image: url("images/ui-icons_00a6dd_256x240.png");
+}
+
+.wijmo-wijinput .wijmo-wijinput-input
+{
+    color: #404040;
 }

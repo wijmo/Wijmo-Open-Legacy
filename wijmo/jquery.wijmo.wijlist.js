@@ -1,10 +1,10 @@
 /*globals jQuery*/
 /*
  *
- * Wijmo Library 2.1.4
+ * Wijmo Library 2.2.0
  * http://wijmo.com/
  *
- * Copyright(c) ComponentOne, LLC.  All rights reserved.
+ * Copyright(c) GrapeCity, Inc.  All rights reserved.
  * 
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * licensing@wijmo.com
@@ -394,6 +394,12 @@
 
 		_create: function () {
 			var self = this, ele = this.element, o = this.options;
+			
+			// enable touch support:
+			if (window.wijmoApplyWijTouchUtilEvents) {
+				$ = window.wijmoApplyWijTouchUtilEvents($);
+			}
+			
 			ele.addClass(listCSS).attr({
 				role: "listbox",
 				"aria-activedescendant": activeItem,
@@ -418,6 +424,17 @@
 					self.renderList();
 					self.refreshSuperPanel();
 				}
+			}
+			
+			//update for visibility change
+			if (self.element.is(":hidden") &&
+						self.element.wijAddVisibilityObserver) {
+				self.element.wijAddVisibilityObserver(function () {
+					self.refreshSuperPanel();
+					if (self.element.wijRemoveVisibilityObserver) {
+						self.element.wijRemoveVisibilityObserver();
+					}
+				}, "wijlist");
 			}
 
 			//Add for support disabled option at 2011/7/8
@@ -493,10 +510,14 @@
 			var self = this, selectedItems;
 
 			if (isExtend) {
+				//update for 24130 issue at 2012/7/20
+				//first load the items by keydown, the 
+				//items.length will not be equal self._templates.length				
 				if (self._templates && items && items.length !== self._templates.length) {
 					return;
 				}
 				self.items = items;
+				//end
 				if (!self.items) {
 					self.items = [];
 				}
@@ -504,8 +525,10 @@
 					if (self.items[idx]) {
 						self.items[idx].templateHtml = self._templates[idx].templateHtml;
 					} else {
-						self.items.push({ templateHtml:
-							self._templates[idx].templateHtml
+						self.items.push({ 
+							templateHtml: self._templates[idx].templateHtml,
+							label: items[idx].label,
+							value: items[idx].value	
 						});
 					}
 				});
@@ -530,6 +553,41 @@
 			}
 		},
 
+		filterTemplateItems: function (searchTerm) {
+			var self = this,
+			term1 = self._escapeRegex(searchTerm), matcher,
+			topHit = null;
+			/// TODO : start with or contains and case sensitive.
+			if (!this.items) {
+				return null;
+			}
+			matcher = new RegExp(term1, "i");
+			$.each(this.items, function (index, item) {
+				var matchResult = matcher.exec(item.label);
+				if (matchResult === null) {
+					item.element.hide();
+				}
+				else {
+					// update for: when using the key to active the item 
+					// the active item is incorrect at 2012/8/13
+					if (item.selected) {
+						self.activate(null, item, false);
+					}
+					if (!item.element.is("visible")) {
+						item.element.show();
+					}
+
+					//update for 25224 issue at 2012/8/13
+					if (term1 !== undefined && term1.length !== 0 &&
+							topHit === null && matchResult.index === 0) {
+						//self.activate(null, item, true);
+						topHit = item;
+					}
+				}
+			});
+			return topHit;
+		},
+		
 		popItem: function () {
 			///	<summary>
 			///	Remove the last item in the wijlist. 
@@ -574,7 +632,8 @@
 				self.superPanel.destroy();
 			}
 
-			ele.removeClass(listCSS).removeAttr("role")
+			ele.removeClass("wijmo-wijobserver-visibility")
+			.removeClass(listCSS).removeAttr("role")
 			.removeAttr("aria-activedescendant").unbind("." + self.widgetName);
 			self.ul.remove();
 
@@ -723,7 +782,13 @@
 				self.activate(event, item, true);
 				return;
 			}
-			next = self.active.element[direction + "All"]("." + listItemCSS).eq(0);
+			if (!self._templates) {
+				next = self.active.element[direction + "All"]("." + listItemCSS).eq(0);
+			} else {
+				//add for only visible item will be moved
+				next = self.active.element[direction + "All"](":visible." + listItemCSS).eq(0);
+			}
+			
 			if (next.length) {
 				self.activate(event, next.data(itemKey), true);
 			}
@@ -751,6 +816,11 @@
 				return;
 			}
 			item = ele.data(itemKey);
+			//update for 24106 issue at 2012/7/20
+			if (!item) {
+				return;
+			}
+			//end 
 			singleMode = self.options.selectionMode === "single";
 			if (singleMode) {
 				previous = self.selectedItem;
@@ -1009,6 +1079,13 @@
 			self._trigger("itemRendered", null, item);
 		},
 		
+		_escapeRegex: function (value) {
+			if (value === undefined) {
+				return value;
+			}
+			return value.replace(/([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, "\\$1");
+		},
+		
 		//update for juice
 		adjustOptions: function () {
 			var o = this.options, i;
@@ -1029,6 +1106,7 @@
 
 			var self = this, ele = this.element, o = this.options, ul = this.ul,
 			singleItem = ul.children(".wijmo-wijlist-item:first"),
+			headerHeight,
 			adjustHeight = null, h, percent, small, vScroller, large, spOptions, pt;
 			if (!ele.is(":visible")) {
 				return false;
@@ -1072,7 +1150,22 @@
 				vScroller = self.superPanel.options.vScroller;
 				vScroller.scrollLargeChange = large;
 				vScroller.scrollSmallChange = small;
+				//update for fixing can't show all dropdown items by wuhao
 				self.superPanel.paintPanel();
+				if (self.superPanel.vNeedScrollBar) {
+					ul.setOutWidth(ele.innerWidth() - 18);
+					self.superPanel.refresh();
+				} else {
+					ul.setOutWidth(ele.outerWidth());
+					headerHeight = ele
+					.children(".wijmo-wijsuperpanel-header").outerHeight();
+					//update for case 24248 at 2012/7/27
+					//Note: not good method for doing this
+					ele.height(ul.outerHeight() + headerHeight);
+					//end 
+					self.superPanel.refresh();
+				}
+				//end for issue
 			}
 			pt = ul.css("padding-top");
 			if (pt.length > 0) {

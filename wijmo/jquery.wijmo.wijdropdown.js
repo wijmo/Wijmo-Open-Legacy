@@ -1,10 +1,10 @@
 /*globals jQuery,document,window*/
 /*
 *
-* Wijmo Library 2.1.4
+* Wijmo Library 2.2.0
 * http://wijmo.com/
 *
-* Copyright(c) ComponentOne, LLC.  All rights reserved.
+* Copyright(c) GrapeCity, Inc.  All rights reserved.
 * 
 * Dual licensed under the MIT or GPL Version 2 licenses.
 * licensing@wijmo.com
@@ -44,6 +44,12 @@
 		_create: function () {
 			var self = this,
 				ele = self.element;
+			
+			// enable touch support:
+			if (window.wijmoApplyWijTouchUtilEvents) {
+				$ = window.wijmoApplyWijTouchUtilEvents($);
+			}
+			
 			if (ele.get(0).tagName.toLowerCase() !== "select") {
 				return;
 			}
@@ -57,6 +63,16 @@
 			else {
 				self.needInit = true;
 			}
+			
+			//update for visibility change
+			if (self.element.is(":hidden") &&
+						self.element.wijAddVisibilityObserver) {
+				self.element.wijAddVisibilityObserver(function () {
+			           self.refresh();
+			           if(self.element.wijRemoveVisibilityObserver) {
+			        	   self.element.wijRemoveVisibilityObserver();
+			           }}, "wijdropdown");
+			 }
 		},
 
 		_createSelect: function () {
@@ -115,21 +131,21 @@
 			self._list = list;
 			self._value = ele.val();
 			//self._selectedIndex = ele.find("option:selected").index();
-			self._selectedIndex = $('option',ele)
-									.index(ele.find("option:selected")),
+			self._selectedIndex = $('option', ele)
+									.index(ele.find("option:selected"));
 			self._selectWrap = selectWrap;
 			self._labelWrap = labelWrap;
 			self._container = container;
-			
+
 			//update for fixed tooltip can't take effect
-			container.attr("title",ele.attr("title"));
+			container.attr("title", ele.attr("title"));
 			ele.removeAttr("title");
 		},
 
 		_buildList: function (list, listContainer, eleWidth) {
 			var self = this,
 				ele = self.element, height;
-			
+
 			listContainer.show();
 
 			ele.children().each(function (i, n) {
@@ -153,12 +169,12 @@
 					list.append(group);
 				}
 			});
-			
+
 			//update for fixing height setting is incorrect when 
 			//execute refresh at 2011/11/30
 			listContainer.height("");
 			//end for height setting
-			
+
 			height = listContainer.height();
 			height = list.outerHeight() < height ? list.outerHeight() : height;
 
@@ -166,11 +182,11 @@
 				height: height,
 				width: eleWidth
 			});
-			
+
 			//update for fixing can't show all dropdown items by wuhao at 2012/2/24
 			list.setOutWidth(list.parent().parent().innerWidth() - 18);
 			//end for issue
-			
+
 			if (listContainer.data("wijsuperpanel")) {
 				listContainer.wijsuperpanel("paintPanel");
 				self.superpanel = listContainer.data("wijsuperpanel");
@@ -181,7 +197,7 @@
 			if ($.fn.bgiframe) {
 				self.superpanel.element.bgiframe();
 			}
-			
+
 			//update for fixing can't show all dropdown items by wuhao at 2012/2/24
 			//list.setOutWidth(list.parent().parent().innerWidth());
 			if (!self.superpanel.vNeedScrollBar) {
@@ -189,7 +205,7 @@
 				self.superpanel.refresh();
 			}
 			//end for issue
-			
+
 			listContainer.hide();
 		},
 
@@ -466,7 +482,7 @@
 				self._label.text(self._activeItem.text());
 				self._value = self._activeItem.data("value");
 				//self._selectedIndex = self._activeItem.index();
-				self._selectedIndex = $('li.wijmo-dropdown-item',listContainer)
+				self._selectedIndex = $('li.wijmo-dropdown-item', listContainer)
 											.index(self._activeItem);
 
 				if (self.superpanel.vNeedScrollBar) {
@@ -484,20 +500,20 @@
 				}
 			}
 		},
-		
+
 		_setValueToEle: function () {
 			var self = this, ele = self.element,
 				oldSelectedItem = ele.find("option[selected]"),
-				//oldSelectedIndex = oldSelectedItem.index(),
-				oldSelectedIndex = $('option',ele).index(oldSelectedItem),
+			//oldSelectedIndex = oldSelectedItem.index(),
+				oldSelectedIndex = $('option', ele).index(oldSelectedItem),
 				selectedIndex = self._selectedIndex;
-			
+
 			//self.oldVal = ele.val();
 			//ele.val(self._value);
 			if (oldSelectedIndex !== selectedIndex) {
 				oldSelectedItem.removeAttr('selected');
 				ele.find("option:eq(" + selectedIndex + ")").attr("selected", true);
-				
+
 				ele.trigger("change");
 			}
 			//if (self.oldVal !== self._value) {
@@ -572,7 +588,7 @@
 				if (!self._list) {
 					return;
 				}
-				
+
 				self._listContainer.show();
 				//update for fixing width settings is wrong when
 				//execute refresh method at 2011/11/30
@@ -587,13 +603,13 @@
 				self._container.width(containerWidth);
 				self._selectWrap.addClass("ui-helper-hidden");
 				//end for fixing width settings at 2011/11/30
-				
+
 				self._list.empty();
 				self._buildList(self._list, self._listContainer, containerWidth);
 				self._value = self.element.val();
 				//self._selectedIndex = ele.find("option :selected").index();
-				self._selectedIndex = $('option',ele)
-									.index(ele.find("option:selected")),
+				self._selectedIndex = $('option', ele)
+									.index(ele.find("option:selected"));
 				self._initActiveItem();
 				if (self._activeItem) {
 					self._label.text(self._activeItem.text());
@@ -662,10 +678,10 @@
 		},
 
 		destroy: function () {
-			
+
 			//update for fixed tooltip can't take effect
 			this.element.attr("title", this._container.attr("title"));
-			
+
 			/// Remove the functionality completely. 
 			/// This will return the element back to its pre-init state.
 			this.element.closest(".wijmo-wijdropdown")

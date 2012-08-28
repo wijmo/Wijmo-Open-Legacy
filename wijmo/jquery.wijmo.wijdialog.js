@@ -1,10 +1,10 @@
 /*globals window,document,jQuery,setTimeout*/
 /*
 *
-* Wijmo Library 2.1.4
+* Wijmo Library 2.2.0
 * http://wijmo.com/
 *
-* Copyright(c) ComponentOne, LLC.  All rights reserved.
+* Copyright(c) GrapeCity, Inc.  All rights reserved.
 * 
 * Dual licensed under the MIT or GPL Version 2 licenses.
 * licensing@wijmo.com
@@ -147,6 +147,11 @@
 		_create: function () {
 			var self = this,
 				o = self.options;
+			
+			// enable touch support:
+			if (window.wijmoApplyWijTouchUtilEvents) {
+				$ = window.wijmoApplyWijTouchUtilEvents($);
+			}
 
 			//Add support for jUICE!
 			if ($.isArray(o.buttons)) {
@@ -993,6 +998,12 @@
 
 		open: function () {
 			var self = this, o = self.options;
+
+			if ((o.hide === "drop"|| o.hide === "bounce") && $.browser.msie) { 
+				//fixed bug when effect "drop" on IE
+				self.uiDialog.css("filter", "auto");
+			}
+
 			if (!self.innerFrame) {
 				if (!self.minimized) {
 					$.ui.dialog.prototype.open.apply(self, arguments);
@@ -1003,6 +1014,7 @@
 				else {
 					self.uiDialog.show();
 				}
+				self.uiDialog.wijTriggerVisibility();
 			}
 			else {
 				self.innerFrame.attr("src", o.contentUrl);

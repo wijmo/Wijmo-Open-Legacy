@@ -1,10 +1,10 @@
 /*globals window,document,jQuery*/
 /*
 *
-* Wijmo Library 2.1.4
+* Wijmo Library 2.2.0
 * http://wijmo.com/
 *
-* Copyright(c) ComponentOne, LLC.  All rights reserved.
+* Copyright(c) GrapeCity, Inc.  All rights reserved.
 * 
 * Dual licensed under the MIT or GPL Version 2 licenses.
 * licensing@wijmo.com
@@ -168,29 +168,30 @@
 			//end for disabled option
 			return this;
 		},
-		
-		_setRangeOption:function(value) {
+
+		_setRangeOption: function (value) {
 			var self = this,
-			element = self.element,
 			o = self.options;
-			
-			if ( value ) {
-				if ( value === true ) {
-					if ( !o.values ) {
-						o.values = [ self._valueMin(), self._valueMin() ];
+
+			if (value) {
+				if (value === true) {
+					if (!o.values) {
+						o.values = [self._valueMin(), self._valueMin()];
 					}
-					if ( o.values.length && o.values.length !== 2 ) {
-						o.values = [ o.values[0], o.values[0] ];
+					if (o.values.length && o.values.length !== 2) {
+						o.values = [o.values[0], o.values[0]];
 					}
 				}
 
-				self.range = $( "<div></div>" )
-					.appendTo( self.element )
-					.addClass( "ui-slider-range" +
-					// note: this isn't the most fittingly semantic framework class for this element,
-					// but worked best visually with a variety of themes
-					" ui-widget-header" + 
-					( ( o.range === "min" || o.range === "max" ) ? " ui-slider-range-" + o.range : "" ) );
+				self.range = $("<div></div>")
+					.appendTo(self.element)
+					.addClass("ui-slider-range" +
+				// note: this isn't the most fittingly semantic 
+				// framework class for this element,
+				// but worked best visually with a variety of themes
+					" ui-widget-header" +
+					((o.range === "min" || o.range === "max") ?
+									" ui-slider-range-" + o.range : ""));
 			} else {
 				self.range.remove();
 			}
@@ -206,12 +207,15 @@
 				o = self.options,
 				jqElement, val, vals, idx, len,
 				ctrlWidth, ctrlHeight, container, decreBtn, increBtn,
-				decreBtnWidth, decreBtnHeight, increBtnWidth,
-				increBtnHeight, thumb, thumbWidth, thumbHeight,
-				dbtop, ibtop, dbleft, ibleft;
+				thumb;
+			
+			// enable touch support:
+			if (window.wijmoApplyWijTouchUtilEvents) {
+				$ = window.wijmoApplyWijTouchUtilEvents($);
+			}
 
 			self._oriStyle = element.attr("style");
-			
+
 			if (element.is(":input")) {
 				if (o.orientation === "horizontal") {
 					jqElement = $("<div></div>")
@@ -276,39 +280,11 @@
 			increBtn = $("<a class=\"wijmo-wijslider-incbutton\"><span></span></a>");
 			element.wrap(container).before(decreBtn).after(increBtn);
 
+			self._container = element.parent();
 			self._attachClass();
-
-			decreBtnWidth = decreBtn.outerWidth();
-			decreBtnHeight = decreBtn.outerHeight();
-			increBtnWidth = increBtn.outerWidth();
-			increBtnHeight = increBtn.outerHeight();
 			thumb = element.find(".ui-slider-handle");
-			thumbWidth = thumb.outerWidth();
-			thumbHeight = thumb.outerHeight();
-			//update code for height and width calculation at 2011/7/12
-			//element.removeAttr("style");
-			//end for height and width calculation
 
-			if (o.orientation === "horizontal") {
-				dbtop = ctrlHeight / 2 - decreBtnHeight / 2;
-				decreBtn.css("top", dbtop).css("left", 0);
-				ibtop = ctrlHeight / 2 - increBtnHeight / 2;
-				increBtn.css("top", ibtop).css("right", 0);
-
-				element.css("left", decreBtnWidth + thumbWidth / 2 - 1)
-				.css("top", ctrlHeight / 2 - element.outerHeight() / 2)
-				.width(ctrlWidth - decreBtnWidth - increBtnWidth - thumbWidth - 2);
-			} else {
-				dbleft = ctrlWidth / 2 - decreBtnWidth / 2;
-				decreBtn.css("left", dbleft).css("top", 0);
-				ibleft = ctrlWidth / 2 - increBtnWidth / 2;
-				increBtn.css("left", ibleft).css("bottom", 0);
-
-				element
-				.css("left", ctrlWidth / 2 - element.outerWidth() / 2)
-				.css("top", decreBtnHeight + thumbHeight / 2 + 1)
-				.height(ctrlHeight - decreBtnHeight - increBtnHeight - thumbHeight - 2);
-			}
+			self._adjustSliderLayout(decreBtn, increBtn, thumb);
 
 			//Add for support disabled option at 2011/7/8
 			if (o.disabledState) {
@@ -317,6 +293,17 @@
 				o.disabled = dis;
 			}
 			//end for disabled option
+
+			//update for visibility change
+			if (self.element.is(":hidden") &&
+						self.element.wijAddVisibilityObserver) {
+				self.element.wijAddVisibilityObserver(function () {
+					self._refresh();
+					if (self.element.wijRemoveVisibilityObserver) {
+						self.element.wijRemoveVisibilityObserver();
+					}
+				}, "wijslider");
+			}
 
 			self._bindEvents();
 		},
@@ -358,6 +345,64 @@
 				});
 		},
 
+		_refresh: function () {
+			var self = this,
+			increBtn, decreBtn, thumb;
+
+			//			self.destroy();
+			//			self._create();
+
+			decreBtn = self._container.find(".wijmo-wijslider-decbutton");
+			increBtn = self._container.find(".wijmo-wijslider-incbutton");
+			thumb = self._container.find(".ui-slider-handle");
+
+			self._adjustSliderLayout(decreBtn, increBtn, thumb);
+			self._refreshValue();
+		},
+
+		_adjustSliderLayout: function (decreBtn, increBtn, thumb) {
+			var self = this,
+			element = self.element,
+			o = self.options,
+			ctrlWidth, ctrlHeight,
+			decreBtnWidth, decreBtnHeight, increBtnWidth,
+			increBtnHeight, thumbWidth, thumbHeight,
+			dbtop, ibtop, dbleft, ibleft;
+
+			ctrlWidth = self._container.width();
+			ctrlHeight = self._container.height();
+
+			decreBtnWidth = decreBtn.outerWidth();
+			decreBtnHeight = decreBtn.outerHeight();
+			increBtnWidth = increBtn.outerWidth();
+			increBtnHeight = increBtn.outerHeight();
+
+			thumbWidth = thumb.outerWidth();
+			thumbHeight = thumb.outerHeight();
+
+			if (o.orientation === "horizontal") {
+				dbtop = ctrlHeight / 2 - decreBtnHeight / 2;
+				decreBtn.css("top", dbtop).css("left", 0);
+				ibtop = ctrlHeight / 2 - increBtnHeight / 2;
+				increBtn.css("top", ibtop).css("right", 0);
+
+				element.css("left", decreBtnWidth + thumbWidth / 2 - 1)
+				.css("top", ctrlHeight / 2 - element.outerHeight() / 2)
+				.width(ctrlWidth - decreBtnWidth - increBtnWidth - thumbWidth - 2);
+
+			} else {
+				dbleft = ctrlWidth / 2 - decreBtnWidth / 2;
+				decreBtn.css("left", dbleft).css("top", 0);
+				ibleft = ctrlWidth / 2 - increBtnWidth / 2;
+				increBtn.css("left", ibleft).css("bottom", 0);
+
+				element
+				.css("left", ctrlWidth / 2 - element.outerWidth() / 2)
+				.css("top", decreBtnHeight + thumbHeight / 2 + 1)
+				.height(ctrlHeight - decreBtnHeight - increBtnHeight - thumbHeight - 2);
+			}
+		},
+
 		destroy: function () {
 			///	<summary>
 			///	Remove the slider functionality completely. 
@@ -369,7 +414,7 @@
 			decreBtn.unbind('.' + self.widgetName);
 			increBtn.unbind('.' + self.widgetName);
 			$.ui.slider.prototype.destroy.apply(this, arguments);
-			
+
 			//update for destroy by wh at 2011/11/11
 			//this.element.parent().removeAttr("class");
 			//this.element.parent().html("");
@@ -385,7 +430,7 @@
 			.removeData("originalStyle")
 			.removeData("originalContent");
 			//end
-			
+
 			//Add for support disabled option at 2011/7/8
 			if (self.disabledDiv) {
 				self.disabledDiv.remove();
@@ -470,7 +515,7 @@
 
 		_decreBtnMouseOver: function (e) {
 			var self = e.data, data, decreBtn;
-			
+
 			if (self.options.disabledState) {
 				return;
 			}
@@ -650,7 +695,7 @@
 			if (self.options.disabledState) {
 				return;
 			}
-			
+
 			//note: step1: slide the slider btn, the change event has fired;
 			//step2: then click the decre button, the change event don't fired.
 			self._mouseSliding = false;
@@ -740,7 +785,7 @@
 				//update for unbind by wh at 2011/11/11
 				//this.element.bind('click', function (event) {
 				this.element.bind('click.' + self.widgetName, function (event) {
-				//end for unbind
+					//end for unbind
 					if (self._dragFillStart > 0) {
 						self._dragFillStart = 0;
 					} else {

@@ -41,10 +41,10 @@
     right: -4px;
 }
 
-* + html .wijmo-wijsplitter-vertical .ui-resizable-e
+/** + html .wijmo-wijsplitter-vertical .ui-resizable-e
 {
     right: -4px;
-}
+}*/
 
 .wijmo-wijsplitter-v-expander
 {
@@ -166,10 +166,10 @@
     bottom: -4px;
 }
 
-* + html .wijmo-wijsplitter-horizontal .ui-resizable-s
+/** + html .wijmo-wijsplitter-horizontal .ui-resizable-s
 {
     bottom: -4px;
-}
+}*/
 
 .wijmo-wijsplitter-h-expander
 {

@@ -1,10 +1,10 @@
 /*globals window,document,jQuery*/
 /*
 *
-* Wijmo Library 2.1.4
+* Wijmo Library 2.2.0
 * http://wijmo.com/
 *
-* Copyright(c) ComponentOne, LLC.  All rights reserved.
+* Copyright(c) GrapeCity, Inc.  All rights reserved.
 * 
 * Dual licensed under the MIT or GPL Version 2 licenses.
 * licensing@wijmo.com
@@ -274,11 +274,11 @@
 			} else if ($.isPlainObject(o[key])) {
 				if (key === "panel1" &&
 					value.collapsed !== undefined) {
-					//if(value.collapsed�� { o.panel2.collapsed = false; }
+					//if(value.collapsed) { o.panel2.collapsed = false; }
 					self._setPanel1Collapsed(value.collapsed);
 				} else if (key === "panel2" &&
 					value.collapsed !== undefined) {
-					//if(value.collapsed�� { o.panel1.collapsed = false; }
+					//if(value.collapsed) { o.panel1.collapsed = false; }
 					self._setPanel2Collapsed(value.collapsed);
 				}
 				o[key] = $.extend(true, o[key], value);
@@ -317,6 +317,11 @@
 			var self = this,
 				element = self.element,
 				o = self.options;
+			
+			// enable touch support:
+			if (window.wijmoApplyWijTouchUtilEvents) {
+				$ = window.wijmoApplyWijTouchUtilEvents($);
+			}
 
 			self._fields = {
 				width: element.width(),

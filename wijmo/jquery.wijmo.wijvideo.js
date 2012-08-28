@@ -1,10 +1,10 @@
 /*globals jQuery,window,document*/
 /*
  * 
- * Wijmo Library 2.1.4
+ * Wijmo Library 2.2.0
  * http://wijmo.com/
  * 
- * Copyright(c) ComponentOne, LLC.  All rights reserved.
+ * Copyright(c) GrapeCity, Inc.  All rights reserved.
  * 
  * Dual licensed under the Wijmo Commercial or GNU GPL Version 3 licenses.
  * licensing@wijmo.com
@@ -31,21 +31,28 @@
 			/// Code example: $(".video").wijvideo("option", 
 			/// "fullScreenButtonVisible", false).
 			/// </summary>
-			fullScreenButtonVisible: true,            ///	<summary>
-            ///	Determines whether to display the controls only when hovering the mouse to the video.
-            /// Default: true
-            /// Type: Boolean
-            /// Code example:
-            ///  $(".video").wijvideo({
-            ///      showControlsOnHover: false
-            ///  });
-            ///	</summary>
-            showControlsOnHover: true
+			fullScreenButtonVisible: true,            
+			///	<summary>
+			///	Determines whether to display the controls only 
+			/// when hovering the mouse to the video.
+			/// Default: true
+			/// Type: Boolean
+			/// Code example:
+			///  $(".video").wijvideo({
+			///      showControlsOnHover: false
+			///  });
+			///	</summary>
+			showControlsOnHover: true
 		},
-		
+
 		_create: function () {
 			var self = this, pos, $playbtn, videoIsSupport,
-				o = self.options, interval; 
+				o = self.options, interval;
+			
+			// enable touch support:
+			if (window.wijmoApplyWijTouchUtilEvents) {
+				$ = window.wijmoApplyWijTouchUtilEvents($);
+			}
 
 			if ($(this.element).is("video")) {
 				$video = $(this.element);
@@ -58,7 +65,7 @@
 				return;
 			}
 			//end for fixing
-			
+
 			//Add for fixing bug 18204 by wh at 2011/11/7
 			videoIsSupport = $video[0].canPlayType;
 			if (!videoIsSupport) {
@@ -92,18 +99,18 @@
 				.height($video.outerHeight());
 
 			$seekSlider = $vidParent.find('.wijmo-wijvideo-index-slider');
-			
+
 			//Volumn
 			self._volumnOn = true;
 			$volumeBtn = $vidParent.find('.wijmo-wijvideo-volume');
-			
+
 			// create the video seek slider
 			interval = window.setInterval(function () {
 				//replace the attr to prop
 				//if ($video.attr('readyState')) {
 				if (self._getVideoAttribute("readyState")) {
 					window.clearInterval(interval);
-					
+
 					//note: we need to adjust the size of the video in
 					//this time
 					$vidParent.width($video.outerWidth())
@@ -112,7 +119,7 @@
 					//note: if the controls is invisible, it will not 
 					//get the position
 					$video.parent().find('.wijmo-wijvideo-controls').show();
-					
+
 					//$seekSlider = $vidParent.find('.wijmo-wijvideo-index-slider');
 					pos = $vidParent.find('.wijmo-wijvideo-timer').position().left;
 					$seekSlider.width(pos - $seekSlider.position().left - 15);
@@ -130,7 +137,7 @@
 							seek = true;
 						}
 					});
-				
+
 					self._updateTime();
 
 					// wire up the volume
@@ -147,28 +154,28 @@
 							if (ui.value === 0) {
 								self._volumnOn = false;
 								$volumeBtn.find("span").removeClass("ui-icon-volume-on")
-									.addClass("ui-icon-volume-off");	
+									.addClass("ui-icon-volume-off");
 							} else {
 								self._volumnOn = true;
 								$volumeBtn.find("span").removeClass("ui-icon-volume-off")
-									.addClass("ui-icon-volume-on");	
+									.addClass("ui-icon-volume-on");
 							}
 						}
 					});
-					
+
 					$video.parent().find('.wijmo-wijvideo-controls')
 						.css('display', 'none');
-					
+
 					self._initialToolTip();
-					
+
 					if (!o.showControlsOnHover) {
 						$('.wijmo-wijvideo-controls').show();
-						$vidParent.height($video.outerHeight() + 
+						$vidParent.height($video.outerHeight() +
 								$('.wijmo-wijvideo-controls').height());
 					}
 				}
 			}, 200);
-			
+
 			$video.bind("click." + self.widgetName, function () {
 				self._togglePlay();
 			});
@@ -191,14 +198,14 @@
 			}, function () {
 				$(this).removeClass("ui-state-hover");
 			});
-			
+
 			$vidParent.find('.wijmo-wijvideo-volume').hover(function () {
 				$('.wijmo-wijvideo-volume-container')
 					.stop(true, true).slideToggle();
 			});
-			
+
 			$fullScreenBtn = $vidParent.find('.wijmo-wijvideo-fullscreen > span');
-			
+
 			$fullScreenBtn.click(function () {
 				self._toggleFullScreen();
 			}).parent().hover(function () {
@@ -206,11 +213,11 @@
 			}, function () {
 				$(this).removeClass("ui-state-hover");
 			});
-			
+
 			if (!self.options.fullScreenButtonVisible) {
 				$vidParent.find('.wijmo-wijvideo-fullscreen').hide();
 			}
-			
+
 			$volumeBtn.hover(function () {
 				$(this).addClass("ui-state-hover");
 			}, function () {
@@ -232,11 +239,11 @@
 					}
 				}
 			});
-			
+
 			//move the init tooltip to interval, when the video's state
 			//is ready, then init the tooltip
 			//self._initialToolTip();
-			
+
 			$video.bind('play.' + self.widgetName, function () {
 				$playbtn.removeClass('ui-icon ui-icon-play')
 					.addClass('ui-icon ui-icon-pause');
@@ -260,13 +267,24 @@
 				self._videoIsControls = true;
 			}
 			$video.removeAttr('controls');
-			
+
+			//update for visibility change
+			if (self.element.is(":hidden") &&
+						self.element.wijAddVisibilityObserver) {
+				self.element.wijAddVisibilityObserver(function () {
+					self._refresh();
+					if (self.element.wijRemoveVisibilityObserver) {
+						self.element.wijRemoveVisibilityObserver();
+					}
+				}, "wijvideo");
+			}
+
 			//update for juice 22288
 			if (self.options.disabled) {
 				self._handleDisabledOption(true, self.element);
 			}
-		},		
-		
+		},
+
 		_setOption: function (key, value) {
 			var self = this, o = self.options;
 
@@ -286,7 +304,7 @@
 					$('.wijmo-wijvideo').unbind('mouseenter mouseleave');
 					window.setTimeout(function () {
 						$('.wijmo-wijvideo-controls').show();
-						$vidParent.height($video.outerHeight() + 
+						$vidParent.height($video.outerHeight() +
 								$('.wijmo-wijvideo-controls').height());
 					}, 200);
 				} else {
@@ -302,7 +320,7 @@
 			}
 			//end for disabled option
 		},
-		
+
 		_handleDisabledOption: function (disabled, ele) {
 			var self = this;
 
@@ -313,7 +331,7 @@
 				self.disabledDiv.appendTo("body");
 				if ($.browser.msie) {
 					$('.wijmo-wijvideo').unbind('mouseenter mouseleave');
-					$video.unbind("click."+ self.widgetName);
+					$video.unbind("click." + self.widgetName);
 				}
 			}
 			else {
@@ -324,8 +342,8 @@
 						$('.wijmo-wijvideo').hover(function () {
 							$('.wijmo-wijvideo-controls').stop(true, true).fadeIn();
 						},
-							function () {
-								$('.wijmo-wijvideo-controls').delay(300).fadeOut();
+						function () {
+							$('.wijmo-wijvideo-controls').delay(300).fadeOut();
 						});
 						$video.bind("click." + self.widgetName, function () {
 							self._togglePlay();
@@ -333,27 +351,26 @@
 					}
 				}
 			}
-		},		
-		
+		},
+
 		_createDisabledDiv: function (outerEle) {
-			var self = this,
-				ele = $vidParent,
+			var ele = $vidParent,
 				eleOffset = ele.offset(),
 				disabledWidth = ele.outerWidth(),
 				disabledHeight = ele.outerHeight();
 
 			return $("<div></div>")
-						.addClass("ui-disabled")
-						.css({
-					"z-index": "99999",
-					position: "absolute",
-					width: disabledWidth,
-					height: disabledHeight,
-					left: eleOffset.left,
-					top: eleOffset.top
-				});
+			.addClass("ui-disabled")
+			.css({
+				"z-index": "99999",
+				position: "absolute",
+				width: disabledWidth,
+				height: disabledHeight,
+				left: eleOffset.left,
+				top: eleOffset.top
+			});
 		},
-		
+
 		_getVideoAttribute: function (name) {
 			if (name === "") {
 				return;
@@ -364,7 +381,7 @@
 				return $video.prop(name);
 			}
 		},
-		
+
 		_setVideoAttribute: function (name, value) {
 			if (name === "") {
 				return;
@@ -375,20 +392,21 @@
 				return $video.prop(name, value);
 			}
 		},
-		
+
 		_initialToolTip: function () {
 			var self = this;
 			//ToolTip-slider
-			$seekSlider.wijtooltip({ mouseTrailing: true, showCallout: false, 
-			position: {offset: '-60 -60'}});
+			$seekSlider.wijtooltip({ mouseTrailing: true, showCallout: false,
+				position: { offset: '-60 -60'}
+			});
 			$seekSlider.bind("mousemove", function (e, ui) {
 				self._changeToolTipContent(e);
 			});
 
 			//ToolTip-button
-			$volumeBtn.wijtooltip({content: "Volume", showCallout: false});
-			$fullScreenBtn.wijtooltip({content: "Full Screen", showCallout: false});
-			
+			$volumeBtn.wijtooltip({ content: "Volume", showCallout: false });
+			$fullScreenBtn.wijtooltip({ content: "Full Screen", showCallout: false });
+
 			//add class to prevent from overriding the origin css of tooltip.
 			$seekSlider.wijtooltip("widget").addClass("wijmo-wijvideo");
 			$volumeBtn.wijtooltip("widget").addClass("wijmo-wijvideo");
@@ -396,7 +414,7 @@
 		},
 
 		_updateTime: function () {
-			var self = this, dur = self._getVideoAttribute("duration"), 
+			var self = this, dur = self._getVideoAttribute("duration"),
 			cur = self._getVideoAttribute("currentTime"),
 				mm, ss, mfmt = '', sfmt = '';
 
@@ -420,79 +438,79 @@
 
 		_togglePlay: function () {
 			var self = this;
-			
+
 			if (!self._getVideoAttribute("readyState")) {
 				return;
 			}
-			
+
 			if (self._getVideoAttribute("paused")) {
 				this.play();
 			} else {
 				this.pause();
 			}
 		},
-		
+
 		_toggleFullScreen: function () {
 			var self = this,
 				isPaused = self._getVideoAttribute("paused"),
 				offsetWidth = 0,
-				fWidth = $(window).width(), 
+				fWidth = $(window).width(),
 				fHeight = $(window).height();
-			
+
 			fullScreen = !fullScreen;
-			
+
 			if (fullScreen) {
 				self._oriVidParentStyle = $vidParent.attr("style");
 				self._oriWidth = $video.outerWidth();
 				self._oriHeight = $video.outerHeight();
 				self._oriDocOverFlow = $(document.documentElement).css("overflow");
-				
+
 				$(document.documentElement).css({
 					overflow: "hidden"
 				});
-				
+
 				if (!self._replacedDiv) {
 					self._replacedDiv = $("<div />");
 				}
-				
+
 				$vidParent.after(self._replacedDiv);
 				$vidParent.addClass("wijmo-wijvideo-container-fullscreen")
 					.css({
 						width: fWidth,
 						height: fHeight
 					}).appendTo($("body"));
-				
+
 				$video.attr("width", fWidth).attr("height", fHeight);
-				
+
 				$(window).bind("resize.wijvideo", function () {
 					self._fullscreenOnWindowResize();
 				});
-				
+
 				//for reposition the video control
 				offsetWidth = fWidth - self._oriWidth;
 			} else {
 				$(document.documentElement).css({
 					overflow: self._oriDocOverFlow
 				});
-				
+
 				//for reposition the video control
 				offsetWidth = self._oriWidth - $video.width();
-				
+
 				self._replacedDiv.after($vidParent)
 					.remove();
 				$vidParent.removeClass("wijmo-wijvideo-container-fullscreen")
 					.attr("style", "")
 					.attr("style", self._oriVidParentStyle);
-				
+
 				$video.attr("width", self._oriWidth)
 					.attr("height", self._oriHeight);
-				
+
 				$(window).unbind("resize.wijvideo");
-			}	
-			
+			}
+
 			self._positionControls(offsetWidth);
 			self._hideToolTips();
-			
+
 			if (!isPaused) {
 				self.play();
 			} else {
@@ -502,7 +520,7 @@
 
 		_fullscreenOnWindowResize: function () {
 			var self = this,
-				fWidth = $(window).width(), 
+				fWidth = $(window).width(),
 				fHeight = $(window).height(),
 				offsetWidth = fWidth - $vidParent.width();
 
@@ -511,56 +529,56 @@
 				height: fHeight
 			});
 			$video.attr("width", fWidth).attr("height", fHeight);
-			
+
 			self._positionControls(offsetWidth);
 		},
-		
+
 		_positionControls: function (offsetWidth) {
 			var seekSlider = $vidParent
 					.find('.wijmo-wijvideo-index-slider');
-			
+
 			seekSlider.width(seekSlider.width() + offsetWidth);
 		},
-		
+
 		_showToolTip: function (e) {
 			var self = this,
-				mousePositionX = e.pageX, 
+				mousePositionX = e.pageX,
 				mousePositionY = e.pageY,
-				sliderOffset = $seekSlider.offset().left,
-				sliderWidth = $seekSlider.width(),
-				curWidth = mousePositionX - sliderOffset,
-				dur = self._getVideoAttribute("duration"), 
-				currentTime;
-			
-			currentTime = dur * (curWidth / sliderWidth);
-
-			$seekSlider.wijtooltip("option", "content", 
-				self._getToolTipContent(currentTime));
-			$seekSlider.wijtooltip("showAt", 
-					{ x: mousePositionX, y: mousePositionY - 10 });
-		},
-		
-		_changeToolTipContent: function (e) {
-			var self = this,
-				mousePositionX = e.pageX, 
 				sliderOffset = $seekSlider.offset().left,
 				sliderWidth = $seekSlider.width(),
 				curWidth = mousePositionX - sliderOffset,
 				dur = self._getVideoAttribute("duration"),
 				currentTime;
-			
+
 			currentTime = dur * (curWidth / sliderWidth);
 
-			$seekSlider.wijtooltip("option", "content", 
+			$seekSlider.wijtooltip("option", "content",
+				self._getToolTipContent(currentTime));
+			$seekSlider.wijtooltip("showAt",
+					{ x: mousePositionX, y: mousePositionY - 10 });
+		},
+
+		_changeToolTipContent: function (e) {
+			var self = this,
+				mousePositionX = e.pageX,
+				sliderOffset = $seekSlider.offset().left,
+				sliderWidth = $seekSlider.width(),
+				curWidth = mousePositionX - sliderOffset,
+				dur = self._getVideoAttribute("duration"),
+				currentTime;
+
+			currentTime = dur * (curWidth / sliderWidth);
+
+			$seekSlider.wijtooltip("option", "content",
 				self._getToolTipContent(currentTime));
 		},
-		
+
 		_hideToolTips: function () {
 			$seekSlider.wijtooltip("hide");
 			$volumeBtn.wijtooltip("hide");
 			$fullScreenBtn.wijtooltip("hide");
 		},
-		
+
 		_getToolTipContent: function (currentTime) {
 			var mm, ss, mfmt = '', sfmt = '';
 
@@ -572,20 +590,36 @@
 			if (ss < 10) {
 				sfmt = '0';
 			}
-			
+
 			return mfmt + mm + ':' + sfmt + ss;
 		},
-		
+
+		_refresh: function () {
+			var pos;
+
+			$video.parent().find('.wijmo-wijvideo-controls').show();
+			pos = $vidParent.find('.wijmo-wijvideo-timer').position().left;
+
+			$seekSlider.width(pos - $seekSlider.position().left - 15);
+			$video.parent().find('.wijmo-wijvideo-controls')
+			.css('display', 'none');
+			if (!this.options.showControlsOnHover) {
+				$('.wijmo-wijvideo-controls', $vidParent).show();
+				$vidParent.height($video.outerHeight() +
+						$('.wijmo-wijvideo-controls').height());
+			}
+		},
+
 		destroy: function () {
 			///	<summary>
 			///	Removes the wijvideo functionality completely. 
 			/// This returns the element back to its pre-init state. 
 			/// Code example: $("#element").wijvideo("destroy");
 			///	</summary>
-			
+
 			var self = this;
 			$.Widget.prototype.destroy.apply(this, arguments);
-			
+
 			//remove the controls
 			$vidParent.after($video).remove();
 			$video.unbind('.' + self.widgetName);
@@ -599,67 +633,67 @@
 			///	Play the video. 
 			/// Code example: $("#element").wijvideo("play");
 			///	</summary>
-			
+
 			$video[0].play();
 		},
-		
+
 		pause: function () {
 			///	<summary>
 			///	Pause the video.
 			/// Code example: $("#element").wijvideo("pause");
 			///	</summary>
-			
+
 			$video[0].pause();
 		},
-		
+
 		getWidth: function () {
 			///	<summary>
 			///	Gets the video width in pixel.
 			/// Code example: $("#element").wijvideo("getWidth");
 			///	</summary>
-			
+
 			return $video.outerWidth();
 		},
-		
+
 		setWidth: function (width) {
 			///	<summary>
 			///	Sets the video width in pixel.
 			/// Code example: $("#element").wijvideo("setWidth", 600);
 			///	</summary>
 			/// <param name="width" type="Number">Width value in pixel.</param>
-			
+
 			width = width || 600;
 			var origWidth = this.getWidth();
 			$video.attr('width', width);
 			$vidParent.width($video.outerWidth());
 			this._positionControls(this.getWidth() - origWidth);
 		},
-		
+
 		getHeight: function () {
 			///	<summary>
 			///	Gets the video height in pixel.
 			/// Code example: $("#element").wijvideo("getHeight");
 			///	</summary>
-			
+
 			return $video.outerHeight();
 		},
-		
+
 		setHeight: function (height) {
 			///	<summary>
 			///	Sets the video height in pixel.
 			/// Code example: $("#element").wijvideo("setHeight", 400);
 			///	</summary>
 			/// <param name="height" type="Number">Height value in pixel.</param>
-			
+
 			height = height || 400;
 			$video.attr('height', height);
-			if (o.showControlsOnHover) {
+			if (this.options.showControlsOnHover) {
 				$vidParent.height($video.outerHeight());
 			} else {
-				$vidParent.height($video.outerHeight() + 
+				$vidParent.height($video.outerHeight() +
 						$('.wijmo-wijvideo-controls').height());
 			}
-			
+
 		}
 	});
-}(jQuery));
+} (jQuery));

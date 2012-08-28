@@ -1,3 +1,60 @@
+Wijmo-Open v2.2.0
+=================
+
+menu
+----
+Fixed a UI issue in sliding mode when set width.
+
+ToolTip
+----
+Fixed an issue when the cssClass is added failed to the ToolTip.
+
+Wijmo-Open v2.1.7
+=================
+tabs
+----
+Fixed an issue when title is localized.
+
+list
+----
+Update for combobox item selection via keyboard when ItemsTemplate is used
+
+menu
+----
+Fixed an issue that submenuitem's text is not shown correctly when templating.
+Fixed an issue that the variable self.domObject is not set to null when killing element.
+
+ToolTip
+----
+Fixed an issue that JavaScript error is observed if 'showCallout' property of ToolTip is set to 'false'.
+
+Wijmo-Open v2.1.6
+=================
+
+Platform
+--------
+Observe visible state change for wijmo widgets. Container widgets now trigger a visible state change event when they display their contents. This allows widgets inside them to redraw when visible to eliminate layout issues.
+
+list
+-----------
+Fixed an issue to support templated filter in combobox.
+Fixed an issue when using multicolumn, first item is lost in dropdown list  after selected an item
+
+menu
+----
+Fixed an issue that submenuitem's text is not shown correctly when templating.
+
+Wijmo-Open v2.1.5
+=================
+
+calendar
+--------
+Fixed an issue that custom events didn't fire after navigating to previous or next month.
+
+list
+-----------
+Fixed an issue with showing all items in combobox.
+
 
 Wijmo-Open v2.1.4
 =================

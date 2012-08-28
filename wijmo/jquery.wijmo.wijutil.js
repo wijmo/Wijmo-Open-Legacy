@@ -1,9 +1,9 @@
 /*
  *
- * Wijmo Library 2.1.4
+ * Wijmo Library 2.2.0
  * http://wijmo.com/
  *
- * Copyright(c) ComponentOne, LLC.  All rights reserved.
+ * Copyright(c) GrapeCity, Inc.  All rights reserved.
  * 
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * licensing@wijmo.com
@@ -15,46 +15,47 @@
  *  jquery.ui.core.js
  *
  */
-/*Replace inner content by iframe and load content using given url*/
+
 (function ($) {
 	$.fn.extend({
+
+		/*Replace inner content by iframe and load content using given url*/
 		wijContent: function (url) {
 			return this.each(function () {
 				this.innerHTML = '<iframe frameborder="0" style="width: 100%; height: 100%;" src="' + url + '">"';
 			});
-		}
-
-		/*,
+		},
+		/* Visibility observer */
 		wijAddVisibilityObserver: function (h, namespace) {
-		return this.each(function () {
-		$(this).addClass("wijmo-wijobserver-visibility");
-		$(this).bind("wijmovisibilitychanged"
+			return this.each(function () {
+				$(this).addClass("wijmo-wijobserver-visibility");
+				$(this).bind("wijmovisibilitychanged"
 		+ (namespace ? ("." + namespace) : ""), h);
-		});
+			});
 		},
 		wijRemoveVisibilityObserver: function (h) {
-		return this.each(function () {
-		$(this).removeClass("wijmo-wijobserver-visibility");
-		if (!h) {
-		$(this).unbind("wijmovisibilitychanged");
-		}
-		else if (jQuery.isFunction(h)) {
-		$(this).unbind("wijmovisibilitychanged", h);
-		} else {
-		$(this).unbind("wijmovisibilitychanged." + h);
-		}
-		});
+			return this.each(function () {
+				$(this).removeClass("wijmo-wijobserver-visibility");
+				if (!h) {
+					$(this).unbind("wijmovisibilitychanged");
+				}
+				else if (jQuery.isFunction(h)) {
+					$(this).unbind("wijmovisibilitychanged", h);
+				} else {
+					$(this).unbind("wijmovisibilitychanged." + h);
+				}
+			});
 		},
 		wijTriggerVisibility: function () {
-		return this.each(function () {
-		var $el = $(this);
-		if ($el.hasClass("wijmo-wijobserver-visibility")) {
-		$el.trigger("wijmovisibilitychanged");
+			return this.each(function () {
+				var $el = $(this);
+				if ($el.hasClass("wijmo-wijobserver-visibility")) {
+					$el.trigger("wijmovisibilitychanged");
+				}
+				$el.find(".wijmo-wijobserver-visibility").trigger("wijmovisibilitychanged");
+			});
 		}
-		$el.find(".wijmo-wijobserver-visibility").trigger("wijmovisibilitychanged");
-		});
-		}
-		*/
+
 	});
 
 	var naNTest = function (num) {

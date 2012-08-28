@@ -3,6 +3,12 @@
     font-size: 12px;
     position: relative;
 }
+
+.wijmo-wijvideo .wijmo-wijvideo-timer
+{
+    font-size: 12px;
+}
+
 .wijmo-wijvideo .wijmo-wijvideo-controls
 {
     display: none;

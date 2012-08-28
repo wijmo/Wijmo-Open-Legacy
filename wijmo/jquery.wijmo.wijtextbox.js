@@ -1,10 +1,10 @@
 /*globals jQuery */
 /*
 *
-* Wijmo Library 2.1.4
+* Wijmo Library 2.2.0
 * http://wijmo.com/
 *
-* Copyright(c) ComponentOne, LLC.  All rights reserved.
+* Copyright(c) GrapeCity, Inc.  All rights reserved.
 * 
 * Dual licensed under the MIT or GPL Version 2 licenses.
 * licensing@wijmo.com
@@ -29,6 +29,11 @@
 				allowedInputTypes = { 'text': true, 'password': true, 
 					'email': true, 'url': true },
 				nodeName = e.get(0).nodeName.toLowerCase();
+			
+			// enable touch support:
+			if (window.wijmoApplyWijTouchUtilEvents) {
+				$ = window.wijmoApplyWijTouchUtilEvents($);
+			}
 
 			if (!allowedNodes.hasOwnProperty(nodeName)) {
 				return;

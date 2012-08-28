@@ -1,10 +1,10 @@
 /*globals jQuery*/
 /*
  *
- * Wijmo Library 2.1.4
+ * Wijmo Library 2.2.0
  * http://wijmo.com/
  *
- * Copyright(c) ComponentOne, LLC.  All rights reserved.
+ * Copyright(c) GrapeCity, Inc.  All rights reserved.
  * 
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * licensing@wijmo.com
@@ -43,13 +43,18 @@
 			/// <param name="e" type="EventObj">
 			/// The jquery event object.
 			changed: null
-			},
+		},
 			
 		_create: function () {
 			var self = this,
 				ele = self.element,
 				eleChkState,
 				radiobuttonElement, label, targetLabel, boxElement, iconElement;
+			
+			// enable touch support:
+			if (window.wijmoApplyWijTouchUtilEvents) {
+				$ = window.wijmoApplyWijTouchUtilEvents($);
+			}
 
 			if (ele.is(":radio")) {
 				if (!ele.attr("id")) {
@@ -178,28 +183,28 @@
 			}
 		},
 		
-        _setOption: function (key, value) {
-        	var self = this,
-        	originalCheckedState = self.options.checked;
-            $.Widget.prototype._setOption.apply(this, arguments);
+		_setOption: function (key, value) {
+			var self = this,
+			originalCheckedState = self.options.checked;
+			$.Widget.prototype._setOption.apply(this, arguments);
 
-            if (key === 'checked') {
-            	self.element.attr("checked",value);
-            	self._refresh();
-            	if (originalCheckedState !== value) {
-    				self._trigger("changed", null, {
-    					checked: value
-    				});
-            	}
-            }
-        },
+			if (key === 'checked') {
+				self.element.attr("checked", value);
+				self._refresh();
+				if (originalCheckedState !== value) {
+					self._trigger("changed", null, {
+						checked: value
+					});
+				}
+			}
+		},
 
 		_setDefaul: function () {
 			var self = this, o = self.options;
 			
 			if (o.checked !== undefined && 
 					o.checked !== null) {
-				this.element.attr("checked",o.checked);
+				this.element.attr("checked", o.checked);
 			}
 			if (this.element.attr("checked")) {
 				this.element.parents(".wijmo-wijradio")
@@ -230,10 +235,11 @@
 				$(n).parents(".wijmo-wijradio").removeClass("ui-state-checked");
 				
 				radioEle = $(n).parents(".wijmo-wijradio").find(":radio");
-				if (radioEle.wijradio("option", "checked") && radioEle[0] !== self.element[0]) {
+				if (radioEle.wijradio("option", "checked") && 
+					radioEle[0] !== self.element[0]) {
 					radioEle.wijradio("setCheckedOption", false);
 				}
-		});
+			});
 
 			if (self.element.is(":checked")) {
 				self.element.data("iconElement")
@@ -246,15 +252,15 @@
 			self.options.checked  = self.element.is(":checked");
 		},
 
-		setCheckedOption: function(value) {
-			var self = this, o= self.options;
+		setCheckedOption: function (value) {
+			var self = this, o = self.options;
 			
-        	if (o.checked !== null && o.checked !== value) {
-        		o.checked = value;
+			if (o.checked !== null && o.checked !== value) {
+				o.checked = value;
 				self._trigger("changed", null, {
 					checked: value
 				});
-        	}
+			}
 		},
 		
 		refresh: function () {

@@ -1,10 +1,10 @@
 /*globals window document jQuery */
 /*
 *
-* Wijmo Library 2.1.4
+* Wijmo Library 2.2.0
 * http://wijmo.com/
 *
-* Copyright(c) ComponentOne, LLC.  All rights reserved.
+* Copyright(c) GrapeCity, Inc.  All rights reserved.
 * 
 * Dual licensed under the MIT or GPL Version 2 licenses.
 * licensing@wijmo.com
@@ -574,7 +574,9 @@
 				/// Type: Number.
 				/// </summary>
 				firstStepChangeFix: 0
-			}
+			},
+			customScrolling: false,
+			listenContentScroll: false
 		},
 
 		_setOption: function (key, value) {
@@ -652,9 +654,9 @@
 			o.hScroller.dir = "h";
 
 			//Add support for touch
-			//if (window.wijmoApplyWijTouchUtilEvents) {
-			//    $ = window.wijmoApplyWijTouchUtilEvents($);
-			//}
+			if (window.wijmoApplyWijTouchUtilEvents) {
+			    $ = window.wijmoApplyWijTouchUtilEvents($);
+			}
 
 			self.paintPanel();
 			self._initResizer();
@@ -662,6 +664,20 @@
 				self.disable();
 			}
 			self._detectAutoRefresh();
+
+			if (o.listenContentScroll) {
+				self._listenContentScroll();
+			}
+
+			//update for visibility change
+			if (self.element.is(":hidden") && self.element.wijAddVisibilityObserver) {
+				self.element.wijAddVisibilityObserver(function () {
+					self.refresh();
+					if (self.element.wijRemoveVisibilityObserver) {
+						self.element.wijRemoveVisibilityObserver();
+					}
+				}, "wijsuperpanel");
+			}
 		},
 
 		_detectAutoRefresh: function () {
@@ -934,6 +950,47 @@
 				self._doScrolling(dir, self, true);
 				self._setScrollingInterval(f, dir, self, true);
 			}
+		},
+
+		_listenContentScroll: function () {
+			var self = this,
+				o = self.options,
+				f = self._fields(),
+				hbarContainer = f.hbarContainer,
+				hbarDrag = f.hbarDrag,
+				vbarContainer = f.vbarContainer,
+				vbarDrag = f.vbarDrag,
+				templateWrapper = f.templateWrapper,
+				contentWrapper = f.contentWrapper,
+				w = contentWrapper.width(),
+				h = contentWrapper.height(),
+				offset = templateWrapper && templateWrapper.offset(),
+				ox = offset && offset.left,
+				oy = offset && offset.top,
+				contentWidth = f.contentWidth,
+				contentHeight = f.contentHeight;
+
+			contentWrapper.bind("scroll", function (event) {
+				var pos = templateWrapper.position(),
+					x = pos.left,
+					y = pos.top;
+
+				contentWrapper.scrollTop(0).scrollLeft(0);
+				templateWrapper.css({
+					left: x,
+					top: y
+				});
+
+				if (x <= 0 && x > w - contentWidth) {
+					o.hScroller.scrollValue = self.scrollPxToValue(-x, "h");
+					self._scrollDrag("h", hbarContainer, hbarDrag, true);
+				}
+
+				if (y <= 0 && y > h - contentHeight) {
+					o.vScroller.scrollValue = self.scrollPxToValue(-y, "v");
+					self._scrollDrag("v", vbarContainer, vbarDrag, true);
+				}
+			});
 		},
 
 		_buttonMouseDown: function (e) {
@@ -1439,6 +1496,39 @@
 			}
 
 			return result;
+		},
+
+		_scrollDrag: function (dir, hbarContainer, hbarDrag,
+			fireScrollEvent) {
+			var self = this,
+				o = self.options,
+				v = dir === "v",
+				scroller = v ? o.vScroller : o.hScroller,
+				hMin = scroller.scrollMin,
+				hMax = scroller.scrollMax,
+				hValue = scroller.scrollValue === undefined ?
+					hMin : (scroller.scrollValue - hMin),
+				hLargeChange = self._getLargeChange(dir),
+				max = hMax - hMin - hLargeChange + 1,
+				dragleft = -1,
+				track, drag, padding;
+
+			if (hValue > max) {
+				hValue = max;
+			}
+
+			if (hbarContainer !== undefined) {
+				track = self._getTrackLen(dir);
+				drag = hbarDrag[v ? "outerHeight" : "outerWidth"]();
+				padding = self._getScrollContainerPadding(v ? "top" : "left");
+				dragleft = (hValue / max) * (track - drag) + padding;
+			}
+
+			if (dragleft >= 0) {
+				hbarDrag.css(v ? "top" : "left", dragleft + "px");
+			}
+
+			self._scrollEnd(fireScrollEvent, self, dir);
 		},
 
 		needToScroll: function (child1) {
@@ -1992,18 +2082,27 @@
 					tempWrapper.stop(true, false);
 				}
 				properties1 = v ? { top: -contentLeft} : { left: -contentLeft };
-				tempWrapper.animate(properties1, contentAnimationOptions);
+				//console.log("content move1");
+				if (!o.customScrolling) {
+					tempWrapper.animate(properties1, contentAnimationOptions);
+				}
+				else {
+					self._scrollEnd(fireScrollEvent, self, dir, hValue);
+				}
 				self._triggerScroll(contentLeft, dir, contentAnimationOptions);
 			}
-			else {
+			else if (scroller.scrollBarVisibility !== "hidden") {
 				key = v ? "top" : "left";
 				if (dragleft >= 0 && dragging !== "dragging") {
 
 					hbarDrag[0].style[key] = dragleft + "px";
 				}
-				tempWrapper[0].style[key] = -contentLeft + "px";
+				//console.log("content move2");
+				if (!o.customScrolling) {
+					tempWrapper[0].style[key] = -contentLeft + "px";
+				}
 				self._triggerScroll(contentLeft, dir);
-				self._scrollEnd(fireScrollEvent, self, dir);
+				self._scrollEnd(fireScrollEvent, self, dir, hValue);
 			}
 		},
 
@@ -2037,6 +2136,9 @@
 			if (fireEvent) {
 				d.beforePosition = self.getContentElement().position();
 				self._beforePosition = d.beforePosition;
+
+				//console.log("scrolling:" + JSON.stringify(d));
+
 				r = self._trigger("scrolling", null, d);
 
 				self.customScroll = d.customScroll;
@@ -2044,7 +2146,7 @@
 			return r;
 		},
 
-		_scrollEnd: function (fireEvent, self, dir) {
+		_scrollEnd: function (fireEvent, self, dir, newValue) {
 			if (fireEvent) {
 				// use settimeout to return to caller immediately.
 				window.setTimeout(function () {
@@ -2058,6 +2160,10 @@
 						beforePosition: self._beforePosition,
 						afterPosition: after
 					};
+					if (!isNaN(newValue)) {
+						d.newValue = newValue;
+					}
+					//console.log("scrolled:" + JSON.stringify(d));
 					self._trigger("scrolled", null, d);
 				}, 0);
 			}

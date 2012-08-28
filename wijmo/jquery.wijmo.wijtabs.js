@@ -1,10 +1,10 @@
 /*globals $, jQuery, document, window, location, wijmoASPNetParseOptions*/
 /*
  *
- * Wijmo Library 2.1.4
+ * Wijmo Library 2.2.0
  * http://wijmo.com/
  *
- * Copyright(c) ComponentOne, LLC.  All rights reserved.
+ * Copyright(c) GrapeCity, Inc.  All rights reserved.
  * 
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * licensing@wijmo.com
@@ -321,7 +321,23 @@
 		},
 
 		_create: function () {
-			this._tabify(true);
+			var self = this;
+			
+			// enable touch support:
+			if (window.wijmoApplyWijTouchUtilEvents) {
+				$ = window.wijmoApplyWijTouchUtilEvents($);
+			}
+			
+			if (self.element.is(":hidden") && self.element.wijAddVisibilityObserver) {
+				self.element.wijAddVisibilityObserver(function () {
+					self.destroy();
+					self._tabify(true);
+					if (self.element.wijRemoveVisibilityObserver) {
+						self.element.wijRemoveVisibilityObserver();
+					}
+				}, "wijtabs");
+			}
+			self._tabify(true);
 		},
 
 		_setOption: function (key, value) {
@@ -390,9 +406,16 @@
 		},
 
 		_tabId: function (a) {
-			return a.title && a.title.replace(/\s/g, '_')
-					.replace(/[^A-Za-z0-9\-_:\.]/g, '') ||
+			var $a = $(a),
+				tabId;
+			if ($a.data && $a.data("tabid")) {
+				return $a.data("tabid");
+			}
+			tabId = a.title && a.title.replace(/\s/g, '_')
+				.replace(/[^A-Za-z0-9\-_:\.]/g, '') ||
 				this.options.idPrefix + getNextTabId();
+			$a.data("tabid", tabId);
+			return tabId;
 		},
 
 		_sanitizeSelector: function (hash) {
@@ -749,6 +772,9 @@
 
 					// seems to be expected behavior that the show callback is fired
 					self.element.queue("tabs", function () {
+						if (self.element.wijTriggerVisibility) {
+							$(self.panels[o.selected]).wijTriggerVisibility();
+						}
 						self._trigger('show', null, 
 							self._ui(self.anchors[o.selected], self.panels[o.selected]));
 					});
@@ -849,6 +875,9 @@
 					$show.hide().removeClass('ui-tabs-hide').attr('aria-hidden', false)
 					.animate(props, o.showOption.duration || 'normal', function () {
 						self._resetStyle($show);
+						if ($show.wijTriggerVisibility) {
+							$show.wijTriggerVisibility();
+						}
 						self._trigger('show', null, self._ui(clicked, $show[0]));
 					});
 				} else {
@@ -861,6 +890,9 @@
 					.attr('aria-selected', true);
 				self._showContent();
 				$show.removeClass('ui-tabs-hide').attr('aria-hidden', false);
+				if ($show.wijTriggerVisibility) {
+					$show.wijTriggerVisibility();
+				}
 				self._trigger('show', null, self._ui(clicked, $show[0]));
 			};
 
@@ -1145,6 +1177,9 @@
 					.attr('aria-selected', true);
 				$panel.removeClass('ui-tabs-hide').attr('aria-hidden', false);
 				this.element.queue("tabs", function () {
+					if (self.element.wijTriggerVisibility) {
+						$(self.panels[0]).wijTriggerVisibility();
+					}
 					self._trigger('show', null, self._ui(self.anchors[0], 
 						self.panels[0]));
 				});

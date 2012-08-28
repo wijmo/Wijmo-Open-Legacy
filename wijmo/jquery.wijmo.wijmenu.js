@@ -2,10 +2,10 @@
 
 /*
 *
-* Wijmo Library 2.1.4
+* Wijmo Library 2.2.0
 * http://wijmo.com/
 *
-* Copyright(c) ComponentOne, LLC.  All rights reserved.
+* Copyright(c) GrapeCity, Inc.  All rights reserved.
 * 
 * Dual licensed under the MIT or GPL Version 2 licenses.
 * licensing@wijmo.com
@@ -286,6 +286,20 @@
 				parentWidget,
 				ele = self.element, sublist,
 				keycode = $.ui.keyCode;
+			
+			// enable touch support:
+			if (window.wijmoApplyWijTouchUtilEvents) {
+				$ = window.wijmoApplyWijTouchUtilEvents($);
+			}
+			
+			if (ele.is(":hidden") && ele.wijAddVisibilityObserver) {
+				ele.wijAddVisibilityObserver(function () {
+					self.refresh();
+					if (ele.wijRemoveVisibilityObserver) {
+						ele.wijRemoveVisibilityObserver();
+					}
+				}, "wijmenu");
+			}
 
 			//fix for issus 20651 by Chandler.Zheng on 2012/03/19
 			self.clickNameSpace = "click.wijmenudoc" + self._newId();
@@ -531,11 +545,13 @@
 		_destroy: function () {
 			var self = this,
 				o = self.options;
-
+			
+			self.destroying = true;
 			self[o.mode === "flyout" ? "_killFlyout" : "_killDrilldown"]();
 			self._killMenuItems();
 			self._killtrigger();
 			self._killElement();
+			self.destroying = false;
 		},
 
 		destroy: function () {
@@ -821,6 +837,9 @@
 		_setOption: function (key, value) {
 			var self = this;
 
+			if (self.destroying) {
+				return;
+			}
 			if (self["_set_" + key]) {
 				self["_set_" + key](value);
 			}
@@ -1189,7 +1208,7 @@
 			ele.removeClass("wijmo-wijmenu-list ui-helper-reset " +
 				"wijmo-wijmenu-content ui-helper-clearfix");
 
-			this.domObject.menucontainer.removeClass("");
+			self.domObject.menucontainer.removeClass("");
 			$(document).unbind(self.clickNameSpace);
 
 			//remove warping
@@ -1199,8 +1218,12 @@
 			else {
 				self.element.unwrap();
 			}
-			self.element.removeData("domObject").removeData("topmenu")
-			.removeData("firstLeftValue");
+            //For fix the tfs issue id 24830. js error: object is null or undefined
+            self.domObject = null;
+            self.element.removeData("topmenu")
+			.removeData("firstLeftValue").removeData("domObject");
+			//self.element.removeData("domObject").removeData("topmenu")
+			//.removeData("firstLeftValue");
 			ele.undelegate(".wijmenuEvent");
 		},
 
@@ -1313,6 +1336,7 @@
 			var self = this,
 				ele = self._getSublist(),
 				container = self.domObject.menucontainer.attr("role", "menu"),
+				containerWidth,
 				o = self.options, //fixPadding,
 				direction = o.direction,
 				breadcrumb = $('<ul class="wijmo-wijmenu-breadcrumb ui-state-default' +
@@ -1343,8 +1367,9 @@
 			if (!o.backLink) {
 				breadcrumb.append(crumbDefaultHeader);
 			}
+			containerWidth = container.width();
 			ele.addClass('wijmo-wijmenu-content wijmo-wijmenu-current ui-widget-content' +
-				' ui-helper-clearfix').css({ width: container.width() });
+				' ui-helper-clearfix').css({ width: containerWidth });
 
 			$.each(self.getItems(), function (i, n) {
 				n._setDrilldownUlStyle();
@@ -1498,9 +1523,11 @@
 						if (!currentCrumb
 							.is('.wijmo-wijmenu-current-crumb')) {
 							if (direction === "rtl") {
-								newLeftVal = + (currentCrumb.prevAll().length) * 180;
+								newLeftVal = + (currentCrumb.prevAll().length) * containerWidth;
+								//newLeftVal = + (currentCrumb.prevAll().length) * 180;
 							} else {
-								newLeftVal = - (currentCrumb.prevAll().length) * 180;
+								newLeftVal = - (currentCrumb.prevAll().length) * containerWidth;
+								//newLeftVal = - (currentCrumb.prevAll().length) * 180;
 							}
 
 							self._slidingAnimation(ele, newLeftVal, function () {
@@ -2066,6 +2093,12 @@
 					textSpan.text(text);
 				}
 			}
+
+            //add class to link to fix tfs issue 24238
+            if (self._getMenuItemType() === self._markupType.other) {
+                //if (link && link.is("div")) {
+                link.addClass("wijmo-wijmenu-link ui-corner-all");
+            }
 		},
 
 		_set_imagePosition: function (value, writeOnly) {
@@ -2263,8 +2296,12 @@
 			//			<span class="wijmo-wijmenu-text">menu item2</span></a></li>
 			//3 is an header mark up like <li><h3>text</h3></li>
 			//4 is an separator this situation don't need to set text
-			
-			link = ele.find('.wijmo-wijmenu-text');
+
+			//find first-child a to fix tfs issue 24238
+			link = ele.find(":not(ul)a .wijmo-wijmenu-text:first");
+			//link = ele.find(".wijmo-wijmenu-text");
+			//end comments.
+
 			if (link.length !== 0) {
 				link.text(text);
 				return;
