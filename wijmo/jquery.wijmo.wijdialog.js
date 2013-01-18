@@ -1,7 +1,7 @@
 /*globals window,document,jQuery,setTimeout*/
 /*
 *
-* Wijmo Library 2.2.0
+* Wijmo Library 2.3.4
 * http://wijmo.com/
 *
 * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -147,7 +147,7 @@
 		_create: function () {
 			var self = this,
 				o = self.options;
-			
+
 			// enable touch support:
 			if (window.wijmoApplyWijTouchUtilEvents) {
 				$ = window.wijmoApplyWijTouchUtilEvents($);
@@ -192,10 +192,16 @@
 					self.disabledDiv = self._createDisabledDiv();
 				}
 				self.disabledDiv.appendTo("body");
+				if ($.browser.msie) {
+					self.uiDialog.draggable("disable");
+				}
 			}
 			else if (self.disabledDiv) {
 				self.disabledDiv.remove();
 				self.disabledDiv = null;
+				if ($.browser.msie) {
+					self.uiDialog.draggable("enable");
+				}
 			}
 		},
 
@@ -276,7 +282,7 @@
 			var self = this, isIn = true;
 			self._createCaptionButtons();
 			self._checkUrl();
-			self.uiDialogButtonPane = $(".ui-dialog-buttonpane", self.uiDialog);
+			//self.uiDialogButtonPane = $(".ui-dialog-buttonpane", self.uiDialog);
 
 			self.uiDialog.bind("mousedown", function (event) {
 				var el = event.target;
@@ -341,6 +347,8 @@
 				else {
 					self._checkUrl();
 				}
+			} else if (key = "captionButtons") {
+				self._createCaptionButtons();
 			}
 		},
 
@@ -451,7 +459,18 @@
 			///	<summary>
 			///		Pins the wijdialog instance so that it could not be moved.
 			///	</summary>
-			var drag = this.isPin;
+			var drag = this.isPin, buttonIcon = this.pinButton.children("span");
+
+			if (!drag) {
+				if (buttonIcon.length) {
+					if (!buttonIcon.hasClass("ui-icon-pin-s")) {
+						buttonIcon.addClass("ui-icon-pin-s");
+					}
+				}
+			}
+			else {
+				buttonIcon.removeClass("ui-icon-pin-s");
+			}
 			this._enableDisableDragger(!drag);
 			this.isPin = !drag;
 		},
@@ -546,6 +565,9 @@
 
 		_enableDisableDragger: function (disabled) {
 			var dlg = this.uiDialog;
+			if (!this.options.draggable) {
+				return;
+			}
 			dlg.draggable({ disabled: disabled });
 			if (disabled) {
 				dlg.removeClass("ui-state-disabled");
@@ -999,7 +1021,7 @@
 		open: function () {
 			var self = this, o = self.options;
 
-			if ((o.hide === "drop"|| o.hide === "bounce") && $.browser.msie) { 
+			if ((o.hide === "drop" || o.hide === "bounce") && $.browser.msie) {
 				//fixed bug when effect "drop" on IE
 				self.uiDialog.css("filter", "auto");
 			}
@@ -1013,6 +1035,7 @@
 				}
 				else {
 					self.uiDialog.show();
+					self._isOpen = true;
 				}
 				self.uiDialog.wijTriggerVisibility();
 			}
@@ -1023,6 +1046,7 @@
 				}
 				else {
 					self.uiDialogTitlebar.show();
+					self._isOpen = true;
 				}
 			}
 			if (self.collapsed) {

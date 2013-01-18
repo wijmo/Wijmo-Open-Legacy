@@ -38,14 +38,15 @@
     ko.wijmo = ko.wijmo || {};
 
     ko.wijmo.customBindingFactory = function () {
-        var self = this,
-        updatingFromEvents = false,
-        updatingFromOtherObservables = false;
+        var self = this;
 
         self.customBinding = function (options) {
             var binding = {},
                 widgetName = options.widgetName,
-                widget;
+                widget,
+                vAccessor,
+                updatingFromEvents = false,
+                updatingFromOtherObservables = false;
 
             binding.init = function (element, valueAccessor, allBindingAccessor, viewModel) {
                 //element: The DOM element involved in this binding
@@ -78,18 +79,29 @@
                     if (attachEvents) {
                         $.each(attachEvents, function (idx, ev) {
                             ko.utils.registerEventHandler(element, widgetName + ev.toLowerCase(), function () {
+                                // add vAccessor and update it in update event, because sometimes the reference of
+                                // value accessor  will be updated by customer.
+                                vAccessor = $(element).data("vAccessor");
+                                var v = vAccessor[key],
+                                    newVal;
                                 if (updatingFromOtherObservables) {
                                     return;
                                 }
                                 updatingFromEvents = true;
-
                                 if ($.isFunction(observableOption.onChange)) {
-                                    observableOption.onChange.call(observableOption, widget, value, arguments);
+                                    if (v) {
+                                        observableOption.onChange.call(observableOption, widget, v, arguments);
+                                    } else {
+                                        observableOption.onChange.call(observableOption, widget, value, arguments);
+                                    }
                                 } else {
-                                    var newVal = $(element)[widgetName]("option", key);
-
+                                    newVal = $(element)[widgetName]("option", key);
                                     //TODO: If newVal is reference type, we should extend it before assignment
-                                    value(newVal);
+                                    if (v) {
+                                        v(newVal);
+                                    } else {
+                                        value(newVal);
+                                    }
                                 }
 
                                 updatingFromEvents = false;
@@ -112,16 +124,24 @@
                 //	(e.g., inside a with: person binding, viewModel will be set to person).
 
                 var valueUnwrapped = ko.utils.unwrapObservable(valueAccessor());
+                //vAccessor = valueUnwrapped;
+                $(element).data("vAccessor", valueUnwrapped);
                 $.each(valueUnwrapped, function (key, value) {
                     //The observable can be used like following: style: { width: percentMax() * 100 + '%' },
                     //the style.width is not an observable value and cannot be observed in ko.computed.
                     //So we need to check if the value is updated in binding.update.
                     var observableOption = options.observableOptions[key];
                     if (observableOption) {
-                        var optType = observableOption.type;
-                        val = ko.toJS(ko.utils.unwrapObservable(value)),
-                        widgetVal = $(element)[widgetName]("option", key);
+                        var optType = observableOption.type,
+                           val = ko.toJS(ko.utils.unwrapObservable(value)),
+                           hash = $(element).data(widgetName + '_ko'),
+                           widgetVal = hash && (key in hash)
+                               ? hash[key]
+                               : $(element)[widgetName]("option", key);
 
+                        if (updatingFromEvents) {
+                            return true;
+                        }
                         if (optType && optType === 'numeric') {
                             var parsedVal = parseFloat(val);
                             val = isNaN(parsedVal) ? val : parsedVal;
@@ -577,6 +597,7 @@
             autoOpen: {},
             draggable: {},
             modal: {},
+			contentUrl:{},
             resizable: {}
         }
     });
@@ -745,12 +766,18 @@
             autoComplete: {},
             highlightMatching: {},
             selectionMode: {},
-            isEditable: {},
+            isEditable: {}, 
             selectedIndex: {
                 type: 'numeric',
                 attachEvents: ['changed']
             },
             selectedValue: {
+                attachEvents: ['changed']
+            },
+            text: {
+                attachEvents: ['changed']
+            },
+            inputTextInDropDownList: {
                 attachEvents: ['changed']
             }
         }

@@ -2,7 +2,7 @@
 	document, wijMonthView, wijMyGrid, htmlTextWriter, jQuery*/
 /*
  *
- * Wijmo Library 2.2.0
+ * Wijmo Library 2.3.4
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -568,6 +568,9 @@
 				break;
 
 			case "monthCols":
+				if (this._myGrid) {
+					this._myGrid = undefined;
+				}
 				this._resetWidth();
 				this.refresh();
 				break;
@@ -735,7 +738,9 @@
 			this._myGrid = undefined;
 			this.refresh();
 			this.element.data('dragging.wijcalendar', false);
-			this.element.wijpopup('show', position);
+			if (this.element.data("wijpopup")) {
+				this.element.wijpopup('show', position);
+			}
 		},
 
 		popupAt: function (x, y) {
@@ -747,7 +752,9 @@
 			this._myGrid = undefined;
 			this.refresh();
 			this.element.data('dragging.wijcalendar', false);
-			this.element.wijpopup('showAt', x, y);
+			if (this.element.data("wijpopup")) {
+				this.element.wijpopup('showAt', x, y);
+			}
 		},
 
 		close: function () {
@@ -1063,9 +1070,10 @@
 				if (monthTable.id !== monthID) {
 					throw Error.create('not a column');
 				}
+				/** update for issue 29995
 				if (!this._isSingleMonth()) {
 					i++;
-				}
+				}*/
 				if (this.options.showWeekDays) {
 					i++;
 				}
@@ -1666,6 +1674,7 @@
 			},
 			this.options.duration || 500,
 			function () {
+				nextTable.css("width", "");
 			}
 		);
 
@@ -1721,7 +1730,7 @@
 
 		_bindEvents: function () {
 			if (!this.element.data('preview.wijcalendar') &&
-					!this.options.disabledState) {
+					!this.options.disabledState && !this.options.disabled) {
 				this.element.find('div .wijmo-wijcalendar-navbutton')
 						.unbind().bind('mouseout.wijcalendar', function () {
 							var el = $(this);
@@ -1824,7 +1833,7 @@
 				allowSelDay = (!!o.selectionMode.day || !!o.selectionMode.days);
 
 			previewMode = previewMode || false;
-			if (!previewMode && !o.disabledState && allowSelDay &&
+			if (!previewMode && !o.disabledState && !o.disabled && allowSelDay &&
 					this._isSelectable(dayType)) {
 				cssCell += " wijmo-wijcalendar-day-selectable";
 			}
@@ -2640,7 +2649,8 @@
 					hw.writeAttribute('role', 'columnheader');
 					hw.writeTagRightChar();
 
-					if (!!o.selectionMode.month && !previewMode && !o.disabledState) {
+					if (!!o.selectionMode.month && !previewMode 
+							&& !o.disabledState && !o.disabled) {
 						hw.writeBeginTag('a');
 						hw.writeAttribute('class', 'ui-icon ui-icon-triangle-1-se');
 						hw.writeSelfClosingTagEnd();
@@ -3042,7 +3052,7 @@
 						cls = cls + ' ui-datepicker-other-month ' +
 							'ui-priority-secondary ui-datepicker-unselectable';
 					} else {
-						if (!o.disabledState) {
+						if (!o.disabledState && !o.disabled) {
 							cls += " wijmo-wijcalendar-day-selectable";
 						}
 					}

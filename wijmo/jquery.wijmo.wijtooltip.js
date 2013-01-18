@@ -1,7 +1,7 @@
 /*globals window document clearTimeout setTimeout jQuery */
 /*
 *
-* Wijmo Library 2.2.0
+* Wijmo Library 2.3.4
 * http://wijmo.com/
 *
 * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -158,10 +158,10 @@
 			/// Determines the callout's class style. 
 			/// If true, then the callout triangle will be filled..
 			/// Type: Boolean.
-			/// Default: true.
-			/// Code example: $(".selector").wijtooltip("option", "calloutFilled", true).
+			/// Default: false.
+			/// Code example: $(".selector").wijtooltip("option", "calloutFilled", false).
 			/// </summary>
-			calloutFilled: true,
+			calloutFilled: false,
 			/// <summary>
 			/// A value that indicates whether to show the modal tooltip.
 			/// Type: Boolean.
@@ -288,20 +288,22 @@
 			}
 		},
 
-        //fix the issue 21416: cssClass does not show.
-        _set_cssClass: function () {
-            var self = this,
-		                        o = self.options,
-                                cssClass = o.cssClass,
-		                        tooltip = self._tooltip;
+		
 
-            if (!tooltip) {
-                return;
-            }
-            if (!tooltip.hasClass(cssClass)) {
-                tooltip.addClass(cssClass);
-            }
-        },
+		//fix the issue 21416: cssClass does not show.
+		_set_cssClass: function () {
+			var self = this,
+				o = self.options,
+				cssClass = o.cssClass,
+				tooltip = self._tooltip;
+
+			if (!tooltip) {
+				return;
+			}
+			if (!tooltip.hasClass(cssClass)) {
+				tooltip.addClass(cssClass);
+			}
+		},
 
 		_set_content: function (value) {
 			var self = this;
@@ -313,7 +315,7 @@
 				self._callbacked = false;
 			}
 			else {
-			    self._setText();
+				self._setText();
 			}
 		},
 
@@ -323,14 +325,14 @@
 				element = self.element,
 				id = element && element.attr("id"),
 				describedBy = "",
-                cssClass = "",
+				cssClass = "",
 				key = o.group || defaultTooltipKey,
 				tooltip = $.wijmo.wijtooltip._getTooltip(key);
-			
+
 			// enable touch support:
 			if (window.wijmoApplyWijTouchUtilEvents) {
-			    $ = window.wijmoApplyWijTouchUtilEvents($);
-            }
+				$ = window.wijmoApplyWijTouchUtilEvents($);
+			}
 
 			if (tooltip) {
 				tooltip.count++;
@@ -340,11 +342,11 @@
 				$.wijmo.wijtooltip._tooltips[key] = tooltip;
 			}
 
-            //fix the issue 21416: cssClass does not show.
-            cssClass = o.cssClass ? o.cssClass : "";
-            if (!tooltip.hasClass(cssClass)) {
-                tooltip.addClass(cssClass);
-            }
+			//fix the issue 21416: cssClass does not show.
+			cssClass = o.cssClass ? o.cssClass : "";
+			if (!tooltip.hasClass(cssClass)) {
+				tooltip.addClass(cssClass);
+			}
 
 			o.position.of = self.element;
 			self._bindLiveEvents();
@@ -398,6 +400,14 @@
 				return;
 			}
 
+			if (tooltip._showAnimationTimer) {
+				clearTimeout(tooltip._showAnimationTimer);
+				tooltip._showAnimationTimer = null;
+			}
+			if (tooltip._showAtAnimationTimer) {
+				clearTimeout(tooltip._showAtAnimationTimer);
+				tooltip._showAtAnimationTimer = null;
+			}
 			if (tooltip._hideAnimationTimer) {
 				clearTimeout(tooltip._hideAnimationTimer);
 				tooltip._hideAnimationTimer = null;
@@ -444,16 +454,25 @@
 				offset = {},
 				calloutShape, border, hBorder, vBorder,
 				width, height;
-
 			if (!tooltip || !callout) {
 				return;
 			}
 
 			tooltip.stop(true, true);
+			
+			if (tooltip._showAtAnimationTimer) {
+				clearTimeout(tooltip._showAtAnimationTimer);
+				tooltip._showAtAnimationTimer = null;
+			}
+			if (tooltip._hideAnimationTimer) {
+				clearTimeout(tooltip._hideAnimationTimer);
+				tooltip._hideAnimationTimer = null;
+			}
 
-			tooltip._showAnimataionTimer =
+			tooltip._showAtAnimationTimer =
 				setTimeout(function () {
-				    self._setText();
+					var visible = tooltip.is(":visible");
+					self._setText();
 					oldTipPos = tooltip.offset();
 
 					tooltip.offset({ left: 0, top: 0 })
@@ -519,12 +538,19 @@
 						"br": {
 							left: point.x - offsetX - hBorder,
 							top: point.y - height - vBorder
-						}
+			            },
+			            "cc": {
+			                left: point.x - width / 2,
+			                top: point.y - height / 2
+			            }
 					}[calloutShape];
 
 					calloutShape = self._flipTooltip(offset, calloutShape, border);
 					self._setUnfilledCallout(calloutShape);
-					tooltip.offset(offset).hide();
+					tooltip.offset(offset);//.hide();
+					if (!visible) {
+						tooltip.hide();
+					}
 					self._calloutShape = calloutShape;
 					self._showTooltip();
 				}, self.options.showDelay);
@@ -543,7 +569,19 @@
 				return;
 			}
 
-			clearTimeout(tooltip._showAnimationTimer);
+			if (tooltip._showAnimationTimer) {
+				clearTimeout(tooltip._showAnimationTimer);
+				tooltip._showAnimationTimer = null;
+			}
+			if (tooltip._showAtAnimationTimer) {
+				clearTimeout(tooltip._showAtAnimationTimer);
+				tooltip._showAtAnimationTimer = null;
+			}
+			if (tooltip._hideAnimationTimer) {
+				clearTimeout(tooltip._hideAnimationTimer);
+				tooltip._hideAnimationTimer = null;
+			}
+			//clearTimeout(tooltip._showAnimationTimer);
 			tooltip._hideAnimationTimer =
 				setTimeout($.proxy(self._hideTooltip, self), self.options.hideDelay);
 		},
@@ -630,9 +668,9 @@
 				break;
 			case "rightClick":
 				element.bind("contextmenu.tooltip", function (e) {
-					self.show();
-					e.preventDefault();
-				});
+						self.show();
+						e.preventDefault();
+					});
 				break;
 			}
 		},
@@ -708,59 +746,59 @@
 				}
 			}
 
-            //fix the issue 21386, calloutShape undefind
-            if (o.showCallout) {
-                if (flip.h) {
-                    if (calloutShape.indexOf('l') > -1) {
-                        calloutShape = calloutShape.replace(/l/, 'r');
-                        flip.h = "l";
-                    } else if (calloutShape.indexOf('r') > -1) {
-                        calloutShape = calloutShape.replace(/r/, 'l');
-                        flip.h = "r";
-                    }
-                }
+			//fix the issue 21386, calloutShape undefind
+			if (o.showCallout) {
+				if (flip.h) {
+					if (calloutShape.indexOf('l') > -1) {
+						calloutShape = calloutShape.replace(/l/, 'r');
+						flip.h = "l";
+					} else if (calloutShape.indexOf('r') > -1) {
+						calloutShape = calloutShape.replace(/r/, 'l');
+						flip.h = "r";
+					}
+				}
 
-                if (flip.v) {
-                    if (calloutShape.indexOf('t') > -1) {
-                        calloutShape = calloutShape.replace(/t/, 'b');
-                        flip.v = "t";
-                    } else if (calloutShape.indexOf('b') > -1) {
-                        calloutShape = calloutShape.replace(/b/, 't');
-                        flip.v = "b";
-                    }
-                }
-                if (flip.h || flip.v) {
-                    self._removeCalloutCss();
-                    tooltip.addClass(calloutCssPrefix + calloutShape);
-                }
-            }
-            /*
-            if (flip.h) {
-                if (calloutShape.indexOf('l') > -1) {
-                    calloutShape = calloutShape.replace(/l/, 'r');
-                    flip.h = "l";
-                } else if (calloutShape.indexOf('r') > -1) {
-                    calloutShape = calloutShape.replace(/r/, 'l');
-                    flip.h = "r";
-                }
-            }
+				if (flip.v) {
+					if (calloutShape.indexOf('t') > -1) {
+						calloutShape = calloutShape.replace(/t/, 'b');
+						flip.v = "t";
+					} else if (calloutShape.indexOf('b') > -1) {
+						calloutShape = calloutShape.replace(/b/, 't');
+						flip.v = "b";
+					}
+				}
+				if (flip.h || flip.v) {
+					self._removeCalloutCss();
+					tooltip.addClass(calloutCssPrefix + calloutShape);
+				}
+			}
+			/*
+			if (flip.h) {
+			if (calloutShape.indexOf('l') > -1) {
+			calloutShape = calloutShape.replace(/l/, 'r');
+			flip.h = "l";
+			} else if (calloutShape.indexOf('r') > -1) {
+			calloutShape = calloutShape.replace(/r/, 'l');
+			flip.h = "r";
+			}
+			}
 
-            if (flip.v) {
-                if (calloutShape.indexOf('t') > -1) {
-                    calloutShape = calloutShape.replace(/t/, 'b');
-                    flip.v = "t";
-                } else if (calloutShape.indexOf('b') > -1) {
-                    calloutShape = calloutShape.replace(/b/, 't');
-                    flip.v = "b";
-                }
-            }
+			if (flip.v) {
+			if (calloutShape.indexOf('t') > -1) {
+			calloutShape = calloutShape.replace(/t/, 'b');
+			flip.v = "t";
+			} else if (calloutShape.indexOf('b') > -1) {
+			calloutShape = calloutShape.replace(/b/, 't');
+			flip.v = "b";
+			}
+			}
 			if (flip.h || flip.v) {
-				self._removeCalloutCss();
-				tooltip.addClass(calloutCssPrefix + calloutShape);
+			self._removeCalloutCss();
+			tooltip.addClass(calloutCssPrefix + calloutShape);
 			} 
-            */
-            
-            return { flip: flip, calloutShape: calloutShape };
+			*/
+
+			return { flip: flip, calloutShape: calloutShape };
 		},
 
 		//methods for options setters
@@ -776,6 +814,9 @@
 
 				self._setCalloutOffset(true);
 			}
+
+			//fix the issue 21467.
+			self._setText();
 		},
 
 		_set_showCallOut: function (value) {
@@ -875,7 +916,7 @@
 				$.each(["tl", "tc", "tr",
 					"bl", "bc", "br",
 					"rt", "rc", "rb",
-					"lt", "lc", "lb"], function (idx, compass) {
+					"lt", "lc", "lb", "cc"], function (idx, compass) {
 						var cssName = calloutCssPrefix + compass;
 
 						if (tooltip.hasClass(cssName)) {
@@ -1021,7 +1062,17 @@
 				}
 			}
 
-			if (value !== "") {
+			//when 'position.offset' is set "none none", 
+			//the properties left and top of the 'callout' element in the tooltip
+			//need to be removed.
+			if (offsetItems && offsetItems.length === 2 && 
+				offsetItems[0] === "none" && offsetItems[1] === "none") {
+				callout.css("left", "").css("top", "");
+			}
+			else if (value === "none") {
+				callout.css(horizontal ? "left" : "top", "");
+			}
+			else if (value !== "") {
 				if (showCalloutAnimation && !showCalloutAnimation.disabled) {
 					callout.animate(horizontal ? { left: value} : { top: value },
 						calloutAnimation.duration, calloutAnimation.easing);
@@ -1050,7 +1101,7 @@
 				"border-right-color": ""
 			});
 
-			if (self.options.calloutFilled) {
+			if (!self.options.calloutFilled) {
 				switch (arrCalloutSharp[0]) {
 				case "l":
 					innerCallout.css("border-right-color", borderColor);
@@ -1098,7 +1149,7 @@
 			self._showModalLayer();
 			tooltip.css("z-index", 99999);
 
-			if (!o.mouseTrailing && $.fn.wijshow) {
+			if ($.fn.wijshow) {
 				animations = {
 					show: true,
 					context: tooltip
@@ -1140,9 +1191,9 @@
 
 			self._hideModalLayer();
 
-			if (!o.mouseTrailing && $.fn.wijhide) {
+			if ($.fn.wijhide) {
 				animations = {
-					show: true,
+					show: false,
 					context: tooltip
 				};
 				tooltip.wijhide(hideAnimation, $.wijmo.wijtooltip.animations,
@@ -1219,6 +1270,11 @@
 					.height(self._getDocSize("Height"))
 					.appendTo("body");
 
+				$(window).bind("resize.wijtooltip", function () {
+				    modalLayer.width(self._getDocSize("Width"))
+                        .height(self._getDocSize("Height"));
+				});
+
 				self._tooltip._modalLayer = modalLayer;
 			}
 		},
@@ -1230,6 +1286,8 @@
 			if (modalLayer) {
 				modalLayer.css("z-index", "")
 					.remove();
+
+				$(window).unbind("resize.wijtooltip");
 			}
 		},
 

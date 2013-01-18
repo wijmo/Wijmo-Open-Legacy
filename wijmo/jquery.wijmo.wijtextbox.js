@@ -1,7 +1,7 @@
 /*globals jQuery */
 /*
 *
-* Wijmo Library 2.2.0
+* Wijmo Library 2.3.4
 * http://wijmo.com/
 *
 * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -38,7 +38,7 @@
 			if (!allowedNodes.hasOwnProperty(nodeName)) {
 				return;
 			}
-			if ((nodeName === 'input') &&
+			if ((nodeName === 'input') && self.element.attr("type") &&
 				!allowedInputTypes.hasOwnProperty(self.element.attr("type")
 				.toLowerCase())) {
 				return;

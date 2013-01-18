@@ -1,115 +1,118 @@
-﻿/*.wijmo-wijaccordion.ui-helper-horizontal > .ui-widget-content
+﻿.wijmo-wijaccordion .wijmo-wijaccordion-header
 {
-    width: 200px;
-    height: 200px;  
-    padding-top:0;
-    padding-bottom:0;  
-    margin-top:0;
-    margin-bottom:0;    
+    display: block;
+    cursor: pointer;
+    position: relative;
+    margin-top: 2px;
+    zoom: 1;
+    padding: .5em .5em .5em .7em;
 }
 
-.wijmo-wijaccordion.ui-helper-horizontal > .ui-accordion-header
+.wijmo-wijaccordion .wijmo-wijaccordion-icons
 {
-    height: 200px;	
-    padding-top:0;
-    padding-bottom:0;
-    margin-top:0;
-    margin-bottom:0;    
-}*/
+    padding-left: 2.2em;
+}
 
+.wijmo-wijaccordion .wijmo-wijaccordion-noicons
+{
+    padding-left: .7em;
+}
 
-.ui-accordion a
+.wijmo-wijaccordion .wijmo-wijaccordion-header a
+{
+    padding-left: 1.2em;
+    font-size: 1em;
+    display: block;
+}
+
+.wijmo-wijaccordion .wijmo-wijaccordion-header .ui-icon
+{
+    position: absolute;
+    left: .5em;
+    top: 50%;
+    margin-top: -8px;
+}
+
+.wijmo-wijaccordion .wijmo-wijaccordion-content
+{
+    overflow: auto;
+    zoom: 1;
+    padding: 1em 2.2em;
+    display: none;
+}
+.wijmo-wijaccordion .wijmo-wijaccordion-content.wijmo-wijaccordion-content-active
+{   
+    display: block;
+}
+
+.wijmo-wijaccordion a
 {
     outline: none;
 }
 
-/* RIGHT */
+.wijmo-wijaccordion-bottom .wijmo-wijaccordion-content-active
+{
+    border-top: none;
+ }
 
-.ui-accordion-right .ui-accordion-header
+.wijmo-wijaccordion-right .wijmo-wijaccordion-header
 {
     margin-top: 0;
     margin-left: 1px;
     width: 2em;
     height: 12em;
     overflow: hidden;
+    padding: .7em .5em .5em;
 }
 
-.ui-accordion-right .ui-accordion-content
+.wijmo-wijaccordion-right .wijmo-wijaccordion-content-active
 {
-    margin: 0;
-    height: 200px;
-    width: 36em;
-    height: 12em;
-    padding: 0 2.2em;
-}
-.ui-accordion-right .ui-accordion-content
-{
-    top: 0;
-    margin-left: -2px;
-    padding: 1px;
-    border: none;
+    border-left: none;
 }
 
-
-.ui-accordion-right .ui-state-active
-{
-    border-right: none;
-}
-
-.ui-accordion-right .ui-accordion-header a
-{
-    padding: 2.2em 0 0 0;
-    text-align: center;
-}
-
-
-.ui-accordion-right .ui-accordion-header .ui-icon
-{
-    top: 10%;
-}
-
-
-/* LEFT */
-
-.ui-accordion-left .ui-accordion-header
+.wijmo-wijaccordion-left .wijmo-wijaccordion-header
 {
     margin-top: 0;
     margin-right: 1px;
     width: 2em;
     height: 12em;
     overflow: hidden;
+    padding: .7em .5em .5em;
 }
 
-.ui-accordion-left .ui-accordion-content
+.wijmo-wijaccordion-left .wijmo-wijaccordion-content-active
 {
-    margin: 0;
-    height: 200px;
+    border-right: none;
+}
+
+.wijmo-wijaccordion-top .wijmo-wijaccordion-header
+{
+    margin: 0 0 1px;
+}
+
+.wijmo-wijaccordion-top .wijmo-wijaccordion-content-active
+{
+    border-bottom: none;
+}
+
+.wijmo-wijaccordion-right .wijmo-wijaccordion-content, .wijmo-wijaccordion-left .wijmo-wijaccordion-content
+{
     width: 36em;
     height: 12em;
-    padding: 0 2.2em;
-}
-.ui-accordion-left .ui-accordion-content
-{
-    border: none;
-    padding: 1px;
-    top: 0;
-    margin-right: -2px;
+    margin: 0;
+    padding: .7em 2.2em .5em;
 }
 
-
-.ui-accordion-left .ui-state-active
+.wijmo-wijaccordion-right .wijmo-wijaccordion-header a, .wijmo-wijaccordion-left .wijmo-wijaccordion-header a
 {
-    border-left: none;
-}
-
-.ui-accordion-left .ui-accordion-header a
-{
-    padding: 2.2em 0 0 0;
     text-align: center;
+    padding: 1.2em .5em .5em;
 }
 
-
-.ui-accordion-left .ui-accordion-header .ui-icon
+.wijmo-wijaccordion-right .wijmo-wijaccordion-header .ui-icon, .wijmo-wijaccordion-left .wijmo-wijaccordion-header .ui-icon
 {
-    top: 10%;
+    top: .5em;
+    left: 50%;
+    margin-left: -9px;
+    margin-top: 0;
 }

@@ -156,7 +156,7 @@
     background: #c4c4c4 url(images/ui-bg_highlight-hard_80_c4c4c4_1x100.png) 50% 50% repeat-x;
     background: #c4c4c4 linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
     background: #c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
-    background: #c4c4c4 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0)); /*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)"; */
+    background: #c4c4c4 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
     font-weight: bold;
     color: #4f4f4f;
     text-shadow: 0px 1px 0px rgba(255,255,255,0.7);
@@ -177,9 +177,6 @@
 {
     background: #83b0ca url(images/ui-bg_highlight-soft_100_83b0ca_1x100.png) repeat-x top;
     border: solid 1px #8ab0c6;
-  /* background: #85b2cb linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0));
-    background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.6)), to(rgba(255,255,255,0)));
-    background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0.6), rgba(255,255,255,0));     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#CCFFFFFF, endColorstr=#00FFFFFF);     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#CCFFFFFF, endColorstr=#00FFFFFF)"; */
     font-weight: bold;
     color: #313131;
     -moz-box-shadow: 0 0 3px #85b2cb;
@@ -203,7 +200,7 @@
     background: #85b2cb url(images/ui-bg_inset-hard_65_85b2cb_1x100.png) 50% 50% repeat-x;
     background: #85b2cb linear-gradient(top, rgba(255,255,255,0), rgba(255,255,255,0.4));
     background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0)), to(rgba(255,255,255,0.4)));
-    background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0), rgba(255,255,255,0.4)); /*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF, endColorstr=#CCFFFFFF);     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF, endColorstr=#CCFFFFFF)"; */
+    background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0), rgba(255,255,255,0.4));
     font-weight: bold;
     color: #1C4257;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
@@ -231,7 +228,7 @@
     background: #aaaaaa;
     background: #aaaaaa linear-gradient(top, rgba(0,0,0,0.25), rgba(0,0,0,0));
     background: #aaaaaa -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.25)), to(rgba(0,0,0,0)));
-    background: #aaaaaa -moz-linear-gradient(top, rgba(0,0,0,0.25), rgba(0,0,0,0)); /*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#33000000, endColorstr=#00000000);     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#33000000, endColorstr=#00000000)"; */
+    background: #aaaaaa -moz-linear-gradient(top, rgba(0,0,0,0.25), rgba(0,0,0,0)); 
     color: #ffffff;
     text-shadow: 1px 1px 1px #333333;
 }
@@ -246,7 +243,7 @@
     background: #fef1ec url(images/ui-bg_inset-soft_95_fef1ec_1x100.png) 50% bottom repeat-x;
     background: #fef1ec linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
     background: #fef1ec -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
-    background: #fef1ec -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0)); /*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)";*/
+    background: #fef1ec -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0)); 
     color: #cd0a0a;
 }
 .ui-state-error a, .ui-widget-content .ui-state-error a, .ui-widget-header .ui-state-error a
@@ -1221,72 +1218,12 @@
  * http://docs.jquery.com/UI/Accordion#theming
  */
 /* IE/Win - Fix animation bug - #4615 */
-.ui-accordion
-{
-    width: 100%;
-}
-.ui-accordion .ui-accordion-header
-{
-    cursor: pointer;
-    position: relative;
-    margin-top: 1px;
-    zoom: 1;
-}
-.ui-accordion .ui-accordion-li-fix
-{
-    display: inline;
-}
-.ui-accordion .ui-accordion-header-active
-{
-    border-bottom: 0 !important;
-}
-.ui-accordion .ui-accordion-header a
-{
-    display: block;
-    font-size: 1em;
-    padding: .5em .5em .5em .7em;
-}
-.ui-accordion-icons .ui-accordion-header a
-{
-    padding-left: 2.2em;
-}
-.ui-accordion .ui-accordion-header .ui-icon
-{
-    position: absolute;
-    left: .5em;
-    top: 50%;
-    margin-top: -8px;
-}
-.ui-accordion .ui-accordion-content
-{
-    padding: 1em 2.2em;
-    border-top: 0;
-    margin-top: -2px;
-    position: relative;
-    top: 1px;
-    margin-bottom: 2px;
-    overflow: auto;
-    display: none;
-    zoom: 1;
-}
-.ui-accordion .ui-accordion-content-active
-{
-    display: block;
-}
-
-.ui-accordion .ui-accordion-header
-{
-    -moz-border-radius: 0;
-    -webkit-border-radius: 0;
-    border-radius: 0;
-}
-
-
-.ui-accordion .ui-accordion-content
-{
-    margin-bottom: 0;
-}
-
+.ui-accordion .ui-accordion-header { display: block; cursor: pointer; position: relative; margin-top: 2px; padding: .5em .5em .5em .7em; zoom: 1; }
+.ui-accordion .ui-accordion-icons { padding-left: 2.2em; }
+.ui-accordion .ui-accordion-noicons { padding-left: .7em; }
+.ui-accordion .ui-accordion-icons .ui-accordion-icons { padding-left: 2.2em; }
+.ui-accordion .ui-accordion-header .ui-accordion-header-icon { position: absolute; left: .5em; top: 50%; margin-top: -8px; }
+.ui-accordion .ui-accordion-content { padding: 1em 2.2em; border-top: 0; overflow: auto; zoom: 1; }
 /*
  * jQuery UI Autocomplete @VERSION
  *
@@ -1733,11 +1670,6 @@ button.ui-button::-moz-focus-inner
     
     background: #83b0ca url(images/ui-bg_highlight-soft_100_83b0ca_1x100.png) repeat-x top;
     border-color: #8ab0c6;
-    /*
-    background: #85b2cb linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
-    background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
-    background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0)); /*   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)"; */
-*/
 }
 
 
@@ -1819,7 +1751,7 @@ button.ui-button::-moz-focus-inner
     background: #A8A8A8;
     background: #A8A8A8 linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
     background: #A8A8A8 -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
-    background: #A8A8A8 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0)); /*    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)"; */
+    background: #A8A8A8 -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
     border-radius: 0;
@@ -2019,7 +1951,6 @@ button.ui-button::-moz-focus-inner
 
 .ui-datepicker-calendar thead
 {
-    /*background: #c0c0c0 url(images/ui-bg_highlight-soft_100_c0c0c0_1x100.png) repeat-x top;*/
     color: #545454;
     text-shadow: 1px 1px 0 rgba(255,255,255,0.50);
     border-bottom: solid 1px #aaaeb6;
@@ -2208,11 +2139,6 @@ button.ui-button::-moz-focus-inner
 {
     background: #83b0ca url(images/ui-bg_highlight-soft_100_83b0ca_1x100.png) repeat-x top;
     border-color: #8ab0c6;
-    /*background: #85b2cb linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
-    background: #85b2cb -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.8)), to(rgba(255,255,255,0)));
-    background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0.8), rgba(255,255,255,0));
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF);
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFFFFF, endColorstr=#00FFFFFF)";*/
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px;
@@ -2754,4 +2680,125 @@ div.wijmo-wijribbon .ui-icon, .wijmo-wijribbon-abbrevicon, div.wijmo-wijribbon-s
 .wijmo-wijinput .wijmo-wijinput-input
 {
     color: #313131;
+}
+
+
+/* WIJMO ACCORDION COMPATIBILITY */
+.wijmo-wijaccordion .ui-accordion-header
+{
+    display: block;
+    cursor: pointer;
+    position: relative;
+    margin-top: 2px;
+    zoom: 1;
+    padding: .5em .5em .5em .7em;
+    width: auto !important;
+}
+
+.wijmo-wijaccordion .ui-accordion-icon
+{
+    padding-left: 2.2em;
+}
+
+.wijmo-wijaccordion .ui-accordion-noicons
+{
+    padding-left: .7em;
+}
+
+.wijmo-wijaccordion .ui-accordion-header a
+{
+    padding-left: 1.2em;
+    font-size: 1em;
+    display: block;
+}
+
+.wijmo-wijaccordion .ui-accordion-header .ui-icon
+{
+    position: absolute;
+    left: .5em;
+    top: 50%;
+    margin-top: -8px;
+}
+
+.wijmo-wijaccordion .ui-accordion-content
+{
+    overflow: auto;
+    zoom: 1;
+    padding: 1em 2.2em;
+    display: none;
+
+}
+.wijmo-wijaccordion .ui-accordion-content.ui-accordion-content-active
+{   
+    display: block;
+}
+
+.wijmo-wijaccordion a
+{
+    outline: none;
+}
+
+.wijmo-wijaccordion-bottom .ui-accordion-content-active
+{
+    border-top: none;
+ }
+
+.wijmo-wijaccordion-right .ui-accordion-header
+{
+    margin-top: 0;
+    margin-left: 1px;
+    height: 12em;
+    overflow: hidden;
+    padding: .7em .5em .5em;
+}
+
+.wijmo-wijaccordion-right .ui-accordion-content-active
+{
+    border-left: none;
+}
+
+.wijmo-wijaccordion-left .ui-accordion-header
+{
+    margin-top: 0;
+    margin-right: 1px;
+    height: 12em;
+    overflow: hidden;
+    padding: .7em .5em .5em;
+}
+
+.wijmo-wijaccordion-left .ui-accordion-content-active
+{
+    border-right: none;
+}
+
+.ui-accordion-top .ui-accordion-header
+{
+    margin: 0 0 1px;
+}
+
+.wijmo-wijaccordion-top .ui-accordion-content-active
+{
+    border-bottom: none;
+}
+
+.ui-accordion-right .ui-accordion-content, .ui-accordion-left .ui-accordion-content
+{
+    width: 36em;
+    height: 13em !important;
+    margin: 0;
+    padding: .7em 2.2em .5em;
+}
+
+.ui-accordion-right .ui-accordion-header a, .ui-accordion-left .ui-accordion-header a
+{
+    text-align: center;
+    padding: 1.2em .5em .5em !important;
+}
+
+.ui-accordion-right .ui-accordion-header .ui-icon, .ui-accordion-left .ui-accordion-header .ui-icon
+{
+    top: .5em !important;
+    left: 50%;
+    margin-left: -9px;
+    margin-top: 0;
 }

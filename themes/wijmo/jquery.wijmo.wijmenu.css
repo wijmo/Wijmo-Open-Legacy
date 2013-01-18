@@ -42,6 +42,8 @@ padding:0;
 	float: right;
 }
 
+
+
 .wijmo-wijmenu .wijmo-wijmenu-list .wijmo-wijmenu-item {
 background:none;
 border:none;
@@ -92,6 +94,10 @@ clear:both;
 float:left;
 width:98%;
 margin:1px 0;
+}
+
+.wijmo-wijmenu .wijmo-wijmenu-rtl .ui-widget-header {
+	float: right;
 }
 
 .wijmo-wijmenu-horizontal .wijmo-wijmenu-list .ui-widget-header
@@ -161,6 +167,9 @@ text-indent:-9999px;
 width:98%;
 margin:1px 0;
 padding:0;
+}
+.wijmo-wijmenu .wijmo-wijmenu-rtl .wijmo-wijmenu-separator {
+	float: right;
 }
 
 .wijmo-wijmenu .wijmo-wijmenu-group {

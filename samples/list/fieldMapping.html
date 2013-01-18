@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>List - Field mapping</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="%description%" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="ComponentOne" />
+
+    <link href="../../themes/rocket/jquery-wijmo.css" rel="stylesheet" type="text/css" />
+    
+    <script src="../../external/jquery-1.8.2.min.js" type="text/javascript"></script>
+    <script src="../../external/jquery-ui-1.9.1.custom.min.js" type="text/javascript"></script>
+    <script src="../../external/jquery.mousewheel.min.js" type="text/javascript"></script>
+    <link href="../../themes/wijmo/jquery.wijmo.wijsuperpanel.css" rel="stylesheet" type="text/css" />
+    <link href="../../themes/wijmo/jquery.wijmo.wijlist.css" rel="stylesheet" type="text/css" />
+    <script src="../../wijmo/jquery.wijmo.wijutil.js" type="text/javascript"></script>
+    <script src="../../wijmo/jquery.wijmo.wijsuperpanel.js" type="text/javascript"></script>
+    <script src="../../wijmo/jquery.wijmo.wijlist.js" type="text/javascript"></script>
+    <style type="text/css">
+        #list
+        {
+            height: 200px;
+            width: 300px;
+        }
+        
+        #testinput
+        {
+            width: 150px;
+            padding: 5px;
+        }
+    </style>
+    <script id="scriptInit" type="text/javascript">
+        $(document).ready(function () {
+            var testArray = [{
+                language: 'c++'
+            }, {
+                language: 'java'
+            }, {
+                language: 'php'
+            }, {
+                language: 'coldfusion'
+            }, {
+                language: 'javascript'
+            }, {
+                language: 'asp'
+            }, {
+                language: 'ruby'
+            }, {
+                language: 'python'
+            }, {
+                language: 'c'
+            }, {
+                language: 'scala'
+            }, {
+                language: 'groovy'
+            }, {
+                language: 'haskell'
+            }, {
+                language: 'perl'
+            }];
+            var list = $("#list");
+            var input = $('#testinput');
+            list.wijlist({
+                dataSource: testArray,
+                listItems: {
+                	label: { bind: "language" }, value: { bind: "language" }
+                },
+                selected: function (event, ui) {
+                    var selectedItem = ui.item;
+                    var str = selectedItem.label;
+                    input.val(str);
+
+                }
+            });
+            //list.wijlist('load');
+            list.wijlist('renderList');
+        });
+        function selectButtonClick(select) {
+            var list = $("#list").data('wijlist');
+            var indices = $('#indices').val().split(',');
+            var newArray = [];
+            $.each(indices, function (index, value) {
+                newArray[newArray.length] = parseInt(value);
+            });
+            if (select) {
+                list.selectItems(newArray);
+            }
+            else {
+                list.unselectItems(newArray);
+            }
+        }
+    </script>
+</head>
+<body class="demo-single">
+    <div class="container">
+        <div class="header">
+            <h2>
+                Field mapping</h2>
+        </div>
+        <div class="main demo">
+            <!-- Begin demo markup -->
+            <div class="ui-widget">
+                <input readonly="readonly" id="testinput" type="text" class="ui-widget-content ui-corner-all" />
+                <div id="list">
+                </div>
+            </div>
+            <!-- End demo markup -->
+            <div class="demo-options">
+                <!-- Begin options markup -->
+                <!-- End options markup -->
+            </div>
+        </div>
+        <div class="footer demo-description">
+        	<p>
+                This sample illustrates field mapping in data binding of the wijlist widget.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

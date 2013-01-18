@@ -1,7 +1,7 @@
 /*globals jQuery,window,document*/
 /*
  * 
- * Wijmo Library 2.2.0
+ * Wijmo Library 2.3.4
  * http://wijmo.com/
  * 
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -42,7 +42,24 @@
 			///      showControlsOnHover: false
 			///  });
 			///	</summary>
-			showControlsOnHover: true
+			showControlsOnHover: true,
+			///	<summary>
+			///	Use the localization option in order to localize
+			///	text which not depends on culture.
+			/// Default: {
+			///	volumeToolTip: "Volume",
+			///	fullScreenToolTip: "Full Screen"
+			/// }
+			/// Type: Object.
+			/// Code example: $("#video").wijvideo(
+			///					{ 
+			///						localization: {
+			///							volumeToolTip: "volume",
+			///							fullScreenToolTip: "FullScreen"
+			///						}
+			///					});
+			///	</summary>
+			localization: null
 		},
 
 		_create: function () {
@@ -404,8 +421,10 @@
 			});
 
 			//ToolTip-button
-			$volumeBtn.wijtooltip({ content: "Volume", showCallout: false });
-			$fullScreenBtn.wijtooltip({ content: "Full Screen", showCallout: false });
+			$volumeBtn.wijtooltip({ content: self._localizeString("volumeToolTip", "Volume"), 
+				showCallout: false });
+			$fullScreenBtn.wijtooltip({ content: self._localizeString("fullScreenToolTip", "Full Screen"), 
+				showCallout: false });
 
 			//add class to prevent from overriding the origin css of tooltip.
 			$seekSlider.wijtooltip("widget").addClass("wijmo-wijvideo");
@@ -577,6 +596,14 @@
 			$seekSlider.wijtooltip("hide");
 			$volumeBtn.wijtooltip("hide");
 			$fullScreenBtn.wijtooltip("hide");
+		},
+		
+		_localizeString: function (key, defaultValue) {
+			var o = this.options;
+			if (o.localization && o.localization[key]) {
+				return o.localization[key];
+			}
+			return defaultValue;
 		},
 
 		_getToolTipContent: function (currentTime) {

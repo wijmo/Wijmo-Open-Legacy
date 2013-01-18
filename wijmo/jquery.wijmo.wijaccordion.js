@@ -10,7 +10,7 @@ amplify*/
 
 /*
  *
- * Wijmo Library 2.2.0
+ * Wijmo Library 2.3.4
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -33,6 +33,7 @@ amplify*/
 	"use strict";
 	$.widget("wijmo.wijaccordion", {
 		// widget options
+		widgetEventPrefix: "wijaccordion",
 		options: {
 			/// <summary>
 			/// Sets the animation easing effect. Set this option to false in order to 
@@ -228,18 +229,18 @@ amplify*/
 		_handleHeaderChange: function (newHeaderSelector, prevHeaderSelector) {
 			var prevHeaders = this.element.find(prevHeaderSelector);
 			prevHeaders
-				.removeClass("ui-accordion-header ui-helper-reset ui-state-active " +
-							this._triangleIconOpened).siblings(".ui-accordion-content")
+				.removeClass("wijmo-wijaccordion-header ui-helper-reset ui-state-active " +
+							this._triangleIconOpened).siblings(".wijmo-wijaccordion-content")
 				.removeClass(
-"ui-accordion-content ui-helper-reset ui-widget-content ui-accordion-content-active");
+"wijmo-wijaccordion-content ui-helper-reset ui-widget-content wijmo-wijaccordion-content-active");
 
 			this._initHeaders(newHeaderSelector);
 		},
 		_initHeaders: function (selector) {
-			var o = this.options;
-			selector = selector ? selector : o.header;
-			this.headers = this.element.find(selector);
-			this.headers.each(jQuery.proxy(this._initHeader, this));
+			var o = this.options,
+				selector = selector ? selector : o.header,
+				headers = this.element.find(selector);
+			headers.each(jQuery.proxy(this._initHeader, this));
 		},
 		_initHeader: function (index, elem) {
 			var o = this.options, rightToLeft = this.element.data("rightToLeft"),
@@ -249,7 +250,7 @@ amplify*/
 				header.remove();
 				header.insertAfter(content);
 			}
-			header.addClass("ui-accordion-header ui-helper-reset")
+			header.addClass("wijmo-wijaccordion-header ui-helper-reset")
 			  .attr("role", "tab");
 			content.attr("role", "tabpanel");
 			if (header.find("> a").length === 0) {
@@ -265,7 +266,7 @@ amplify*/
 					tabIndex: 0
 				})
 				.find("> .ui-icon").addClass(this._triangleIconOpened);
-				content.addClass("ui-accordion-content-active")
+				content.addClass("wijmo-wijaccordion-content-active")
 					.addClass(this._contentCornerOpened)
 					.wijTriggerVisibility();
 			} else {
@@ -277,7 +278,7 @@ amplify*/
 				.find("> .ui-icon").addClass(this._triangleIconClosed);
 				content.hide();
 			}
-			content.addClass("ui-accordion-content ui-helper-reset ui-widget-content");
+			content.addClass("wijmo-wijaccordion-content ui-helper-reset ui-widget-content");
 
 		},
 		_create: function () {
@@ -286,7 +287,7 @@ amplify*/
 				$ = window.wijmoApplyWijTouchUtilEvents($);
 			}
 			this.element.addClass(
-			"wijmo-wijaccordion ui-accordion ui-widget ui-accordion-icons " +
+			"wijmo-wijaccordion ui-widget wijmo-wijaccordion-icons " +
 			"ui-helper-reset ui-helper-clearfix");
 			var o = this.options;
 			if (o.disabled) {
@@ -295,6 +296,7 @@ amplify*/
 			this._onDirectionChange(o.expandDirection, false);
 			this._initHeaders();
 			this.element.attr("role", "tablist");
+			$.Widget.prototype._create.apply(self, arguments);
 		},
 		_init: function () {
 			this._bindLiveEvents();
@@ -303,12 +305,33 @@ amplify*/
 		destroy: function () {
 			this._unbindLiveEvents();
 			this.element.removeClass(
-			"wijmo-wijaccordion ui-accordion ui-widget ui-helper-reset ui-accordion-icons")
+			"wijmo-wijaccordion ui-widget ui-helper-reset wijmo-wijaccordion-icons")
 			.removeAttr("role");
 			$.Widget.prototype.destroy.apply(this, arguments);
 
 		},
+		_getHeaders: function () {
+			var o = this.options, rightToLeft = this.element.data("rightToLeft"),
+					headersArr = [], i,
+					hdr, headers = this.element.find(o.header);
+			if (headers.length > 0 &&
+				!$(headers[0]).hasClass("wijmo-wijaccordion-header") &&
+				$(headers[0]).hasClass("wijmo-wijaccordion-content")) {
+				for (i = 0; i < headers.length; i += 1) {
+					// fix for 29695:
+					hdr = rightToLeft ?
+							$(headers[i]).next(".wijmo-wijaccordion-header") :
+							$(headers[i]).prev(".wijmo-wijaccordion-header");
+					if (hdr.length > 0) {
+						headersArr.push(hdr[0]);
+					}
 
+				}
+			} else {
+				return headers;
+			}
+			return $(headersArr);
+		},
 		/// <summary>
 		/// Activates the accordion content pane by its index.
 		/// </summary>
@@ -317,11 +340,15 @@ amplify*/
 		///	</param>
 		activate: function (index) {
 			var nextHeader, o = this.options,
-				headers = this.element.children(".ui-accordion-header"),
-				prevHeader = this.element.find(".ui-accordion-header.ui-state-active"),
+				headers = this._getHeaders(),
+				prevHeader,
 				rightToLeft = this.element.data("rightToLeft"),
 				newIndex, prevIndex, nextContent, prevContent,
 				animOptions, proxied, proxiedDuration, animations, duration, easing;
+			prevHeader = $(jQuery.grep(headers, function (a) {
+				return $(a).hasClass("ui-state-active");
+			}));
+
 			if (typeof index === "number") {
 				nextHeader = $(headers[index]);
 			} else if (typeof index === "string") {
@@ -330,6 +357,9 @@ amplify*/
 			} else {
 				nextHeader = $(index);
 				index = headers.index(index);
+			}
+			if (nextHeader.hasClass("ui-state-disabled")) {
+				return false;
 			}
 			if (nextHeader.hasClass("ui-state-active")) {
 				if (o.requireOpenedPane) {
@@ -348,15 +378,16 @@ amplify*/
 			else if (!o.requireOpenedPane) {
 				prevHeader = $(null);
 			}
-			newIndex = $(".ui-accordion-header", this.element).index(nextHeader);
-			prevIndex = $(".ui-accordion-header", this.element).index(prevHeader);
+			// 29193 (fix for nested accordions):
+			newIndex = headers.index(nextHeader);
+			prevIndex = headers.index(prevHeader);
 
 			nextContent = rightToLeft ?
-							nextHeader.prev(".ui-accordion-content") :
-							nextHeader.next(".ui-accordion-content");
+							nextHeader.prev(".wijmo-wijaccordion-content") :
+							nextHeader.next(".wijmo-wijaccordion-content");
 			prevContent = rightToLeft ?
-							prevHeader.prev(".ui-accordion-content") :
-							prevHeader.next(".ui-accordion-content");
+							prevHeader.prev(".wijmo-wijaccordion-content") :
+							prevHeader.next(".wijmo-wijaccordion-content");
 			if (prevHeader.length === 0 && nextHeader.length === 0) {
 				return false;
 			}
@@ -383,14 +414,13 @@ amplify*/
 			})
 			.find("> .ui-icon").removeClass(this._triangleIconClosed)
 			.addClass(this._triangleIconOpened);
-
 			if (o.animated) {
 				animOptions = {
 					toShow: nextContent,
 					toHide: prevContent,
 					complete: jQuery.proxy(function () {
-						prevContent.removeClass("ui-accordion-content-active");
-						nextContent.addClass("ui-accordion-content-active")
+						prevContent.removeClass("wijmo-wijaccordion-content-active");
+						nextContent.addClass("wijmo-wijaccordion-content-active")
 						.wijTriggerVisibility();
 						prevContent.css('display', '');
 						nextContent.css('display', '');
@@ -436,10 +466,10 @@ amplify*/
 				animations[easing](animOptions);
 			} else {
 				if (prevHeader.length > 0) {
-					prevContent.hide().removeClass("ui-accordion-content-active");
+					prevContent.hide().removeClass("wijmo-wijaccordion-content-active");
 				}
 				if (nextHeader.length > 0) {
-					nextContent.show().addClass("ui-accordion-content-active")
+					nextContent.show().addClass("wijmo-wijaccordion-content-active")
 									.addClass(this._contentCornerOpened)
                                     .wijTriggerVisibility();
 				}
@@ -456,7 +486,7 @@ amplify*/
 
 		/** Private methods */
 		_bindLiveEvents: function () {
-			this.element.find('.ui-accordion-header')
+			this.element.find('.wijmo-wijaccordion-header')
 			.live(this.options.event + ".wijaccordion",
 									jQuery.proxy(this._onHeaderClick, this))
 			.live("keydown.wijaccordion",
@@ -471,7 +501,7 @@ amplify*/
 							function () { $(this).removeClass('ui-state-focus'); });
 		},
 		_unbindLiveEvents: function () {
-			this.element.find('.ui-accordion-header').die(".wijaccordion");
+			this.element.find('.wijmo-wijaccordion-header').die(".wijaccordion");
 		},
 		_onHeaderClick: function (e) {
 			if (!this.options.disabled) {
@@ -484,11 +514,11 @@ amplify*/
 				return;
 			}
 			var keyCode = $.ui.keyCode,
-				focusedHeader = this.element.find(".ui-accordion-header.ui-state-focus"),
-				focusedInd, headers = this.element.find(".ui-accordion-header");
+				focusedHeader = this.element.find(".wijmo-wijaccordion-header.ui-state-focus"),
+				focusedInd, headers = this._getHeaders();
 			if (focusedHeader.length > 0) {
 
-				focusedInd = $(".ui-accordion-header",
+				focusedInd = $(".wijmo-wijaccordion-header",
 									this.element).index(focusedHeader);
 
 				switch (e.keyCode) {
@@ -520,10 +550,10 @@ amplify*/
 			var rightToLeft, openedHeaders, openedContents, openedTriangles,
 			closedTriangles, prevIsRightToLeft;
 			if (allowDOMChange) {
-				openedHeaders = this.element.find(".ui-accordion-header." +
+				openedHeaders = this.element.find(".wijmo-wijaccordion-header." +
 													this._headerCornerOpened);
 				openedHeaders.removeClass(this._headerCornerOpened);
-				openedContents = this.element.find(".ui-accordion-content." +
+				openedContents = this.element.find(".wijmo-wijaccordion-content." +
 													this._contentCornerOpened);
 				openedContents.removeClass(this._contentCornerOpened);
 				openedTriangles = this.element.find("." + this._triangleIconOpened);
@@ -532,7 +562,7 @@ amplify*/
 				closedTriangles.removeClass(this._triangleIconClosed);
 			}
 			if (prevDirection !== null) {
-				this.element.removeClass("ui-accordion-" + prevDirection);
+				this.element.removeClass("wijmo-wijaccordion-" + prevDirection);
 			}
 			switch (newDirection) {
 				case "top":
@@ -542,7 +572,7 @@ amplify*/
 					this._triangleIconClosed = "ui-icon-triangle-1-e";
 					rightToLeft = true;
 					this.element.removeClass("ui-helper-horizontal");
-					this.element.addClass("ui-accordion-top");
+					this.element.addClass("wijmo-wijaccordion-top");
 					break;
 				case "right":
 					this._headerCornerOpened = "ui-corner-left";
@@ -551,7 +581,7 @@ amplify*/
 					this._triangleIconClosed = "ui-icon-triangle-1-s";
 					rightToLeft = false;
 					this.element.addClass("ui-helper-horizontal");
-					this.element.addClass("ui-accordion-right");
+					this.element.addClass("wijmo-wijaccordion-right");
 					break;
 				case "left":
 					this._headerCornerOpened = "ui-corner-right";
@@ -560,7 +590,7 @@ amplify*/
 					this._triangleIconClosed = "ui-icon-triangle-1-s";
 					rightToLeft = true;
 					this.element.addClass("ui-helper-horizontal");
-					this.element.addClass("ui-accordion-left");
+					this.element.addClass("wijmo-wijaccordion-left");
 					break;
 				default: //bottom
 					this._headerCornerOpened = "ui-corner-top";
@@ -569,7 +599,7 @@ amplify*/
 					this._triangleIconClosed = "ui-icon-triangle-1-e";
 					rightToLeft = false;
 					this.element.removeClass("ui-helper-horizontal");
-					this.element.addClass("ui-accordion-bottom");
+					this.element.addClass("wijmo-wijaccordion-bottom");
 					break;
 			}
 			prevIsRightToLeft = this.element.data("rightToLeft");
@@ -583,14 +613,14 @@ amplify*/
 			}
 
 			if (allowDOMChange && rightToLeft !== prevIsRightToLeft) {
-				this.element.children(".ui-accordion-header").each(function () {
+				this.element.children(".wijmo-wijaccordion-header").each(function () {
 					var header = $(this), content;
 					if (rightToLeft) {
-						content = header.next(".ui-accordion-content");
+						content = header.next(".wijmo-wijaccordion-content");
 						header.remove();
 						header.insertAfter(content);
 					} else {
-						content = header.prev(".ui-accordion-content");
+						content = header.prev(".wijmo-wijaccordion-content");
 						header.remove();
 						header.insertBefore(content);
 					}

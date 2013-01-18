@@ -1,7 +1,7 @@
 /*globals window,document,jQuery*/
 /*
 *
-* Wijmo Library 2.2.0
+* Wijmo Library 2.3.4
 * http://wijmo.com/
 *
 * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -149,6 +149,8 @@
 			minRange: 0
 		},
 
+		widgetEventPrefix: "wijslider",
+
 		_setOption: function (key, value) {
 			///	<summary>
 			///		Sets Slider options.
@@ -156,8 +158,13 @@
 
 			var self = this;
 
-			$.ui.slider.prototype._setOption.apply(self, arguments);
-			this.options[key] = value;
+			if (key === "values") {
+				value = self._pre_set_values(value);
+				self.options[key] = value;
+				self._setValuesOption();
+			} else {
+				$.ui.slider.prototype._setOption.apply(self, arguments);
+			}
 
 			//Add for support disabled option at 2011/7/8
 			if (key === "disabled") {
@@ -171,31 +178,98 @@
 
 		_setRangeOption: function (value) {
 			var self = this,
-			o = self.options;
+			o = self.options,
+			valueMin;
 
-			if (value) {
-				if (value === true) {
-					if (!o.values) {
-						o.values = [self._valueMin(), self._valueMin()];
-					}
-					if (o.values.length && o.values.length !== 2) {
-						o.values = [o.values[0], o.values[0]];
-					}
+			if (value === true) {
+				if (!o.values || (o.values && o.values.length === 0)) {
+					valueMin = self._valueMin();
+					o.values = [valueMin, valueMin];
+				} else if (o.values.length && o.values.length !== 2) {
+					valueMin = o.values[0];
+					o.values = [valueMin, valueMin];
 				}
+				self._refresh_handle(2);
+			}
+			self._re_createRange();
+			self._refreshValue();
+		},
 
-				self.range = $("<div></div>")
-					.appendTo(self.element)
-					.addClass("ui-slider-range" +
-				// note: this isn't the most fittingly semantic 
-				// framework class for this element,
-				// but worked best visually with a variety of themes
-					" ui-widget-header" +
-					((o.range === "min" || o.range === "max") ?
-									" ui-slider-range-" + o.range : ""));
-			} else {
+		_setValuesOption: function () {
+			var self = this,
+			valsLength = 0,
+			i;
+
+			self._animateOff = true;
+			self._refreshValue();
+			if ($.isArray(self.options.values)) {
+				valsLength = self.options.values.length;
+			}
+			for (i = 0; i < valsLength; i++) {
+				self._change(null, i);
+			}
+			self._animateOff = false;
+		},
+
+		_re_createRange: function () {
+			var self = this,
+				o = self.options;
+
+			if (self.range) {
 				self.range.remove();
 			}
-			self._refreshValue();
+			if (o.range) {
+				self.range = $("<div></div>")
+					.appendTo(self.element)
+					.addClass("ui-slider-range ui-widget-header" +
+						((o.range === "min" || o.range === "max") ?
+									" ui-slider-range-" + o.range : ""));
+			}
+		},
+
+		_pre_set_values: function (values) {
+			var self = this,
+				o = self.options,
+				newHandleLen = 1,
+				value;
+
+			newHandleLen = values && values.length ? values.length : 1;
+			if (o.range === true) {
+				if (!values || (values && values.length === 0)) {
+					value = self._valueMin();
+					values = [value, value];
+				} else if (values.length && values.length !== 2) {
+					value = values[0];
+					values = [value, value];
+				}
+				newHandleLen = 2;
+			}
+			self._refresh_handle(newHandleLen);
+			self._re_createRange();
+			return values;
+		},
+
+		_refresh_handle: function (newHandleLen) {
+			var self = this,
+				handleLen = self.handles.length,
+				handle = "<a class='ui-slider-handle ui-state-default ui-corner-all' href='#'></a>",
+				handles = [], i;
+
+			if (handleLen !== newHandleLen) {
+				if (newHandleLen > handleLen) {
+					for (i = handleLen; i < newHandleLen; i++) {
+						handles.push(handle);
+					}
+					self.element.append(handles.join(""));
+				} else {
+					self.element
+						.find(".ui-slider-handle")
+						.eq(newHandleLen - 1)
+						.nextAll()
+						.remove();
+				}
+				self.handles = self.element.find(".ui-slider-handle");
+			}
 		},
 
 		_create: function () {
@@ -208,7 +282,7 @@
 				jqElement, val, vals, idx, len,
 				ctrlWidth, ctrlHeight, container, decreBtn, increBtn,
 				thumb;
-			
+
 			// enable touch support:
 			if (window.wijmoApplyWijTouchUtilEvents) {
 				$ = window.wijmoApplyWijTouchUtilEvents($);
@@ -345,6 +419,26 @@
 				});
 		},
 
+		refresh: function () {
+			/// <summary>
+			/// Refresh the wijslider widget.
+			/// </summary>
+
+			// note: when the original element's width is setted by percent
+			// it's hard to adjust the position and size, so first destroy then
+			// recreate
+			//this._refresh();
+			var widgetObject = this.element.data("wijslider"),
+			wijmoWidgetObject = this.element.data("wijmoWijslider");
+
+			this.destroy();
+
+			this.element.data("wijslider", widgetObject);
+			this.element.data("wijmoWijslider", wijmoWidgetObject);
+
+			this._create();
+		},
+
 		_refresh: function () {
 			var self = this,
 			increBtn, decreBtn, thumb;
@@ -446,7 +540,7 @@
 				newValue = newVal,
 				values;
 
-			if (o.range) {
+			if (o.range === true) {
 				values = self.values();
 				if (index === 0 && values[1] - minRange < newVal) {
 					newValue = values[1] - minRange;
@@ -454,7 +548,6 @@
 					newValue = values[0] + minRange;
 				}
 			}
-
 			$.ui.slider.prototype._slide.call(self, event, index, newValue);
 		},
 
@@ -495,9 +588,10 @@
 		},
 
 		_bindEvents: function () {
-			var self = this, decreBtn, increBtn;
+			var self = this, decreBtn, increBtn, ele;
 			decreBtn = this._getDecreBtn();
 			increBtn = this._getIncreBtn();
+			ele = self.element;
 			//
 			decreBtn.bind('click.' + self.widgetName, self, self._decreBtnClick);
 			increBtn.bind('click.' + self.widgetName, self, self._increBtnClick);
@@ -511,12 +605,15 @@
 			increBtn.bind('mouseout.' + self.widgetName, self, self._increBtnMouseOut);
 			increBtn.bind('mousedown.' + self.widgetName, self, self._increBtnMouseDown);
 			increBtn.bind('mouseup.' + self.widgetName, self, self._increBtnMouseUp);
+
+			ele.bind('mouseup.' + self.widgetName, self, self._elementMouseupEvent);
 		},
 
 		_decreBtnMouseOver: function (e) {
 			var self = e.data, data, decreBtn;
 
-			if (self.options.disabledState) {
+			if (self.options.disabledState ||
+					self.options.disabled) {
 				return;
 			}
 
@@ -530,7 +627,8 @@
 		_increBtnMouseOver: function (e) {
 			var self = e.data, data, increBtn;
 
-			if (self.options.disabledState) {
+			if (self.options.disabledState ||
+					self.options.disabled) {
 				return;
 			}
 
@@ -544,7 +642,8 @@
 		_decreBtnMouseOut: function (e) {
 			var self = e.data, data, decreBtn;
 
-			if (self.options.disabledState) {
+			if (self.options.disabledState ||
+					self.options.disabled) {
 				return;
 			}
 
@@ -558,7 +657,8 @@
 		_increBtnMouseOut: function (e) {
 			var self = e.data, data, increBtn;
 
-			if (self.options.disabledState) {
+			if (self.options.disabledState ||
+					self.options.disabled) {
 				return;
 			}
 
@@ -572,7 +672,8 @@
 		_decreBtnMouseDown: function (e) {
 			var self = e.data, data, decreBtn;
 
-			if (self.options.disabledState) {
+			if (self.options.disabledState ||
+					self.options.disabled) {
 				return;
 			}
 
@@ -603,7 +704,8 @@
 
 		_documentMouseUp: function (e) {
 			var self = e.data.self, ele = e.data.ele;
-			if (self.options.disabledState) {
+			if (self.options.disabledState ||
+					self.options.disabled) {
 				return;
 			}
 
@@ -621,7 +723,8 @@
 		_increBtnMouseDown: function (e) {
 			var self = e.data, data, increBtn;
 
-			if (self.options.disabledState) {
+			if (self.options.disabledState ||
+					self.options.disabled) {
 				return;
 			}
 
@@ -652,7 +755,8 @@
 		_decreBtnMouseUp: function (e) {
 			var self = e.data, data, decreBtn;
 
-			if (self.options.disabledState) {
+			if (self.options.disabledState ||
+					self.options.disabled) {
 				return;
 			}
 
@@ -668,7 +772,8 @@
 		_increBtnMouseUp: function (e) {
 			var self = e.data, data, increBtn;
 
-			if (self.options.disabledState) {
+			if (self.options.disabledState ||
+					self.options.disabled) {
 				return;
 			}
 
@@ -692,7 +797,8 @@
 		_decreBtnClick: function (e) {
 			var self = e.data, data;
 
-			if (self.options.disabledState) {
+			if (self.options.disabledState ||
+					self.options.disabled) {
 				return;
 			}
 
@@ -716,7 +822,8 @@
 		_increBtnClick: function (e) {
 			var self = e.data, data;
 
-			if (self.options.disabledState) {
+			if (self.options.disabledState ||
+					self.options.disabled) {
 				return;
 			}
 			//note: step1: slide the slider btn, the change event has fired;
@@ -729,71 +836,71 @@
 		},
 
 		_decre: function () {
-			var curVal = this.value();
+			var self = this,
+				curVal = self.value(),
+				o = self.options,
+				min = o.min,
+				step = o.step;
 			//
-			if (!this.options.range && !this.options.values) {
-				curVal = this.value();
-				if (curVal <= this.options.min) {
-					this.value(this.options.min);
+			if (o.values && o.values.length) {
+				curVal = self.values(0);
+				if (curVal <= min) {
+					self.values(0, min);
 				} else {
-					this.value(curVal - this.options.step);
+					self.values(0, curVal - step);
 				}
 			} else {
-				curVal = this.values(0);
-				if (curVal <= this.options.min) {
-					this.values(0, this.options.min);
+				curVal = self.value();
+				if (curVal <= min) {
+					self.value(min);
 				} else {
-					this.values(0, curVal - this.options.step);
+					self.value(curVal - step);
 				}
 			}
 			//
-			this.element.parent()
-			.attr("aria-valuenow", this.value());
+			self.element.parent()
+			.attr("aria-valuenow", self.value());
 		},
 
 		_incre: function () {
-			var curVal = this.value();
+			var self = this,
+				curVal = self.value(),
+				o = self.options,
+				max = o.max,
+				step = o.step,
+				index;
 			//
-			if (!this.options.range && !this.options.values) {
-				curVal = this.value();
-				if (curVal >= this.options.max) {
-					this.value(this.options.max);
+			if (o.values && o.values.length) {
+				index = o.values.length === 1 ? 0 : 1;
+				curVal = self.values(index);
+				if (curVal >= max) {
+					self.values(index, max);
 				} else {
-					this.value(curVal + this.options.step);
+					self.values(index, curVal + step);
 				}
 			} else {
-				curVal = this.values(1);
-				if (curVal >= this.options.max) {
-					this.values(1, this.options.max);
+				curVal = self.value();
+				if (curVal >= max) {
+					self.value(max);
 				} else {
-					this.values(1, curVal + this.options.step);
+					self.value(curVal + step);
 				}
 			}
 			//
-			this.element.parent()
-			.attr("aria-valuenow", this.value());
+			self.element.parent()
+			.attr("aria-valuenow", self.value());
 
 		},
 
-		_mouseInit: function () {
-			var self = this;
-			//update for knockout: 
-			//animate works only for every other click
-			//if (this.options.dragFill)
-			if (this.options.dragFill && this.options.range) {
-				this._preventClickEvent = false;
-				//update for unbind by wh at 2011/11/11
-				//this.element.bind('click', function (event) {
-				this.element.bind('click.' + self.widgetName, function (event) {
-					//end for unbind
-					if (self._dragFillStart > 0) {
-						self._dragFillStart = 0;
-					} else {
-						$.ui.slider.prototype._mouseCapture.apply(self, arguments);
-					}
-				});
+		_elementMouseupEvent: function (e) {
+			var self = e.data;
+			if (self.options.dragFill && self.options.range) {
+				if (self._dragFillStart > 0) {
+					self._dragFillStart = 0;
+				} else {
+					$.ui.slider.prototype._mouseCapture.apply(self, arguments);
+				}
 			}
-			$.ui.mouse.prototype._mouseInit.apply(this, arguments);
 		},
 
 		_mouseCapture: function (event) {
@@ -809,10 +916,18 @@
 					this.elementOffset = this.element.offset();
 					return true;
 				} else {
-					return $.ui.slider.prototype._mouseCapture.apply(this, arguments);
+					try {
+						return $.ui.slider.prototype._mouseCapture.apply(this, arguments);
+					} catch (e) {
+
+					}
 				}
 			} else {
-				return $.ui.slider.prototype._mouseCapture.apply(this, arguments);
+				try {
+					return $.ui.slider.prototype._mouseCapture.apply(this, arguments);
+				} catch (e) {
+
+				}
 			}
 		},
 

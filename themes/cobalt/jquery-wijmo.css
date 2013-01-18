@@ -1171,58 +1171,12 @@
  * http://docs.jquery.com/UI/Accordion#theming
  */
 /* IE/Win - Fix animation bug - #4615 */
-.ui-accordion
-{
-    width: 100%;
-}
-.ui-accordion .ui-accordion-header
-{
-    cursor: pointer;
-    position: relative;
-    margin-top: 1px;
-    zoom: 1;
-}
-.ui-accordion .ui-accordion-li-fix
-{
-    display: inline;
-}
-.ui-accordion .ui-accordion-header-active
-{
-    border-bottom: 0 !important;
-}
-.ui-accordion .ui-accordion-header a
-{
-    display: block;
-    font-size: 1em;
-    padding: .5em .5em .5em .7em;
-}
-.ui-accordion-icons .ui-accordion-header a
-{
-    padding-left: 2.2em;
-}
-.ui-accordion .ui-accordion-header .ui-icon
-{
-    position: absolute;
-    left: .5em;
-    top: 50%;
-    margin-top: -8px;
-}
-.ui-accordion .ui-accordion-content
-{
-    padding: 1em 2.2em;
-    border-top: 0;
-    margin-top: -2px;
-    position: relative;
-    top: 1px;
-    margin-bottom: 2px;
-    overflow: auto;
-    display: none;
-    zoom: 1;
-}
-.ui-accordion .ui-accordion-content-active
-{
-    display: block;
-}
+.ui-accordion .ui-accordion-header { display: block; cursor: pointer; position: relative; margin-top: 2px; padding: .5em .5em .5em .7em; zoom: 1; }
+.ui-accordion .ui-accordion-icons { padding-left: 2.2em; }
+.ui-accordion .ui-accordion-noicons { padding-left: .7em; }
+.ui-accordion .ui-accordion-icons .ui-accordion-icons { padding-left: 2.2em; }
+.ui-accordion .ui-accordion-header .ui-accordion-header-icon { position: absolute; left: .5em; top: 50%; margin-top: -8px; }
+.ui-accordion .ui-accordion-content { padding: 1em 2.2em; border-top: 0; overflow: auto; zoom: 1; }
 /*
  * jQuery UI Autocomplete 1.8.10
  *
@@ -2294,4 +2248,124 @@ div.wijmo-wijribbon .ui-icon, .wijmo-wijribbon-abbrevicon, div.wijmo-wijribbon-s
 .wijmo-wijinput .wijmo-wijinput-input
 {
     color: #222;
+}
+
+/* WIJMO ACCORDION COMPATIBILITY */
+.wijmo-wijaccordion .ui-accordion-header
+{
+    display: block;
+    cursor: pointer;
+    position: relative;
+    margin-top: 2px;
+    zoom: 1;
+    padding: .5em .5em .5em .7em;
+    width: auto !important;
+}
+
+.wijmo-wijaccordion .ui-accordion-icon
+{
+    padding-left: 2.2em;
+}
+
+.wijmo-wijaccordion .ui-accordion-noicons
+{
+    padding-left: .7em;
+}
+
+.wijmo-wijaccordion .ui-accordion-header a
+{
+    padding-left: 1.2em;
+    font-size: 1em;
+    display: block;
+}
+
+.wijmo-wijaccordion .ui-accordion-header .ui-icon
+{
+    position: absolute;
+    left: .5em;
+    top: 50%;
+    margin-top: -8px;
+}
+
+.wijmo-wijaccordion .ui-accordion-content
+{
+    overflow: auto;
+    zoom: 1;
+    padding: 1em 2.2em;
+    display: none;
+
+}
+.wijmo-wijaccordion .ui-accordion-content.ui-accordion-content-active
+{   
+    display: block;
+}
+
+.wijmo-wijaccordion a
+{
+    outline: none;
+}
+
+.wijmo-wijaccordion-bottom .ui-accordion-content-active
+{
+    border-top: none;
+ }
+
+.wijmo-wijaccordion-right .ui-accordion-header
+{
+    margin-top: 0;
+    margin-left: 1px;
+    height: 12em;
+    overflow: hidden;
+    padding: .7em .5em .5em;
+}
+
+.wijmo-wijaccordion-right .ui-accordion-content-active
+{
+    border-left: none;
+}
+
+.wijmo-wijaccordion-left .ui-accordion-header
+{
+    margin-top: 0;
+    margin-right: 1px;
+    height: 12em;
+    overflow: hidden;
+    padding: .7em .5em .5em;
+}
+
+.wijmo-wijaccordion-left .ui-accordion-content-active
+{
+    border-right: none;
+}
+
+.ui-accordion-top .ui-accordion-header
+{
+    margin: 0 0 1px;
+}
+
+.wijmo-wijaccordion-top .ui-accordion-content-active
+{
+    border-bottom: none;
+}
+
+.ui-accordion-right .ui-accordion-content, .ui-accordion-left .ui-accordion-content
+{
+    width: 36em;
+    height: 13em !important;
+    margin: 0;
+    padding: .7em 2.2em .5em;
+}
+
+.ui-accordion-right .ui-accordion-header a, .ui-accordion-left .ui-accordion-header a
+{
+    text-align: center;
+    padding: 1.2em .5em .5em !important;
+}
+
+.ui-accordion-right .ui-accordion-header .ui-icon, .ui-accordion-left .ui-accordion-header .ui-icon
+{
+    top: .5em !important;
+    left: 50%;
+    margin-left: -9px;
+    margin-top: 0;
 }

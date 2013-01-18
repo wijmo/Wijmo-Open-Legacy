@@ -16,7 +16,8 @@
 .ui-tabs-bottom .ui-tabs-nav li.ui-tabs-selected
 {
     margin-top: -1px;
-    padding-bottom: 2px;
+    padding-bottom: 1px !important;
+    border-top: none !important;
 }
 
 .ui-tabs .ui-tabs-nav li
@@ -28,7 +29,6 @@
 .ui-tabs-left .ui-tabs-nav
 {
     float: left;
-    overflow: hidden;
 }
 
 .ui-tabs-left .ui-tabs-nav li
@@ -86,7 +86,6 @@
 .ui-tabs-right .ui-tabs-nav
 {
     float: right;
-    overflow: hidden;
 }
 
 .ui-tabs-right .ui-tabs-nav li
@@ -143,4 +142,24 @@
 {
     margin-left: -1px;
     padding-left: 1px;
+}
+
+.ui-tabs-top .scrollWrap
+{
+    border-bottom-width: 0px;
+}
+
+.ui-tabs-bottom .scrollWrap
+{
+    border-top-width: 0px;
+}
+
+.ui-tabs-left .scrollWrap
+{
+    border-right-width: 0px;
+}
+
+.ui-tabs-right .scrollWrap
+{
+    border-left-width: 0px;
 }

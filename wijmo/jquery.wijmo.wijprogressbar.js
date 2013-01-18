@@ -2,7 +2,7 @@
 
 /*
 *
-* Wijmo Library 2.2.0
+* Wijmo Library 2.3.4
 * http://wijmo.com/
 *
 * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -208,31 +208,31 @@
 				val;
 
 			switch (key) {
-			case "value":
-				o[key] = parseInt(value, 10);
-				self._refreshValue();
-				return;
-			case "maxValue":
-				o.max = value;
-			case "minValue":
-				val = parseInt(value, 10);
-				o[key] = val;
-				self[key === "maxValue" ? "max" : "min"] = val;
-				self._refreshValue(true);
-				return;
-			case "labelFormatString":
-			case "toolTipFormatString":
-				o[key] = value;
-				self._refreshValue(true);
-				return;
-			case "fillDirection":
-			case "labelAlign":
-			case "indicatorImage":
-				o[key] = value;
-				self._updateElementsCss();
-				return;
-			default:
-				break;
+				case "value":
+					o[key] = parseInt(value, 10);
+					self._refreshValue();
+					return;
+				case "maxValue":
+					o.max = value;
+				case "minValue":
+					val = parseInt(value, 10);
+					o[key] = val;
+					self[key === "maxValue" ? "max" : "min"] = val;
+					self._refreshValue(true);
+					return;
+				case "labelFormatString":
+				case "toolTipFormatString":
+					o[key] = value;
+					self._refreshValue(true);
+					return;
+				case "fillDirection":
+				case "labelAlign":
+				case "indicatorImage":
+					o[key] = value;
+					self._updateElementsCss();
+					return;
+				default:
+					break;
 			}
 
 			$.Widget.prototype._setOption.apply(self, arguments);
@@ -248,7 +248,7 @@
 			var self = this,
 				o = self.options,
 				element = self.element;
-			
+
 			// enable touch support:
 			if (window.wijmoApplyWijTouchUtilEvents) {
 				$ = window.wijmoApplyWijTouchUtilEvents($);
@@ -297,17 +297,24 @@
 				ele = outerEle ? outerEle : self.element,
 				eleOffset = ele.offset(),
 				disabledWidth = ele.outerWidth(),
-				disabledHeight = ele.outerHeight();
-
-			return $("<div></div>").addClass("ui-disabled")
-			.css({
-				"z-index": "99999",
-				position: "absolute",
-				width: disabledWidth,
-				height: disabledHeight,
-				left: eleOffset.left,
-				top: eleOffset.top
-			});
+				disabledHeight = ele.outerHeight(),
+				css = {
+					"z-index": "99999",
+					position: "absolute",
+					width: disabledWidth,
+					height: disabledHeight,
+					left: eleOffset.left,
+					top: eleOffset.top
+				};
+			if ($.browser.msie) {
+				$.extend(css, {
+					"background-color": "#fff",
+					opacity: 0.1
+				});
+			}
+			return $("<div></div>")
+				.addClass("ui-disabled")
+				.css(css);
 		},
 
 		_triggerEvent: function (eventName, oldValue, newValue) {
@@ -321,6 +328,7 @@
 			var self = this,
 				o = self.options,
 				animationOptions = o.animationOptions,
+				indicatorIncrement = o.indicatorIncrement,
 				element = self.element,
 				value, percent, oldValue;
 
@@ -342,6 +350,13 @@
 					$.wijmo.wijprogressbar.animations.progress({
 						content: self.valueDiv,
 						complete: function () {
+
+							if (indicatorIncrement !== 1) {
+								self._refreshProgress(percent, value);
+								if (o.labelAlign === "running") {
+									self._updateRunningLabelCss(percent);
+								}
+							}
 							self._triggerEvent("progressChanged",
 								oldValue, value);
 							self._lastStep = percent;
@@ -354,6 +369,9 @@
 				}, o.animationDelay);
 			} else {
 				self._refreshProgress(Math.round(percent));
+				if (o.labelAlign === "running") {
+					self._updateRunningLabelCss(percent);
+				}
 				self._lastStep = percent;
 				self._triggerEvent("progressChanged", oldValue, value);
 			}
@@ -504,7 +522,6 @@
 			pos = pbLen === pgLen ? pbLen - lblLen :
 						step * pbLen / 100 - lblLen + lblLen *
 						(pbLen - pgLen) / pbLen;
-
 			label.css(self.directions[fillDirection], pos);
 		},
 
@@ -526,7 +543,7 @@
 				cornerBottomCss)
 			.addClass(cornerPrefixCss + self.directions[fillDirection]);
 
-			if (lastStep) {
+			if (typeof lastStep === "number") {
 				if (self._isHorizontal()) {
 					valueDiv.css("width", lastStep + "%")
 					.css("height", "");
@@ -553,17 +570,16 @@
 				resultPrecision = 2;
 
 			if (indicatorIncrement) {
-				arrP = percent.toString().split(".");
-				if (arrP.length === 2) {
-					ln = arrP[1].length;
-					resultPrecision = ln;
-				}
-				base = Math.pow(10, ln);
-
+				//arrP = percent.toString().split(".");
+				//if (arrP.length === 2) {
+				//	ln = arrP[1].length;
+				//	resultPrecision = ln;
+				//}
+				//base = Math.pow(10, ln);
 
 				if (indicatorIncrement !== 1) {
-					percent = Math.floor(percent * base / indicatorIncrement) *
-						indicatorIncrement / base;
+					percent = Math.floor(percent / indicatorIncrement) *
+						indicatorIncrement;
 				}
 				else {
 					percent = Math.round(percent);

@@ -2,7 +2,7 @@
 /*jslint white: false */
 /*
 *
-* Wijmo Library 2.2.0
+* Wijmo Library 2.3.4
 * http://wijmo.com/
 *
 * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -176,9 +176,13 @@
 					break;
 				case "disabled":
 					if (value) {
-						this.element.addClass("ui-state-disabled");
+						this.element.addClass("ui-state-disabled")
+					.find("> .ui-expander-header").addClass("ui-state-disabled");
+						this.element.find("> .ui-widget-content").addClass("ui-state-disabled");
 					} else {
-						this.element.removeClass("ui-state-disabled");
+						this.element.removeClass("ui-state-disabled")
+					.find("> .ui-expander-header").removeClass("ui-state-disabled");
+						this.element.find("> .ui-widget-content").removeClass("ui-state-disabled");
 					}
 					break;
 				case "expandDirection":
@@ -225,7 +229,9 @@
 			content.attr("role", "tabpanel");
 
 			if (header.find("> a").length === 0) {
-				header.wrapInner('<a href="#"></a>');
+				// fix for 32089:
+				header.wrapInner('<a href="javascript:void(null)"></a>');
+				//header.wrapInner('<a href="#"></a>');
 			}
 			if (header.find("> .ui-icon").length === 0) {
 				$('<span class="ui-icon"></span>').insertBefore($("> a", header)[0]);
@@ -247,7 +253,7 @@
 				.attr({
 					"aria-expanded": "false",
 					tabIndex: -1
-				})				
+				})
 				.find("> .ui-icon").addClass(this._triangleIconClosed);
 			} else {
 				this.element.find("> .ui-expander-header")
@@ -265,7 +271,9 @@
 				.wijTriggerVisibility();
 			}
 			if (o.disabled) {
-				this.element.addClass("ui-state-disabled");
+				this.element.addClass("ui-state-disabled")
+					.find("> .ui-expander-header").addClass("ui-state-disabled");
+				this.element.find("> .ui-widget-content").addClass("ui-state-disabled");
 			}
 			this._bindLiveEvents();
 		},
@@ -479,7 +487,7 @@
 						.addClass("ui-expander-content-active")
 						.addClass(this._contentCornerOpened)
 						.wijTriggerVisibility();
-						this._trigger("afterExpand")						
+						this._trigger("afterExpand")
 						this.element.find("> .ui-widget-content").css('display', '');
 					}, this),
 					horizontal: this.element.hasClass("ui-helper-horizontal")
@@ -518,9 +526,10 @@
 		},
 
 		/** Private methods */
-		_onHeaderClick: function () {
-			this.option('expanded', !this.options.expanded);
-			return false;
+		_onHeaderClick: function (e) {
+			this.option("expanded", !this.options.expanded);
+			// commented in order to fix issue 32089:
+			//return false;	// fix for 32089
 		}
 
 	});

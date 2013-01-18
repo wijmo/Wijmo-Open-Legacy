@@ -1,7 +1,7 @@
 /*globals $, jQuery, document, window, location, wijmoASPNetParseOptions*/
 /*
  *
- * Wijmo Library 2.2.0
+ * Wijmo Library 2.3.4
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -321,7 +321,8 @@
 		},
 
 		_create: function () {
-			var self = this;
+			var self = this,
+				o = self.options;
 			
 			// enable touch support:
 			if (window.wijmoApplyWijTouchUtilEvents) {
@@ -330,14 +331,24 @@
 			
 			if (self.element.is(":hidden") && self.element.wijAddVisibilityObserver) {
 				self.element.wijAddVisibilityObserver(function () {
+					var dataObj = self.element.data("wijtabs");
+					var wijmoDataObj = self.element.data("wijmoWijtabs");
 					self.destroy();
+					self.element.data("wijtabs", dataObj);
+					self.element.data("wijmoWijtabs", wijmoDataObj);
 					self._tabify(true);
 					if (self.element.wijRemoveVisibilityObserver) {
 						self.element.wijRemoveVisibilityObserver();
 					}
 				}, "wijtabs");
 			}
+			
 			self._tabify(true);
+
+			if (o.disabledstate || o.disabled) {
+				self.disable();
+			}
+			$.Widget.prototype._create.apply(self, arguments);
 		},
 
 		_setOption: function (key, value) {
@@ -352,7 +363,7 @@
 				break;
 
 			case 'alignment':
-				this.destroy();
+				this._innerDestroy();
 				this._tabify(true);
 				break;
 
@@ -407,15 +418,43 @@
 
 		_tabId: function (a) {
 			var $a = $(a),
-				tabId;
+				tabId,
+				hrefParams;
 			if ($a.data && $a.data("tabid")) {
 				return $a.data("tabid");
 			}
+			if (a.href && a.href.length) {
+				hrefParams = this._getURLParameters(a.href);
+				if (hrefParams.tabId) {
+					tabId = hrefParams.tabId;
+					$a.data("tabid", tabId);
+					return tabId;
+				}
+			}
+			
 			tabId = a.title && a.title.replace(/\s/g, '_')
 				.replace(/[^A-Za-z0-9\-_:\.]/g, '') ||
 				this.options.idPrefix + getNextTabId();
+			
 			$a.data("tabid", tabId);
 			return tabId;
+		},
+		
+		_getURLParameters: function (url) {
+			var params = {},
+				parametersString,
+				parameters;
+			if (url.indexOf('?') > -1) {
+				parametersString = url.split('?')[1];
+				parameters = parametersString.split('&');
+				$.each(parameters, function (i, param) {
+					var p = param.split('=');
+					if (p.length > 1) {
+						params[p[0]] = p[1];
+					}
+				});
+			}
+			return params;
 		},
 
 		_sanitizeSelector: function (hash) {
@@ -821,7 +860,7 @@
 			// after add or option change
 			this.lis.add(this.anchors).unbind('.tabs');
 
-			if (!o.disabledState && o.event !== 'mouseover') {
+			if (!o.disabledState && !o.disabled && o.event !== 'mouseover') {
 				addState = function (state, el) {
 					if (el.is(':not(.ui-state-disabled)')) {
 						el.addClass('ui-state-' + state);
@@ -929,7 +968,7 @@
 			};
 
 			// attach tab event handler, unbind to avoid duplicates from former tabifying
-			if (!o.disabledState) {
+			if (!o.disabledState && !o.disabled) {
 				this.anchors.bind(o.event + '.tabs', function () {
 					var el = this,
 				$li = $(this).closest('li'),
@@ -1026,8 +1065,14 @@
 			});
 
 		},
-
+		
 		destroy: function () {
+			
+			this._innerDestroy();
+			$.Widget.prototype.destroy.apply(this, arguments);
+		},
+
+		_innerDestroy: function () {
 			var o = this.options,
 				content = $('.wijmo-wijtabs-content');
 			this.abort();

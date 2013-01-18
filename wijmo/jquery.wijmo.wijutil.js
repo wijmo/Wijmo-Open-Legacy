@@ -1,6 +1,6 @@
 /*
  *
- * Wijmo Library 2.2.0
+ * Wijmo Library 2.3.4
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -143,14 +143,18 @@
 		}
 
 		if (animated) {
-			if ($.effects && $.effects[animated]) {
-				this.show(animated, $.extend(option, { easing: easing }), duration, shown);
-				return;
-			}
-
 			if (customAnimations && customAnimations[animated]) {
 				customAnimations[animated](animation, $.extend(customAnimationOptions, { complete: shown }));
 				return;
+			}
+			//individual effects in jqueryui 1.9 are now defined on $.effects.effect 
+			//rather than directly on $.effects.
+			if ($.effects) {
+				if ($.effects[animated] || 
+						($.effects.effect && $.effects.effect[animated])) {
+					this.show(animated, $.extend(option, { easing: easing }), duration, shown);
+					return;
+				}
 			}
 		}
 
@@ -171,15 +175,19 @@
 		}
 
 		if (animated) {
-			if ($.effects && $.effects[animated]) {
-				this.hide(animated, $.extend(option,
-				{ easing: easing }), duration, hidden);
-				return;
-			}
 			if (customAnimations && customAnimations[animated]) {
-				customAnimations[animated](newAnimations,
+				customAnimations[animated](animation,
 					$.extend(customAnimationOptions, { complete: hidden }));
 				return;
+			}
+			//individual effects in jqueryui 1.9 are now defined on $.effects.effect 
+			//rather than directly on $.effects.
+			if ($.effects) {
+				if ($.effects[animated] || 
+						($.effects.effect && $.effects.effect[animated])) {
+					this.hide(animated, $.extend(option, { easing: easing }), duration, hidden);
+					return;
+				}
 			}
 		}
 
@@ -194,7 +202,8 @@
 		_UTFPunctuationsString: ' ! \" # % & \' ( ) * , - . / : ; ? @ [ \\ ] { } \u00a1 \u00ab \u00ad \u00b7 \u00bb \u00bf \u037e \u0387 \u055a \u055b \u055c \u055d \u055e \u055f \u0589 \u058a \u05be \u05c0 \u05c3 \u05f3 \u05f4 \u060c \u061b \u061f \u066a \u066b \u066c \u066d \u06d4 \u0700 \u0701 \u0702 \u0703 \u0704 \u0705 \u0706 \u0707 \u0708 \u0709 \u070a \u070b \u070c \u070d \u0964 \u0965 \u0970 \u0df4 \u0e4f \u0e5a \u0e5b \u0f04 \u0f05 \u0f06 \u0f07 \u0f08 \u0f09 \u0f0a \u0f0b \u0f0c \u0f0d \u0f0e \u0f0f \u0f10 \u0f11 \u0f12 \u0f3a \u0f3b \u0f3c \u0f3d \u0f85 \u104a \u104b \u104c \u104d \u104e \u104f \u10fb \u1361 \u1362 \u1363 \u1364 \u1365 \u1366 \u1367 \u1368 \u166d \u166e \u169b \u169c \u16eb \u16ec \u16ed \u17d4 \u17d5 \u17d6 \u17d7 \u17d8 \u17d9 \u17da \u17dc \u1800 \u1801 \u1802 \u1803 \u1804 \u1805 \u1806 \u1807 \u1808 \u1809 \u180a \u2010 \u2011 \u2012 \u2013 \u2014 \u2015 \u2016 \u2017 \u2018 \u2019 \u201a \u201b \u201c \u201d \u201e \u201f \u2020 \u2021 \u2022 \u2023 \u2024 \u2025 \u2026 \u2027 \u2030 \u2031 \u2032 \u2033 \u2034 \u2035 \u2036 \u2037 \u2038 \u2039 \u203a \u203b \u203c \u203d \u203e \u2041 \u2042 \u2043 \u2045 \u2046 \u2048 \u2049 \u204a \u204b \u204c \u204d \u207d \u207e \u208d \u208e \u2329 \u232a \u3001 \u3002 \u3003 \u3008 \u3009 \u300a \u300b \u300c \u300d \u300e \u300f \u3010 \u3011 \u3014 \u3015 \u3016 \u3017 \u3018 \u3019 \u301a \u301b \u301c \u301d \u301e \u301f \u3030 \ufd3e \ufd3f \ufe30 \ufe31 \ufe32 \ufe35 \ufe36 \ufe37 \ufe38 \ufe39 \ufe3a \ufe3b \ufe3c \ufe3d \ufe3e \ufe3f \ufe40 \ufe41 \ufe42 \ufe43 \ufe44 \ufe49 \ufe4a \ufe4b \ufe4c \ufe50 \ufe51 \ufe52 \ufe54 \ufe55 \ufe56 \ufe57 \ufe58 \ufe59 \ufe5a \ufe5b \ufe5c \ufe5d \ufe5e \ufe5f \ufe60 \ufe61 \ufe63 \ufe68 \ufe6a \ufe6b \uff01 \uff02 \uff03 \uff05 \uff06 \uff07 \uff08 \uff09 \uff0a \uff0c \uff0d \uff0e \uff0f \uff1a \uff1b \uff1f \uff20 \uff3b \uff3c \uff3d \uff5b \uff5d \uff61 \uff62 \uff63 \uff64\';this.UTFWhitespacesString_=\'\t \u000b \u000c \u001f   \u00a0 \u1680 \u2000 \u2001 \u2002 \u2003 \u2004 \u2005 \u2006 \u2007 \u2008 \u2009 \u200a \u200b \u2028 \u202f \u3000',
 
 		isDigit: function (c) {
-			return (c >= '0' && c <= '9');
+		    var code = c.charCodeAt(0);
+		    return (code >= 48 && code < 58) || (code >= 65296 && code < 65306);
 		},
 
 		isLetter: function (c) {

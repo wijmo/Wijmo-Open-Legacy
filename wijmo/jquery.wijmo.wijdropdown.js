@@ -1,7 +1,7 @@
 /*globals jQuery,document,window*/
 /*
 *
-* Wijmo Library 2.2.0
+* Wijmo Library 2.3.4
 * http://wijmo.com/
 *
 * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -37,6 +37,7 @@
 			$.Widget.prototype._setOption.apply(this, arguments);
 			if (key === "disabled") {
 				this._labelWrap.toggleClass("ui-state-disabled", value);
+				this._label.toggleClass("ui-state-disabled", value);
 				this.element.attr("disabled", value ? "disabled" : "");
 			}
 		},
@@ -68,11 +69,13 @@
 			if (self.element.is(":hidden") &&
 						self.element.wijAddVisibilityObserver) {
 				self.element.wijAddVisibilityObserver(function () {
-			           self.refresh();
-			           if(self.element.wijRemoveVisibilityObserver) {
-			        	   self.element.wijRemoveVisibilityObserver();
-			           }}, "wijdropdown");
-			 }
+			            self.refresh();
+			            if (self.element.wijRemoveVisibilityObserver) {
+                            self.element.wijRemoveVisibilityObserver();
+			            }
+                    }, 
+                        "wijdropdown");
+			}
 		},
 
 		_createSelect: function () {
@@ -110,9 +113,11 @@
 
 			if (ele.get(0).disabled !== false) {
 				self.options.disabled = true;
-				labelWrap.addClass("ui-state-disabled");
 			}
-
+            if (self.options.disabled) {
+                labelWrap.addClass("ui-state-disabled");
+                label.addClass("ui-state-disabled");
+            }
 			labelWrap.append(label);
 			container.append(selectWrap)
 				.append(labelWrap)
@@ -184,7 +189,14 @@
 			});
 
 			//update for fixing can't show all dropdown items by wuhao at 2012/2/24
-			list.setOutWidth(list.parent().parent().innerWidth() - 18);
+            //fixed the bug 30486
+			//list.setOutWidth(list.parent().parent().innerWidth() - 18);
+			if ($.browser.msie && /^[8]\.[0-9]+/.test($.browser.version)) {
+			    list.setOutWidth(list.parent().parent().innerWidth() - 19);
+			}
+			else {
+			    list.setOutWidth(list.parent().parent().innerWidth() - 18);
+			}
 			//end for issue
 
 			if (listContainer.data("wijsuperpanel")) {
@@ -201,7 +213,13 @@
 			//update for fixing can't show all dropdown items by wuhao at 2012/2/24
 			//list.setOutWidth(list.parent().parent().innerWidth());
 			if (!self.superpanel.vNeedScrollBar) {
-				list.setOutWidth(list.parent().parent().innerWidth());
+                //fixed the bug 30486
+			    if ($.browser.msie && /^[8]\.[0-9]+/.test($.browser.version)) {
+			        list.setOutWidth(list.parent().parent().innerWidth() - 1);
+			    }
+			    else {
+			        list.setOutWidth(list.parent().parent().innerWidth());
+			    }
 				self.superpanel.refresh();
 			}
 			//end for issue
@@ -270,11 +288,12 @@
 				labelWrap = self._labelWrap,
 				listContainer = self._listContainer,
 				ele = self.element,
+				ischrome = false,
 				offset;
 			self._handelEvents(self._label);
 			self._handelEvents(self._rightTrigger);
 
-			$(document.body).bind("click" + namespace, function (e) {
+			$(document).bind("click" + namespace, function (e) {
 				if (listContainer.is(":hidden")) {
 					return;
 				}
@@ -390,6 +409,17 @@
 				}
 				ele.trigger('keyup');
 			});
+			
+			ischrome = /chrome/.test(navigator.userAgent.toLowerCase());
+			if (ischrome || $.browser.safari) {
+				rightTrigger.bind("mouseout" + namespace, function () {
+					if (self.options.disabled) {
+						return;
+					}
+					label.removeClass(self.focusClass);
+					rightTrigger.removeClass(self.focusClass);
+				});
+			}
 		},
 
 		_init: function () {
@@ -503,7 +533,7 @@
 
 		_setValueToEle: function () {
 			var self = this, ele = self.element,
-				oldSelectedItem = ele.find("option[selected]"),
+				oldSelectedItem = ele.find(":selected"),
 			//oldSelectedIndex = oldSelectedItem.index(),
 				oldSelectedIndex = $('option', ele).index(oldSelectedItem),
 				selectedIndex = self._selectedIndex;
@@ -511,9 +541,12 @@
 			//self.oldVal = ele.val();
 			//ele.val(self._value);
 			if (oldSelectedIndex !== selectedIndex) {
+				if ($.browser.mozilla) {
+					ele.val(self._value);
+				}
 				oldSelectedItem.removeAttr('selected');
 				ele.find("option:eq(" + selectedIndex + ")").attr("selected", true);
-
+				
 				ele.trigger("change");
 			}
 			//if (self.oldVal !== self._value) {

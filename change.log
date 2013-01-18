@@ -1,3 +1,143 @@
+
+Wijmo-Open v2.3.4
+=================
+Dependencies
+------------
+Uses jQuery 1.8.2 and jQuery UI 1.9.1
+
+list
+------
+Fixed an issue that incorrect item is selected on pressing "Enter" key after typing a key to filter the comboitems.
+
+Calendar
+------
+Fixed an issue that calendar is not rendered when monthCols/monthRows is set in year view.
+Fixed an issue that javascript error occur when call method 'show'(JQueryUI upgrade caused the issue.).
+
+Tab
+------
+Fixed an issue that the wijdget's object can't find after visibility change from false to true.
+
+
+Wijmo-Open v2.3.3
+=================
+Dependencies
+------------
+Uses jQuery 1.8.2 and jQuery UI 1.9.1
+
+Slider
+-------
+Override the "widgetEventPrefix" to "wijslider"
+
+Menu
+-------
+Changed the default value "[]" to "null" of "items" option.
+
+List
+------
+Add "FindIndexByLabel" method.
+Fixed an issue that autoSize property is broken in latest build 
+
+
+Wijmo-Open v2.3.2
+=================
+Dependencies
+------------
+Uses jQuery 1.8.2 and jQuery UI 1.9.1
+
+Menu 
+------
+Fixed an issue that 'navigateUrl' is not working properly in sub menu after navigating through keyboard when 'mode' property is set to 'sliding'
+
+Calendar
+------
+Fixed an issue that first day is not selected when multiple months are shown & selectionMode is WeekDay.
+
+Slider
+------
+Fixed an issue that the js error is observed when invodes the "refresh" method in wijslider.
+
+Tabs
+----
+wijtabs can be correctly disabled.
+
+Dropdown
+------
+Fixed an issue that dropdown is rendered with unnecessary scrollbars in IE8.
+
+List
+------
+Fixed an issue that wijList- selectItems() Not finding Values that are numbers string, like "200","300".
+
+Wijmo-Open v2.3.1
+=================
+Dependencies
+------------
+Uses jQuery 1.8.2 and jQuery UI 1.9.1
+
+Tabs
+------
+Fixed an issue with widgets rendering in an inactive (not displayed) tab. 
+
+
+Wijmo-Open v2.3.0
+=================
+Dependencies
+------------
+Updated to support jQuery 1.8.2 and jQuery UI 1.9.1
+
+Tooltip
+-------
+Fixed an animation issue with jQuey ui 1.9.
+Fixed an issue that tooltip is shown after moving mouse if 'mouseTrailing' & 'showDelay' are set to true & non-default value respectively.
+Fixed an issue when mouseTrailing is true and position.my is "center center".
+Changed default value and behavior of "calloutFilled" option.
+Fixed an issue when 'modal' is true, modal is not apply completely according to the browser after resizing the browser.
+
+Slider
+--------
+Fixed an issue that javascript error is thrown on clicking thumbs handle if Range="True"
+Fixed an issue that the "disabled" option takes no effect in juice
+
+DropDown
+--------
+Fixed an issue that change event don't fire in second time if set the select value by code.
+Fixed an issue that dropown remains selected even after focus is lost
+Fixed an issue that incorrect select value is returned for selected item in Firefox
+Fixed an issue that when "disabled" is true, dropdown disabled style is not added.
+Fixed an issue that when not click at dropdown area, sometimes the droplist is not hide.
+ 
+Menu
+----
+Changed private function "_destroy" to "_innerDestroy" for jquery ui 1.9.
+Fixed a scroll issue in sliding mode.
+Fixed a sliding issue when dblclick an item in sliding mode.
+Removed a global variable of menu and menu item.
+
+Tabs
+-----
+Fixed an issue of fail to destroy and recreate tabs.
+Changed private function "_destroy" to "_innerDestroy" for jquery ui 1.9.
+
+Popup
+-------
+Fixed an animation issue with jQuey ui 1.9.
+
+Calendar
+------
+Fixed an issue that the "disabled" option takes no effect in juice
+Fixed an issue that calendar¡¯s month header and body are misaligned after choosing the month using quick pick mode
+
+
+
+Wijmo-Open v2.2.1
+=================
+ToolTip
+----
+Fix an issue when tooltip's method '_set_position' is invoked, however the content and title properties of the tooltip remain unchanged. 
+Fix another issue when 'position.offset' is "none none", the offset of the 'callout' element in the tooltip remain unchanged. 
+
+
 Wijmo-Open v2.2.0
 =================
 

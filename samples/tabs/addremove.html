@@ -7,13 +7,12 @@
 	<meta name="description" content="Add or remove tabs by code." />
 	<meta name="keywords" content="" />
 	<meta name="author" content="ComponentOne" />
-	
 	<link href="../../themes/rocket/jquery-wijmo.css" rel="stylesheet" type="text/css" />
-	
-	<script src="../../external/jquery-1.8.0.min.js" type="text/javascript"></script>
-	<script src="../../external/jquery-ui-1.8.23.custom.min.js" type="text/javascript"></script>
+	<script src="../../external/jquery-1.8.2.min.js" type="text/javascript"></script>
+	<script src="../../external/jquery-ui-1.9.1.custom.min.js" type="text/javascript"></script>
 	<link href="../../themes/wijmo/jquery.wijmo.wijdialog.css" rel="stylesheet" type="text/css" />
 	<link href="../../themes/wijmo/jquery.wijmo.wijtabs.css" rel="stylesheet" type="text/css" />
+	<script src="../../wijmo/jquery.wijmo.wijutil.js" type="text/javascript"></script>
 	<script src="../../wijmo/jquery.wijmo.wijdialog.js" type="text/javascript"></script>
 	<script src="../../wijmo/jquery.wijmo.wijtabs.js" type="text/javascript"></script>
 	<script type="text/javascript">
@@ -22,8 +21,9 @@
 		});
 
 		$(function () {
-			var $tab_title_input = $('#tab_title'), $tab_content_input = $('#tab_content');
-			var tab_counter = 2;
+			var $tab_title_input = $('#tab_title'),
+				$tab_content_input = $('#tab_content'),
+				tab_counter = 2;
 
 			// tabs init with a custom tab template and an "add" callback filling in the content
 			var $tabs = $('#tabs').wijtabs({
@@ -74,10 +74,10 @@
 
 			// addTab button: just opens the dialog
 			$('#add_tab')
-						.button()
-						.click(function () {
-							$dialog.wijdialog('open');
-						});
+				.button()
+				.click(function () {
+					$dialog.wijdialog('open');
+				});
 
 			// close icon: removing the tab on click
 			// note: closable tabs gonna be an option in the future - see http://dev.jqueryui.com/ticket/3924
@@ -127,8 +127,10 @@
 			<!-- Begin demo markup -->
 			<div id="tabs">
 				<ul>
-					<li><a href="#tabs-1">Nunc tincidunt</a> <span class="ui-icon ui-icon-close">Remove
-						Tab</span></li>
+					<li>
+						<a href="#tabs-1">Nunc tincidunt</a>
+						<span class="ui-icon ui-icon-close">Remove Tab</span>
+					</li>
 				</ul>
 				<div id="tabs-1">
 					<p>
@@ -160,10 +162,11 @@
 			</div>
 		</div>
 		<div class="footer demo-description">
-<p>
-
-This sample illustrates how to dynamically add tabs using the addTab function. In addition, the sample includes a function that will allow each tab to close by clicking on an 'x' on the tabs.
-</p>
+			<p>
+				This sample illustrates how to dynamically add tabs using the addTab function. In
+				addition, the sample includes a function that will allow each tab to close by clicking
+				on an 'x' on the tabs.
+			</p>
 		</div>
 	</div>
 </body>
