@@ -1,0 +1,8 @@
+{
+  "name": "Wjimo",
+  "version": "1.0.0",
+  "dependencies": {
+    "jquery": "1.8.2",
+    "jquery-ui" : "1.9.1"
+  }
+}
