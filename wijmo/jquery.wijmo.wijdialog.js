@@ -347,7 +347,7 @@
 				else {
 					self._checkUrl();
 				}
-			} else if (key = "captionButtons") {
+			} else if (key === "captionButtons") {
 				self._createCaptionButtons();
 			}
 		},
